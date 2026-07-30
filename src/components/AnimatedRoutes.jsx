@@ -1,10 +1,8 @@
-import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import Home from '../pages/Home.jsx';
-import FrameSystem from '../pages/FrameSystem.jsx';
-import Neuromodulation from '../pages/Neuromodulation.jsx';
+import Product from '../pages/Product.jsx';
 import WhoWeAre from '../pages/WhoWeAre.jsx';
 import Founders from '../pages/Founders.jsx';
 import Community from '../pages/Community.jsx';
@@ -13,7 +11,25 @@ import Publications from '../pages/Publications.jsx';
 import Careers from '../pages/Careers.jsx';
 import Investment from '../pages/Investment.jsx';
 import Contact from '../pages/Contact.jsx';
+import NotFound from '../pages/NotFound.jsx';
 import PageTransition from './PageTransition.jsx';
+
+const routes = [
+  { path: '/', element: <Home /> },
+  // One data-driven route. Adding a record to data/products.js publishes a page.
+  { path: '/what-we-do/:slug', element: <Product /> },
+  { path: '/who-we-are', element: <WhoWeAre /> },
+  { path: '/who-we-are/our-founders', element: <Founders /> },
+  { path: '/who-we-are/community', element: <Community /> },
+  { path: '/resources/education', element: <Education /> },
+  { path: '/resources/publications', element: <Publications /> },
+  { path: '/careers', element: <Careers /> },
+  { path: '/investment-opportunities', element: <Investment /> },
+  { path: '/contact', element: <Contact /> },
+  // A real 404. Previously unknown URLs silently rendered Home, which tells
+  // both users and crawlers the page exists.
+  { path: '*', element: <NotFound /> },
+];
 
 export default function AnimatedRoutes() {
   const location = useLocation();
@@ -21,24 +37,9 @@ export default function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-        
-        <Route path="/what-we-do/navinetics-frame-system" element={<PageTransition><FrameSystem /></PageTransition>} />
-        <Route path="/what-we-do/neuromodulation" element={<PageTransition><Neuromodulation /></PageTransition>} />
-        
-        <Route path="/who-we-are" element={<PageTransition><WhoWeAre /></PageTransition>} />
-        <Route path="/who-we-are/our-founders" element={<PageTransition><Founders /></PageTransition>} />
-        <Route path="/who-we-are/community" element={<PageTransition><Community /></PageTransition>} />
-        
-        <Route path="/resources/education" element={<PageTransition><Education /></PageTransition>} />
-        <Route path="/resources/publications" element={<PageTransition><Publications /></PageTransition>} />
-        
-        <Route path="/careers" element={<PageTransition><Careers /></PageTransition>} />
-        <Route path="/investment-opportunities" element={<PageTransition><Investment /></PageTransition>} />
-        <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-        
-        {/* Fallback */}
-        <Route path="*" element={<PageTransition><Home /></PageTransition>} />
+        {routes.map(({ path, element }) => (
+          <Route key={path} path={path} element={<PageTransition>{element}</PageTransition>} />
+        ))}
       </Routes>
     </AnimatePresence>
   );

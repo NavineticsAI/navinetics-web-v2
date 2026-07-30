@@ -1,63 +1,80 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import { usePageMeta } from '../lib/meta.js';
+import { Button, Hero, Reveal, Section, StatTile } from '../ui/index.js';
+
+const facts = [
+  { label: 'Location', value: 'Rochester', unit: 'Southeast Minnesota' },
+  { label: 'To the Twin Cities', value: '~1 hr', unit: 'by road' },
+  { label: 'Neighbourhood', value: 'Downtown', unit: '206 S Broadway' },
+];
 
 export default function Community() {
+  usePageMeta({
+    title: 'Community',
+    description:
+      'NaviNetics is based in the heart of downtown Rochester, Minnesota — a community that fosters innovation and supports medical advancement.',
+  });
+
   return (
-    <div className="pt-32 pb-20 min-h-screen bg-gray-50 flex items-center">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:w-1/2 space-y-6"
-          >
-            <h1 className="text-5xl font-semibold tracking-tight text-gray-900">
-              Community
-            </h1>
-            <h2 className="text-2xl text-blue-600 font-medium">Rochester, MN</h2>
-            
-            <div className="prose prose-lg text-gray-600 font-light leading-relaxed">
-              <p>
-                NaviNetics is located in SE Minnesota in the heart of Downtown Rochester. Rochester has been voted one of the best places to live, with growing opportunities for arts and entertainment within Rochester and just an hour drive to the twin cities.
-              </p>
-              <p>
-                We are proud to be part of a vibrant community that fosters innovation and supports medical advancements.
-              </p>
-            </div>
-            
-            <div className="pt-4">
-              <a 
-                href="https://homeia.com/city-living-guide/what-is-it-like-to-live-in-rochester-mn/" 
-                target="_blank" 
-                rel="noreferrer"
-                className="inline-flex items-center text-blue-600 font-medium hover:text-blue-800 transition-colors"
-              >
-                Learn more about our community
-                <svg className="ml-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
-              </a>
-            </div>
-          </motion.div>
+    <>
+      <Hero
+        eyebrow="Who we are — Community"
+        title="Rochester, Minnesota."
+        lead="NaviNetics is located in southeast Minnesota, in the heart of downtown Rochester — consistently voted one of the best places to live, with growing arts and entertainment and an hour's drive to the Twin Cities."
+      />
 
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:w-1/2 w-full h-96 md:h-[500px] rounded-3xl overflow-hidden shadow-2xl relative"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1579720313437-14283ce2f036?auto=format&fit=crop&q=80&w=800&h=1000" 
-              alt="Rochester, MN Cityscape" 
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-          </motion.div>
+      <Section wide>
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <Reveal>
+            <div className="flex flex-col gap-5 leading-relaxed text-ink-2">
+              <p className="max-w-prose">
+                We are proud to be part of a vibrant community that fosters innovation and supports
+                medical advancements — and to be neighbours to one of the world's leading medical
+                centres.
+              </p>
+              <p className="max-w-prose">
+                It is not incidental to the work. Proximity to clinicians is what lets us design by
+                listening, and it is why the company exists here rather than anywhere else.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              {facts.map((f) => (
+                <StatTile key={f.label} {...f} />
+              ))}
+            </div>
+
+            <Button
+              href="https://homeia.com/city-living-guide/what-is-it-like-to-live-in-rochester-mn/"
+              variant="secondary"
+              className="mt-8"
+              arrow
+            >
+              Learn more about Rochester
+            </Button>
+          </Reveal>
+
+          <Reveal delay={0.08}>
+            {/*
+              TODO — asset licence. This image is hotlinked from Unsplash's CDN:
+              an uncontrolled third-party dependency on a page NaviNetics owns.
+              Replace with a local asset with a licence on file. Tracked in
+              /design-language-info/07-accessibility.md (Known gaps).
+            */}
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl shadow-e3">
+              <img
+                src="https://images.unsplash.com/photo-1579720313437-14283ce2f036?auto=format&fit=crop&q=80&w=800&h=1000"
+                alt="Downtown Rochester, Minnesota"
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-nn-950/55 to-transparent"
+                aria-hidden="true"
+              />
+            </div>
+          </Reveal>
         </div>
-
-      </div>
-    </div>
+      </Section>
+    </>
   );
 }

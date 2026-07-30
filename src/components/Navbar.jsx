@@ -1,140 +1,226 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { cn } from '../lib/cn.js';
+import { EASE_OUT, usePrefersReducedMotion } from '../lib/motion.js';
+import { products } from '../data/products.js';
+import { Button } from '../ui/Button.jsx';
+import { ProductPlate } from '../ui/Card.jsx';
+import { ThemeToggle } from '../ui/ThemeToggle.jsx';
+
+const nav = [
+  {
+    title: 'Who We Are',
+    path: '/who-we-are',
+    items: [
+      { title: 'About NaviNetics', path: '/who-we-are' },
+      { title: 'Our Founders', path: '/who-we-are/our-founders' },
+      { title: 'Community', path: '/who-we-are/community' },
+    ],
+  },
+  // Generated from the catalogue, so products four and five appear here for free.
+  { title: 'What We Do', path: products[0].path, mega: true },
+  {
+    title: 'Resources',
+    path: '/resources/education',
+    items: [
+      { title: 'Education', path: '/resources/education' },
+      { title: 'Publications', path: '/resources/publications' },
+    ],
+  },
+  { title: 'Careers', path: '/careers' },
+  { title: 'Investment', path: '/investment-opportunities' },
+];
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openIdx, setOpenIdx] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const reduced = usePrefersReducedMotion();
+  const navRef = useRef(null);
 
   useEffect(() => {
-    setIsOpen(false);
-    setActiveDropdown(null);
+    setMobileOpen(false);
+    setOpenIdx(null);
   }, [location.pathname]);
 
-  const navLinks = [
-    {
-      title: "Who We Are",
-      path: "/who-we-are",
-      dropdown: [
-        { title: "About NaviNetics", path: "/who-we-are" },
-        { title: "Our Founders", path: "/who-we-are/our-founders" },
-        { title: "Community", path: "/who-we-are/community" }
-      ]
-    },
-    {
-      title: "What We Do",
-      path: "/what-we-do/navinetics-frame-system",
-      dropdown: [
-        { title: "NaviNetics Frame System", path: "/what-we-do/navinetics-frame-system" },
-        { title: "NaviNetics NeuroModulation", path: "/what-we-do/neuromodulation" }
-      ]
-    },
-    {
-      title: "Resources",
-      path: "/resources/education",
-      dropdown: [
-        { title: "Education", path: "/resources/education" },
-        { title: "Publications", path: "/resources/publications" }
-      ]
-    },
-    {
-      title: "Careers",
-      path: "/careers"
-    },
-    {
-      title: "Investment",
-      path: "/investment-opportunities"
-    }
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Esc closes any open panel; never trap focus in the bar.
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setOpenIdx(null);
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, []);
+
+  const panel = reduced
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
+    : {
+        initial: { opacity: 0, y: 8, scale: 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        exit: { opacity: 0, y: 4, scale: 0.98 },
+      };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass">
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center">
-          <img src="/logo-378x75-1.png" alt="NaviNetics Logo" className="h-8 object-contain" />
+    <nav
+      ref={navRef}
+      aria-label="Main"
+      className="fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-[padding] duration-[420ms] ease-out"
+      onMouseLeave={() => setOpenIdx(null)}
+    >
+      {/* Frosted, never refracting — a lens here would re-filter the backdrop
+          on every scroll pixel. */}
+      <div
+        className={cn(
+          'nn-glass mx-auto flex items-center gap-5 rounded-full py-2 pl-5 pr-2 [--gb:16px]',
+          'transition-[max-width,padding] duration-[420ms] ease-out',
+          scrolled ? 'max-w-4xl' : 'max-w-7xl',
+        )}
+      >
+        <Link to="/" className="flex shrink-0 items-center" aria-label="NaviNetics home">
+          <img src="/logo-378x75-1.png" alt="NaviNetics" className="h-7 w-auto object-contain" />
         </Link>
-        
-        {/* Desktop Nav */}
-        <div className="hidden lg:flex items-center space-x-6 text-sm text-brand-dark font-medium tracking-wide">
-          {navLinks.map((link, idx) => (
-            <div 
-              key={idx} 
-              className="relative group py-5"
-              onMouseEnter={() => setActiveDropdown(idx)}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <Link to={link.path} className="flex items-center gap-1 hover:text-brand-light transition-colors">
+
+        <div className="hidden flex-1 items-center gap-1 lg:flex">
+          {nav.map((link, idx) => (
+            <div key={link.title} className="relative" onMouseEnter={() => setOpenIdx(idx)}>
+              <NavLink
+                to={link.path}
+                onFocus={() => setOpenIdx(idx)}
+                aria-expanded={link.items || link.mega ? openIdx === idx : undefined}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium',
+                    'transition-colors duration-100 hover:text-action',
+                    isActive ? 'text-action' : 'text-ink-2',
+                  )
+                }
+              >
                 {link.title}
-                {link.dropdown && <ChevronDown size={14} className="text-brand-light/70" />}
-              </Link>
-              
-              {link.dropdown && (
-                <AnimatePresence>
-                  {activeDropdown === idx && (
-                    <motion.div 
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 5, scale: 0.95 }}
-                      transition={{ duration: 0.15, ease: "easeOut" }}
-                      className="absolute top-full left-0 w-64 bg-white/90 backdrop-blur-md shadow-xl border border-gray-100 rounded-2xl overflow-hidden pt-2 pb-2"
-                    >
-                      {link.dropdown.map((dropItem, dropIdx) => (
-                        <Link 
-                          key={dropIdx} 
-                          to={dropItem.path}
-                          className="block px-5 py-3 hover:bg-brand-light/10 hover:text-brand-light transition-colors"
+                {(link.items || link.mega) && (
+                  <ChevronDown size={13} className="opacity-60" aria-hidden="true" />
+                )}
+              </NavLink>
+
+              <AnimatePresence>
+                {openIdx === idx && link.items && (
+                  <motion.div
+                    {...panel}
+                    transition={{ duration: 0.18, ease: EASE_OUT }}
+                    className="nn-glass absolute left-0 top-full mt-2 w-60 overflow-hidden rounded-md p-1.5 [--gb:30px]"
+                  >
+                    {link.items.map((it) => (
+                      <Link
+                        key={it.path}
+                        to={it.path}
+                        className="block rounded-sm px-3.5 py-2.5 text-sm text-ink-2 transition-colors duration-100 hover:bg-action-soft hover:text-action"
+                      >
+                        {it.title}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+
+                {openIdx === idx && link.mega && (
+                  <motion.div
+                    {...panel}
+                    transition={{ duration: 0.18, ease: EASE_OUT }}
+                    className="nn-glass absolute left-1/2 top-full mt-2 w-[min(38rem,80vw)] -translate-x-1/2 overflow-hidden rounded-lg p-2 [--gb:34px]"
+                  >
+                    <div className="grid gap-1.5 sm:grid-cols-2">
+                      {products.map((p) => (
+                        <Link
+                          key={p.slug}
+                          to={p.path}
+                          className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
                         >
-                          {dropItem.title}
-                        </Link>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              )}
-            </div>
-          ))}
-          <Link to="/contact" className="text-sm font-semibold bg-brand-dark text-white px-6 py-2.5 rounded-full hover:bg-brand-light shadow-md hover:shadow-lg transition-all ml-2">
-            Contact
-          </Link>
-        </div>
-
-        {/* Mobile menu button */}
-        <button className="lg:hidden text-brand-dark p-2" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile Nav */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white/95 backdrop-blur-lg border-b border-gray-100 overflow-hidden"
-          >
-            <div className="px-6 py-4 flex flex-col space-y-4">
-              {navLinks.map((link, idx) => (
-                <div key={idx} className="flex flex-col space-y-2">
-                  <Link to={link.path} className="font-semibold text-lg text-brand-dark">
-                    {link.title}
-                  </Link>
-                  {link.dropdown && (
-                    <div className="flex flex-col pl-4 space-y-2 border-l-2 border-brand-light/20">
-                      {link.dropdown.map((dropItem, dropIdx) => (
-                        <Link key={dropIdx} to={dropItem.path} className="text-gray-600 hover:text-brand-light">
-                          {dropItem.title}
+                          <ProductPlate
+                            src={p.hero}
+                            alt=""
+                            className="h-14 w-16 shrink-0 rounded-sm"
+                            imgClassName="!p-1.5"
+                          />
+                          <div className="min-w-0">
+                            <div className="text-sm font-semibold leading-tight group-hover/mega:text-action">
+                              {p.shortName}
+                            </div>
+                            <div className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink-3">
+                              {p.family}
+                            </div>
+                          </div>
                         </Link>
                       ))}
                     </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
+
+        <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle className="hidden sm:inline-flex" />
+          <Button to="/contact" size="sm" className="hidden lg:inline-flex">
+            Contact
+          </Button>
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            className="grid h-9 w-9 cursor-pointer place-items-center rounded-full text-ink lg:hidden"
+          >
+            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: EASE_OUT }}
+            className="nn-glass mx-auto mt-2 max-w-7xl overflow-hidden rounded-lg p-4 [--gb:30px] lg:hidden"
+          >
+            <div className="flex flex-col gap-4">
+              {nav.map((link) => (
+                <div key={link.title} className="flex flex-col gap-1.5">
+                  <Link to={link.path} className="text-base font-semibold">
+                    {link.title}
+                  </Link>
+                  {(link.items ?? (link.mega ? products.map((p) => ({ title: p.shortName, path: p.path })) : null))?.map(
+                    (it) => (
+                      <Link
+                        key={it.path}
+                        to={it.path}
+                        className="border-l border-hairline pl-3 text-sm text-ink-2"
+                      >
+                        {it.title}
+                      </Link>
+                    ),
                   )}
                 </div>
               ))}
-              <Link to="/contact" className="font-semibold text-lg text-brand-light mt-4">
-                Contact
-              </Link>
+              <div className="mt-2 flex items-center justify-between">
+                <Button to="/contact" size="sm">
+                  Contact
+                </Button>
+                <ThemeToggle />
+              </div>
             </div>
           </motion.div>
         )}
