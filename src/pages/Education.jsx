@@ -149,7 +149,7 @@ export default function Education() {
                 <div className="mt-10 flex flex-col gap-8">
                   {s.lists.map((list) => (
                     <div key={list.title}>
-                      <h3 className="text-eyebrow text-ink-3">{list.title}</h3>
+                      <h3 className="eyebrow text-ink-3">{list.title}</h3>
                       <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
                         {list.items.map((item) => (
                           <li key={item} className="flex items-center gap-3 text-sm">

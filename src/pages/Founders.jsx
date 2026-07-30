@@ -76,7 +76,7 @@ export default function Founders() {
 
               <div className="w-full lg:w-7/12">
                 <h2 className="text-d2">{f.name}</h2>
-                <p className="mt-2 text-eyebrow text-action">{f.role}</p>
+                <p className="mt-2 eyebrow text-action">{f.role}</p>
                 <div className="mt-8 flex flex-col gap-5 leading-relaxed text-ink-2">
                   {f.bio.map((p) => (
                     <p key={p.slice(0, 32)} className="max-w-prose">

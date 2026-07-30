@@ -17,7 +17,7 @@ export function Badge({ tone = 'action', dot = false, className, children, ...pr
     <span
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1',
-        'text-eyebrow !tracking-[0.11em]',
+        'eyebrow !tracking-[0.11em]',
         TONES[tone] ?? TONES.action,
         className,
       )}

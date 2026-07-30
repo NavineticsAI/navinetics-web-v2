@@ -35,7 +35,7 @@ export function Field({
 
   return (
     <div className={cn('flex flex-col gap-1.5', className)}>
-      <label htmlFor={id} className="text-eyebrow !tracking-[0.13em] text-ink-3">
+      <label htmlFor={id} className="eyebrow !tracking-[0.13em] text-ink-3">
         {label}
       </label>
       <Tag

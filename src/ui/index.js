@@ -13,5 +13,6 @@ export { Field, Switch } from './Field.jsx';
 export { Gallery } from './Gallery.jsx';
 export { ThemeToggle } from './ThemeToggle.jsx';
 export { Hero } from './Hero.jsx';
+export { ConvergenceDiagram } from './ConvergenceDiagram.jsx';
 export { ScrollSequence } from './ScrollSequence.jsx';
 export { Statement, PullQuote } from './Statement.jsx';

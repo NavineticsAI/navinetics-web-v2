@@ -33,7 +33,7 @@ export function Section({
 /** Mono, uppercase, wide-tracked. Reserved for measured or categorical labels. */
 export function Eyebrow({ className, children, ...props }) {
   return (
-    <span className={cn('text-eyebrow text-action', className)} {...props}>
+    <span className={cn('eyebrow text-action', className)} {...props}>
       {children}
     </span>
   );

@@ -73,7 +73,7 @@ export default function Contact() {
                     <Icon size={18} />
                   </span>
                   <div>
-                    <dt className="text-eyebrow text-ink-3">{label}</dt>
+                    <dt className="eyebrow text-ink-3">{label}</dt>
                     <dd className="mt-1 whitespace-pre-line">
                       {href ? (
                         <a href={href} className="text-ink transition-colors hover:text-action">

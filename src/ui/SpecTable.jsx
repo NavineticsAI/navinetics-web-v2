@@ -47,12 +47,12 @@ export function ComparisonTable({ columns, rows, highlight = 0, className }) {
       <table className="w-full min-w-[560px] text-sm">
         <thead>
           <tr>
-            <th className="bg-surface-2 px-4 py-3 text-left text-eyebrow text-ink-3">Attribute</th>
+            <th className="bg-surface-2 px-4 py-3 text-left eyebrow text-ink-3">Attribute</th>
             {columns.map((c, i) => (
               <th
                 key={c}
                 className={cn(
-                  'bg-surface-2 px-4 py-3 text-left text-eyebrow',
+                  'bg-surface-2 px-4 py-3 text-left eyebrow',
                   i === highlight ? 'bg-action-soft text-action' : 'text-ink-3',
                 )}
               >

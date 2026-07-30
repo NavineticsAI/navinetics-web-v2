@@ -3,7 +3,6 @@ import { ArrowUpRight, Search, X } from 'lucide-react';
 import { usePageMeta } from '../lib/meta.js';
 import {
   publications,
-  publicationJournals,
   publicationTopics,
   publicationYears,
 } from '../data/publications.js';
@@ -176,7 +175,7 @@ export default function Publications() {
 function FilterGroup({ label, value, onChange, options }) {
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="mr-1 text-eyebrow text-ink-3">{label}</span>
+      <span className="mr-1 eyebrow text-ink-3">{label}</span>
       <Chip active={value === 'all'} onClick={() => onChange('all')}>
         All
       </Chip>

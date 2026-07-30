@@ -94,7 +94,7 @@ export default function Home() {
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal className="sm:col-span-2">
             <Card lift className="nn-retic relative h-full min-h-56 overflow-hidden">
-              <span className="text-eyebrow text-action">Unprecedented access</span>
+              <span className="eyebrow text-action">Unprecedented access</span>
               <h3 className="mt-3 text-2xl tracking-[-0.03em]">
                 The anchor key replaces the head ring
               </h3>

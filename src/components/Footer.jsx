@@ -45,14 +45,14 @@ export default function Footer() {
               the patient and the physician, and translating those conversations into safe,
               effective, high-quality devices.
             </p>
-            <p className="mt-4 text-eyebrow text-sg-300">
+            <p className="mt-4 eyebrow text-sg-300">
               Quality and simplicity, in everything we do
             </p>
           </div>
 
           {columns.map((col) => (
             <nav key={col.title} aria-label={col.title}>
-              <h2 className="text-eyebrow text-nn-300">{col.title}</h2>
+              <h2 className="eyebrow text-nn-300">{col.title}</h2>
               <ul className="mt-4 flex flex-col gap-2.5">
                 {col.links.map((l) => (
                   <li key={l.to}>
