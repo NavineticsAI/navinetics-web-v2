@@ -6,7 +6,6 @@ import { Button, Field, Hero, Reveal, Section, Switch } from '../ui/index.js';
 const REASONS = [
   'Frame System enquiry',
   'Neuromodulation research',
-  'Investment',
   'Careers',
   'Something else',
 ];
@@ -21,7 +20,7 @@ export default function Contact() {
   usePageMeta({
     title: 'Contact',
     description:
-      'Get in touch with NaviNetics about the Frame System, neuromodulation research, investment or careers.',
+      'Get in touch with NaviNetics about the Frame System, neuromodulation research or careers.',
   });
 
   const [form, setForm] = useState({ name: '', email: '', reason: REASONS[0], message: '' });

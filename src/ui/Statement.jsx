@@ -5,7 +5,8 @@ import { Eyebrow, Reveal } from './Section.jsx';
 /**
  * Short copy plus one action. Replaces the four different centred cards the
  * original build used — each in a different accent colour (slate on Careers,
- * emerald on Investment, emerald again on Community). One component, one accent.
+ * emerald on the since-removed Investment page, emerald again on Community).
+ * One component, one accent.
  */
 export function Statement({ eyebrow, title, children, actions, framed = true, className }) {
   const Wrap = framed ? Reticle : 'div';

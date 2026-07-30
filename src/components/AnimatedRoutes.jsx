@@ -9,7 +9,6 @@ import Community from '../pages/Community.jsx';
 import Education from '../pages/Education.jsx';
 import Publications from '../pages/Publications.jsx';
 import Careers from '../pages/Careers.jsx';
-import Investment from '../pages/Investment.jsx';
 import Contact from '../pages/Contact.jsx';
 import NotFound from '../pages/NotFound.jsx';
 import PageTransition from './PageTransition.jsx';
@@ -24,7 +23,6 @@ const routes = [
   { path: '/resources/education', element: <Education /> },
   { path: '/resources/publications', element: <Publications /> },
   { path: '/careers', element: <Careers /> },
-  { path: '/investment-opportunities', element: <Investment /> },
   { path: '/contact', element: <Contact /> },
   // A real 404. Previously unknown URLs silently rendered Home, which tells
   // both users and crawlers the page exists.

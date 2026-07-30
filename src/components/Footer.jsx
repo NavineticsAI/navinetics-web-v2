@@ -22,7 +22,6 @@ const columns = [
       { label: 'Education', to: '/resources/education' },
       { label: 'Publications', to: '/resources/publications' },
       { label: 'Careers', to: '/careers' },
-      { label: 'Investment', to: '/investment-opportunities' },
     ],
   },
 ];

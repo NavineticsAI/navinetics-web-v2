@@ -169,14 +169,15 @@ export default function Home() {
         <Reveal className="flex flex-col items-center gap-6 text-center">
           <h2 className="text-d2">Let's talk.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            Whether you're a surgeon, a researcher, or an investor — we'd like to hear from you.
+            Whether you're a surgeon, a researcher, or a prospective colleague — we'd like to hear
+            from you.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button to="/contact" size="lg" arrow>
               Contact us
             </Button>
-            <Button to="/investment-opportunities" size="lg" variant="secondary">
-              Investment opportunities
+            <Button to="/resources/publications" size="lg" variant="secondary">
+              Read our research
             </Button>
           </div>
         </Reveal>

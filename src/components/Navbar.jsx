@@ -34,7 +34,6 @@ const nav = [
     ],
   },
   { title: 'Careers', path: '/careers' },
-  { title: 'Investment', path: '/investment-opportunities' },
 ];
 
 export default function Navbar() {

@@ -6,7 +6,7 @@ What the existing content actually is, and the templates that fall out of it.
 
 ## Content audit
 
-Eleven routes, five genuinely distinct content types:
+Ten routes, five genuinely distinct content types:
 
 | Type | Routes | Shape |
 |---|---|---|
@@ -14,10 +14,10 @@ Eleven routes, five genuinely distinct content types:
 | **Long-form technical** | Education | 400-word blocks of electrochemistry + figures |
 | **Indexed records** | Publications | A growing list needing search and filter |
 | **People** | Founders | Long biographies with portraits |
-| **Statement + CTA** | Careers, Investment, Community, Who We Are | Short copy, one action |
+| **Statement + CTA** | Careers, Community, Who We Are | Short copy, one action |
 | **Interactive** | Contact | Form |
 
-The original build treated all eleven as bespoke pages. Five templates cover them.
+The original build treated every route as a bespoke page. Five templates cover them.
 
 ---
 
@@ -94,11 +94,11 @@ No glass, no reticle on the portraits. These are people, not targets.
 
 ## Statement + CTA template
 
-Careers, Investment, Community, Who We Are. Short copy and one action.
+Careers, Community, Who We Are. Short copy and one action.
 
 The original built these as centred cards with decorative blurred blobs, each in a different colour —
-Careers in slate, Investment in **emerald**, Community's card in emerald, Who We Are mixing blue and
-emerald. All of it becomes one `Statement` component using `action`.
+Careers in slate, the since-removed Investment page in **emerald**, Community's card in emerald,
+Who We Are mixing blue and emerald. All of it becomes one `Statement` component using `action`.
 
 **Careers is built to grow.** It renders a `JobList` when `src/data/jobs.js` is non-empty and falls
 back to the general enquiry statement when it isn't. No rework needed when the first opening posts.
@@ -132,11 +132,14 @@ Unchanged. The existing structure is sound and the URLs should not break.
 /resources/education                Education
 /resources/publications             Publications
 /careers                            Careers
-/investment-opportunities           Investment
 /contact                            Contact
 ```
 
 New products slot in under `/what-we-do/:slug` automatically.
+
+`/investment-opportunities` was removed at NaviNetics' request. Nothing redirects to it — the
+route simply 404s, which is correct for a page that should no longer exist. If the URL was ever
+shared externally, add a redirect rather than restoring the page.
 
 ---
 
