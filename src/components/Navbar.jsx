@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -8,6 +8,10 @@ import { products } from '../data/products.js';
 import { Button } from '../ui/Button.jsx';
 import { ProductPlate } from '../ui/Card.jsx';
 import { ThemeToggle } from '../ui/ThemeToggle.jsx';
+
+const MENU_W = 240; // w-60
+const MEGA_MAX = 608; // 38rem
+const EDGE = 12; // viewport gutter
 
 const nav = [
   {
@@ -36,10 +40,46 @@ const nav = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openIdx, setOpenIdx] = useState(null);
+  const [anchor, setAnchor] = useState({ left: 0, top: 0, width: MENU_W });
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const reduced = usePrefersReducedMotion();
+
   const navRef = useRef(null);
+  const pillRef = useRef(null);
+  const itemRefs = useRef([]);
+
+  /**
+   * Panels are positioned manually because they render OUTSIDE the frosted
+   * pill. They have to: an element with backdrop-filter becomes a backdrop
+   * root, so a nested panel would blur the pill's empty interior instead of
+   * the page — which renders it completely transparent.
+   */
+  const measure = useCallback((idx) => {
+    const item = itemRefs.current[idx];
+    const navEl = navRef.current;
+    const pill = pillRef.current;
+    if (!item || !navEl || !pill) return;
+
+    const nr = navEl.getBoundingClientRect();
+    const ir = item.getBoundingClientRect();
+    const pr = pill.getBoundingClientRect();
+    const isMega = !!nav[idx].mega;
+    const width = isMega ? Math.min(MEGA_MAX, window.innerWidth * 0.8) : MENU_W;
+
+    let left = isMega ? ir.left + ir.width / 2 - width / 2 : ir.left;
+    left = Math.max(EDGE, Math.min(left, window.innerWidth - width - EDGE));
+
+    setAnchor({ left: left - nr.left, top: pr.bottom - nr.top, width });
+  }, []);
+
+  const open = useCallback(
+    (idx) => {
+      setOpenIdx(idx);
+      measure(idx);
+    },
+    [measure],
+  );
 
   useEffect(() => {
     setMobileOpen(false);
@@ -53,6 +93,19 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // The pill changes width on scroll, so a held-open panel must follow it.
+  useLayoutEffect(() => {
+    if (openIdx == null) return;
+    const update = () => measure(openIdx);
+    update();
+    window.addEventListener('resize', update);
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      window.removeEventListener('resize', update);
+      window.removeEventListener('scroll', update);
+    };
+  }, [openIdx, scrolled, measure]);
+
   // Esc closes any open panel; never trap focus in the bar.
   useEffect(() => {
     const onKey = (e) => {
@@ -65,7 +118,7 @@ export default function Navbar() {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  const panel = reduced
+  const panelMotion = reduced
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
     : {
         initial: { opacity: 0, y: 8, scale: 0.98 },
@@ -73,18 +126,20 @@ export default function Navbar() {
         exit: { opacity: 0, y: 4, scale: 0.98 },
       };
 
+  const active = openIdx != null ? nav[openIdx] : null;
+
   return (
     <nav
       ref={navRef}
       aria-label="Main"
-      className="fixed inset-x-0 top-0 z-50 px-3 pt-3 transition-[padding] duration-[420ms] ease-out"
+      className="fixed inset-x-0 top-0 z-50 px-3 pt-3"
       onMouseLeave={() => setOpenIdx(null)}
     >
       {/* Frosted, never refracting — a lens here would re-filter the backdrop
-          on every scroll pixel. */}
-      {/* min-h keeps the bar a fixed height through the contraction, so the
-          transition can never change it even if content reflows. */}
+          on every scroll pixel. min-h keeps the height fixed through the
+          contraction so the transition can never change it. */}
       <div
+        ref={pillRef}
         className={cn(
           'nn-glass mx-auto flex min-h-14 items-center gap-5 rounded-full py-2 pl-5 pr-2 [--gb:16px]',
           'transition-[max-width] duration-[420ms] ease-out',
@@ -97,10 +152,16 @@ export default function Navbar() {
 
         <div className="hidden flex-1 items-center gap-1 lg:flex">
           {nav.map((link, idx) => (
-            <div key={link.title} className="relative" onMouseEnter={() => setOpenIdx(idx)}>
+            <div
+              key={link.title}
+              ref={(el) => {
+                itemRefs.current[idx] = el;
+              }}
+              onMouseEnter={() => open(idx)}
+            >
               <NavLink
                 to={link.path}
-                onFocus={() => setOpenIdx(idx)}
+                onFocus={() => open(idx)}
                 aria-expanded={link.items || link.mega ? openIdx === idx : undefined}
                 className={({ isActive }) =>
                   cn(
@@ -117,61 +178,6 @@ export default function Navbar() {
                   <ChevronDown size={13} className="opacity-60" aria-hidden="true" />
                 )}
               </NavLink>
-
-              <AnimatePresence>
-                {openIdx === idx && link.items && (
-                  <motion.div
-                    key={`${link.title}-menu`}
-                    {...panel}
-                    transition={{ duration: 0.18, ease: EASE_OUT }}
-                    className="nn-glass absolute left-0 top-full mt-2 w-60 overflow-hidden rounded-md p-1.5 [--gb:30px]"
-                  >
-                    {link.items.map((it) => (
-                      <Link
-                        key={it.path}
-                        to={it.path}
-                        className="block rounded-sm px-3.5 py-2.5 text-sm text-ink-2 transition-colors duration-100 hover:bg-action-soft hover:text-action"
-                      >
-                        {it.title}
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-
-                {openIdx === idx && link.mega && (
-                  <motion.div
-                    key={`${link.title}-mega`}
-                    {...panel}
-                    transition={{ duration: 0.18, ease: EASE_OUT }}
-                    className="nn-glass absolute left-1/2 top-full mt-2 w-[min(38rem,80vw)] -translate-x-1/2 overflow-hidden rounded-lg p-2 [--gb:34px]"
-                  >
-                    <div className="grid gap-1.5 sm:grid-cols-2">
-                      {products.map((p) => (
-                        <Link
-                          key={p.slug}
-                          to={p.path}
-                          className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
-                        >
-                          <ProductPlate
-                            src={p.hero}
-                            alt=""
-                            className="h-14 w-16 shrink-0 rounded-sm"
-                            imgClassName="!p-1.5"
-                          />
-                          <div className="min-w-0">
-                            <div className="text-sm font-semibold leading-tight group-hover/mega:text-action">
-                              {p.shortName}
-                            </div>
-                            <div className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink-3">
-                              {p.family}
-                            </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
           ))}
         </div>
@@ -193,6 +199,67 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* ── Dropdown panels ──────────────────────────────────────────────────
+          Siblings of the pill, never children. See `measure` above. */}
+      <AnimatePresence>
+        {active && (active.items || active.mega) && (
+          <motion.div
+            key={active.title}
+            {...panelMotion}
+            transition={{ duration: 0.18, ease: EASE_OUT }}
+            className="absolute hidden lg:block"
+            style={{ left: anchor.left, top: anchor.top, width: anchor.width }}
+          >
+            {/* pt-2 is the visual gap AND the hover bridge — without it the
+                pointer crosses dead space and the menu closes on approach. */}
+            <div className="pt-2">
+              {active.items && (
+                <div className="nn-glass overflow-hidden rounded-md p-1.5 [--gb:30px]">
+                  {active.items.map((it) => (
+                    <Link
+                      key={it.path}
+                      to={it.path}
+                      className="block rounded-sm px-3.5 py-2.5 text-sm text-ink-2 transition-colors duration-100 hover:bg-action-soft hover:text-action"
+                    >
+                      {it.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {active.mega && (
+                <div className="nn-glass overflow-hidden rounded-lg p-2 [--gb:34px]">
+                  <div className="grid gap-1.5 sm:grid-cols-2">
+                    {products.map((p) => (
+                      <Link
+                        key={p.slug}
+                        to={p.path}
+                        className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
+                      >
+                        <ProductPlate
+                          src={p.hero}
+                          alt=""
+                          className="h-14 w-16 shrink-0 rounded-sm"
+                          imgClassName="!p-1.5"
+                        />
+                        <div className="min-w-0">
+                          <div className="text-sm font-semibold leading-tight group-hover/mega:text-action">
+                            {p.shortName}
+                          </div>
+                          <div className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink-3">
+                            {p.family}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -208,17 +275,18 @@ export default function Navbar() {
                   <Link to={link.path} className="text-base font-semibold">
                     {link.title}
                   </Link>
-                  {(link.items ?? (link.mega ? products.map((p) => ({ title: p.shortName, path: p.path })) : null))?.map(
-                    (it) => (
-                      <Link
-                        key={it.path}
-                        to={it.path}
-                        className="border-l border-hairline pl-3 text-sm text-ink-2"
-                      >
-                        {it.title}
-                      </Link>
-                    ),
-                  )}
+                  {(
+                    link.items ??
+                    (link.mega ? products.map((p) => ({ title: p.shortName, path: p.path })) : null)
+                  )?.map((it) => (
+                    <Link
+                      key={it.path}
+                      to={it.path}
+                      className="border-l border-hairline pl-3 text-sm text-ink-2"
+                    >
+                      {it.title}
+                    </Link>
+                  ))}
                 </div>
               ))}
               <div className="mt-2 flex items-center justify-between">
