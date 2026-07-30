@@ -82,11 +82,13 @@ export default function Navbar() {
     >
       {/* Frosted, never refracting — a lens here would re-filter the backdrop
           on every scroll pixel. */}
+      {/* min-h keeps the bar a fixed height through the contraction, so the
+          transition can never change it even if content reflows. */}
       <div
         className={cn(
-          'nn-glass mx-auto flex items-center gap-5 rounded-full py-2 pl-5 pr-2 [--gb:16px]',
-          'transition-[max-width,padding] duration-[420ms] ease-out',
-          scrolled ? 'max-w-4xl' : 'max-w-7xl',
+          'nn-glass mx-auto flex min-h-14 items-center gap-5 rounded-full py-2 pl-5 pr-2 [--gb:16px]',
+          'transition-[max-width] duration-[420ms] ease-out',
+          scrolled ? 'max-w-5xl' : 'max-w-7xl',
         )}
       >
         <Link to="/" className="flex shrink-0 items-center" aria-label="NaviNetics home">
@@ -102,7 +104,9 @@ export default function Navbar() {
                 aria-expanded={link.items || link.mega ? openIdx === idx : undefined}
                 className={({ isActive }) =>
                   cn(
-                    'flex items-center gap-1 rounded-full px-3 py-2 text-sm font-medium',
+                    // whitespace-nowrap is load-bearing: without it the labels
+                    // wrap when the bar contracts and the bar changes height.
+                    'flex items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium',
                     'transition-colors duration-100 hover:text-action',
                     isActive ? 'text-action' : 'text-ink-2',
                   )
@@ -117,6 +121,7 @@ export default function Navbar() {
               <AnimatePresence>
                 {openIdx === idx && link.items && (
                   <motion.div
+                    key={`${link.title}-menu`}
                     {...panel}
                     transition={{ duration: 0.18, ease: EASE_OUT }}
                     className="nn-glass absolute left-0 top-full mt-2 w-60 overflow-hidden rounded-md p-1.5 [--gb:30px]"
@@ -135,6 +140,7 @@ export default function Navbar() {
 
                 {openIdx === idx && link.mega && (
                   <motion.div
+                    key={`${link.title}-mega`}
                     {...panel}
                     transition={{ duration: 0.18, ease: EASE_OUT }}
                     className="nn-glass absolute left-1/2 top-full mt-2 w-[min(38rem,80vw)] -translate-x-1/2 overflow-hidden rounded-lg p-2 [--gb:34px]"
@@ -170,7 +176,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <ThemeToggle className="hidden sm:inline-flex" />
           <Button to="/contact" size="sm" className="hidden lg:inline-flex">
             Contact
