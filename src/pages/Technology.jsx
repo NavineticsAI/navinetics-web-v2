@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
-import { getTechnology, isTechPlaceholder, technologies } from '../data/technology.js';
+import { getTechnology, isTechPlaceholder } from '../data/technology.js';
 import { getProduct } from '../data/products.js';
 import {
   ComingSoon,
@@ -119,5 +119,3 @@ export default function Technology() {
   );
 }
 
-/** Every technology, for the nav panel and the Technology index. */
-export { technologies };
