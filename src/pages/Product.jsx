@@ -1,8 +1,9 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
-import { comparison, getProduct, otherProducts } from '../data/products.js';
+import { comparison, getProduct, isPlaceholder, otherProducts } from '../data/products.js';
 import {
   Button,
+  ComingSoon,
   ComparisonTable,
   ComponentList,
   Gallery,
@@ -40,13 +41,24 @@ export default function Product() {
       <Hero
         size="lg"
         tone="dark"
-        eyebrow={`What we do — ${product.shortName}`}
+        eyebrow={`Products — ${product.shortName}`}
         title={product.tagline}
         lead={product.intro}
       >
-        <MetricRow metrics={product.metrics} tone="dark" />
+        {/* Placeholder products have no metrics — see data/products.js */}
+        {product.metrics?.length > 0 && <MetricRow metrics={product.metrics} tone="dark" />}
       </Hero>
 
+      {isPlaceholder(product) ? (
+        <Section>
+          <ComingSoon
+            title={`${product.name} isn't specified yet.`}
+            body="The product is real and in development. Its dimensions, load ratings and radiolucency characteristics are regulated claims, so rather than fill a spec table with plausible numbers, here's what's outstanding."
+            needs={product.needsContent}
+          />
+        </Section>
+      ) : (
+        <>
       <ScrollSequence
         steps={product.sequence}
         image={product.hero}
@@ -136,6 +148,9 @@ export default function Product() {
         </Section>
       )}
 
+        </>
+      )}
+
       {/* Cross-sell */}
       {others.length > 0 && (
         <Section band={!comparison.published} wide>
@@ -167,5 +182,5 @@ export default function Product() {
 
 /** Redirect helper kept for any legacy link that lands on the bare section. */
 export function ProductIndexRedirect() {
-  return <Navigate to="/what-we-do/navinetics-frame-system" replace />;
+  return <Navigate to="/products/d1-stereotactic-frame" replace />;
 }

@@ -5,14 +5,14 @@ import { Hero, Reveal, Section, PullQuote } from '../ui/index.js';
 
 const cards = [
   {
-    to: '/who-we-are/our-founders',
+    to: '/company/our-founders',
     Icon: Users,
     title: 'The Visionaries',
     body: 'Meet the leaders behind NaviNetics — decades of combined experience in neurosurgery, biomedical engineering and technology development.',
     cta: 'Read their bios',
   },
   {
-    to: '/who-we-are/community',
+    to: '/company/community',
     Icon: MapPin,
     title: 'Our Community',
     body: 'Located in the heart of Downtown Rochester, MN. Learn more about the community that fosters our innovation and growth.',

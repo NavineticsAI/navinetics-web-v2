@@ -1,31 +1,12 @@
 import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
-import { products } from '../data/products.js';
+import { nav } from '../data/nav.js';
 import { IsoMark } from '../ui/Reticle.jsx';
 
-const columns = [
-  {
-    title: 'What We Do',
-    links: products.map((p) => ({ label: p.shortName, to: p.path })),
-  },
-  {
-    title: 'Who We Are',
-    links: [
-      { label: 'About NaviNetics', to: '/who-we-are' },
-      { label: 'Our Founders', to: '/who-we-are/our-founders' },
-      { label: 'Community', to: '/who-we-are/community' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Education', to: '/resources/education' },
-      { label: 'Publications', to: '/resources/publications' },
-      { label: 'Careers', to: '/careers' },
-    ],
-  },
-];
-
+/**
+ * Footer columns mirror the navbar, both read from data/nav.js — so a new page
+ * appears in the footer without a second edit.
+ */
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-nn-950 px-6 pb-10 pt-20 text-nn-50 lg:px-8">
@@ -35,7 +16,7 @@ export default function Footer() {
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="grid gap-12 lg:grid-cols-[1.4fr_repeat(3,1fr)]">
+        <div className="grid gap-12 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
           <div>
             <div className="text-2xl font-semibold tracking-[-0.03em]">
               Navi<span className="text-sg-300">Netics</span>
@@ -50,17 +31,17 @@ export default function Footer() {
             </p>
           </div>
 
-          {columns.map((col) => (
+          {nav.map((col) => (
             <nav key={col.title} aria-label={col.title}>
               <h2 className="eyebrow text-nn-300">{col.title}</h2>
               <ul className="mt-4 flex flex-col gap-2.5">
-                {col.links.map((l) => (
-                  <li key={l.to}>
+                {col.items.map((l) => (
+                  <li key={l.path}>
                     <Link
-                      to={l.to}
+                      to={l.path}
                       className="text-sm text-nn-100 transition-colors duration-100 hover:text-sg-300"
                     >
-                      {l.label}
+                      {l.title}
                     </Link>
                   </li>
                 ))}

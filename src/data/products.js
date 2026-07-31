@@ -2,9 +2,17 @@
  * The product catalogue.
  *
  * One record yields: a card in the catalogue grid, a detail page at
- * /what-we-do/:slug, an entry in the "What We Do" nav mega-panel, and a column
- * in the comparison grid. Adding a product means adding a record here — no new
+ * /products/:slug, an entry in the Products nav mega-panel, and a column in the
+ * comparison grid. Adding a product means adding a record here — no new
  * components, no new routes.
+ *
+ * `technology` links a product to the platform page that explains its science,
+ * so Products (what you buy) and Technology (how it works) cross-reference
+ * without duplicating each other.
+ *
+ * `status: 'in-development'` renders the ComingSoon treatment instead of the
+ * full detail template, so an unfinished product can appear in the catalogue
+ * without fabricating specifications for it.
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
@@ -18,12 +26,13 @@
 
 export const products = [
   {
-    slug: 'navinetics-frame-system',
-    path: '/what-we-do/navinetics-frame-system',
-    name: 'NaviNetics Frame System',
-    shortName: 'Frame System',
-    family: 'Reusable Stereotactic System',
+    slug: 'd1-stereotactic-frame',
+    path: '/products/d1-stereotactic-frame',
+    name: 'D1 Stereotactic Frame',
+    shortName: 'D1',
+    family: 'D1 Stereotactic Frame',
     tag: { label: 'Flagship', tone: 'action' },
+    technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nRadically comfortable.',
     summary:
       'Arc-centred targeting with a skull anchor key in place of a base ring. Three linear degrees of freedom, two angles of rotation.',
@@ -91,17 +100,48 @@ export const products = [
       { src: '/model-head-clean-750x998-1-451x600.png', caption: 'Anchor key on model', fit: 'contain' },
       { src: '/DSC05397-1024x695.jpg', caption: 'Stereotactic frame', fit: 'cover' },
       { src: '/microdrive-image-1024x797.png', caption: 'Mechanical microdrive', fit: 'contain' },
-      { src: '/stereotactic_halo.png', caption: 'Frame assembly', fit: 'contain' },
     ],
   },
 
   {
-    slug: 'neuromodulation',
-    path: '/what-we-do/neuromodulation',
-    name: 'NaviNetics NeuroModulation',
-    shortName: 'Neuromodulation',
-    family: 'WINCS Harmoni',
+    slug: 'carbon-fiber-surgical-tables',
+    path: '/products/carbon-fiber-surgical-tables',
+    name: 'Carbon Fiber Surgical Tables',
+    shortName: 'Surgical Tables',
+    family: 'Carbon Fiber Surgical Tables',
+    tag: { label: 'In development', tone: 'warn' },
+    technology: 'stereotactic-devices',
+    status: 'in-development',
+    tagline: 'Radiolucent by design.',
+    summary:
+      'Carbon fibre tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
+    /**
+     * PLACEHOLDER — content pending from NaviNetics.
+     * Deliberately no dimensions, load ratings, radiolucency figures or
+     * compatibility claims: all of those are regulated and none have been
+     * supplied. The page renders the ComingSoon treatment until they are.
+     */
+    intro:
+      'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fibre construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
+    hero: '/DSC05397-1024x695.jpg',
+    heroAlt: 'Placeholder image — carbon fibre surgical table photography pending',
+    needsContent: [
+      'Product photography',
+      'Dimensions and load ratings',
+      'Radiolucency characteristics',
+      'Imaging-system compatibility',
+      'Regulatory status',
+    ],
+  },
+
+  {
+    slug: 'maven-neuromodulation',
+    path: '/products/maven-neuromodulation',
+    name: 'Maven Neuromodulation',
+    shortName: 'Maven',
+    family: 'Maven Neuromodulation',
     tag: { label: 'Research', tone: 'line' },
+    technology: 'neuromodulation',
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
     summary:
       'Synchronised neurochemical and electrophysiological recording with stimulation, engineered to minimise stimulation artefact.',
@@ -171,6 +211,7 @@ export const products = [
 ];
 
 export const getProduct = (slug) => products.find((p) => p.slug === slug);
+export const isPlaceholder = (p) => p?.status === 'in-development';
 export const otherProducts = (slug) => products.filter((p) => p.slug !== slug);
 
 /**

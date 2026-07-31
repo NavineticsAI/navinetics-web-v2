@@ -6,7 +6,7 @@ What the existing content actually is, and the templates that fall out of it.
 
 ## Content audit
 
-Ten routes, five genuinely distinct content types:
+Sixteen routes, seven genuinely distinct content types:
 
 | Type | Routes | Shape |
 |---|---|---|
@@ -16,6 +16,8 @@ Ten routes, five genuinely distinct content types:
 | **People** | Founders | Long biographies with portraits |
 | **Statement + CTA** | Careers, Community, Who We Are | Short copy, one action |
 | **Interactive** | Contact | Form |
+| **Platform** | Technology × 3 | Principles, applied-in, hand-offs |
+| **Gallery** | Media | Filterable image and video library |
 
 The original build treated every route as a bespoke page. Five templates cover them.
 
@@ -120,28 +122,75 @@ signals the page has moved without stealing height from it.
 
 ## Information architecture
 
-Unchanged. The existing structure is sound and the URLs should not break.
+Restructured into four top-level groups. Products is what you can buy; Technology
+is how it works. They cross-reference rather than duplicate — Technology pages stay
+at platform level and hand off to Education for the science and Publications for
+the evidence.
 
 ```
-/                                   Home
-/who-we-are                         About
-/who-we-are/our-founders            Founders
-/who-we-are/community               Community
-/what-we-do/navinetics-frame-system Product · Frame System
-/what-we-do/neuromodulation         Product · Neuromodulation
-/resources/education                Education
-/resources/publications             Publications
-/careers                            Careers
-/contact                            Contact
+/                                        Home
+
+Company
+/company/who-we-are                      About
+/company/our-founders                    Founders
+/company/partners                        Partners            (placeholder)
+/company/community                       Community
+
+Products — the devices
+/products/d1-stereotactic-frame          D1 Stereotactic Frame
+/products/carbon-fiber-surgical-tables   Carbon Fiber Tables (placeholder)
+/products/maven-neuromodulation          Maven Neuromodulation
+
+Technology — the science
+/technology/stereotactic-devices         Stereotaxy
+/technology/neuromodulation              Neuromodulation
+/technology/navinetics-ai                NaviNetics AI       (placeholder)
+
+Resources
+/resources/media                         Media gallery
+/resources/careers                       Careers
+/resources/education                     Education
+/resources/publications                  Publications
+
+/contact                                 Contact
 ```
 
-New products slot in under `/what-we-do/:slug` automatically.
+`src/data/nav.js` is the single source of truth: the navbar, the footer and the
+route table all read it, so adding a page puts it in all three. Product and
+technology entries derive from their own data files, so a new product needs no
+nav edit at all.
 
-`/investment-opportunities` was removed at NaviNetics' request. Nothing redirects to it — the
-route simply 404s, which is correct for a page that should no longer exist. If the URL was ever
-shared externally, add a redirect rather than restoring the page.
+### Redirects
 
----
+The IA changed, so every previously published URL is redirected rather than left
+to 404. Declared in `redirects` in `src/data/nav.js` and registered ahead of the
+catch-all route:
+
+| Old | New |
+|---|---|
+| `/who-we-are` | `/company/who-we-are` |
+| `/who-we-are/our-founders` | `/company/our-founders` |
+| `/who-we-are/community` | `/company/community` |
+| `/what-we-do/navinetics-frame-system` | `/products/d1-stereotactic-frame` |
+| `/what-we-do/neuromodulation` | `/products/maven-neuromodulation` |
+| `/careers` | `/resources/careers` |
+| `/investment-opportunities` | `/contact` |
+
+### Placeholders
+
+Three pages exist without content: Partners, Carbon Fiber Surgical Tables, and
+NaviNetics AI. They render `<ComingSoon>`, which states plainly that the page is
+incomplete and lists what is outstanding.
+
+This is deliberate. The alternative — filling a spec table with plausible numbers
+— is the exact failure mode to avoid on a medical device site, where dimensions,
+load ratings and performance figures are regulated claims. An honest placeholder
+is safer than an invented specification, and the outstanding list means it cannot
+be quietly forgotten.
+
+Partners is empty for a different reason: "we came out of Mayo Clinic" and "Mayo
+Clinic is a named partner" are different claims, and the second needs both
+confirmation and permission to use another organisation's name and marks.
 
 ## Per-route metadata
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
-import { products } from '../data/products.js';
+import { isPlaceholder, products } from '../data/products.js';
 import { publications } from '../data/publications.js';
 import {
   Button,
@@ -35,14 +35,17 @@ export default function Home() {
           <Button to={products[0].path} size="lg" arrow>
             Discover the Frame System
           </Button>
-          <Button to="/who-we-are" size="lg" variant="secondary">
+          <Button to="/company/who-we-are" size="lg" variant="secondary">
             Who we are
           </Button>
         </div>
       </Hero>
 
-      {/* Product features — alternating, one Lens panel each (budget: 3 max) */}
-      {products.map((product, i) => (
+      {/* Product features — alternating, one Lens panel each (budget: 3 max).
+          Products still in development are excluded: they have no metrics to
+          show, and a half-empty feature section reads worse than absence. They
+          still appear in the nav, the footer and product cross-sell. */}
+      {products.filter((p) => !isPlaceholder(p)).map((product, i) => (
         <Section key={product.slug} wide band={i % 2 === 1}>
           <div
             className={`flex flex-col items-center gap-12 lg:gap-20 ${
@@ -120,7 +123,7 @@ export default function Home() {
                 </p>
               </div>
               <Link
-                to="/who-we-are/our-founders"
+                to="/company/our-founders"
                 className="mt-5 inline-flex w-fit rounded-full bg-on-action px-4 py-2 text-[0.8125rem] font-semibold text-action"
               >
                 Meet the founders
@@ -157,7 +160,7 @@ export default function Home() {
                   stimulation artefact never contaminates the recording.
                 </p>
               </div>
-              <LinkAction to="/what-we-do/neuromodulation" className="mt-5">
+              <LinkAction to="/products/maven-neuromodulation" className="mt-5">
                 Discover neuromodulation
               </LinkAction>
             </Card>

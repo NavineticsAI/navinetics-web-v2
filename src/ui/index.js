@@ -16,3 +16,4 @@ export { Hero } from './Hero.jsx';
 export { ConvergenceDiagram } from './ConvergenceDiagram.jsx';
 export { ScrollSequence } from './ScrollSequence.jsx';
 export { Statement, PullQuote } from './Statement.jsx';
+export { ComingSoon } from './ComingSoon.jsx';

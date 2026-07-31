@@ -4,37 +4,14 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '../lib/cn.js';
 import { EASE_OUT, usePrefersReducedMotion } from '../lib/motion.js';
-import { products } from '../data/products.js';
+import { nav } from '../data/nav.js';
 import { Button } from '../ui/Button.jsx';
 import { ProductPlate } from '../ui/Card.jsx';
 import { ThemeToggle } from '../ui/ThemeToggle.jsx';
 
-const MENU_W = 240; // w-60
-const MEGA_MAX = 608; // 38rem
-const EDGE = 12; // viewport gutter
-
-const nav = [
-  {
-    title: 'Who We Are',
-    path: '/who-we-are',
-    items: [
-      { title: 'About NaviNetics', path: '/who-we-are' },
-      { title: 'Our Founders', path: '/who-we-are/our-founders' },
-      { title: 'Community', path: '/who-we-are/community' },
-    ],
-  },
-  // Generated from the catalogue, so products four and five appear here for free.
-  { title: 'What We Do', path: products[0].path, mega: true },
-  {
-    title: 'Resources',
-    path: '/resources/education',
-    items: [
-      { title: 'Education', path: '/resources/education' },
-      { title: 'Publications', path: '/resources/publications' },
-    ],
-  },
-  { title: 'Careers', path: '/careers' },
-];
+const MENU_W = 240;
+const RICH_MAX = 620;
+const EDGE = 12;
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -63,10 +40,10 @@ export default function Navbar() {
     const nr = navEl.getBoundingClientRect();
     const ir = item.getBoundingClientRect();
     const pr = pill.getBoundingClientRect();
-    const isMega = !!nav[idx].mega;
-    const width = isMega ? Math.min(MEGA_MAX, window.innerWidth * 0.8) : MENU_W;
+    const rich = nav[idx].panel === 'rich';
+    const width = rich ? Math.min(RICH_MAX, window.innerWidth * 0.8) : MENU_W;
 
-    let left = isMega ? ir.left + ir.width / 2 - width / 2 : ir.left;
+    let left = rich ? ir.left + ir.width / 2 - width / 2 : ir.left;
     left = Math.max(EDGE, Math.min(left, window.innerWidth - width - EDGE));
 
     setAnchor({ left: left - nr.left, top: pr.bottom - nr.top, width });
@@ -105,7 +82,6 @@ export default function Navbar() {
     };
   }, [openIdx, scrolled, measure]);
 
-  // Esc closes any open panel; never trap focus in the bar.
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') {
@@ -161,7 +137,7 @@ export default function Navbar() {
               <NavLink
                 to={link.path}
                 onFocus={() => open(idx)}
-                aria-expanded={link.items || link.mega ? openIdx === idx : undefined}
+                aria-expanded={openIdx === idx}
                 className={({ isActive }) =>
                   cn(
                     // whitespace-nowrap is load-bearing: without it the labels
@@ -173,9 +149,7 @@ export default function Navbar() {
                 }
               >
                 {link.title}
-                {(link.items || link.mega) && (
-                  <ChevronDown size={13} className="opacity-60" aria-hidden="true" />
-                )}
+                <ChevronDown size={13} className="opacity-60" aria-hidden="true" />
               </NavLink>
             </div>
           ))}
@@ -201,7 +175,7 @@ export default function Navbar() {
       {/* ── Dropdown panels ──────────────────────────────────────────────────
           Siblings of the pill, never children. See `measure` above. */}
       <AnimatePresence>
-        {active && (active.items || active.mega) && (
+        {active && (
           <motion.div
             key={active.title}
             {...panelMotion}
@@ -212,7 +186,41 @@ export default function Navbar() {
             {/* pt-2 is the visual gap AND the hover bridge — without it the
                 pointer crosses dead space and the menu closes on approach. */}
             <div className="pt-2">
-              {active.items && (
+              {active.panel === 'rich' ? (
+                <div className="nn-glass overflow-hidden rounded-lg p-2 [--gb:34px]">
+                  <div className="grid gap-1.5">
+                    {active.items.map((it) => (
+                      <Link
+                        key={it.path}
+                        to={it.path}
+                        className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
+                      >
+                        <ProductPlate
+                          src={it.image}
+                          alt=""
+                          className="h-14 w-16 shrink-0 rounded-sm"
+                          imgClassName="!p-1.5"
+                        />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-semibold leading-tight group-hover/mega:text-action">
+                              {it.title}
+                            </span>
+                            {it.note && (
+                              <span className="font-data text-[0.5625rem] uppercase tracking-[0.1em] text-warn">
+                                {it.note}
+                              </span>
+                            )}
+                          </div>
+                          <div className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink-3">
+                            {it.subtitle}
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ) : (
                 <div className="nn-glass overflow-hidden rounded-md p-1.5 [--gb:30px]">
                   {active.items.map((it) => (
                     <Link
@@ -223,35 +231,6 @@ export default function Navbar() {
                       {it.title}
                     </Link>
                   ))}
-                </div>
-              )}
-
-              {active.mega && (
-                <div className="nn-glass overflow-hidden rounded-lg p-2 [--gb:34px]">
-                  <div className="grid gap-1.5 sm:grid-cols-2">
-                    {products.map((p) => (
-                      <Link
-                        key={p.slug}
-                        to={p.path}
-                        className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
-                      >
-                        <ProductPlate
-                          src={p.hero}
-                          alt=""
-                          className="h-14 w-16 shrink-0 rounded-sm"
-                          imgClassName="!p-1.5"
-                        />
-                        <div className="min-w-0">
-                          <div className="text-sm font-semibold leading-tight group-hover/mega:text-action">
-                            {p.shortName}
-                          </div>
-                          <div className="mt-0.5 line-clamp-2 text-xs leading-snug text-ink-3">
-                            {p.family}
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
                 </div>
               )}
             </div>
@@ -266,18 +245,13 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.22, ease: EASE_OUT }}
-            className="nn-glass mx-auto mt-2 max-w-7xl overflow-hidden rounded-lg p-4 [--gb:30px] lg:hidden"
+            className="nn-glass mx-auto mt-2 max-h-[75vh] max-w-7xl overflow-y-auto rounded-lg p-4 [--gb:30px] lg:hidden"
           >
             <div className="flex flex-col gap-4">
               {nav.map((link) => (
                 <div key={link.title} className="flex flex-col gap-1.5">
-                  <Link to={link.path} className="text-base font-semibold">
-                    {link.title}
-                  </Link>
-                  {(
-                    link.items ??
-                    (link.mega ? products.map((p) => ({ title: p.shortName, path: p.path })) : null)
-                  )?.map((it) => (
+                  <span className="text-base font-semibold">{link.title}</span>
+                  {link.items.map((it) => (
                     <Link
                       key={it.path}
                       to={it.path}
