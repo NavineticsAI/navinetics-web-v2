@@ -1,0 +1,122 @@
+/**
+ * The technology platforms.
+ *
+ * Technology explains HOW things work; Products is WHAT you can buy. They are
+ * deliberately different jobs, so these pages stay at platform level and hand
+ * off rather than restating:
+ *   · deep science      → /resources/education
+ *   · evidence          → /resources/publications
+ *   · the actual device → the linked product
+ *
+ * One record yields a detail page at /technology/:slug and an entry in the
+ * Technology nav panel.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * CLAIMS NOTICE
+ * Drawn from NaviNetics' existing public site and publications. No accuracy
+ * figures, performance numbers or availability claims have been invented.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/**
+ * ASSET WARNING — do not use /stereotactic_halo.png or /halo_ring.png.
+ * The first carries a competitor's trademark (Stryker) on the device and
+ * appears to be an AI render; the second is an unbranded AI render of a
+ * base head ring — the component NaviNetics' anchor key replaces. Neither
+ * depicts a NaviNetics product. Use photography of actual devices.
+ */
+
+export const technologies = [
+  {
+    slug: 'stereotactic-devices',
+    path: '/technology/stereotactic-devices',
+    name: 'Stereotactic Devices',
+    eyebrow: 'Technology — Stereotaxy',
+    tagline: 'Reaching one point\nfrom any angle.',
+    summary:
+      'Arc-centred targeting: three linear degrees of freedom place a target at the focus of an arc, and two rotations set the trajectory to it.',
+    hero: '/DSC05397-1024x695.jpg',
+    heroAlt: 'The NaviNetics stereotactic frame assembly',
+    principles: [
+      {
+        title: 'A coordinate system fixed to the patient',
+        body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy. Without that link there is no way to translate a point on a scan into a point in a person.',
+      },
+      {
+        title: 'Three linear axes, two rotations',
+        body: 'X, Y and Z place the target at the focus — the iso-centre — of the arc. Ring and arc angles then set the approach trajectory to it. Because every trajectory passes through the same focus, the target can be approached from many directions without recomputing it.',
+      },
+      {
+        title: 'Localisers tie it to the image',
+        body: 'MR and CT localisers, and X-ray reticles, register the imaging volume to the frame so that a planned coordinate and a delivered coordinate are the same thing.',
+      },
+    ],
+    appliedIn: ['d1-stereotactic-frame', 'carbon-fiber-surgical-tables'],
+    readMore: [
+      { label: 'Stereotactic neurosurgery, explained', to: '/resources/education#stereotaxy' },
+      { label: 'Published accuracy and validation work', to: '/resources/publications' },
+    ],
+  },
+
+  {
+    slug: 'neuromodulation',
+    path: '/technology/neuromodulation',
+    name: 'Neuromodulation',
+    eyebrow: 'Technology — Neuromodulation',
+    tagline: 'Measuring what\nstimulation changes.',
+    summary:
+      'Recording neurochemical and electrophysiological activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
+    hero: '/WINC-Harmoni-Device.png',
+    heroAlt: 'The WINCS Harmoni device',
+    principles: [
+      {
+        title: 'Chemistry, measured electrically',
+        body: 'Neurotransmitters are detected by their oxidation and reduction at an electrode surface. Fast-scan cyclic voltammetry sweeps the electrode potential and reads the resulting current; the shape of that response identifies the analyte.',
+      },
+      {
+        title: 'Absolute, not just relative',
+        body: 'Multiple cyclic square wave voltammetry measures absolute concentration in the extracellular space rather than only phasic change — which matters if you want to compare across sessions or subjects.',
+      },
+      {
+        title: 'Synchronised with stimulation',
+        body: 'Measurement and stimulation channels are independent but synchronised, so stimulation artefact is minimised at the point of integration instead of being filtered out afterwards.',
+      },
+    ],
+    appliedIn: ['maven-neuromodulation'],
+    readMore: [
+      { label: 'Neurochemical detection, explained', to: '/resources/education#neurochemical' },
+      { label: 'Voltammetry method papers', to: '/resources/publications' },
+    ],
+  },
+
+  {
+    slug: 'navinetics-ai',
+    path: '/technology/navinetics-ai',
+    name: 'NaviNetics AI',
+    eyebrow: 'Technology — Software',
+    tagline: 'Software for\nplanning and targeting.',
+    summary:
+      'Software work applying machine learning to neuronavigation — including automated landmark localisation, a method the team has already published.',
+    hero: '/microdrive-image-1024x797.png',
+    heroAlt: 'Placeholder image — NaviNetics AI visuals pending',
+    /**
+     * PLACEHOLDER — content pending from NaviNetics.
+     * The one concrete statement here (published work on automated landmark
+     * localisation for neuronavigation) is verifiable. Nothing is claimed about
+     * availability, regulatory status, or performance.
+     */
+    status: 'in-development',
+    needsContent: [
+      'What the software does, in one sentence',
+      'Whether it is a product, a platform, or research',
+      'Screenshots or interface visuals',
+      'Regulatory status and intended use',
+    ],
+    principles: [],
+    appliedIn: [],
+    readMore: [{ label: 'Published research', to: '/resources/publications' }],
+  },
+];
+
+export const getTechnology = (slug) => technologies.find((t) => t.slug === slug);
+export const isTechPlaceholder = (t) => t?.status === 'in-development';

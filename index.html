@@ -2,14 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>NaviNetics | Modern Medical Devices</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Light default; theme.jsx rewrites this when the user toggles. -->
+    <meta name="theme-color" content="#F4F7F9" />
+    <meta
+      name="description"
+      content="NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery. Born from the Neural Engineering Laboratories at Mayo Clinic."
+    />
+
+    <!-- Self-hosted; preload the two faces used above the fold. -->
+    <link
+      rel="preload"
+      href="/fonts/instrument-sans-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/plex-mono-500-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!--
+      Resolve the theme BEFORE first paint. The previous build set
+      `bg-black text-white` on <body> while App forced white, so every cold
+      load flashed black. Kept in sync with src/lib/theme.jsx.
+
+      Light is the default. The OS prefers-color-scheme setting is deliberately
+      not consulted — dark is opt-in via the toggle, and remembered.
+    -->
+    <script>
+      (function () {
+        try {
+          var s = localStorage.getItem('nn-theme');
+          document.documentElement.setAttribute('data-theme', s === 'dark' ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+      })();
+    </script>
+
+    <title>NaviNetics — Precision stereotactic and neuromodulation devices</title>
   </head>
-  <body class="bg-black text-white antialiased">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
