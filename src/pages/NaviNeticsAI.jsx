@@ -96,16 +96,17 @@ export default function NaviNeticsAI() {
               + '0.6 mm deviation.'],
             ['Next', 'muted', 'Clinical validation studies',
               'Formal studies. No availability, performance or regulatory claim is made until they exist.'],
-            /* Stated the way the repository states it. Development follows
-               IEC 62304 Class C practice and the requirements and risk sets
-               are maintained alongside the code, but the device master record
-               is explicitly marked "not approved", the classification is not
-               a controlled statement yet, and nothing has been submitted. */
+            /* The supporting detail is deliberately not on the page: the
+               standard it is built to, the requirement and risk sets kept
+               alongside the code, and the fact that classification and
+               intended use are not yet settled. All of that is true and all
+               of it is in the application repository, but a visitor reading a
+               status ladder wants the status. What must stay is the last
+               clause — the device master record there is explicitly marked
+               "not approved" and nothing has been submitted. */
             ['Planned', 'muted', 'Regulatory submission',
-              'Built to IEC 62304 Class C software practice, with requirements, risk management '
-              + 'and traceability maintained alongside the code. Classification and intended use '
-              + 'are not yet settled, no submission has been made, and no clearance or approval '
-              + 'is claimed or implied.'],
+              'Developed under a formal software safety process. No submission has been made, '
+              + 'and no clearance is claimed.'],
           ].map(([stage, tone, head, body]) => (
             <Reveal key={stage} className="flex flex-wrap items-start gap-5 bg-surface px-6 py-5">
               <span
