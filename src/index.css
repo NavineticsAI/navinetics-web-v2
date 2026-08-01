@@ -88,7 +88,12 @@
   --text-d1: clamp(2.25rem, 5.4vw, 4rem);
   --text-d2: clamp(1.75rem, 3.6vw, 2.75rem);
   --text-lead: clamp(1.0625rem, 1.5vw, 1.25rem);
-  --eyebrow: 0.6875rem;
+  /* Named `--text-eyebrow`, not `--eyebrow`: the .eyebrow utility below reads
+     it by that name, and Tailwind only emits theme variables something
+     references. Under the old name it emitted nothing, the utility's
+     font-size was invalid at computed-value time, and every eyebrow on the
+     site silently inherited 16px instead of 11px. */
+  --text-eyebrow: 0.6875rem;
 }
 
 /* ── Semantic tokens · LIGHT ───────────────────────────────────────────────
@@ -164,6 +169,41 @@
   color-scheme: dark;
 }
 
+/* ── Planning workstation · THEME-INDEPENDENT ──────────────────────────────
+   The simulated application on /technology/navinetics-ai is a screen, so it
+   does not follow the page theme — it looks the same in light and dark, the
+   way a monitor in a photograph would.
+
+   Every value here was sampled from screenshots of the real application with
+   a canvas, not picked by eye. Note R < G < B throughout: the chrome is a
+   blue-grey slate, and an accurate neutral grey looks wrong next to it.   */
+:root {
+  --ws-bg: #17191c; /* window body, title bar, 3D viewport */
+  --ws-chassis: #1e2125; /* pane title bars */
+  --ws-panel: #22262b; /* cards, rails */
+  --ws-elev: #272c31; /* panel body, fields, buttons */
+  --ws-line: #3a424b;
+  --ws-line-2: #2d3239;
+  --ws-ink: #f5f7fa;
+  --ws-ink-2: #ccd4dd;
+  --ws-ink-3: #8c97a3;
+  --ws-vp: #040404; /* the 2D viewports are near-pure black */
+  --ws-blue: #4e78d8;
+  --ws-plan-rim: #506fb8; /* the plan card border is blue, not amber */
+  --ws-entry-rim: #65a2dd;
+  --ws-target-rim: #c7863a;
+  /* Axis colours. Arc and Collar carry the colour of the axis they rotate
+     about, which is why Arc reads red like X and Collar green like Y. */
+  --ws-ax-x: #d0553f;
+  --ws-ax-y: #38a36f;
+  --ws-ax-z: #315ed8;
+  --ws-track: #03a1bd;
+  --ws-target: #c62d2d;
+  --ws-entry: #73e519;
+  --ws-green: #42a36f;
+  --ws-amber: #c7863a;
+}
+
 /* NOTE: there is deliberately no `@media (prefers-color-scheme: dark)` block.
    Light is the default for everyone; dark is opt-in through the toggle and is
    remembered in localStorage. A media-query fallback here would flip a
@@ -193,6 +233,30 @@
   --color-warn-soft: var(--warn-soft);
   --color-crit-soft: var(--crit-soft);
   --color-action-glow: var(--action-glow);
+
+  /* workstation — theme-independent, see above */
+  --color-ws-bg: var(--ws-bg);
+  --color-ws-chassis: var(--ws-chassis);
+  --color-ws-panel: var(--ws-panel);
+  --color-ws-elev: var(--ws-elev);
+  --color-ws-line: var(--ws-line);
+  --color-ws-line-2: var(--ws-line-2);
+  --color-ws-ink: var(--ws-ink);
+  --color-ws-ink-2: var(--ws-ink-2);
+  --color-ws-ink-3: var(--ws-ink-3);
+  --color-ws-vp: var(--ws-vp);
+  --color-ws-blue: var(--ws-blue);
+  --color-ws-plan-rim: var(--ws-plan-rim);
+  --color-ws-entry-rim: var(--ws-entry-rim);
+  --color-ws-target-rim: var(--ws-target-rim);
+  --color-ws-ax-x: var(--ws-ax-x);
+  --color-ws-ax-y: var(--ws-ax-y);
+  --color-ws-ax-z: var(--ws-ax-z);
+  --color-ws-track: var(--ws-track);
+  --color-ws-target: var(--ws-target);
+  --color-ws-entry: var(--ws-entry);
+  --color-ws-green: var(--ws-green);
+  --color-ws-amber: var(--ws-amber);
 }
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
@@ -437,6 +501,75 @@
     mix-blend-mode: multiply;
   }
 
+  /* ── Scroll marker ────────────────────────────────────────────────────────
+     A slow settle rather than a bounce: this sits beside a precision
+     instrument, and a jaunty arrow would be the wrong register. The global
+     reduced-motion rule stops it.                                        */
+  .nn-drop {
+    animation: nn-drop 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+    transform-origin: top;
+  }
+  @keyframes nn-drop {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 0.45;
+    }
+    45% {
+      transform: translateY(5px);
+      opacity: 1;
+    }
+  }
+
+  /* ── Workstation range control ────────────────────────────────────────────
+     Pseudo-elements, so this cannot be expressed as utilities. Fill is driven
+     from `--fill` rather than a second element.                          */
+  .nn-ws-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 14px;
+    margin: 0;
+    display: block;
+    background: transparent;
+    cursor: pointer;
+  }
+  .nn-ws-range::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(
+      90deg,
+      var(--ws-blue) 0 var(--fill, 50%),
+      rgb(210 220 232 / 0.14) var(--fill, 50%) 100%
+    );
+  }
+  .nn-ws-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 11px;
+    height: 11px;
+    border: 0;
+    border-radius: 2px;
+    background: #eef1f5;
+    margin-top: -4px;
+  }
+  .nn-ws-range::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: rgb(210 220 232 / 0.14);
+  }
+  .nn-ws-range::-moz-range-progress {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--ws-blue);
+  }
+  .nn-ws-range::-moz-range-thumb {
+    width: 11px;
+    height: 11px;
+    border: 0;
+    border-radius: 2px;
+    background: #eef1f5;
+  }
 }
 
 /* ── Reduced motion ──────────────────────────────────────────────────────── */

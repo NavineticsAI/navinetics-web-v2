@@ -17,3 +17,12 @@ export { ConvergenceDiagram } from './ConvergenceDiagram.jsx';
 export { ScrollSequence } from './ScrollSequence.jsx';
 export { Statement, PullQuote } from './Statement.jsx';
 export { ComingSoon } from './ComingSoon.jsx';
+
+/**
+ * Workstation and DemoLauncher are deliberately NOT re-exported here.
+ *
+ * Every page imports from this barrel, so anything listed lands in the main
+ * bundle. Those two carry a volume renderer and a noise table that only
+ * /technology/navinetics-ai needs; keeping them out lets that route split.
+ * Import them from their own files.
+ */

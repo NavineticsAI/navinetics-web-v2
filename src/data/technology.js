@@ -100,17 +100,31 @@ export const technologies = [
     hero: '/microdrive-image-1024x797.png',
     heroAlt: 'Placeholder image — NaviNetics AI visuals pending',
     /**
-     * PLACEHOLDER — content pending from NaviNetics.
-     * The one concrete statement here (published work on automated landmark
-     * localisation for neuronavigation) is verifiable. Nothing is claimed about
-     * availability, regulatory status, or performance.
+     * IN DEVELOPMENT — copy pending from NaviNetics.
+     *
+     * This slug does NOT use the Technology template. It has its own route and
+     * page (pages/NaviNeticsAI.jsx) because its hero is the software itself: a
+     * simulation of the planning workspace, running on a generated head.
+     *
+     * The one concrete statement here — published work on automated landmark
+     * localisation for neuronavigation — is verifiable. Nothing is claimed
+     * about availability, regulatory status, or performance.
      */
     status: 'in-development',
+    /*
+     * Body copy is now written, derived from the application repository
+     * itself (navinetics-ai-suite: the master application guide, the
+     * requirements set, and the named modules). It still wants a read-through
+     * by someone who can approve it as a public statement — which is what
+     * the first item below now asks for.
+     */
     needsContent: [
-      'What the software does, in one sentence',
+      'Sign-off on the body copy, which is currently derived from the application repository',
       'Whether it is a product, a platform, or research',
-      'Screenshots or interface visuals',
-      'Regulatory status and intended use',
+      'An approved classification, intended-use and intended-user statement',
+      'Sign-off on the two performance figures held back: the ±1 mm placement tolerance and the OR benchmark',
+      'A defaced surface render, to replace the synthetic head in the demo',
+      'Confirmation of the frame origin offset used by the demo',
     ],
     principles: [],
     appliedIn: [],

@@ -12,7 +12,7 @@ import { Eyebrow, Reveal } from './Section.jsx';
  * regulated claims. This states plainly that the page is incomplete and, in
  * development, lists what is outstanding so it can't be quietly forgotten.
  */
-export function ComingSoon({ title, body, needs, action = true, className }) {
+export function ComingSoon({ title, body, needs, action = true, badge = true, className }) {
   return (
     <Reveal>
       <Reticle
@@ -22,9 +22,13 @@ export function ComingSoon({ title, body, needs, action = true, className }) {
         )}
       >
         <div className="flex flex-col items-start gap-4">
-          <Badge tone="warn" dot>
-            In development
-          </Badge>
+          {/* Opt-out rather than removal: three other pages still rely on this
+              chip to state their status. */}
+          {badge && (
+            <Badge tone="warn" dot>
+              In development
+            </Badge>
+          )}
           <h2 className="text-d2">{title}</h2>
           {body && <p className="max-w-prose text-lead leading-[1.55] text-ink-2">{body}</p>}
         </div>
