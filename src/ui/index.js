@@ -6,6 +6,7 @@ export { Reticle, Rule, IsoMark } from './Reticle.jsx';
 export { Section, SectionHead, Eyebrow, TickLine, Reveal } from './Section.jsx';
 export { Card, ProductCard, ProductPlate, StatTile, MetricRow } from './Card.jsx';
 export { Badge } from './Badge.jsx';
+export { Logo } from './Logo.jsx';
 export { SpecTable, ComparisonTable, ComponentList } from './SpecTable.jsx';
 export { Tabs } from './Tabs.jsx';
 export { Accordion } from './Accordion.jsx';
