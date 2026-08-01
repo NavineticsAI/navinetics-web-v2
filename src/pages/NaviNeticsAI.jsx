@@ -39,9 +39,7 @@ export default function NaviNeticsAI() {
       <BrainHero
         eyebrow="Technology — Software"
         title={'Stereotaxis, revolutionised.\nPrecision, made easier.'}
-        lead="A desktop workstation for stereotactic neurosurgical planning. Fuse the series,
-          find the localiser, set the target — and read back the arc, the collar and the depth
-          the frame has to be set to."
+        lead="A desktop workstation for stereotactic neurosurgical planning."
         facts={[
           // Together these are a complete stereotactic setting: three to
           // position, two to aim, one to advance.
