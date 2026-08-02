@@ -10,7 +10,6 @@ import Founders from '../pages/Founders.jsx';
 import Partners from '../pages/Partners.jsx';
 import Community from '../pages/Community.jsx';
 import Media from '../pages/Media.jsx';
-import Education from '../pages/Education.jsx';
 import Publications from '../pages/Publications.jsx';
 import Careers from '../pages/Careers.jsx';
 import Contact from '../pages/Contact.jsx';
@@ -19,12 +18,16 @@ import PageTransition from './PageTransition.jsx';
 import { redirects } from '../data/nav.js';
 
 /**
- * The only split route on the site. NaviNetics AI carries a volume renderer
- * and a noise table that no other page touches, and inlining them put the
- * main bundle over Vite's chunk-size warning. The fallback is the dark
- * workstation ground, so the split cannot flash white over the hero.
+ * The two split routes. Both carry drawing code no other page touches, and
+ * inlining either pushes the main bundle over Vite's chunk-size warning.
+ *
+ * NaviNetics AI has a volume renderer and a noise table; its fallback is the
+ * dark workstation ground, so the split cannot flash white over the hero.
+ * Education has five canvas figures and a small 3-D scene; its fallback is the
+ * page ground, and it sits below a hero that renders immediately either way.
  */
 const NaviNeticsAI = lazy(() => import('../pages/NaviNeticsAI.jsx'));
+const Education = lazy(() => import('../pages/Education.jsx'));
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -56,7 +59,14 @@ const routes = [
   // Resources
   { path: '/resources/media', element: <Media /> },
   { path: '/resources/careers', element: <Careers /> },
-  { path: '/resources/education', element: <Education /> },
+  {
+    path: '/resources/education',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+        <Education />
+      </Suspense>
+    ),
+  },
   { path: '/resources/publications', element: <Publications /> },
 
   { path: '/contact', element: <Contact /> },

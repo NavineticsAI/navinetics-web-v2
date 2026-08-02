@@ -26,3 +26,17 @@ __pycache__/
 *.sw?
 
 tmp/
+
+# Scratch from the tools in tools/*.mjs — a headless Chrome profile and the
+# host pages they drive. Untracked, and oxlint should not read them either:
+# a browser extension's bundled JS is not our code.
+tools/.chrome*/
+tools/.screens.html
+tools/.edu.html
+
+# Video masters. Image masters are committed — they are a megabyte or two and
+# they are the source of truth for the WebPs beside them. A video master is
+# 25 MB, which is larger than this entire repository's history, and git keeps
+# it forever whether or not it is ever needed again. The encoded file that the
+# page actually loads IS committed; keep the master wherever the renders live.
+src/assets/**/*.vid.mp4

@@ -134,6 +134,11 @@
   --retic: rgb(31 104 144 / 0.55);
   --plate: linear-gradient(160deg, #fbfdfe, #eaf1f5);
 
+  /* The analyte in the education page's electrode figure. Outside the blue
+     family on purpose — it is the one thing being picked out of a crowd, and
+     a blue would read as brand emphasis rather than as a species. */
+  --edu-target: #1f9d55;
+
   /* Logo. The artwork is a mask, so `--logo-ink` is the whole colour of the
      mark and the wordmark — one flat value, not a gradient. `--logo-lit` is
      how hard the travelling light hits it, which has to come down on the dark
@@ -174,6 +179,8 @@
   --sh: 0 6 10;
   --retic: rgb(130 186 217 / 0.55);
   --plate: linear-gradient(160deg, #f2f7fa, #dee9ef);
+
+  --edu-target: #43c47e;
 
   --logo-ink: #82bad9;
   --logo-lit: 0.3;
@@ -582,6 +589,53 @@
     border: 0;
     border-radius: 2px;
     background: #eef1f5;
+  }
+
+  /* ── Education figures ────────────────────────────────────────────────────
+     Range inputs and the disclosure marker cannot be expressed as utilities;
+     everything else on that page is.                                     */
+  .nn-edu-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 16px;
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .nn-edu-range::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--hairline);
+  }
+  .nn-edu-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px;
+    height: 13px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--action);
+    margin-top: -5px;
+  }
+  .nn-edu-range::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--hairline);
+  }
+  .nn-edu-range::-moz-range-thumb {
+    width: 13px;
+    height: 13px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--action);
+  }
+  .nn-edu-range:focus-visible {
+    outline: 2px solid var(--action);
+    outline-offset: 3px;
+  }
+  /* Safari keeps its own triangle even with list-style: none. */
+  details > summary::-webkit-details-marker {
+    display: none;
   }
 
   /* ── Logo ─────────────────────────────────────────────────────────────────
