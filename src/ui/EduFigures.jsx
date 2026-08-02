@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { cn } from '../lib/cn.js';
-import { useTheme } from '../lib/theme.jsx';
 import { usePrefersReducedMotion } from '../lib/motion.js';
 import { drawArc } from '../lib/arcScene.js';
 import localiserSrc from '../assets/education/02.3.a.webp';
@@ -36,25 +35,41 @@ function Figure({ title, hint, children, caption }) {
   );
 }
 
-/** Theme tokens, re-read whenever the theme changes so canvases stay in step. */
+/**
+ * Theme tokens, re-read whenever the theme actually changes.
+ *
+ * Watches the `data-theme` attribute rather than the value from useTheme().
+ * ThemeProvider writes that attribute from an effect of its own, and a parent's
+ * effect runs AFTER its children's — so reading on the context change samples
+ * the OUTGOING theme's colours, and because the dependency never fires again it
+ * keeps them for good. Measured: toggling to dark left two of these canvases
+ * byte-for-byte identical, still carrying light-theme ink on a dark page.
+ *
+ * The attribute is what decides the colours, so the attribute is what to watch.
+ */
 function usePalette() {
-  const { theme } = useTheme();
   const [pal, setPal] = useState(null);
-  useLayoutEffect(() => {
-    const s = getComputedStyle(document.documentElement);
-    const v = (n) => s.getPropertyValue(n).trim();
-    setPal({
-      bg: v('--surface'), line: v('--hairline'), soft: v('--hairline-soft'),
-      action: v('--action'), ink: v('--ink'), sub: v('--ink-3'),
-      /* The species in the electrode figure. The target is the only saturated
-         one; the rest are held down so green reads as "the one being looked
-         for" rather than as one of four equals. */
-      target: v('--edu-target'),
-      'other-1': v('--ink-3'),
-      'other-2': v('--color-nn-400'),
-      'other-3': v('--warn'),
-    });
-  }, [theme]);
+  useEffect(() => {
+    const read = () => {
+      const s = getComputedStyle(document.documentElement);
+      const v = (n) => s.getPropertyValue(n).trim();
+      setPal({
+        bg: v('--surface'), line: v('--hairline'), soft: v('--hairline-soft'),
+        action: v('--action'), ink: v('--ink'), sub: v('--ink-3'),
+        /* The species in the electrode figure. The target is the only saturated
+           one; the rest are held down so green reads as "the one being looked
+           for" rather than as one of four equals. */
+        target: v('--edu-target'),
+        'other-1': v('--ink-3'),
+        'other-2': v('--color-nn-400'),
+        'other-3': v('--warn'),
+      });
+    };
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => mo.disconnect();
+  }, []);
   return pal;
 }
 
