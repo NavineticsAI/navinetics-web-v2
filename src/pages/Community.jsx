@@ -1,79 +1,134 @@
 import { usePageMeta } from '../lib/meta.js';
-import { Button, Hero, Reveal, Section, StatTile } from '../ui/index.js';
+import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
+import { LocatorMap } from '../ui/LocatorMap.jsx';
 
-const facts = [
-  { label: 'Location', value: 'Rochester', unit: 'Southeast Minnesota' },
-  { label: 'To the Twin Cities', value: '~1 hr', unit: 'by road' },
-  { label: 'Neighbourhood', value: 'Downtown', unit: '206 S Broadway' },
+/**
+ * Community.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * The stock photograph that used to sit here was hotlinked from a third-party
+ * image CDN with no licence on file — an uncontrolled dependency on a page
+ * NaviNetics owns, and flagged as a known gap in the design language docs. It
+ * is gone. The drawn locator that replaces it is built from public-domain
+ * Natural Earth borders by tools/locator-map.mjs, weighs a few kilobytes, and
+ * follows the theme.
+ *
+ * CLAIMS NOTICE. Two figures appear on this page and both are checkable: the
+ * 124 km is the great-circle distance between the two civic coordinates,
+ * computed in that same tool; "about an hour by road" was already on the site.
+ * Nothing about Rochester's population, rankings or economy is asserted —
+ * those need a source, and the vague "consistently voted one of the best places
+ * to live" that used to be in the hero has been dropped for the same reason.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/** Why the address matters, rather than what is nearby. */
+const REASONS = [
+  {
+    title: 'The clinicians are down the corridor',
+    body:
+      'A co-founder operates at Mayo Clinic. Design input arrives as a surgeon telling you what was '
+      + 'in the way this morning, not as a summary of a survey some months later.',
+  },
+  {
+    title: 'Prototypes can be carried, not shipped',
+    body:
+      'A part can be machined, taken across town, held in gloved hands, criticised and changed '
+      + 'again inside a week. Distance is the thing that usually stops that loop closing.',
+  },
+  {
+    title: 'The laboratory is still here',
+    body:
+      'The Neural Engineering Laboratories, where the founders work and where the first reusable '
+      + 'stereotactic system was prototyped, are in the same city.',
+  },
+];
+
+const FACTS = [
+  { k: 'Address', v: '206 S Broadway, Suite 700', note: 'Downtown Rochester, MN 55904' },
+  { k: 'Region', v: 'Southeast Minnesota', note: 'Olmsted County' },
+  { k: 'Minneapolis–Saint Paul', v: '124 km', note: 'about an hour by road' },
 ];
 
 export default function Community() {
   usePageMeta({
     title: 'Community',
     description:
-      'NaviNetics is based in the heart of downtown Rochester, Minnesota — a community that fosters innovation and supports medical advancement.',
+      'NaviNetics is based in downtown Rochester, Minnesota — next door to the clinicians the '
+      + 'devices are designed with.',
   });
 
   return (
     <>
       <Hero
-        eyebrow="Who we are — Community"
+        eyebrow="Company — Community"
         title="Rochester, Minnesota."
-        lead="NaviNetics is located in southeast Minnesota, in the heart of downtown Rochester — consistently voted one of the best places to live, with growing arts and entertainment and an hour's drive to the Twin Cities."
+        lead="We are in the middle of downtown Rochester, in southeast Minnesota. The address is not incidental to the work — it is the reason the design loop closes as fast as it does."
       />
 
-      <Section wide>
-        <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
+      <Section wide className="!pt-0">
+        <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16">
           <Reveal>
-            <div className="flex flex-col gap-5 leading-relaxed text-ink-2">
-              <p className="max-w-prose">
-                We are proud to be part of a vibrant community that fosters innovation and supports
-                medical advancements — and to be neighbours to one of the world's leading medical
-                centres.
-              </p>
-              <p className="max-w-prose">
-                It is not incidental to the work. Proximity to clinicians is what lets us design by
-                listening, and it is why the company exists here rather than anywhere else.
-              </p>
-            </div>
-
-            <div className="mt-10 grid gap-3 sm:grid-cols-3">
-              {facts.map((f) => (
-                <StatTile key={f.label} {...f} />
-              ))}
-            </div>
-
-            <Button
-              href="https://homeia.com/city-living-guide/what-is-it-like-to-live-in-rochester-mn/"
-              variant="secondary"
-              className="mt-8"
-              arrow
-            >
-              Learn more about Rochester
-            </Button>
+            <LocatorMap />
           </Reveal>
 
           <Reveal delay={0.08}>
-            {/*
-              TODO — asset licence. This image is hotlinked from Unsplash's CDN:
-              an uncontrolled third-party dependency on a page NaviNetics owns.
-              Replace with a local asset with a licence on file. Tracked in
-              /design-language-info/07-accessibility.md (Known gaps).
-            */}
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-xl shadow-e3">
-              <img
-                src="https://images.unsplash.com/photo-1579720313437-14283ce2f036?auto=format&fit=crop&q=80&w=800&h=1000"
-                alt="Downtown Rochester, Minnesota"
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-nn-950/55 to-transparent"
-                aria-hidden="true"
-              />
+            <div className="flex flex-col divide-y divide-hairline-soft border-y border-hairline-soft">
+              {FACTS.map((f) => (
+                <div key={f.k} className="flex items-baseline justify-between gap-6 py-4">
+                  <span className="eyebrow shrink-0 text-ink-3">{f.k}</span>
+                  <span className="text-right">
+                    <span className="block text-sm font-semibold">{f.v}</span>
+                    <span className="block text-xs text-ink-3">{f.note}</span>
+                  </span>
+                </div>
+              ))}
             </div>
+            <Button href="https://maps.google.com/?q=206+S+Broadway+Ave+Suite+700,+Rochester,+MN+55904" variant="secondary" className="mt-8" arrow>
+              Open in Maps
+            </Button>
           </Reveal>
         </div>
+      </Section>
+
+      <Section wide band>
+        <SectionHead
+          eyebrow="Why here"
+          title="Proximity is a design tool."
+          lead="Being a short walk from the operating theatre changes what can be asked, how quickly it
+            can be answered, and how often a wrong assumption gets caught."
+        />
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {REASONS.map((r, i) => (
+            <Reveal key={r.title} delay={i * 0.06}>
+              <Card className="flex h-full flex-col gap-3">
+                <span className="font-data text-2xl leading-none text-action/40 tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <h3 className="text-lg tracking-[-0.03em]">{r.title}</h3>
+                <p className="text-sm leading-relaxed text-ink-2">{r.body}</p>
+              </Card>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section band={false}>
+        <Reveal className="flex flex-col items-center gap-6 text-center">
+          <h2 className="text-d2">Visiting, or joining?</h2>
+          <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
+            Suite 700 is on South Broadway, a few minutes from the Mayo Clinic campus. Tell us
+            you're coming and we'll put the kettle on.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button to="/contact" size="lg" arrow>
+              Get in touch
+            </Button>
+            <Button to="/company/careers" size="lg" variant="secondary">
+              Open roles
+            </Button>
+          </div>
+        </Reveal>
       </Section>
     </>
   );
