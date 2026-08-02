@@ -148,6 +148,32 @@
   --logo-lit: 0.5;
   --logo-tint: 0.51;
 
+  /* The partners globe.
+     ─────────────────────────────────────────────────────────────────────────
+     Five territory colours, picked by measuring CIE ΔE rather than by eye.
+     Which pairs need separating is a geography question, not a colour one:
+     the globe shows at most a hemisphere, so China with South Korea and China
+     with Australia are the pairs a reader actually has to tell apart, while
+     Brazil and China are never on screen together. A first set that looked
+     perfectly reasonable in a swatch row put China and Korea CLOSEST together
+     — ΔE 26, and they touch. This set holds every co-visible pair at ΔE 71 or
+     better on this ground, and 65 on the dark one.
+
+     Kept apart from --ok/--warn/--crit on purpose. Those three carry status
+     meaning site-wide, and spending them as map categories would blunt that. */
+  --terr-us: #1f6890;
+  --terr-sa: #9c7d22;
+  --terr-cn: #b05c34;
+  --terr-au: #2b8560;
+  --terr-kr: #74589e;
+
+  --globe-sky-1: #edf4f8;
+  --globe-sky-2: #cfdfe9;
+  --globe-rim: rgb(11 56 77 / 0.16);
+  --globe-land: #9db7c6; /* land with no partner behind it */
+  --globe-ghost: rgb(11 56 77 / 0.06); /* the far side, showing through */
+  --globe-grid: rgb(11 56 77 / 0.065);
+
   color-scheme: light;
 }
 
@@ -185,6 +211,22 @@
   --logo-ink: #82bad9;
   --logo-lit: 0.3;
   --logo-tint: 0.43;
+
+  /* Same five hues, lifted for a dark ground. The light values sit at 3.6–5.7
+     contrast against #f4f7f9; these sit at 6.0–8.2 against #04141d, and the
+     worst co-visible separation holds at ΔE 65. */
+  --terr-us: #4e9ac4;
+  --terr-sa: #c9a93f;
+  --terr-cn: #d4835a;
+  --terr-au: #4bb287;
+  --terr-kr: #a48ccb;
+
+  --globe-sky-1: #08283a;
+  --globe-sky-2: #03121b;
+  --globe-rim: rgb(130 186 217 / 0.2);
+  --globe-land: #2c5266;
+  --globe-ghost: rgb(130 186 217 / 0.07);
+  --globe-grid: rgb(130 186 217 / 0.06);
 
   color-scheme: dark;
 }
@@ -369,6 +411,74 @@
    (vs `rounded-*`). Keep everything below inside this layer.
    ═══════════════════════════════════════════════════════════════════════════ */
 @layer components {
+  /* ── Partners globe ───────────────────────────────────────────────────────
+     Pins and logo chips are real buttons positioned over the canvas each
+     frame, not shapes hit-tested inside it — that is the difference between
+     something a keyboard can reach and something it cannot. Only the parts
+     utilities cannot express live here: the ring pseudo-element, and the
+     `--pc` custom property that carries each territory's colour down from
+     the component.                                                        */
+  .nn-pin {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    z-index: 3;
+  }
+  .nn-pin i {
+    position: absolute;
+    inset: 11px;
+    border-radius: 50%;
+    background: var(--pc, var(--action));
+    box-shadow:
+      0 0 0 3px var(--canvas),
+      0 0 0 4px var(--pc, var(--action));
+    transition: transform 250ms var(--ease-out);
+  }
+  /* Rochester is the one place on the map that is us rather than a partner,
+     so it gets a second ring instead of a second colour. */
+  .nn-pin-home::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    border: 1px solid var(--pc, var(--action));
+    opacity: 0.5;
+  }
+  .nn-pin-site i {
+    inset: 13px;
+    background: var(--canvas);
+    box-shadow: 0 0 0 2px var(--pc, var(--action));
+  }
+  .nn-pin:hover i,
+  .nn-pin[aria-pressed="true"] i {
+    transform: scale(1.45);
+  }
+
+  .nn-chip {
+    position: absolute;
+    z-index: 4;
+    transform: translate(-50%, -50%);
+    transition:
+      opacity 300ms var(--ease-out),
+      box-shadow 250ms var(--ease-out),
+      border-color 250ms var(--ease-out);
+  }
+  /* Marks sit on a white plate at their supplied colours. Recolouring another
+     organisation's mark so it survives the dark theme is usually a breach of
+     their brand guidelines, and Abbott's wordmark is black — it would vanish.
+     NOT `.nn-plate`: that one is the product-shot plate further down, and it
+     puts mix-blend-multiply on its images, which would eat the white out of
+     every logo here. */
+  .nn-mark {
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgb(11 56 77 / 0.07);
+  }
+
   /* ── Glass ────────────────────────────────────────────────────────────────
      Two materials. See /design-language-info/02-liquid-glass.md           */
   .nn-glass {

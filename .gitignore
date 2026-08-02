@@ -33,6 +33,10 @@ tmp/
 tools/.chrome*/
 tools/.screens.html
 tools/.edu.html
+tools/.partners.html
+
+# PowerPoint's lock file, written beside info.pptx whenever the deck is open.
+~$*.pptx
 
 # Video masters. Image masters are committed — they are a megabyte or two and
 # they are the source of truth for the WebPs beside them. A video master is
