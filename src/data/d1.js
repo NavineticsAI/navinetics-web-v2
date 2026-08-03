@@ -51,8 +51,8 @@ const stills = import.meta.glob('../assets/d1/turn/hl-*.webp', {
 });
 const still = (id) => stills[`../assets/d1/turn/hl-${id}.webp`];
 
-/** The rendered frame is 673 × 960; the hero needs the ratio to lay out. */
-export const FRAME = { w: 673, h: 960 };
+/** The rendered frame is 713 × 1020; the hero needs the ratio to lay out. */
+export const FRAME = { w: 713, h: 1020 };
 
 /**
  * What the settled hero names.

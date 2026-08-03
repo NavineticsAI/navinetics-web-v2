@@ -20,7 +20,12 @@ const WORK = ROOT + 'tools/.d1/';
 
 const FILE = CAD + (readdirSync(CAD).find((f) => /\.step$/i.test(f)) || '');
 const IN = 25.4;
-const TOL = +(process.argv[2] || 0.5);   // chord tolerance, mm
+const TOL = +(process.argv[2] || 0.3);
+/* Set per instance before its faces are walked. Threads are the reason: a
+   thumbscrew carries more faces than the arc does, and none of them is
+   visible at hero size. */
+const FASTENER_TOL = 1.8;
+let ACTIVE_TOL = TOL;   // chord tolerance, mm
 const E = await parse(FILE);
 const A = (id) => args(E.get(id).a);
 const T = (id) => E.get(id)?.t;
@@ -137,7 +142,7 @@ function edgePoints(ec) {
        the latter asks for ~600 segments on a 12 mm hole and buries the
        tessellator in boundary points that then all get subdivided. */
     const rr = Math.max(r, r2);
-    const dth = 2 * Math.acos(Math.max(-1, Math.min(1, 1 - (TOL / IN) / rr)));
+    const dth = 2 * Math.acos(Math.max(-1, Math.min(1, 1 - (ACTIVE_TOL / IN) / rr)));
     const n = Math.max(4, Math.min(48, Math.ceil(Math.abs(d) / (dth || 0.5))));
     const pts = [];
     for (let i = 0; i <= n; i++) {
@@ -406,15 +411,16 @@ const FAMILY = [
   ['stage', /^20186-(1-1|2|5|6|12|13|14|16A|17-1|28-\d|31|32|34)_/],
   ['base', /^20186-(3-1|4)_/],
 ];
-const GNAMES = ['arc', 'rails', 'drive', 'stage', 'base'];
+const GNAMES = ['arc', 'rails', 'drive', 'stage', 'base', 'fastener'];
 const groupOf = (name) => {
-  if (STOCK.test(name) || /_(9\d{4}A\d+|1\d{7}_)/.test(name)) return -1;
+  if (STOCK.test(name) || /_(9\d{4}A\d+|1\d{7}_)/.test(name)) return GNAMES.indexOf('fastener');
   for (const [g, re] of FAMILY) if (re.test(name)) return GNAMES.indexOf(g);
   return GNAMES.indexOf('stage');
 };
 
 let nTri = 0; let nFail = 0; const parts = [];
 for (const inst of insts) {
+  ACTIVE_TOL = groupOf(inst.name) === GNAMES.indexOf('fastener') ? FASTENER_TOL : TOL;
   const items = (E.get(inst.brep).a.match(/#\d+/g) || []).map((r) => +r.slice(1));
   const V = []; const F = [];
   for (const it of items) {
@@ -475,7 +481,7 @@ for (const inst of insts) {
             const e = dist(scl(add(S.ev(p[0], p[1]), S.ev(q[0], q[1])), 0.5), S.ev(mid[0], mid[1])) * IN;
             if (e > we) { we = e; worst = i; }
           }
-          if (we > TOL) {
+          if (we > ACTIVE_TOL) {
             const [p, q] = edges[worst];
             const mid = [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
             const o = [a, b, c][(worst + 2) % 3];

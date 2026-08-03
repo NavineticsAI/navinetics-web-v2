@@ -36,9 +36,13 @@
  *     nearly all fillets, inverted numerically. 179 faces (1.2%) fail and are
  *     skipped; at hero scale they are not visible, but that is the number to
  *     watch if the model is ever re-exported.
- *   · Stock fasteners are dropped, and they are not a rounding error: the
- *     whole file tessellates to 2.25M triangles and the frame alone to 88k.
- *     Threads are 96% of the geometry and none of the picture.
+ *   · Stock fasteners are KEPT, at a coarse tolerance of their own. Dropping
+ *     them was the first attempt and it was wrong: between 48% and 69% of the
+ *     frame pixels in NaviNetics' own photographs are bare metal, because the
+ *     knobs, screws and the microdrive column are steel. An all-blue assembly
+ *     did not look like the object. Their threads are still most of the
+ *     geometry — 1.7M triangles of 2.13M — which is what the separate
+ *     tolerance is for.
  *   · The accessory tray is dropped too. It sits at y < 0 in assembly space
  *     while every frame part's centroid is y > 0, which is the whole test.
  */
@@ -50,10 +54,13 @@ const CAD = `${ROOT}src/assets/d1/`;
 const WORK = `${ROOT}tools/.d1/`;
 const OUT = `${ROOT}src/assets/d1/turn/`;
 
-const TOL = 0.5;        // chord tolerance, mm
-const SIZE = 960;       // rendered square, px, before the alpha crop
+const TOL = 0.3;        // chord tolerance, mm, for structure
+const SIZE = 1200;      // rendered square, px, before the alpha crop
 const FRAMES = 36;
-const QUALITY = 0.82;
+const QUALITY = 0.80;
+/* Rendered large for quality, then encoded a little smaller: supersampling a
+   1200px render down to ~1020 is sharper than rendering 1020 directly. */
+const ENCODE_SCALE = 0.85;
 
 const step = readdirSync(CAD).find((f) => /\.step$/i.test(f));
 if (!step) {
@@ -89,7 +96,7 @@ console.log('\n── 3 · encode ───────────────�
 for (const f of readdirSync(OUT)) {
   if (f.endsWith('.webp')) rmSync(OUT + f);
 }
-await run('webp.mjs', [String(QUALITY), '1.0', '1']);
+await run('webp.mjs', [String(QUALITY), String(ENCODE_SCALE), '1']);
 
 const made = readdirSync(OUT).filter((f) => f.endsWith('.webp'));
 const bytes = made.reduce((s, f) => s + statSync(OUT + f).size, 0);

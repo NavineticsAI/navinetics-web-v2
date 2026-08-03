@@ -41,14 +41,27 @@ const nb = new Float32Array(W * W * 3);
 const ib = new Uint8Array(W * W);      // group id + 1, 0 = background
 const vz = new Float32Array(W * W);    // view-space depth, for occlusion
 
-/* One material, in NaviNetics blue — the sg ramp out of index.css. Four
-   invented hues would have been four brand colours the brand does not have;
-   the parts separate by light and occlusion instead, which is how a real
-   photograph of one object separates them. */
-const STEEL = [0.395, 0.595, 0.760];
-const GCOL = [STEEL, STEEL, STEEL, STEEL, [0.330, 0.510, 0.665]];
+/* Materials, measured off NaviNetics' own photographs of the real frame
+   rather than chosen (tools/d1/../../ — see the sampler note in the commit).
+   The body blue reads #2e6ab1 / #296796 across two photographs, its shadows
+   #102045 and its highlights #70b2e5. Crucially, half the frame is NOT blue:
+   between 48% and 69% of the frame pixels in those photographs are bare
+   metal, because the fasteners, knobs and the microdrive column are steel.
+   Rendering the whole assembly one colour was the single biggest reason the
+   first pass did not look like the object.
+
+   Values are linear — the shader gammas at the end — and are the measured
+   sRGB divided through by the diffuse term a mid-lit surface receives. */
+const BLUE = [0.032, 0.195, 0.595];
+const BLUE_DK = [0.024, 0.150, 0.470];
+const STEEL = [0.700, 0.735, 0.780];
+const STEEL_HI = [0.760, 0.790, 0.830];
+/*            arc    rails   drive   stage   base      fastener */
+const GCOL = [BLUE, BLUE, STEEL, BLUE, BLUE_DK, STEEL_HI];
+/* Anodised aluminium is far less specular than bare turned steel. */
+const SPEC = [0.55, 0.55, 1.15, 0.55, 0.5, 1.3];
 const LIT = [0.510, 0.729, 0.851];   // sg-300 #82bad9
-const DIM = [0.055, 0.115, 0.160];   // toward nn-900 #06202e
+const DIM = [0.030, 0.062, 0.092];
 
 function render(yaw, pitch) {
   /* -Infinity, not +Infinity: view space here has +z toward the camera, so
@@ -155,8 +168,9 @@ function shade(ao, highlight) {
         if (n[2] < 0) n = [-n[0], -n[1], -n[2]];
         let base = GCOL[gi];
         let gain = 1;
+        let sk = SPEC[gi];
         if (highlight != null) {
-          if (highlight.has(gi)) { base = LIT; gain = 1.12; } else { base = DIM; gain = 0.72; }
+          if (highlight.has(gi)) { base = LIT; gain = 1.12; } else { base = DIM; gain = 0.8; sk *= 0.35; }
         }
         const kd = Math.max(0, n[0] * KEY[0] + n[1] * KEY[1] + n[2] * KEY[2]);
         const fd = Math.max(0, n[0] * FILL[0] + n[1] * FILL[1] + n[2] * FILL[2]);
@@ -171,9 +185,9 @@ function shade(ao, highlight) {
         const ambR = 0.085 * up + 0.030; const ambG = 0.125 * up + 0.045; const ambB = 0.175 * up + 0.062;
         const k = ao[o];
         const dif = kd * 0.88 + fd * 0.20;
-        r = (base[0] * (ambR / 0.09 * 0.14 + dif) * k + spec * 0.88 + rd * 0.20 + fres * 0.09) * gain;
-        g = (base[1] * (ambG / 0.13 * 0.14 + dif) * k + spec * 0.94 + rd * 0.30 + fres * 0.14) * gain;
-        b = (base[2] * (ambB / 0.18 * 0.14 + dif) * k + spec + rd * 0.42 + fres * 0.20) * gain;
+        r = (base[0] * (ambR + dif) * k + spec * sk * 0.88 + rd * 0.16 + fres * 0.07) * gain;
+        g = (base[1] * (ambG + dif) * k + spec * sk * 0.94 + rd * 0.24 + fres * 0.11) * gain;
+        b = (base[2] * (ambB + dif) * k + spec * sk + rd * 0.34 + fres * 0.17) * gain;
         a = 1;
       }
       const oy = Math.floor(y / SS); const ox = Math.floor(x / SS);
@@ -221,7 +235,7 @@ if (mode === 'one') {
   render(38 * D2R, -18 * D2R);
   const ao = occlusion();
   png(`${DIR}r-settled.png`, OUT, OUT, shade(ao, null));
-  png(`${DIR}r-rails.png`, OUT, OUT, shade(ao, 1));
+  png(`${DIR}r-rails.png`, OUT, OUT, shade(ao, new Set([0, 1, 3])));
   console.timeEnd('frame');
   console.log('wrote r-settled.png, r-rails.png');
 }
@@ -251,4 +265,16 @@ if (mode === 'turn') {
     png(`${DIR}turn/hl-${g}.png`, OUT, OUT, shade(ao, new Set(set)));
   }
   console.log(`wrote ${N} frames + ${Object.keys(CALL).length} highlight stills`);
+}
+
+/* One still per geometry group, for naming. The groups are what the tool can
+   separate; what they are called is NaviNetics' to say. */
+if (mode === 'groups') {
+  render(SETTLE.yaw, SETTLE.pitch);
+  const ao = occlusion();
+  ['arc', 'rails', 'drive', 'stage', 'base', 'fastener'].forEach((g, i) => {
+    png(`${DIR}turn/grp-${g}.png`, OUT, OUT, shade(ao, new Set([i])));
+  });
+  png(`${DIR}turn/grp-all.png`, OUT, OUT, shade(ao, null));
+  console.log('wrote 6 group stills + the neutral frame');
 }
