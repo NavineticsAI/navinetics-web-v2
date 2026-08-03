@@ -4,12 +4,18 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  *
- * WHERE THE PICTURES COME FROM. The hero is not photography. It is the
+ * WHERE THE PICTURE COMES FROM. The hero is not photography. It is the
  * assembly CAD — 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file —
- * tessellated and rendered offline by tools/d1-frame.mjs. The STEP itself is
- * gitignored and never reaches the browser; what ships is a turntable of
- * pictures of a mesh, which cannot be turned back into geometry. No dimension,
- * travel, angle or tolerance from that file appears anywhere on the page.
+ * tessellated to 1.7M triangles and then ray traced offline by
+ * tools/d1/trace.mjs: a BVH, a cosine-weighted hemisphere per pixel for real
+ * occlusion, GGX-sampled reflections, and an analytic studio environment. The
+ * STEP is gitignored and never reaches the browser; what ships is one picture
+ * of a mesh, which cannot be turned back into geometry. No dimension, travel,
+ * angle or tolerance from that file appears anywhere on the page.
+ *
+ * ONE IMAGE, NOT A TURNTABLE. An earlier pass scrubbed 36 rendered frames as
+ * the reader scrolled. Rotation is not worth what it costs: quality has to be
+ * divided 36 ways, and 36 mediocre frames read worse than one good picture.
  *
  * NOTHING IN THE FIGURE IS NAMED, and that is deliberate. The tool can
  * separate the assembly into six groups and light any of them independently —
@@ -31,17 +37,18 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-/* Vite resolves the turntable at build time. Sorted because glob order is not
-   guaranteed and the frames are an animation — one out of place is a stutter. */
-const frames = import.meta.glob('../assets/d1/turn/f*.webp', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-});
-export const turntable = Object.keys(frames).sort().map((k) => frames[k]);
+import heroArt from '../assets/d1/hero.webp';
+import detailArt from '../assets/d1/detail.webp';
 
-/** The rendered frame is 713 × 1020; the hero needs the ratio to lay out. */
-export const FRAME = { w: 713, h: 1020 };
+/** Traced at 1700 × 2430, cropped to its own alpha and encoded down. */
+export const hero = heroArt;
+export const FRAME = { w: 1027, h: 1565 };
+
+/* The same object from the other side, for the closing band. Not a second
+   asset in any meaningful sense — same mesh, same studio, same tracer, one
+   more camera. */
+export const detail = detailArt;
+export const DETAIL = { w: 759, h: 1134 };
 
 /**
  * The four explanations, each with an abstract ground and a figure.
@@ -157,10 +164,10 @@ export const bands = [
     ],
     meta: [{ label: 'Localisers', value: 'MR · CT · X-ray' }, { label: 'Reusable', value: 'Yes' }],
     figure: {
-      src: turntable[Math.round(turntable.length * 0.62)],
-      w: FRAME.w, h: FRAME.h,
-      alt: 'The D1 frame seen from behind, rendered from the assembly CAD.',
-      caption: 'The same assembly, turned',
+      src: detailArt,
+      w: 759, h: 1134,
+      alt: 'The D1 frame from the opposite side, rendered from the assembly CAD.',
+      caption: 'The same instrument, from the other side',
     },
   },
 ];

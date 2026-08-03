@@ -1,23 +1,23 @@
 /**
  * The D1 hero, out of the assembly CAD.
  *
- * `node tools/d1-frame.mjs` turns src/assets/d1/*.STEP into the 36-frame
- * turntable in src/assets/d1/turn/. The STEP is
- * gitignored — 73 MB that git would keep every revision of forever — so this
- * only runs on a machine that has the CAD beside it. The renders are committed
- * and are what the site actually loads; if the CAD is absent the tool says so
- * and stops rather than writing anything.
+ * `node tools/d1-frame.mjs` turns src/assets/d1/*.STEP into the two renders in
+ * src/assets/d1/: hero.webp and detail.webp. The STEP is gitignored — 73 MB
+ * that git would keep every revision of forever — so this only runs on a
+ * machine that has the CAD beside it. The renders are committed and are what
+ * the site loads; if the CAD is absent the tool says so and stops rather than
+ * writing anything.
  *
- * WHY RENDER AHEAD OF TIME. The tessellated frame is ~88,000 triangles. Shipped
- * as a mesh with indices and normals that is roughly a megabyte before you draw
- * anything, needs WebGL, and still looks like a CAD viewer. Rendered here it
- * gets three lights, a screen-space occlusion pass and 2x supersampling, and
- * the page pays for a sequence of pictures instead. It also means no geometry
- * goes over the wire: a turntable cannot be turned back into a model.
+ * TWO PICTURES, RAY TRACED. This went through a rasterised 36-frame turntable
+ * first, and that was the wrong trade twice over. Rotation divides the quality
+ * budget 36 ways, and 36 mediocre frames read worse than one good picture. And
+ * the rasteriser could not have got there anyway: it had no reflections, and
+ * metal without reflections reads as plastic however the lights are set, while
+ * its occlusion was a screen-space guess that darkened wherever geometry
+ * merely overlapped on screen rather than where parts actually meet. The whole
+ * budget now goes into two traced images.
  *
- * THE STAGES, in order — each is a separate file because each is a separate
- * kind of problem, and the middle one is the only one worth re-running while
- * you tune lighting:
+ * THE STAGES, in order:
  *
  *   d1/step.mjs        an ISO 10303-21 reader: entity table, argument
  *                      splitting, rigid transforms, de Boor evaluation.
@@ -25,26 +25,31 @@
  *                      read coordinates without this and every part lands on
  *                      the origin), then turns each of the 15,056 trimmed
  *                      faces into triangles. Writes tools/.d1/mesh.bin.
- *   d1/render.mjs      z-buffered rasteriser -> tools/.d1/turn/*.png.
- *   d1/webp.mjs        crops every frame to one shared alpha box, so the
- *                      object cannot jump between frames, and encodes WebP
- *                      through headless Chrome into src/assets/d1/turn/.
+ *   d1/trace.mjs       BVH + traced, across every core over a
+ *                      SharedArrayBuffer. About 2.5 minutes for the hero.
+ *   d1/encode.mjs      crops each render to its own alpha and encodes WebP
+ *                      through headless Chrome.
  *
- * TOLERANCES AND COUNTS worth knowing before you change anything:
+ * d1/render.mjs is the old rasteriser. Nothing the site loads comes from it
+ * any more; it is kept only for its `groups` mode, which lights one geometry
+ * group at a time and is how you check that a grouping change did what you
+ * meant it to.
+ *
+ * WORTH KNOWING before changing anything:
  *   · 91% of faces sit on planes, cylinders, cones, tori or spheres, which
- *     invert into (u,v) in closed form. The remaining 8% are B-spline patches,
- *     nearly all fillets, inverted numerically. 179 faces (1.2%) fail and are
- *     skipped; at hero scale they are not visible, but that is the number to
- *     watch if the model is ever re-exported.
+ *     invert into (u,v) in closed form. The rest are B-spline patches, nearly
+ *     all fillets, inverted numerically. 174 faces — 1.2% — fail and are
+ *     skipped; that is the number to watch if the model is ever re-exported.
  *   · Stock fasteners are KEPT, at a coarse tolerance of their own. Dropping
- *     them was the first attempt and it was wrong: between 48% and 69% of the
- *     frame pixels in NaviNetics' own photographs are bare metal, because the
- *     knobs, screws and the microdrive column are steel. An all-blue assembly
- *     did not look like the object. Their threads are still most of the
- *     geometry — 1.7M triangles of 2.13M — which is what the separate
- *     tolerance is for.
- *   · The accessory tray is dropped too. It sits at y < 0 in assembly space
- *     while every frame part's centroid is y > 0, which is the whole test.
+ *     them was an early mistake: between 48% and 69% of the frame pixels in
+ *     NaviNetics' own photographs are bare metal, because the knobs, the
+ *     screws and the microdrive column are steel, and an all-blue assembly did
+ *     not look like the object. Their threads are still most of the geometry —
+ *     1.7M triangles of 2.13M — which is what the separate tolerance is for.
+ *   · Materials and lamp intensities are measured off those photographs, not
+ *     chosen. The notes are in d1/trace-worker.mjs.
+ *   · The accessory tray is dropped. It sits at y < 0 in assembly space while
+ *     every frame part's centroid is y > 0, which is the whole test.
  */
 import { spawn } from 'node:child_process';
 import { mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
@@ -52,30 +57,31 @@ import { mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
 const CAD = `${ROOT}src/assets/d1/`;
 const WORK = `${ROOT}tools/.d1/`;
-const OUT = `${ROOT}src/assets/d1/turn/`;
 
-const TOL = 0.3;        // chord tolerance, mm, for structure
-const SIZE = 1200;      // rendered square, px, before the alpha crop
-const FRAMES = 36;
-const QUALITY = 0.80;
-/* Rendered large for quality, then encoded a little smaller: supersampling a
-   1200px render down to ~1020 is sharper than rendering 1020 directly. */
-const ENCODE_SCALE = 0.85;
+const TOL = 0.3;          // chord tolerance, mm, for the structure
+const QUALITY = 0.9;
+/* Traced large and encoded down. Supersampling a 1700px trace to ~1030 is both
+   sharper and quieter than tracing 1030 directly: the sample noise averages
+   away in the downscale instead of needing a denoiser. */
+const ENCODE_SCALE = 0.7;
+/* width, height, primary spp, hemisphere rays, reflection rays, name, yaw, pitch */
+const VIEWS = [
+  [1700, 2430, 6, 48, 18, 'hero', 38, -18],
+  [1300, 1750, 6, 44, 16, 'detail', -34, -6],
+];
 
 const step = readdirSync(CAD).find((f) => /\.step$/i.test(f));
 if (!step) {
   console.log(`\n  No STEP file in ${CAD}`);
   console.log('  The CAD is gitignored on purpose. Put 20186_D003 REV2.STEP there and re-run.');
-  console.log('  The committed renders in src/assets/d1/turn/ are untouched.\n');
+  console.log('  The committed renders in src/assets/d1/ are untouched.\n');
   process.exit(0);
 }
 console.log(`\n  source: ${step}`);
-
-mkdirSync(`${WORK}turn`, { recursive: true });
-mkdirSync(OUT, { recursive: true });
+mkdirSync(WORK, { recursive: true });
 
 const run = (file, args) => new Promise((resolve, reject) => {
-  const p = spawn(process.execPath, ['--max-old-space-size=8192', `${ROOT}tools/d1/${file}`, ...args], {
+  const p = spawn(process.execPath, ['--max-old-space-size=14336', `${ROOT}tools/d1/${file}`, ...args], {
     stdio: 'inherit',
   });
   p.on('exit', (code) => (code === 0 ? resolve() : reject(new Error(`${file} exited ${code}`))));
@@ -84,20 +90,17 @@ const run = (file, args) => new Promise((resolve, reject) => {
 console.log('\n── 1 · tessellate ────────────────────────────────────────────');
 await run('tessellate.mjs', [String(TOL)]);
 
-console.log('\n── 2 · render ────────────────────────────────────────────────');
-/* Clear the PNGs first: a shorter run would otherwise leave the tail of a
-   longer one behind, and webp.mjs globs the directory. */
-for (const f of readdirSync(`${WORK}turn`)) {
-  if (f.endsWith('.png')) rmSync(`${WORK}turn/${f}`);
+for (const v of VIEWS) {
+  console.log(`\n── 2 · trace ${v[5]} ──────────────────────────────────────────`);
+  /* Drop the previous PNG first, so a failed trace cannot leave the last good
+     render sitting there to be silently re-encoded as if it were new. */
+  if (readdirSync(WORK).includes(`${v[5]}.png`)) rmSync(`${WORK}${v[5]}.png`);
+  await run('trace.mjs', v.map(String));
 }
-await run('render.mjs', [String(SIZE), 'turn', String(FRAMES)]);
 
 console.log('\n── 3 · encode ────────────────────────────────────────────────');
-for (const f of readdirSync(OUT)) {
-  if (f.endsWith('.webp')) rmSync(OUT + f);
-}
-await run('webp.mjs', [String(QUALITY), String(ENCODE_SCALE), '1']);
+await run('encode.mjs', [String(QUALITY), String(ENCODE_SCALE), ...VIEWS.map((v) => v[5])]);
 
-const made = readdirSync(OUT).filter((f) => f.endsWith('.webp'));
-const bytes = made.reduce((s, f) => s + statSync(OUT + f).size, 0);
-console.log(`\n  ${made.length} files in src/assets/d1/turn/, ${(bytes / 1024).toFixed(0)} kB total\n`);
+const made = VIEWS.map((v) => `${v[5]}.webp`).filter((f) => readdirSync(CAD).includes(f));
+const bytes = made.reduce((s, f) => s + statSync(CAD + f).size, 0);
+console.log(`\n  ${made.length} renders in src/assets/d1/, ${(bytes / 1024).toFixed(0)} kB total\n`);
