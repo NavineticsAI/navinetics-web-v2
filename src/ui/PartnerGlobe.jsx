@@ -25,17 +25,22 @@ const SPIN = 3.1;          // degrees per second, ~two minutes for a full turn
 const BEAD_PERIOD = 2600;  // ms for one pass of the route marker
 
 /**
- * Theme tokens, re-read whenever the theme actually changes.
+ * The globe's colours.
  *
- * Watches the `data-theme` attribute rather than the value from useTheme().
- * ThemeProvider writes that attribute from an effect of its own, and a parent's
- * effect runs AFTER its children's — so reading on the context change samples
- * the outgoing theme's colours, and because the dependency never fires again it
- * keeps them for good. Measured before this was an observer: one toggle later
- * the tokens read #03121b and the canvas was still painting #d2e1ea.
+ * Every token read here is theme-independent — the globe is a lit sphere in
+ * both themes — so `--terr-*-lit` rather than `--terr-*`, which stays
+ * theme-aware for the ledger further down the page. See :root in index.css.
  *
- * The attribute is the thing that decides the colours, so the attribute is the
- * thing to watch. No effect-ordering assumption left to get wrong.
+ * The observer stays anyway, and deliberately. It watches the `data-theme`
+ * attribute rather than the value from useTheme(): ThemeProvider writes that
+ * attribute from an effect of its own, and a parent's effect runs AFTER its
+ * children's, so reading on the context change samples the OUTGOING theme's
+ * colours — and because the dependency never fires again, keeps them for good.
+ * Measured when this component had that bug: one toggle later the tokens read
+ * #03121b and the canvas was still painting #d2e1ea. Nothing here is
+ * theme-dependent today, so the observer is currently a no-op; it is four
+ * lines of insurance against the day one of these tokens becomes theme-aware
+ * again and nobody remembers this happened.
  */
 function usePalette(ids) {
   const [pal, setPal] = useState(null);
@@ -51,7 +56,7 @@ function usePalette(ids) {
         ghost: v('--globe-ghost'),
         grid: v('--globe-grid'),
         action: v('--action'),
-        terr: Object.fromEntries(ids.map((id) => [id, v(`--terr-${id}`)])),
+        terr: Object.fromEntries(ids.map((id) => [id, v(`--terr-${id}-lit`)])),
       });
     };
     read();

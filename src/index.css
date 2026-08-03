@@ -167,12 +167,6 @@
   --terr-au: #2b8560;
   --terr-kr: #74589e;
 
-  --globe-sky-1: #edf4f8;
-  --globe-sky-2: #cfdfe9;
-  --globe-rim: rgb(11 56 77 / 0.16);
-  --globe-land: #9db7c6; /* land with no partner behind it */
-  --globe-ghost: rgb(11 56 77 / 0.06); /* the far side, showing through */
-  --globe-grid: rgb(11 56 77 / 0.065);
 
   color-scheme: light;
 }
@@ -221,12 +215,6 @@
   --terr-au: #4bb287;
   --terr-kr: #a48ccb;
 
-  --globe-sky-1: #08283a;
-  --globe-sky-2: #03121b;
-  --globe-rim: rgb(130 186 217 / 0.2);
-  --globe-land: #2c5266;
-  --globe-ghost: rgb(130 186 217 / 0.07);
-  --globe-grid: rgb(130 186 217 / 0.06);
 
   color-scheme: dark;
 }
@@ -264,6 +252,35 @@
   --ws-entry: #73e519;
   --ws-green: #42a36f;
   --ws-amber: #c7863a;
+}
+
+
+/* ── Partners globe · THEME-INDEPENDENT ────────────────────────────────────
+   The globe is a lit sphere on a stand, not a piece of page, so it stays dark
+   in both themes — the same call the workstation and the MAVEN bay make. It
+   is also the honest one: the territory colours have to hold five categories
+   apart against the ocean behind them, and the pale sky gave the weakest pair
+   3.6 where this one gives 6.0.
+
+   `--terr-*-lit` is the on-dark variant of each territory colour, for the
+   canvas and the pins. `--terr-*` stays theme-aware because the ledger below
+   the globe is ordinary page, and a colour lifted for a dark sphere falls to
+   about 2.5 against a pale card. Same five hues either way, so a reader moving
+   from the globe to the ledger is still following the same five threads. */
+:root {
+  --globe-bay: #03121b;
+  --globe-sky-1: #08283a;
+  --globe-sky-2: #03121b;
+  --globe-rim: rgb(130 186 217 / 0.2);
+  --globe-land: #2c5266; /* land with no partner behind it */
+  --globe-ghost: rgb(130 186 217 / 0.07); /* the far side, showing through */
+  --globe-grid: rgb(130 186 217 / 0.06);
+
+  --terr-us-lit: #4e9ac4;
+  --terr-sa-lit: #c9a93f;
+  --terr-cn-lit: #d4835a;
+  --terr-au-lit: #4bb287;
+  --terr-kr-lit: #a48ccb;
 }
 
 /* ── MAVEN · THEME-INDEPENDENT ─────────────────────────────────────────────
@@ -477,7 +494,7 @@
     border-radius: 50%;
     background: var(--pc, var(--action));
     box-shadow:
-      0 0 0 3px var(--canvas),
+      0 0 0 3px var(--globe-bay),
       0 0 0 4px var(--pc, var(--action));
     transition: transform 250ms var(--ease-out);
   }
@@ -493,7 +510,7 @@
   }
   .nn-pin-site i {
     inset: 13px;
-    background: var(--canvas);
+    background: var(--globe-bay);
     box-shadow: 0 0 0 2px var(--pc, var(--action));
   }
   .nn-pin:hover i,

@@ -59,8 +59,12 @@ export default function Partners() {
 
       <section className="px-6 pb-4 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <div className="overflow-hidden rounded-lg border border-hairline
-            bg-[radial-gradient(120%_90%_at_50%_8%,var(--surface-2),var(--canvas)_70%)]">
+          {/* The container is dark in both themes, like the globe inside it.
+              A lit sphere needs a room to be lit in, and the pale version put
+              five territory colours against a near-white ocean where the
+              weakest pair fell to 3.6 contrast. */}
+          <div className="overflow-hidden rounded-lg border border-[rgb(130_186_217/0.14)]
+            bg-[radial-gradient(120%_90%_at_50%_8%,#0a2c40,var(--globe-bay)_70%)]">
             <div
               ref={stageRef}
               className="relative aspect-[16/13] min-h-[560px] w-full lg:aspect-[16/7.6]"
