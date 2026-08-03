@@ -11,18 +11,14 @@
  * pictures of a mesh, which cannot be turned back into geometry. No dimension,
  * travel, angle or tolerance from that file appears anywhere on the page.
  *
- * WHAT THE CALLOUTS ARE NAMED. Every name below is taken verbatim from the
- * `components` list on the product record, which came from NaviNetics' own
- * public site. They are NOT read out of the CAD: the file names its parts by
- * internal drawing number (20186-9_D0014 REV3 and the like), and those are
- * neither public nor meaningful to a reader.
- *
- * ONE MAPPING NEEDS CONFIRMING. Two of the three are certain — the graduated
- * lead-screw column is the Mechanical Microdrive, and the arc, rails and stage
- * together are the Stereotactic Head Frame. The third, `anchor`, is the flat
- * plate group at the base of the assembly, and calling it the Skull Anchor Key
- * is an inference from position rather than something the file states. If it
- * is wrong, change the label here; the geometry grouping is in the tool.
+ * NOTHING IN THE FIGURE IS NAMED, and that is deliberate. The tool can
+ * separate the assembly into six groups and light any of them independently —
+ * that machinery still exists in tools/d1/render.mjs — but the page does not
+ * label them. The CAD names its parts by internal drawing number
+ * (20186-9_D0014 REV3 and the like), which is neither public nor meaningful,
+ * and every mapping from those to a component name would be an inference of
+ * mine rather than something NaviNetics has stated. So the hero shows the
+ * instrument and says nothing about which piece is which.
  *
  * NOT HERE, deliberately:
  *   · Any accuracy or precision figure. None appears on the existing site and
@@ -44,42 +40,8 @@ const frames = import.meta.glob('../assets/d1/turn/f*.webp', {
 });
 export const turntable = Object.keys(frames).sort().map((k) => frames[k]);
 
-const stills = import.meta.glob('../assets/d1/turn/hl-*.webp', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-});
-const still = (id) => stills[`../assets/d1/turn/hl-${id}.webp`];
-
 /** The rendered frame is 713 × 1020; the hero needs the ratio to lay out. */
 export const FRAME = { w: 713, h: 1020 };
-
-/**
- * What the settled hero names.
- *
- * Three, not four, because three is how many component names the geometry
- * actually supports. A fourth would have been a label invented to fill a slot.
- */
-export const callouts = [
-  {
-    id: 'frame',
-    name: 'Stereotactic Head Frame',
-    note: 'The arc, the rails and the targeting stage — one component.',
-    src: still('frame'),
-  },
-  {
-    id: 'microdrive',
-    name: 'Mechanical Microdrive',
-    note: 'The graduated column on the trajectory.',
-    src: still('microdrive'),
-  },
-  {
-    id: 'anchor',
-    name: 'Skull Anchor Key',
-    note: 'What the whole assembly hangs from.',
-    src: still('anchor'),
-  },
-];
 
 /**
  * The four explanations, each with an abstract ground and a figure.
@@ -151,8 +113,8 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
-    lead: 'A mechanical microdrive sits on the trajectory the arc has chosen and advances along '
-      + 'it — the graduated column that rises out of the middle of the hero.',
+    lead: 'Once the arc has chosen the approach, a mechanical microdrive advances along it — '
+      + 'down the line the frame has already set, rather than beside it.',
     points: [
       {
         label: 'On the line, not beside it.',

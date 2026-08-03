@@ -255,20 +255,12 @@ if (mode === 'turn') {
     if (i % 8 === 0) process.stdout.write(`  ${i}/${N}\r`);
   }
   console.timeEnd('turntable');
-  render(SETTLE.yaw, SETTLE.pitch);
-  const ao = occlusion();
-  /* Callouts are named from the product record's component list, so they are
-     groups of geometry rather than one group each: the arc, the rails and the
-     stage are all one component — the head frame. */
-  const CALL = { frame: [0, 1, 3], microdrive: [2], anchor: [4] };
-  for (const [g, set] of Object.entries(CALL)) {
-    png(`${DIR}turn/hl-${g}.png`, OUT, OUT, shade(ao, new Set(set)));
-  }
-  console.log(`wrote ${N} frames + ${Object.keys(CALL).length} highlight stills`);
+  console.log(`wrote ${N} frames`);
 }
 
-/* One still per geometry group, for naming. The groups are what the tool can
-   separate; what they are called is NaviNetics' to say. */
+/* One still per geometry group. Not used by the page — the hero labels nothing
+   — but kept as a diagnostic: it is how you check that a grouping change did
+   what you meant, by looking at each group lit on its own. */
 if (mode === 'groups') {
   render(SETTLE.yaw, SETTLE.pitch);
   const ao = occlusion();

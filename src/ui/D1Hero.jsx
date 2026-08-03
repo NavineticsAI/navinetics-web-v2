@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { callouts, turntable, FRAME } from '../data/d1.js';
+import { useEffect, useRef } from 'react';
+import { turntable, FRAME } from '../data/d1.js';
 import { usePrefersReducedMotion } from '../lib/motion.js';
 
 /**
@@ -16,7 +16,13 @@ import { usePrefersReducedMotion } from '../lib/motion.js';
  * would pay for per-frame (three lights, occlusion, 2x supersampling), costs
  * no GPU work here, needs no WebGL, and puts no geometry on the wire.
  *
- * The cost is weight: the turntable is about 1.5 MB. So the settled frame is
+ * NOTHING IS LABELLED. An earlier pass put three named callouts around the
+ * settled frame; the names were wrong and naming the parts at all was the
+ * wrong idea, so the hero shows the instrument and lets the bands below do the
+ * explaining. The renderer can still light any group on its own — see the
+ * `groups` mode in tools/d1/render.mjs — if that is ever wanted back.
+ *
+ * The cost is weight: the turntable is about 1.8 MB. So the settled frame is
  * fetched on its own first and everything else follows once it lands, and any
  * frame not yet decoded falls back to the nearest one that is. The opening
  * paints against a single image.
@@ -29,13 +35,6 @@ export function D1Hero() {
   const copyRef = useRef(null);
   const cueRef = useRef(null);
   const imgs = useRef([]);
-  const stills = useRef({});
-  const activeRef = useRef(null);
-  const mixRef = useRef(0);
-  const [active, setActive] = useState(null);
-  const [settled, setSettled] = useState(reduced);
-
-  useEffect(() => { activeRef.current = active; }, [active]);
 
   /* ── fetch: the settled frame alone, then the rest ──────────────────────── */
   useEffect(() => {
@@ -48,10 +47,7 @@ export function D1Hero() {
       return im;
     };
     const first = load(turntable[last], last);
-    const rest = () => {
-      turntable.forEach((src, i) => { if (i !== last) load(src, i); });
-      for (const c of callouts) stills.current[c.id] = load(c.src);
-    };
+    const rest = () => { turntable.forEach((src, i) => { if (i !== last) load(src, i); }); };
     if (first.complete) rest();
     else first.addEventListener('load', rest, { once: true });
   }, []);
@@ -103,13 +99,15 @@ export function D1Hero() {
       /* A portrait render on a landscape stage. Fit to height, then clamp to a
          width budget — without the clamp a phone gets an object wider than the
          screen, and a wide desktop gets one that runs through the headline.
-         The budget is the half of the stage the copy does not use. */
+         The budget is the half of the stage the copy does not use; it drifts
+         only as far right as it needs to clear the words, since nothing sits
+         out at the edge any more. */
       const narrow = w < 900;
-      let dh = h * (reduced ? 0.7 : 0.56 + 0.13 * s);
-      const maxW = w * (narrow ? 0.74 : 0.42);
+      let dh = h * (reduced ? 0.72 : 0.58 + 0.15 * s);
+      const maxW = w * (narrow ? 0.76 : 0.44);
       if ((FRAME.w / FRAME.h) * dh > maxW) dh = (maxW * FRAME.h) / FRAME.w;
       const dw = (FRAME.w / FRAME.h) * dh;
-      const dx = w * (narrow || reduced ? 0.5 : 0.5 + 0.17 * s) - dw / 2;
+      const dx = w * (narrow || reduced ? 0.5 : 0.5 + 0.13 * s) - dw / 2;
       const dy = h * (narrow ? 0.32 : 0.46) - dh / 2;
 
       if (base) {
@@ -117,14 +115,6 @@ export function D1Hero() {
         ctx.drawImage(base, dx, dy, dw, dh);
       }
 
-      // the highlight still, crossfaded in over the settled frame
-      const target = s > 0.94 && activeRef.current ? 1 : 0;
-      mixRef.current += (target - mixRef.current) * 0.16;
-      const still = activeRef.current ? stills.current[activeRef.current] : null;
-      if (still?.complete && still.naturalWidth && mixRef.current > 0.004) {
-        ctx.globalAlpha = mixRef.current;
-        ctx.drawImage(still, dx, dy, dw, dh);
-      }
       ctx.globalAlpha = 1;
 
       if (copyRef.current && !reduced) {
@@ -136,9 +126,7 @@ export function D1Hero() {
     };
 
     const frame = () => {
-      const p = (window.scrollY - hostTop) / travel;
-      const s = paint(p);
-      setSettled((cur) => (cur === s > 0.62 ? cur : s > 0.62));
+      paint((window.scrollY - hostTop) / travel);
       raf = requestAnimationFrame(frame);
     };
 
@@ -211,51 +199,6 @@ export function D1Hero() {
             degrees of freedom, two angles of rotation.
           </p>
         </div>
-
-        {/* ── what it is made of ─────────────────────────────────────────── */}
-        <ul
-          /* Down the right on a wide stage, where the object leaves a column
-             free. On a phone there is no free column — the object fills the
-             width — so they drop to a row along the bottom instead of floating
-             over the frame. */
-          className={
-            reduced
-              ? 'flex flex-wrap gap-2'
-              : 'absolute z-10 flex gap-2 inset-x-4 bottom-4 flex-row flex-wrap justify-center'
-                + ' lg:inset-x-auto lg:bottom-auto lg:right-10 lg:top-1/2 lg:-translate-y-1/2'
-                + ' lg:flex-col lg:items-end lg:justify-start'
-          }
-        >
-          {callouts.map((c, i) => (
-            <li key={c.id}>
-              <button
-                type="button"
-                onClick={() => setActive((cur) => (cur === c.id ? null : c.id))}
-                aria-pressed={active === c.id}
-                className={`flex items-center gap-2.5 rounded-full border px-4 py-2
-                  text-left text-[0.8125rem] transition-colors ${
-                  active === c.id
-                    ? 'border-sg-300 bg-white/[0.12] text-nn-50'
-                    : 'border-white/15 bg-white/[0.05] text-nn-200 hover:border-sg-300 hover:text-nn-50'
-                }`}
-                style={reduced ? undefined : {
-                  opacity: settled ? 1 : 0,
-                  transform: settled ? 'translateX(0)' : 'translateX(14px)',
-                  transitionProperty: 'opacity, transform, color, border-color, background-color',
-                  transitionDuration: '.35s',
-                  transitionDelay: settled ? `${i * 70}ms` : '0ms',
-                  pointerEvents: settled ? 'auto' : 'none',
-                }}
-              >
-                <span
-                  className="size-2 flex-none rounded-full bg-sg-300"
-                  aria-hidden="true"
-                />
-                {c.name}
-              </button>
-            </li>
-          ))}
-        </ul>
 
         {!reduced && (
           <span

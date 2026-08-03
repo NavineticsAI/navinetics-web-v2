@@ -2,7 +2,7 @@
  * The D1 hero, out of the assembly CAD.
  *
  * `node tools/d1-frame.mjs` turns src/assets/d1/*.STEP into the 36-frame
- * turntable and three highlight stills in src/assets/d1/turn/. The STEP is
+ * turntable in src/assets/d1/turn/. The STEP is
  * gitignored — 73 MB that git would keep every revision of forever — so this
  * only runs on a machine that has the CAD beside it. The renders are committed
  * and are what the site actually loads; if the CAD is absent the tool says so
