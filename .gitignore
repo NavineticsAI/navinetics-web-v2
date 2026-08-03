@@ -35,6 +35,7 @@ tools/.screens.html
 tools/.edu.html
 tools/.partners.html
 tools/.maven.html
+tools/.ortables.html
 
 # PowerPoint's lock file, written beside info.pptx whenever the deck is open.
 ~$*.pptx
@@ -59,3 +60,6 @@ src/assets/maven/info.pptx
 # 1.6 MB of PNG that one command reproduces exactly is the same trade the rule
 # above refuses. Delete the file and re-run the tool.
 src/assets/maven/detail.png
+
+*.pdf
+*.pptx

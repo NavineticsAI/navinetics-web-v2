@@ -35,6 +35,8 @@ const Maven = lazy(() => import('../pages/Maven.jsx'));
 /* Neuromodulation shares MAVEN's band component and scene builders, so it
    splits for the same reason and lands in the same neighbourhood. */
 const Neuromodulation = lazy(() => import('../pages/Neuromodulation.jsx'));
+/* The surgical tables carry the motion explorer and two more scene builders. */
+const SurgicalTables = lazy(() => import('../pages/SurgicalTables.jsx'));
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -57,6 +59,17 @@ const routes = [
     element: (
       <Suspense fallback={<div className="min-h-screen bg-[var(--mv-bay)]" />}>
         <Maven />
+      </Suspense>
+    ),
+  },
+  // The carbon tables are the second product with their own page: the range is
+  // five specified models and the useful thing to do with that is let a reader
+  // put each one through its own motions, which the template cannot express.
+  {
+    path: '/products/carbon-fiber-surgical-tables',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+        <SurgicalTables />
       </Suspense>
     ),
   },

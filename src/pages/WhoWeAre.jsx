@@ -134,8 +134,8 @@ export default function WhoWeAre() {
       </Section>
 
       <Section wide band>
-        <SectionHead eyebrow="What we make" title="Two lines of work." />
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
+        <SectionHead eyebrow="What we make" title="Three lines of work." />
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {shipping.map((p, i) => (
             <Reveal key={p.slug} delay={i * 0.06}>
               <Card lift as={Link} to={p.path} className="flex h-full flex-col gap-3">

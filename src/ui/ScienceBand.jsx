@@ -29,7 +29,12 @@ const BUILDERS = {
  * plugin system to sit in one file. The layout is worth repeating; the wiring
  * is not worth generalising for three callers.
  */
-export function ScienceBand({ scene, tone, ground = 'bay', eyebrow, title, lead, points = [], meta = [], figure }) {
+/* `builders` lets a page bring its own scene registry. The MAVEN scenes are
+   the default because they were here first; the carbon tables pass theirs. */
+export function ScienceBand({
+  scene, builders = BUILDERS, tone, ground = 'bay',
+  eyebrow, title, lead, points = [], meta = [], figure,
+}) {
   const light = ground === 'light';
   const reduced = usePrefersReducedMotion();
   const canvasRef = useRef(null);
@@ -39,7 +44,7 @@ export function ScienceBand({ scene, tone, ground = 'bay', eyebrow, title, lead,
     if (!cv) return undefined;
 
     const ctx = cv.getContext('2d');
-    const draw = BUILDERS[scene](light);
+    const draw = builders[scene](light);
     let w = 0;
     let h = 0;
     let visible = false;
@@ -87,7 +92,7 @@ export function ScienceBand({ scene, tone, ground = 'bay', eyebrow, title, lead,
       io.disconnect();
       ro.disconnect();
     };
-  }, [scene, light, reduced]);
+  }, [scene, builders, light, reduced]);
 
   return (
     <section

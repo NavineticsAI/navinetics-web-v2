@@ -1,5 +1,6 @@
 import mavenDevice from '../assets/maven/device.webp';
 import mavenDetail from '../assets/maven/detail.webp';
+import tableShot from '../assets/or-tables/table.webp';
 
 /**
  * The product catalogue.
@@ -112,9 +113,16 @@ export const products = [
     name: 'Carbon Fiber Surgical Tables',
     shortName: 'Surgical Tables',
     family: 'Carbon Fiber Surgical Tables',
-    tag: { label: 'In development', tone: 'warn' },
+    tag: { label: 'Range', tone: 'line' },
     technology: 'stereotactic-devices',
-    status: 'in-development',
+    /**
+     * No longer `status: 'in-development'`. That flag drove the ComingSoon
+     * treatment and the "In development" badge, and both became wrong when the
+     * brochure arrived: /products/carbon-fiber-surgical-tables now has its own
+     * page with five models specified in full. Removing it also moves this
+     * record into `shipping` in pages/WhoWeAre.jsx, which is why that section
+     * counts three lines of work rather than two.
+     */
     tagline: 'Radiolucent by design.',
     summary:
       'Carbon fibre tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
@@ -126,12 +134,15 @@ export const products = [
      */
     intro:
       'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fibre construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
-    hero: '/DSC05397-1024x695.jpg',
-    heroAlt: 'Placeholder image — carbon fibre surgical table photography pending',
+    hero: tableShot,
+    heroAlt: 'A carbon-fibre operating table',
+    heroTone: 'bay',
+    /* Four of the five gaps were closed by the brochure — photography,
+       dimensions, load ratings and the range itself. These two are still not
+       stated in any document NaviNetics has supplied, and the page says so
+       rather than leaving the list to imply they are settled. */
     needsContent: [
-      'Product photography',
-      'Dimensions and load ratings',
-      'Radiolucency characteristics',
+      'Radiolucency characteristics — no attenuation figure is published',
       'Imaging-system compatibility',
       'Regulatory status',
     ],
