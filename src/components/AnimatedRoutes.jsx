@@ -28,6 +28,10 @@ import { redirects } from '../data/nav.js';
  */
 const NaviNeticsAI = lazy(() => import('../pages/NaviNeticsAI.jsx'));
 const Education = lazy(() => import('../pages/Education.jsx'));
+/* MAVEN carries the ring geometry and the voltammogram field, which no other
+   route touches. Its fallback is the instrument bay, so the split cannot flash
+   a pale panel over a dark hero. */
+const Maven = lazy(() => import('../pages/Maven.jsx'));
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -40,6 +44,19 @@ const routes = [
 
   // Products and Technology are each one data-driven route: adding a record to
   // data/products.js or data/technology.js publishes a page.
+  //
+  // MAVEN is the exception, declared before the dynamic route for the same
+  // reason NaviNetics AI is below: its opening is a diagram of the system
+  // rather than a photograph of it, which the template cannot express. Its
+  // words still come from the same record.
+  {
+    path: '/products/maven-neuromodulation',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-[var(--mv-bay)]" />}>
+        <Maven />
+      </Suspense>
+    ),
+  },
   { path: '/products/:slug', element: <Product /> },
 
   // NaviNetics AI has its own page rather than the Technology template: its
