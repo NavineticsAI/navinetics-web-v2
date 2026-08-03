@@ -4,7 +4,10 @@ import { Hero, Reveal, Section } from '../ui/index.js';
 const founders = [
   {
     name: 'Kendall H. Lee, M.D., Ph.D.',
-    role: 'Co-Director & Co-Founder',
+    /* Their title at NaviNetics. The "Co-Director" further down each bio is a
+       different job — the Mayo Clinic Neural Engineering Laboratories — and is
+       correct as written. */
+    role: 'Co-CEO & Co-Founder',
     image: '/kendall-lee-150-500x400-1.jpg',
     bio: [
       'Dr. Lee earned his B.A. in biology with a minor in philosophy (Summa Cum Laude) from the University of Colorado at Denver. He attended Yale University Graduate School, where he received his Master of Philosophy, M.D. (Cum Laude) and Ph.D. in neurobiology. He completed an internship in internal medicine at the Hospital of St. Raphael, Yale University School of Medicine and a residency in neurology at Harvard Medical School.',
@@ -16,7 +19,10 @@ const founders = [
   },
   {
     name: 'Kevin E. Bennet, MBA, Ph.D.',
-    role: 'Co-Director & Co-Founder',
+    /* Their title at NaviNetics. The "Co-Director" further down each bio is a
+       different job — the Mayo Clinic Neural Engineering Laboratories — and is
+       correct as written. */
+    role: 'Co-CEO & Co-Founder',
     image: '/kevin-bennet-150-500x400-1.jpg',
     bio: [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',

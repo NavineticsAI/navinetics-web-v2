@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { cn } from '../lib/cn.js';
 import { usePageMeta } from '../lib/meta.js';
 import { isPlaceholder, products } from '../data/products.js';
 import { publications } from '../data/publications.js';
@@ -64,21 +65,47 @@ export default function Home() {
 
             <Reveal className="w-full lg:w-1/2">
               <div className="relative">
+                {/* `tone` is forwarded because these are cut-outs with
+                    transparent backgrounds and each record says which ground
+                    it needs. Home was ignoring that and putting all three on
+                    the pale plate — on the one page most people see first. */}
                 <ProductPlate
                   src={product.hero}
                   alt={product.heroAlt}
+                  tone={product.heroTone}
                   className="aspect-square w-full"
                 />
-                {/* One lens panel floating over the plate — the showcase moment */}
-                <Lens className="absolute bottom-5 left-5 right-5 rounded-md p-4 md:bottom-6 md:left-6 md:right-auto md:max-w-[18rem] md:p-5">
-                  <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-action">
-                    {product.metrics[0].label}
-                  </span>
-                  <div className="mt-1 text-xl font-semibold tracking-[-0.03em]">
-                    {product.metrics[0].value}
-                  </div>
-                  <div className="text-xs text-ink-3">{product.metrics[0].unit}</div>
-                </Lens>
+                {/* One lens panel floating over the plate — the showcase
+                    moment. Guarded because `metrics` is optional on a product
+                    record, and indexing it blindly took the whole home page
+                    down when a record shipped without one: a missing optional
+                    field should cost its own panel, not the site.
+
+                    The bay plate is dark in BOTH themes, so its lens cannot
+                    use the theme's ink tokens — in light mode they resolve to
+                    near-black on near-black. Hence the fixed pale set. */}
+                {product.metrics?.[0] && (
+                  <Lens className="absolute bottom-5 left-5 right-5 rounded-md p-4 md:bottom-6 md:left-6 md:right-auto md:max-w-[18rem] md:p-5">
+                    <span className={cn(
+                      'font-data text-[0.6875rem] uppercase tracking-[0.14em]',
+                      product.heroTone === 'bay' ? 'text-sg-300' : 'text-action',
+                    )}>
+                      {product.metrics[0].label}
+                    </span>
+                    <div className={cn(
+                      'mt-1 text-xl font-semibold tracking-[-0.03em]',
+                      product.heroTone === 'bay' && 'text-nn-50',
+                    )}>
+                      {product.metrics[0].value}
+                    </div>
+                    <div className={cn(
+                      'text-xs',
+                      product.heroTone === 'bay' ? 'text-nn-200' : 'text-ink-3',
+                    )}>
+                      {product.metrics[0].unit}
+                    </div>
+                  </Lens>
+                )}
               </div>
             </Reveal>
           </div>

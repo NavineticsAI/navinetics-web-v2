@@ -63,7 +63,7 @@ export const disciplines = [
     with: [
       ['NSX', 'Whether the adjustment is reachable where the surgeon actually stands.'],
       ['SW', 'Where a readout or encoder has to physically live on the mechanism.'],
-      ['REG', 'Verification protocols that prove the stack-up, not just describe it.'],
+      ['REG', 'Verification protocols that prove the stack-up.'],
     ],
   },
   {
@@ -140,6 +140,6 @@ export const expectations = [
     tone: 'yes',
     label: 'But this',
     title: 'Your name goes on it',
-    body: 'Patents and peer-reviewed papers, not internal wiki pages. Over 100 publications so far, and the people who did the work are on them.',
+    body: 'Patents and peer-reviewed papers. Over 100 publications so far, and the people who did the work are on them.',
   },
 ];

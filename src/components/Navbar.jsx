@@ -7,6 +7,7 @@ import { EASE_OUT, usePrefersReducedMotion } from '../lib/motion.js';
 import { nav } from '../data/nav.js';
 import { Button } from '../ui/Button.jsx';
 import { ProductPlate } from '../ui/Card.jsx';
+import { Logo } from '../ui/Logo.jsx';
 import { ThemeToggle } from '../ui/ThemeToggle.jsx';
 
 const MENU_W = 240;
@@ -122,7 +123,9 @@ export default function Navbar() {
         )}
       >
         <Link to="/" className="flex shrink-0 items-center" aria-label="NaviNetics home">
-          <img src="/logo-378x75-1.png" alt="NaviNetics" className="h-7 w-auto object-contain" />
+          {/* 28px: the h-7 the image used, kept exactly so the bar's height
+              and the gap to the first link do not move. */}
+          <Logo height={28} />
         </Link>
 
         <div className="hidden flex-1 items-center gap-1 lg:flex">

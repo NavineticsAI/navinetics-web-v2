@@ -1,3 +1,5 @@
+import mavenDevice from '../assets/maven/device.webp';
+
 /**
  * The technology platforms.
  *
@@ -19,11 +21,10 @@
  */
 
 /**
- * ASSET WARNING — do not use /stereotactic_halo.png or /halo_ring.png.
- * The first carries a competitor's trademark (Stryker) on the device and
- * appears to be an AI render; the second is an unbranded AI render of a
- * base head ring — the component NaviNetics' anchor key replaces. Neither
- * depicts a NaviNetics product. Use photography of actual devices.
+ * ASSET NOTE — the four fabricated device images that used to sit in public/
+ * were deleted on 2026-08-03. See the note in data/media.js for what they were
+ * and why. Use photography of actual devices, or renders derived from our own
+ * CAD — see tools/d1-frame.mjs.
  */
 
 export const technologies = [
@@ -66,15 +67,29 @@ export const technologies = [
     tagline: 'Measuring what\nstimulation changes.',
     summary:
       'Recording neurochemical and electrophysiological activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
-    hero: '/WINC-Harmoni-Device.png',
-    heroAlt: 'The WINCS Harmoni device',
+    /* The MAVEN unit's own artwork. This replaced a journal figure that was
+       standing in as a product shot — see the note in data/products.js. */
+    hero: mavenDevice,
+    heroAlt: 'The MAVEN system',
+    /**
+     * This slug does NOT use the Technology template. It has its own route and
+     * page (pages/Neuromodulation.jsx), because the template is three
+     * principles beside a photograph and the subject is an arc of published
+     * work that wants figures and room. Its content is data/neuromodulation.js.
+     *
+     * What that page still reads from here: `eyebrow`, `tagline`, `summary`
+     * for the hero, and `readMore`. `hero`, `heroAlt` and `principles` are not
+     * rendered anywhere at the moment — kept because they describe the
+     * platform correctly and the template may want them again, not because
+     * something is using them.
+     */
     principles: [
       {
         title: 'Chemistry, measured electrically',
         body: 'Neurotransmitters are detected by their oxidation and reduction at an electrode surface. Fast-scan cyclic voltammetry sweeps the electrode potential and reads the resulting current; the shape of that response identifies the analyte.',
       },
       {
-        title: 'Absolute, not just relative',
+        title: 'Absolute concentration',
         body: 'Multiple cyclic square wave voltammetry measures absolute concentration in the extracellular space rather than only phasic change — which matters if you want to compare across sessions or subjects.',
       },
       {
@@ -100,17 +115,31 @@ export const technologies = [
     hero: '/microdrive-image-1024x797.png',
     heroAlt: 'Placeholder image — NaviNetics AI visuals pending',
     /**
-     * PLACEHOLDER — content pending from NaviNetics.
-     * The one concrete statement here (published work on automated landmark
-     * localisation for neuronavigation) is verifiable. Nothing is claimed about
-     * availability, regulatory status, or performance.
+     * IN DEVELOPMENT — copy pending from NaviNetics.
+     *
+     * This slug does NOT use the Technology template. It has its own route and
+     * page (pages/NaviNeticsAI.jsx) because its hero is the software itself: a
+     * simulation of the planning workspace, running on a generated head.
+     *
+     * The one concrete statement here — published work on automated landmark
+     * localisation for neuronavigation — is verifiable. Nothing is claimed
+     * about availability, regulatory status, or performance.
      */
     status: 'in-development',
+    /*
+     * Body copy is now written, derived from the application repository
+     * itself (navinetics-ai-suite: the master application guide, the
+     * requirements set, and the named modules). It still wants a read-through
+     * by someone who can approve it as a public statement — which is what
+     * the first item below now asks for.
+     */
     needsContent: [
-      'What the software does, in one sentence',
+      'Sign-off on the body copy, which is currently derived from the application repository',
       'Whether it is a product, a platform, or research',
-      'Screenshots or interface visuals',
-      'Regulatory status and intended use',
+      'An approved classification, intended-use and intended-user statement',
+      'Sign-off on the two performance figures held back: the ±1 mm placement tolerance and the OR benchmark',
+      'A defaced surface render, to replace the synthetic head in the demo',
+      'Confirmation of the frame origin offset used by the demo',
     ],
     principles: [],
     appliedIn: [],

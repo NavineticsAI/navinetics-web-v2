@@ -24,3 +24,55 @@ __pycache__/
 *.njsproj
 *.sln
 *.sw?
+
+tmp/
+
+# Scratch from the tools in tools/*.mjs — a headless Chrome profile and the
+# host pages they drive. Untracked, and oxlint should not read them either:
+# a browser extension's bundled JS is not our code.
+tools/.chrome*/
+tools/.screens.html
+tools/.edu.html
+tools/.partners.html
+tools/.maven.html
+tools/.ortables.html
+
+# PowerPoint's lock file, written beside info.pptx whenever the deck is open.
+~$*.pptx
+
+# Video masters. Image masters are committed — they are a megabyte or two and
+# they are the source of truth for the WebPs beside them. A video master is
+# 25 MB, which is larger than this entire repository's history, and git keeps
+# it forever whether or not it is ever needed again. The encoded file that the
+# page actually loads IS committed; keep the master wherever the renders live.
+src/assets/**/*.vid.mp4
+
+# The MAVEN deck. src/assets/partners/info.pptx is committed at 2.6 MB as the
+# provenance record for third-party trademarks and that trade is worth making;
+# this one is 159 MB, which is roughly sixty times the whole of this
+# repository's history, and git would keep every future revision of it forever.
+# Nothing in the build reads it. Keep it wherever the source material lives.
+# Remove this line if you decide the provenance is worth the weight.
+src/assets/maven/info.pptx
+
+# The MAVEN detail master, which is not a master: tools/maven-art.mjs renders
+# it out of Picture11.emf, and the EMF is committed right beside it. Keeping
+# 1.6 MB of PNG that one command reproduces exactly is the same trade the rule
+# above refuses. Delete the file and re-run the tool.
+src/assets/maven/detail.png
+
+*.pdf
+*.pptx
+*.step
+# The D1 assembly CAD. 73 MB of SolidWorks AP214 that git would keep every
+# revision of forever, and nothing in the build reads it: tools/d1-frame.mjs
+# turns it into the turntable in src/assets/d1/turn/, and those renders are
+# committed. Keep the STEP wherever the CAD lives.
+src/assets/d1/*.STEP
+
+# Scratch for tools/d1-frame.mjs: the tessellated mesh and the PNG frames it
+# renders before they are cropped and encoded. Only the WebPs are committed.
+tools/.d1/
+
+# Scratch profile for tools/check-routes.mjs.
+tools/.routes/

@@ -1,3 +1,8 @@
+import d1Head from '../assets/d1/head.webp';
+import mavenDevice from '../assets/maven/device.webp';
+import mavenDetail from '../assets/maven/detail.webp';
+import tableShot from '../assets/or-tables/table.webp';
+
 /**
  * The product catalogue.
  *
@@ -38,8 +43,9 @@ export const products = [
       'Arc-centred targeting with a skull anchor key in place of a base ring. Three linear degrees of freedom, two angles of rotation.',
     intro:
       'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
-    hero: '/model-head-clean-750x998-1-451x600.png',
-    heroAlt: 'The NaviNetics skull anchor key fitted to an anatomical head model',
+    hero: d1Head,
+    heroAlt: 'The D1 frame fitted to an anatomical head model, held clear of the face',
+    heroTone: 'bay',
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
       { label: 'Localisers', value: 'MR · CT', unit: 'plus X-ray reticles' },
@@ -97,9 +103,9 @@ export const products = [
       'DBS Lead Implantation Accessories',
     ],
     gallery: [
-      { src: '/model-head-clean-750x998-1-451x600.png', caption: 'Anchor key on model', fit: 'contain' },
-      { src: '/DSC05397-1024x695.jpg', caption: 'Stereotactic frame', fit: 'cover' },
-      { src: '/microdrive-image-1024x797.png', caption: 'Mechanical microdrive', fit: 'contain' },
+      { src: '/model-head-clean-750x998-1-451x600.png', caption: 'The anchor key on a head model', fit: 'contain' },
+      { src: '/DSC05397-1024x695.jpg', caption: 'The stereotactic frame', fit: 'cover' },
+      { src: '/microdrive-image-1024x797.png', caption: 'The mechanical microdrive', fit: 'contain' },
     ],
   },
 
@@ -109,9 +115,16 @@ export const products = [
     name: 'Carbon Fiber Surgical Tables',
     shortName: 'Surgical Tables',
     family: 'Carbon Fiber Surgical Tables',
-    tag: { label: 'In development', tone: 'warn' },
+    tag: { label: 'Range', tone: 'line' },
     technology: 'stereotactic-devices',
-    status: 'in-development',
+    /**
+     * No longer `status: 'in-development'`. That flag drove the ComingSoon
+     * treatment and the "In development" badge, and both became wrong when the
+     * brochure arrived: /products/carbon-fiber-surgical-tables now has its own
+     * page with five models specified in full. Removing it also moves this
+     * record into `shipping` in pages/WhoWeAre.jsx, which is why that section
+     * counts three lines of work rather than two.
+     */
     tagline: 'Radiolucent by design.',
     summary:
       'Carbon fibre tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
@@ -121,14 +134,22 @@ export const products = [
      * compatibility claims: all of those are regulated and none have been
      * supplied. The page renders the ComingSoon treatment until they are.
      */
+    metrics: [
+      { label: 'Models specified', value: '5', unit: 'one to six motions' },
+      { label: 'Load capacity', value: '230', unit: 'kg, every model' },
+      { label: 'Table top', value: 'Carbon fibre', unit: 'always in the beam' },
+    ],
     intro:
       'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fibre construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
-    hero: '/DSC05397-1024x695.jpg',
-    heroAlt: 'Placeholder image — carbon fibre surgical table photography pending',
+    hero: tableShot,
+    heroAlt: 'A carbon-fibre operating table',
+    heroTone: 'bay',
+    /* Four of the five gaps were closed by the brochure — photography,
+       dimensions, load ratings and the range itself. These two are still not
+       stated in any document NaviNetics has supplied, and the page says so
+       rather than leaving the list to imply they are settled. */
     needsContent: [
-      'Product photography',
-      'Dimensions and load ratings',
-      'Radiolucency characteristics',
+      'Radiolucency characteristics — no attenuation figure is published',
       'Imaging-system compatibility',
       'Regulatory status',
     ],
@@ -145,10 +166,30 @@ export const products = [
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
     summary:
       'Synchronised neurochemical and electrophysiological recording with stimulation, engineered to minimise stimulation artefact.',
+    /**
+     * MAVEN is the product name — confirmed by NaviNetics. The copy below used
+     * to be written around "the WINCS Harmoni Device" throughout; it now names
+     * MAVEN, which is what the artwork, the summary slide and the deck all
+     * call it. If the lineage between the two is worth stating on the page,
+     * that is a sentence NaviNetics should supply rather than one to infer.
+     *
+     * The bespoke page at /products/maven-neuromodulation reads only `name`,
+     * `shortName`, `tagline` and the catalogue fields from this record. The
+     * rest — sequence, detail, specs, highlights, components, gallery — is not
+     * rendered anywhere at the moment. It is kept because it describes a real
+     * product and may come back, not because something is using it.
+     */
     intro:
-      'Improving the efficacy of deep brain stimulation (DBS) by studying the role of neurochemical and electrophysiological biomarkers with the WINCS Harmoni Device.',
-    hero: '/WINC-Harmoni-Device.png',
-    heroAlt: 'The WINCS Harmoni device',
+      'Improving the efficacy of deep brain stimulation (DBS) by studying the role of neurochemical and electrophysiological biomarkers.',
+    /* The unit's own artwork, cut out. This replaces /WINC-Harmoni-Device.png,
+       which is a four-panel journal figure — device dimensions, a software
+       block diagram, a chip die and a calibration curve — and was standing in
+       as product photography here, on the neuromodulation technology page and
+       in this record's gallery. It is still in public/ and still listed in
+       data/media.js; whether it should be is a permissions question. */
+    hero: mavenDevice,
+    heroAlt: 'The MAVEN system',
+    heroTone: 'bay',
     metrics: [
       { label: 'Measures', value: 'Chem + Ephys', unit: 'synchronised' },
       { label: 'Telemetry', value: 'Wireless', unit: 'real-time' },
@@ -171,11 +212,11 @@ export const products = [
     detail: {
       title: 'Preclinical Research',
       image: '/WINCS-Swine-Model-1024x668.png',
-      imageAlt: 'WINCS applied in a preclinical model',
+      imageAlt: 'MAVEN applied in a preclinical model',
       fit: 'cover',
       paragraphs: [
-        'WINCS can be used to quantify neuronal electrical activity and neurochemical levels such as dopamine, serotonin, and adenosine. By analyzing multimodal recordings, it addresses a critical gap in understanding normal and pathologic neurophysiology.',
-        'With wireless control and telemetry, WINCS provides a seamless real-time platform for identifying and characterizing potential biomarkers.',
+        'MAVEN can be used to quantify neuronal electrical activity and neurochemical levels such as dopamine, serotonin, and adenosine. By analyzing multimodal recordings, it addresses a critical gap in understanding normal and pathologic neurophysiology.',
+        'With wireless control and telemetry, MAVEN provides a seamless real-time platform for identifying and characterizing potential biomarkers.',
       ],
     },
     specs: [
@@ -195,7 +236,7 @@ export const products = [
       'Addresses a critical gap in understanding normal and pathologic neurophysiology.',
     ],
     components: [
-      'WINCS Harmoni Base Unit',
+      'MAVEN Base Unit',
       'Carbon-Fibre Microelectrodes',
       'Reference Electrode',
       'Wireless Telemetry Module',
@@ -203,9 +244,8 @@ export const products = [
       'Acquisition Software',
     ],
     gallery: [
-      { src: '/WINC-Harmoni-Device.png', caption: 'WINCS Harmoni device', fit: 'contain' },
-      { src: '/WINCS-Swine-Model-1024x668.png', caption: 'Preclinical application', fit: 'cover' },
-      { src: '/surgical_probe.png', caption: 'Sensing probe', fit: 'contain' },
+      { src: mavenDevice, caption: 'The MAVEN system', fit: 'contain' },
+      { src: mavenDetail, caption: 'The MAVEN front panel', fit: 'contain' },
     ],
   },
 ];

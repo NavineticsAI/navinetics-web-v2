@@ -14,11 +14,17 @@
  * depending on content, an interstitial warning. None is included here.
  */
 /**
- * ASSET WARNING — do not use /stereotactic_halo.png or /halo_ring.png.
- * The first carries a competitor's trademark (Stryker) on the device and
- * appears to be an AI render; the second is an unbranded AI render of a
- * base head ring — the component NaviNetics' anchor key replaces. Neither
- * depicts a NaviNetics product. Use photography of actual devices.
+ * ASSET NOTE — four fabricated device images were deleted from public/ on
+ * 2026-08-03: stereotactic_halo.png, halo_ring.png, skull_anchor.png and
+ * surgical_probe.png. All four were AI renders of devices that do not exist,
+ * carrying fake CE marks and invented model, serial and lot numbers; one bore
+ * a competitor's trademark (Stryker) and one a fabricated Ø0.8 mm dimension
+ * callout. surgical_probe.png was live here and in MAVEN's gallery, captioned
+ * as a carbon-fibre microelectrode assembly, which it was not.
+ *
+ * A fabricated specification or CE mark on a medical device company's site is
+ * a regulatory problem, not a stock-photo problem. Use photography of actual
+ * devices, or renders derived from our own CAD — see tools/d1-frame.mjs.
  */
 
 export const mediaItems = [
@@ -66,15 +72,6 @@ export const mediaItems = [
     src: '/WINCS-Swine-Model-1024x668.png',
     fit: 'cover',
     caption: 'Preclinical application.',
-  },
-  {
-    id: 'probe',
-    title: 'Sensing probe',
-    kind: 'image',
-    category: 'Research',
-    src: '/surgical_probe.png',
-    fit: 'contain',
-    caption: 'Carbon-fibre microelectrode assembly.',
   },
 ];
 
