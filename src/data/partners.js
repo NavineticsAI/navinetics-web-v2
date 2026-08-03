@@ -23,13 +23,23 @@ import delta from '../assets/partners/delta-medical.webp';
  *   · The export-growth narrative. It is an investor argument, and this page
  *     answers a different question: who can supply a system where.
  *
- * Two things still need NaviNetics' confirmation:
+ * Both of the open questions have since been answered by NaviNetics:
  *
- *   · Delta Medical has no artwork anywhere in the deck, and no logo was
- *     supplied. src/assets/partners/delta-medical.png is a placeholder.
- *   · ELIM DMP appears in the deck labelled only "Partner company". It is
- *     listed under South Korea with exactly that wording, because nothing else
- *     is known. If the relationship is something more specific, say so.
+ *   · ELIM DMP is the manufacturing partner for NaviNetics Asia. The deck had
+ *     it as "Partner company" and nothing more, which is how it was listed
+ *     until the relationship was confirmed.
+ *   · Delta Medical and NaviNetics Asia both have real artwork now — neither
+ *     is a drawn placeholder any longer. Every mark on this page is the
+ *     organisation's own.
+ *
+ * ONE THING TO BE SURE OF. The NaviNetics Asia slot currently shows the CBH
+ * mark, supplied at 1485×944 — not a NaviNetics Asia mark. That reads as
+ * deliberate, since the subsidiary was CBH until March 2026 and may still
+ * trade under it. But this page introduces the organisation as "NaviNetics
+ * Asia", so it is a name and a logo that do not match. If the intent is that
+ * South Korea is presented as CBH, the name should follow the logo; if a
+ * NaviNetics Asia mark exists, it should replace the file. Either is one
+ * change. See tools/partner-logos.mjs.
  *
  * The `id` of each territory must match the order in tools/world-dots.mjs —
  * that is what ties a record to the dots the globe tints for it.
@@ -141,8 +151,9 @@ export const territories = [
       {
         logo: elim,
         name: 'ELIM DMP',
-        role: 'Partner company',
-        body: 'Named in the deck as a partner company alongside NaviNetics Asia.',
+        role: 'Manufacturing partner',
+        body: 'Manufacturing partner for NaviNetics Asia. The deck listed it only as a partner '
+          + 'company; NaviNetics confirmed what the relationship is.',
       },
     ],
     cover: [['South Korea', 1]],

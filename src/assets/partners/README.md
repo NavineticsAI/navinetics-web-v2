@@ -12,20 +12,30 @@ page imports the `.webp`; the `.png` stays as the source of truth. Nothing in
 the codebase refers to a mark by any other name, so the filename is the whole
 contract.
 
+If you drop in a **`.webp`** instead and delete the `.png`, the tool now takes
+that as the replacement and rebuilds the master from it. It used to draw a
+placeholder over the top of exactly that, so this is a safety net rather than a
+second supported route — a `.png` is still the thing to supply.
+
 | File | State | Where it came from |
 | --- | --- | --- |
 | `abbott.png` | Deck artwork | `info.pptx`, supplied as vector — the one crisp mark of the set |
 | `paragon-care.png` | Deck artwork | `info.pptx`, 2256×763 |
 | `lituo-medical.png` | **Low resolution** | `info.pptx`, 194×68 — soft at chip size on a 2× display |
-| `cbh.png` | Deck artwork | `info.pptx`, 200×126 — also low resolution |
+| `cbh.png` | Reference only | `info.pptx`, 200×126. Nothing imports it — see below |
 | `elim-dmp.png` | Deck artwork | `info.pptx`, 477×106 |
-| `delta-medical.png` | **Placeholder** | No artwork anywhere in the deck |
-| `navinetics-asia.png` | **Placeholder** | The deck still shows the pre-integration CBH mark |
+| `delta-medical.png` | Supplied | Dropped in by NaviNetics, 300×58 |
+| `navinetics-asia.png` | Supplied | Dropped in by NaviNetics, 1485×944 — **the CBH mark** |
 
-`navinetics-asia.png` is deliberately a separate file from `cbh.png` rather than
-a copy of it. The deck records the integration as March 2026 but still carries
-the old mark, so the page needs somewhere to put the new one the moment it
-exists — and until then the placeholder says plainly that it is missing.
+No placeholders remain. Every mark the page shows is the organisation's own.
+
+**`navinetics-asia.png` currently holds the CBH mark**, at seven times the size
+of the deck's copy — so `cbh.png` is now reference material rather than a mark
+anything renders. The page introduces that organisation as "NaviNetics Asia"
+while showing a logo that reads CBH. If South Korea should be presented as CBH
+the name should follow the logo; if a NaviNetics Asia mark exists it should
+replace this file. Either is one change, and the note in `src/data/partners.js`
+says the same thing where a reader of the data will find it.
 
 NaviNetics' own mark is not here. It lives at `public/logo-378x75-1.png` and is
 shared with the navbar, so there is one copy of it rather than two that can

@@ -38,21 +38,38 @@ const CHROME = [
 /**
  * Every mark the partners page can show.
  *
- * `from` names the file inside info.pptx that carries it. Where that is null
- * the deck has no artwork at all and a placeholder is drawn instead — those
- * are the two the page flags in its own copy, so they are not a silent gap.
+ * `from` names the file inside info.pptx that carries it. `supplied` records a
+ * mark that arrived some other way — someone dropped the artwork in by hand.
+ *
+ * A mark with neither is a placeholder: no artwork exists for it anywhere, one
+ * is drawn from its name, and the manifest says so on every run. That is the
+ * only thing the "still placeholders" line means, so both fields have to be
+ * kept honest or it starts lying in the safe direction.
  */
 const MARKS = [
   { id: 'abbott', name: 'Abbott', from: 'ppt/media/image5.svg' },
   { id: 'paragon-care', name: 'Paragon Care', from: 'ppt/media/image6.png' },
   { id: 'lituo-medical', name: 'Lituo Medical', from: 'ppt/media/image7.png' },
+  /* The deck's own CBH mark, at 200×126. Nothing imports it — the page reads
+     navinetics-asia, which now carries the same mark at seven times the size.
+     Kept as the deck's record of what was in the deck. */
   { id: 'cbh', name: 'CBH', from: 'ppt/media/image22.png' },
   { id: 'elim-dmp', name: 'ELIM DMP', from: 'ppt/media/image23.png' },
-  /* No artwork exists for either of these. NaviNetics Asia is deliberately
-     separate from cbh.png: the deck still shows the pre-integration mark, and
-     overwriting the placeholder is how the new one arrives. */
-  { id: 'delta-medical', name: 'Delta Medical', from: null },
-  { id: 'navinetics-asia', name: 'NaviNetics Asia', from: null },
+  {
+    id: 'delta-medical',
+    name: 'Delta Medical',
+    from: null,
+    supplied: 'dropped in by NaviNetics — the wordmark with its diamond and the Portuguese tagline',
+  },
+  {
+    /* Deliberately its own file rather than an alias of cbh: this slot is what
+       South Korea shows, and what it shows is a decision. It currently holds
+       the CBH mark at high resolution — see the note in data/partners.js. */
+    id: 'navinetics-asia',
+    name: 'NaviNetics Asia',
+    from: null,
+    supplied: 'dropped in by NaviNetics — the CBH mark at 1485×944',
+  },
 ];
 
 const MASTER_W = 1200;   // masters are rendered/kept this wide at most
@@ -124,8 +141,39 @@ await sleep(1000);
 
 const png = (uri, path) => writeFileSync(path, Buffer.from(uri.split(',')[1], 'base64'));
 
-/* ── 1 · masters ──────────────────────────────────────────────────────────── */
-const missing = MARKS.filter((m) => !existsSync(DIR + m.id + '.png'));
+/* ── 1 · masters ──────────────────────────────────────────────────────────────
+   A missing master is normally a mark that has never been supplied. It is not
+   always: someone replacing a logo may reasonably drop the .webp over the top,
+   since that is the file the page actually imports, and delete the .png.
+
+   That used to be destructive. The old order was "master missing → draw a
+   placeholder → regenerate the webp from it", which quietly overwrote the new
+   artwork with a wordmark. So a webp with no master beside it is now read as
+   the replacement it is: it becomes the master, and the contract — the .png is
+   the source of truth, the .webp is built from it — is restored rather than
+   enforced by deleting someone's work.
+
+   Dropping in a .png is still the documented way to do it. This is the safety
+   net for the other way round.                                             */
+let missing = MARKS.filter((m) => !existsSync(DIR + m.id + '.png'));
+const orphans = missing.filter((m) => existsSync(DIR + m.id + '.webp'));
+for (const m of orphans) {
+  const bytes = readFileSync(DIR + m.id + '.webp').toString('base64');
+  const uri = await ev(`(async () => {
+    const img = await new Promise((res, rej) => {
+      const i = new Image(); i.onload = () => res(i); i.onerror = rej;
+      i.src = 'data:image/webp;base64,${bytes}';
+    });
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth; c.height = img.naturalHeight;
+    c.getContext('2d').drawImage(img, 0, 0);
+    return c.toDataURL('image/png');
+  })()`);
+  png(uri, DIR + m.id + '.png');
+  console.log(`  recovered  ${m.id}.png from the webp beside it — that webp was newer than any master`);
+}
+missing = missing.filter((m) => !orphans.includes(m));
+
 let deck = new Map();
 if (missing.some((m) => m.from)) {
   if (!existsSync(DECK)) throw new Error('info.pptx is missing and some masters need extracting from it');
@@ -186,7 +234,7 @@ for (const m of missing) {
     console.log(`  placeholder ${m.id}.png`);
   }
 }
-if (!missing.length) console.log('  all masters present');
+if (!missing.length && !orphans.length) console.log('  all masters present');
 
 /* ── 2 · web copies ───────────────────────────────────────────────────────── */
 console.log('');
@@ -226,7 +274,7 @@ for (const m of MARKS) {
   })()`);
   png(d.uri, DIR + m.id + '.webp');
   const kb = statSync(DIR + m.id + '.webp').size / 1024;
-  manifest.push({ id: m.id, w: d.ow, h: d.oh, kb, real: !!m.from });
+  manifest.push({ id: m.id, w: d.ow, h: d.oh, kb, real: !!(m.from || m.supplied) });
   console.log(`  ${m.id.padEnd(16)} ${String(d.w).padStart(4)}×${String(d.h).padEnd(4)} png`
     + ` → ${String(d.ow).padStart(3)}×${String(d.oh).padEnd(3)} webp ${kb.toFixed(1)} kB`);
 }
