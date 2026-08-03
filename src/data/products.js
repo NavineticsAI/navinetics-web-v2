@@ -1,3 +1,4 @@
+import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
 import mavenDetail from '../assets/maven/detail.webp';
 import tableShot from '../assets/or-tables/table.webp';
@@ -42,8 +43,9 @@ export const products = [
       'Arc-centred targeting with a skull anchor key in place of a base ring. Three linear degrees of freedom, two angles of rotation.',
     intro:
       'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
-    hero: '/model-head-clean-750x998-1-451x600.png',
-    heroAlt: 'The NaviNetics skull anchor key fitted to an anatomical head model',
+    hero: d1Head,
+    heroAlt: 'The D1 frame fitted to an anatomical head model, held clear of the face',
+    heroTone: 'bay',
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
       { label: 'Localisers', value: 'MR · CT', unit: 'plus X-ray reticles' },

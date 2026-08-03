@@ -84,12 +84,10 @@ export default function SurgicalTables() {
             body: 'The property that makes carbon fibre transparent to X-rays is the same one '
               + 'that makes it light: there is not much there to absorb anything.',
           },
-          {
-            label: 'No figure is quoted here.',
-            body: 'Neither document states an attenuation value or an aluminium equivalent, so '
-              + 'neither does this page. The physics is the claim; a number would be a different '
-              + 'kind of claim.',
-          },
+          /* The absent radiolucency figure is no longer explained to the
+             reader. Why there isn't one belongs in the claims notice in
+             data/orTables.js, which is where it still is — a page should not
+             narrate its own restraint. */
         ]}
         meta={[
           { label: 'Top', value: 'Carbon fibre' },
