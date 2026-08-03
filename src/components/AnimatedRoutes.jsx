@@ -32,6 +32,9 @@ const Education = lazy(() => import('../pages/Education.jsx'));
    route touches. Its fallback is the instrument bay, so the split cannot flash
    a pale panel over a dark hero. */
 const Maven = lazy(() => import('../pages/Maven.jsx'));
+/* Neuromodulation shares MAVEN's band component and scene builders, so it
+   splits for the same reason and lands in the same neighbourhood. */
+const Neuromodulation = lazy(() => import('../pages/Neuromodulation.jsx'));
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -68,6 +71,17 @@ const routes = [
     element: (
       <Suspense fallback={<div className="min-h-screen bg-ws-bg" />}>
         <NaviNeticsAI />
+      </Suspense>
+    ),
+  },
+  // Neuromodulation is the third exception to the technology template, and the
+  // same kind: the template is three principles beside a photograph, and this
+  // subject is an arc of published work that wants figures and room.
+  {
+    path: '/technology/neuromodulation',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+        <Neuromodulation />
       </Suspense>
     ),
   },

@@ -4,7 +4,7 @@ import { getProduct } from '../data/products.js';
 import { bands } from '../data/maven.js';
 import { Button, Reveal } from '../ui/index.js';
 import { MavenHero } from '../ui/MavenHero.jsx';
-import { MavenBand } from '../ui/MavenBand.jsx';
+import { ScienceBand } from '../ui/ScienceBand.jsx';
 
 /**
  * MAVEN.
@@ -48,7 +48,7 @@ export default function Maven() {
       <MavenHero product={product} />
 
       {bands.map((b) => (
-        <MavenBand key={b.id} {...b} />
+        <ScienceBand key={b.id} {...b} />
       ))}
 
       {/* Closes the page. States what the instrument is for and what it is

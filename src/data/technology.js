@@ -72,6 +72,18 @@ export const technologies = [
        standing in as a product shot — see the note in data/products.js. */
     hero: mavenDevice,
     heroAlt: 'The MAVEN system',
+    /**
+     * This slug does NOT use the Technology template. It has its own route and
+     * page (pages/Neuromodulation.jsx), because the template is three
+     * principles beside a photograph and the subject is an arc of published
+     * work that wants figures and room. Its content is data/neuromodulation.js.
+     *
+     * What that page still reads from here: `eyebrow`, `tagline`, `summary`
+     * for the hero, and `readMore`. `hero`, `heroAlt` and `principles` are not
+     * rendered anywhere at the moment — kept because they describe the
+     * platform correctly and the template may want them again, not because
+     * something is using them.
+     */
     principles: [
       {
         title: 'Chemistry, measured electrically',

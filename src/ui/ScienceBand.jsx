@@ -12,19 +12,24 @@ const BUILDERS = {
 };
 
 /**
- * One domain, explained: copy, an animated ground, and a figure.
+ * One subject, explained: copy, an animated ground, and a figure.
  *
  * The same three-column arrangement as the feature bands on the software page
  * — text, then a deliberately empty column that is the window the animation
  * shows through, then the figure. The scene is canvas, sized to its element,
  * driven by one rAF loop that only runs while the band is on screen.
  *
+ * Shared by the MAVEN product page and the neuromodulation technology page,
+ * which is why it is not called MavenBand. The scenes it draws still are
+ * MAVEN's — lib/mavenScenes.js — because that is where they came from and both
+ * callers are about the same instrument's science.
+ *
  * Not shared with SceneBand: that component owns the software page's scene
  * registry and its four bands, and the two would have to grow a props-shaped
  * plugin system to sit in one file. The layout is worth repeating; the wiring
- * is not worth generalising for two callers.
+ * is not worth generalising for three callers.
  */
-export function MavenBand({ scene, tone, ground = 'bay', eyebrow, title, lead, points = [], meta = [], figure }) {
+export function ScienceBand({ scene, tone, ground = 'bay', eyebrow, title, lead, points = [], meta = [], figure }) {
   const light = ground === 'light';
   const reduced = usePrefersReducedMotion();
   const canvasRef = useRef(null);
