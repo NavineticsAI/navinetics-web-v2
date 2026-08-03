@@ -13,9 +13,11 @@
  * of a mesh, which cannot be turned back into geometry. No dimension, travel,
  * angle or tolerance from that file appears anywhere on the page.
  *
- * ONE IMAGE, NOT A TURNTABLE. An earlier pass scrubbed 36 rendered frames as
- * the reader scrolled. Rotation is not worth what it costs: quality has to be
- * divided 36 ways, and 36 mediocre frames read worse than one good picture.
+ * TWO RESOLUTIONS, ON PURPOSE. The scroll scrubs 32 traced frames and then
+ * lands on hero.webp, which is the same camera at more than twice the
+ * resolution. Rotation and quality were treated as a choice for two revisions
+ * and they are not one: the frames that only exist in motion can be small,
+ * and the single frame anybody actually looks at can be large.
  *
  * NOTHING IN THE FIGURE IS NAMED, and that is deliberate. The tool can
  * separate the assembly into six groups and light any of them independently —
@@ -40,7 +42,23 @@
 import heroArt from '../assets/d1/hero.webp';
 import detailArt from '../assets/d1/detail.webp';
 
-/** Traced at 1700 × 2430, cropped to its own alpha and encoded down. */
+/* The turntable the hero scrubs. Sorted because glob order is not guaranteed
+   and these are an animation — one frame out of place is a visible stutter. */
+const frames = import.meta.glob('../assets/d1/t[0-9][0-9].webp', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+export const turntable = Object.keys(frames).sort().map((k) => frames[k]);
+
+/**
+ * The settled pose, traced at 1700 × 2430 and encoded down.
+ *
+ * The last turntable frame is the same camera, so the hero swaps in at the end
+ * of the travel as a change of resolution rather than a jump: the reader stops
+ * on the full-quality render, and the 32 frames they only ever saw in motion
+ * were never made to carry that weight.
+ */
 export const hero = heroArt;
 export const FRAME = { w: 1027, h: 1565 };
 

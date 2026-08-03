@@ -70,6 +70,18 @@ const VIEWS = [
   [1300, 1750, 6, 44, 16, 'detail', -34, -6],
 ];
 
+/* The turntable the scroll scrubs. Traced like everything else, but smaller
+   and with fewer samples: it is only ever seen in motion, and the frame the
+   reader actually stops on is hero.webp at full resolution, swapped in at the
+   end of the travel. Paying full price for 32 frames nobody stops on was the
+   mistake the first version of this page made. */
+const TURN = {
+  n: 32, w: 940, h: 1345, spp: 4, diff: 30, spec: 12, q: 0.75, scale: 0.62,
+};
+const HERO_YAW = 38;
+const HERO_PITCH = -18;
+const easeInOut = (u) => (u < 0.5 ? 4 * u * u * u : 1 - ((-2 * u + 2) ** 3) / 2);
+
 const step = readdirSync(CAD).find((f) => /\.step$/i.test(f));
 if (!step) {
   console.log(`\n  No STEP file in ${CAD}`);
@@ -98,9 +110,27 @@ for (const v of VIEWS) {
   await run('trace.mjs', v.map(String));
 }
 
-console.log('\n── 3 · encode ────────────────────────────────────────────────');
-await run('encode.mjs', [String(QUALITY), String(ENCODE_SCALE), ...VIEWS.map((v) => v[5])]);
+/* One full revolution, decelerating into the hero pose, so the last frame and
+   hero.webp are the same camera and the swap at the end is a change of
+   resolution rather than a jump. */
+const TURN_NAMES = [];
+for (let i = 0; i < TURN.n; i++) {
+  const e = easeInOut(i / (TURN.n - 1));
+  const yaw = HERO_YAW - 360 * (1 - e);
+  const pitch = HERO_PITCH + (1 - e) * -16;
+  const name = `t${String(i).padStart(2, '0')}`;
+  TURN_NAMES.push(name);
+  process.stdout.write(`\r── 2b · turntable ${i + 1}/${TURN.n} ──────────────────────`);
+  if (readdirSync(WORK).includes(`${name}.png`)) rmSync(`${WORK}${name}.png`);
+  await run('trace.mjs', [TURN.w, TURN.h, TURN.spp, TURN.diff, TURN.spec, name,
+    yaw.toFixed(3), pitch.toFixed(3), 'spin'].map(String));
+}
 
-const made = VIEWS.map((v) => `${v[5]}.webp`).filter((f) => readdirSync(CAD).includes(f));
+console.log('\n── 3 · encode ────────────────────────────────────────────────');
+await run('encode.mjs', [String(QUALITY), String(ENCODE_SCALE), 'tight', ...VIEWS.map((v) => v[5])]);
+await run('encode.mjs', [String(TURN.q), String(TURN.scale), 'union', ...TURN_NAMES]);
+
+const made = [...VIEWS.map((v) => v[5]), ...TURN_NAMES]
+  .map((n) => `${n}.webp`).filter((f) => readdirSync(CAD).includes(f));
 const bytes = made.reduce((s, f) => s + statSync(CAD + f).size, 0);
 console.log(`\n  ${made.length} renders in src/assets/d1/, ${(bytes / 1024).toFixed(0)} kB total\n`);

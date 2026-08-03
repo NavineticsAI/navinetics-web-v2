@@ -39,6 +39,11 @@ const SPEC = +(process.argv[6] || 10);    // reflection rays per primary sample
 const OUTNAME = process.argv[7] || 'hero';
 const YAW = (+(process.argv[8] ?? 38)) * Math.PI / 180;
 const PITCH = (+(process.argv[9] ?? -18)) * Math.PI / 180;
+/* 'tight' frames this view alone. 'spin' frames the widest the object gets
+   anywhere in a full revolution, so every frame of a turntable is drawn at the
+   same scale — fit each frame to itself and the object visibly breathes as it
+   turns. */
+const FIT = process.argv[10] || 'tight';
 
 /* ── mesh ─────────────────────────────────────────────────────────────────── */
 const raw = readFileSync(`${WORK}mesh.bin`);
@@ -246,11 +251,32 @@ const toView = (p) => {
 };
 let fx = -Infinity;
 let fy = -Infinity;
-for (let i = 0; i < NV; i++) {
-  const v = toView([pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]]);
-  const w = DIST - v[2];
-  fx = Math.max(fx, Math.abs(v[0]) / w);
-  fy = Math.max(fy, Math.abs(v[1]) / w);
+if (FIT === 'spin') {
+  /* Every seventh vertex over 36 yaws: the extremes of a machined assembly are
+     corners and rims, which survive that sampling, and the margin below covers
+     what does not. */
+  for (let a = 0; a < 36; a++) {
+    const y2 = (a / 36) * Math.PI * 2;
+    const c2 = Math.cos(y2); const s2 = Math.sin(y2);
+    for (let i = 0; i < NV; i += 7) {
+      const x = pos[i * 3]; const y = pos[i * 3 + 1]; const z = pos[i * 3 + 2];
+      const x1 = x * c2 + z * s2;
+      const z1 = -x * s2 + z * c2;
+      const y2v = y * cpit - z1 * spit;
+      const z2v = y * spit + z1 * cpit;
+      const w = DIST - z2v;
+      if (Math.abs(x1) / w > fx) fx = Math.abs(x1) / w;
+      if (Math.abs(y2v) / w > fy) fy = Math.abs(y2v) / w;
+    }
+  }
+  fx *= 1.03; fy *= 1.03;
+} else {
+  for (let i = 0; i < NV; i++) {
+    const v = toView([pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]]);
+    const w = DIST - v[2];
+    fx = Math.max(fx, Math.abs(v[0]) / w);
+    fy = Math.max(fy, Math.abs(v[1]) / w);
+  }
 }
 const FOC = Math.min((W * 0.5) / (fx * 1.075), (H * 0.5) / (fy * 1.045));
 console.log(`camera: dist ${DIST}, focal ${FOC.toFixed(0)}px on ${W}x${H}`);

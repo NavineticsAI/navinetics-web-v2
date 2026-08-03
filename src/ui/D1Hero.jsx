@@ -1,102 +1,188 @@
 import { useEffect, useRef } from 'react';
-import { hero, FRAME } from '../data/d1.js';
+import { hero, turntable, FRAME } from '../data/d1.js';
 import { usePrefersReducedMotion } from '../lib/motion.js';
 
 /**
- * The D1 opening: one image of the instrument.
+ * The D1 opening: the instrument turns as you scroll, and settles.
  *
- * It used to be a 36-frame turntable the scroll scrubbed through. That bought
- * rotation at the cost of the thing that actually mattered — no single frame
- * could carry enough render quality once it had to be paid for 36 times, and
- * 36 mediocre frames read worse than one good picture. So the turntable is
- * gone, and what is left is a single ray-traced render at full resolution:
- * real occlusion, real reflections, and the measured anodised blue. See
- * tools/d1/trace.mjs for how it is made.
+ * The host is taller than the viewport and the layer inside it is sticky, so
+ * the turn is paid for with ordinary scrolling and nothing is captured. The
+ * travel is one screen — one flick of the wheel settles it.
  *
- * WHAT THE SCROLL DOES NOW. The image drifts and grows very slightly as the
- * hero leaves — parallax, not animation. There is nothing to settle into any
- * more, so the hero is correct from the first paint and legible before anyone
- * touches the wheel. It is also one ~300 kB image rather than 1.8 MB of
- * frames, with no decode work at all while scrolling.
+ * TWO RESOLUTIONS. The 32 turntable frames are traced small, because they only
+ * ever exist in motion. The pose the reader stops on is hero.webp at more than
+ * twice the resolution, swapped in at the end of the travel; the last frame is
+ * the same camera, so the swap is a change of sharpness rather than a jump.
+ * Rotation and quality got traded against each other for two revisions and
+ * they never had to be.
  *
- * NOTHING IS LABELLED. The renderer can still light any one group on its own —
- * see the `groups` mode in tools/d1/render.mjs — but the page names no part of
- * the instrument, because every mapping from the CAD's internal drawing
- * numbers to a component name would be an inference rather than something
- * NaviNetics has stated.
+ * WHAT IS BEING DRAWN. Not a model — pictures of one. tools/d1-frame.mjs
+ * tessellates the assembly CAD to 1.7M triangles and ray traces it: real
+ * occlusion from a cosine-weighted hemisphere per pixel, GGX reflections, and
+ * a measured anodised blue. That is quality no browser would pay for per
+ * frame, it costs no GPU work here, needs no WebGL, and puts no geometry on
+ * the wire.
+ *
+ * LOADING. hero.webp is fetched first and alone, so the opening paints against
+ * one image; the turntable follows once it lands. Any frame not yet decoded
+ * falls back to the nearest one that is, so an early scroll degrades to a
+ * coarser spin rather than to nothing.
+ *
+ * NOTHING IS LABELLED, deliberately — see the notice in data/d1.js.
  */
 export function D1Hero() {
   const reduced = usePrefersReducedMotion();
   const hostRef = useRef(null);
-  const artRef = useRef(null);
-  const copyRef = useRef(null);
+  const stickyRef = useRef(null);
+  const cvRef = useRef(null);
+  const cueRef = useRef(null);
+  const imgs = useRef([]);
+  const heroImg = useRef(null);
+
+  /* ── fetch: the settled render first and alone, then the spin ───────────── */
+  useEffect(() => {
+    const load = (src) => {
+      const im = new Image();
+      im.decoding = 'async';
+      im.src = src;
+      return im;
+    };
+    const first = load(hero);
+    heroImg.current = first;
+    const rest = () => { turntable.forEach((src, i) => { imgs.current[i] = load(src); }); };
+    if (first.complete) rest();
+    else first.addEventListener('load', rest, { once: true });
+  }, []);
 
   useEffect(() => {
     const host = hostRef.current;
-    const art = artRef.current;
-    if (!host || !art || reduced) return undefined;
-
+    const cv = cvRef.current;
+    if (!host || !cv) return undefined;
+    const ctx = cv.getContext('2d');
+    let w = 0;
+    let h = 0;
     let raf = 0;
-    let ticking = false;
+    let hostTop = 0;
+    let travel = 1;
 
-    /* Transform only — no layout property is touched, so this stays on the
-       compositor and scrolling never blocks on it. */
-    const apply = () => {
-      ticking = false;
-      const r = host.getBoundingClientRect();
-      const p = Math.max(0, Math.min(1, -r.top / Math.max(1, r.height)));
-      art.style.transform = `translate3d(0, ${(-42 * p).toFixed(1)}px, 0) scale(${(1 + 0.05 * p).toFixed(4)})`;
-      if (copyRef.current) copyRef.current.style.transform = `translate3d(0, ${(30 * p).toFixed(1)}px, 0)`;
-    };
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      raf = requestAnimationFrame(apply);
+    const size = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const r = (stickyRef.current || cv).getBoundingClientRect();
+      w = r.width;
+      h = r.height;
+      cv.width = Math.max(1, Math.round(w * dpr));
+      cv.height = Math.max(1, Math.round(h * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      hostTop = host.getBoundingClientRect().top + window.scrollY;
+      travel = Math.max(1, host.offsetHeight - (stickyRef.current?.offsetHeight || h));
     };
 
-    apply();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    const ready = (im) => im?.complete && im.naturalWidth > 0;
+    /* A frame that has not decoded yet is not a blank hero: walk outwards for
+       the nearest one that has. */
+    const pick = (i) => {
+      for (let d = 0; d < turntable.length; d++) {
+        if (ready(imgs.current[i - d])) return imgs.current[i - d];
+        if (ready(imgs.current[i + d])) return imgs.current[i + d];
+      }
+      return ready(heroImg.current) ? heroImg.current : null;
+    };
+
+    const clamp01 = (v) => Math.max(0, Math.min(1, v));
+    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - ((-2 * t + 2) ** 3) / 2);
+
+    const paint = (p) => {
+      const s = reduced ? 1 : ease(clamp01(p));
+      /* Past 0.97 the spin is over: show the full-resolution render. */
+      const im = s > 0.97 && ready(heroImg.current)
+        ? heroImg.current
+        : pick(Math.min(turntable.length - 1, Math.round(s * (turntable.length - 1))));
+      ctx.clearRect(0, 0, w, h);
+      if (!im) return s;
+
+      /* Sized by HEIGHT: the render is tall and narrow, and fitting it to the
+         width puts the wheels through the bottom of a laptop viewport. */
+      const narrow = w < 1024;
+      let dh = h * (narrow ? 0.44 : 0.62 + 0.08 * s);
+      const maxW = w * (narrow ? 0.74 : 0.46);
+      const ar = FRAME.w / FRAME.h;
+      if (ar * dh > maxW) dh = maxW / ar;
+      const dw = ar * dh;
+      const dx = w * (narrow ? 0.5 : 0.5 + 0.13 * s) - dw / 2;
+      const dy = h * (narrow ? 0.3 : 0.46) - dh / 2;
+
+      ctx.globalAlpha = 0.3 + 0.7 * clamp01(s * 2.4);
+      ctx.drawImage(im, dx, dy, dw, dh);
+      ctx.globalAlpha = 1;
+
+      if (cueRef.current) cueRef.current.style.opacity = String(1 - clamp01(s / 0.22));
+      return s;
+    };
+
+    const frame = () => {
+      paint((window.scrollY - hostTop) / travel);
+      raf = requestAnimationFrame(frame);
+    };
+
+    size();
+    if (reduced) paint(1);
+    else raf = requestAnimationFrame(frame);
+
+    const ro = new ResizeObserver(() => { size(); if (reduced) paint(1); });
+    ro.observe(host);
+    window.addEventListener('resize', size);
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      ro.disconnect();
+      window.removeEventListener('resize', size);
     };
   }, [reduced]);
 
   return (
-    <header ref={hostRef} className="relative overflow-hidden bg-[var(--mv-bay)] text-nn-50">
+    <header
+      ref={hostRef}
+      className="relative bg-[var(--mv-bay)] text-nn-50"
+      /* One screen of travel: the brief was one scroll, not three. */
+      style={reduced ? undefined : { height: 'calc(100svh + 90vh)' }}
+    >
       <div
-        className="relative mx-auto flex min-h-[100svh] max-w-[110rem] flex-col justify-end gap-10
-          px-6 pb-16 pt-28 lg:grid lg:grid-cols-[minmax(0,46%)_minmax(0,1fr)] lg:items-center
-          lg:gap-8 lg:px-10 lg:pb-20 lg:pt-24"
+        ref={stickyRef}
+        className={
+          reduced
+            ? 'relative flex flex-col-reverse gap-12 overflow-hidden px-6 pb-20 pt-28 lg:px-8'
+            : 'sticky top-0 h-[100svh] overflow-hidden'
+        }
       >
-        {/* ── the instrument ─────────────────────────────────────────────── */}
-        {/* Source order puts it first so it is the first thing fetched; on a
-            wide screen it belongs on the right, which is what `order` does. */}
-        <div className="order-first lg:order-last lg:justify-self-center">
-          <img
-            ref={artRef}
-            src={hero}
-            width={FRAME.w}
-            height={FRAME.h}
-            /* This image IS the largest contentful paint. Nothing about it
-               should be deferred, and it must not be lazy. */
-            fetchPriority="high"
-            decoding="async"
-            alt="The D1 stereotactic frame: an anodised blue arc-centred head frame with two
-              curved rails, a targeting stage, and a bare-steel mechanical microdrive rising from
-              its centre."
-            /* Sized by HEIGHT once there is a column to stand in. The render is
-               tall and narrow (1027 × 1565), so capping its width instead puts
-               the wheels through the bottom of the viewport on any laptop. */
-            className="mx-auto block h-auto w-full max-w-[14rem] will-change-transform
-              sm:max-w-[17rem] lg:h-[66svh] lg:w-auto lg:max-w-none xl:h-[72svh]"
-          />
-        </div>
+        <canvas
+          ref={cvRef}
+          className={reduced ? 'h-[56svh] w-full' : 'absolute inset-0 h-full w-full'}
+          role="img"
+          aria-label="The D1 stereotactic frame: an anodised blue arc-centred head frame with two
+            curved rails, a targeting stage, and a bare-steel mechanical microdrive rising from its
+            centre. It turns to a three-quarter view as the page scrolls."
+        />
 
-        {/* ── the words ──────────────────────────────────────────────────── */}
-        <div ref={copyRef} className="flex flex-col gap-4 will-change-transform">
+        {/* Hairlines through letterforms are unreadable, so the copy carries
+            its own scrim rather than dimming the whole stage. */}
+        {!reduced && (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0"
+            aria-hidden="true"
+            style={{
+              height: '62%',
+              background:
+                'linear-gradient(to top, var(--mv-bay) 0%, rgb(3 16 26/.86) 34%, rgb(3 16 26/0) 100%)',
+            }}
+          />
+        )}
+
+        <div
+          className={
+            reduced
+              ? 'flex flex-col gap-4'
+              : 'absolute inset-x-0 bottom-0 flex flex-col gap-4 px-6 pb-20 lg:max-w-[50%] lg:px-10 lg:pb-20'
+          }
+        >
           <span className="eyebrow text-sg-300">Products — D1 Stereotactic Frame</span>
           <h1 className="whitespace-pre-line text-d1">
             {'Robust. Low complexity.\nRadically comfortable.'}
@@ -106,6 +192,16 @@ export function D1Hero() {
             degrees of freedom, two angles of rotation.
           </p>
         </div>
+
+        {!reduced && (
+          <span
+            ref={cueRef}
+            className="pointer-events-none absolute inset-x-0 bottom-5 text-center font-data
+              text-[0.625rem] uppercase tracking-[0.14em] text-ink-3"
+          >
+            Scroll — the frame settles
+          </span>
+        )}
       </div>
     </header>
   );
