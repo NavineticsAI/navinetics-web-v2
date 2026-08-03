@@ -34,6 +34,7 @@ tools/.chrome*/
 tools/.screens.html
 tools/.edu.html
 tools/.partners.html
+tools/.maven.html
 
 # PowerPoint's lock file, written beside info.pptx whenever the deck is open.
 ~$*.pptx
@@ -44,3 +45,17 @@ tools/.partners.html
 # it forever whether or not it is ever needed again. The encoded file that the
 # page actually loads IS committed; keep the master wherever the renders live.
 src/assets/**/*.vid.mp4
+
+# The MAVEN deck. src/assets/partners/info.pptx is committed at 2.6 MB as the
+# provenance record for third-party trademarks and that trade is worth making;
+# this one is 159 MB, which is roughly sixty times the whole of this
+# repository's history, and git would keep every future revision of it forever.
+# Nothing in the build reads it. Keep it wherever the source material lives.
+# Remove this line if you decide the provenance is worth the weight.
+src/assets/maven/info.pptx
+
+# The MAVEN detail master, which is not a master: tools/maven-art.mjs renders
+# it out of Picture11.emf, and the EMF is committed right beside it. Keeping
+# 1.6 MB of PNG that one command reproduces exactly is the same trade the rule
+# above refuses. Delete the file and re-run the tool.
+src/assets/maven/detail.png
