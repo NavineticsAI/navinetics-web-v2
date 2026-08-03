@@ -13,11 +13,10 @@
  * of a mesh, which cannot be turned back into geometry. No dimension, travel,
  * angle or tolerance from that file appears anywhere on the page.
  *
- * TWO RESOLUTIONS, ON PURPOSE. The scroll scrubs 32 traced frames and then
- * lands on hero.webp, which is the same camera at more than twice the
- * resolution. Rotation and quality were treated as a choice for two revisions
- * and they are not one: the frames that only exist in motion can be small,
- * and the single frame anybody actually looks at can be large.
+ * ONE RENDER, MOVED. The hero does not rotate. It arrives small, offset and
+ * dim, and comes into focus by translating and scaling into place as the page
+ * scrolls — so the entire quality budget goes into a single image instead of
+ * being divided across frames that only ever exist in motion.
  *
  * NOTHING IN THE FIGURE IS NAMED, and that is deliberate. The tool can
  * separate the assembly into six groups and light any of them independently —
@@ -41,24 +40,15 @@
 
 import heroArt from '../assets/d1/hero.webp';
 import detailArt from '../assets/d1/detail.webp';
+/* The arc-centred band's figure is the existing video of the instrument
+   turning on a head model with a probe on its trajectory — which is precisely
+   what arc-centred means, and no still can show it. Same encode the education
+   page uses; there is no second copy. */
+import frameVideo from '../assets/education/02.1.web.mp4';
+import framePoster from '../assets/education/02.1.web.poster.webp';
 
-/* The turntable the hero scrubs. Sorted because glob order is not guaranteed
-   and these are an animation — one frame out of place is a visible stutter. */
-const frames = import.meta.glob('../assets/d1/t[0-9][0-9].webp', {
-  eager: true,
-  query: '?url',
-  import: 'default',
-});
-export const turntable = Object.keys(frames).sort().map((k) => frames[k]);
 
-/**
- * The settled pose, traced at 1700 × 2430 and encoded down.
- *
- * The last turntable frame is the same camera, so the hero swaps in at the end
- * of the travel as a change of resolution rather than a jump: the reader stops
- * on the full-quality render, and the 32 frames they only ever saw in motion
- * were never made to carry that weight.
- */
+/** The one render: traced at 1700 × 2430 and encoded down to this. */
 export const hero = heroArt;
 export const FRAME = { w: 1027, h: 1565 };
 
@@ -126,10 +116,12 @@ export const bands = [
     ],
     meta: [{ label: 'Classification', value: 'Arc-centred' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
     figure: {
-      src: '/DSC05397-1024x695.jpg',
-      w: 1024, h: 695,
-      alt: 'The NaviNetics stereotactic frame assembly.',
-      caption: 'The frame assembly',
+      video: frameVideo,
+      poster: framePoster,
+      w: 1280, h: 720,
+      alt: 'The stereotactic frame on a head model, turning, with a probe held on its trajectory '
+        + 'as the arc moves around it.',
+      caption: 'Every approach, one point',
     },
   },
   {

@@ -9,9 +9,18 @@
  * writing anything.
  *
  * TWO PICTURES, RAY TRACED. This went through a rasterised 36-frame turntable
- * first, and that was the wrong trade twice over. Rotation divides the quality
- * budget 36 ways, and 36 mediocre frames read worse than one good picture. And
- * the rasteriser could not have got there anyway: it had no reflections, and
+ * and then a traced 32-frame one, and rotation was the wrong thing to buy both
+ * times: it divides the quality budget across frames that only ever exist in
+ * motion. The hero arrives by translating and scaling instead, so the whole
+ * budget goes into one image.
+ *
+ * trace.mjs keeps its `spin` fit mode, which frames the widest the object gets
+ * anywhere in a revolution so a set of frames can share a scale, and
+ * encode.mjs keeps the matching `union` crop. Nothing uses either now; they
+ * are a few lines each and they are the entire cost of a turntable ever being
+ * wanted back.
+ *
+ * The rasteriser could not have got there anyway: it had no reflections, and
  * metal without reflections reads as plastic however the lights are set, while
  * its occlusion was a screen-space guess that darkened wherever geometry
  * merely overlapped on screen rather than where parts actually meet. The whole
@@ -70,17 +79,6 @@ const VIEWS = [
   [1300, 1750, 6, 44, 16, 'detail', -34, -6],
 ];
 
-/* The turntable the scroll scrubs. Traced like everything else, but smaller
-   and with fewer samples: it is only ever seen in motion, and the frame the
-   reader actually stops on is hero.webp at full resolution, swapped in at the
-   end of the travel. Paying full price for 32 frames nobody stops on was the
-   mistake the first version of this page made. */
-const TURN = {
-  n: 32, w: 940, h: 1345, spp: 4, diff: 30, spec: 12, q: 0.75, scale: 0.62,
-};
-const HERO_YAW = 38;
-const HERO_PITCH = -18;
-const easeInOut = (u) => (u < 0.5 ? 4 * u * u * u : 1 - ((-2 * u + 2) ** 3) / 2);
 
 const step = readdirSync(CAD).find((f) => /\.step$/i.test(f));
 if (!step) {
@@ -109,28 +107,9 @@ for (const v of VIEWS) {
   if (readdirSync(WORK).includes(`${v[5]}.png`)) rmSync(`${WORK}${v[5]}.png`);
   await run('trace.mjs', v.map(String));
 }
-
-/* One full revolution, decelerating into the hero pose, so the last frame and
-   hero.webp are the same camera and the swap at the end is a change of
-   resolution rather than a jump. */
-const TURN_NAMES = [];
-for (let i = 0; i < TURN.n; i++) {
-  const e = easeInOut(i / (TURN.n - 1));
-  const yaw = HERO_YAW - 360 * (1 - e);
-  const pitch = HERO_PITCH + (1 - e) * -16;
-  const name = `t${String(i).padStart(2, '0')}`;
-  TURN_NAMES.push(name);
-  process.stdout.write(`\r── 2b · turntable ${i + 1}/${TURN.n} ──────────────────────`);
-  if (readdirSync(WORK).includes(`${name}.png`)) rmSync(`${WORK}${name}.png`);
-  await run('trace.mjs', [TURN.w, TURN.h, TURN.spp, TURN.diff, TURN.spec, name,
-    yaw.toFixed(3), pitch.toFixed(3), 'spin'].map(String));
-}
-
 console.log('\n── 3 · encode ────────────────────────────────────────────────');
 await run('encode.mjs', [String(QUALITY), String(ENCODE_SCALE), 'tight', ...VIEWS.map((v) => v[5])]);
-await run('encode.mjs', [String(TURN.q), String(TURN.scale), 'union', ...TURN_NAMES]);
 
-const made = [...VIEWS.map((v) => v[5]), ...TURN_NAMES]
-  .map((n) => `${n}.webp`).filter((f) => readdirSync(CAD).includes(f));
+const made = VIEWS.map((v) => `${v[5]}.webp`).filter((f) => readdirSync(CAD).includes(f));
 const bytes = made.reduce((s, f) => s + statSync(CAD + f).size, 0);
 console.log(`\n  ${made.length} renders in src/assets/d1/, ${(bytes / 1024).toFixed(0)} kB total\n`);

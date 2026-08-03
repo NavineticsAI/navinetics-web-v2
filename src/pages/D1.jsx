@@ -59,16 +59,39 @@ export default function D1() {
             </p>
           </div>
         </Reveal>
-        <ul className="mt-9 grid list-none gap-x-10 gap-y-0 p-0 sm:grid-cols-2 lg:grid-cols-3">
-          {product.components.map((c) => (
-            <li
-              key={c}
-              className="border-b border-hairline-soft py-3 text-[0.9375rem] text-ink-2"
-            >
-              {c}
-            </li>
-          ))}
-        </ul>
+        {/* The assembly beside the list of what it is made of, rather than
+            floating in a band on its own — a contents list wants the thing
+            whose contents they are. */}
+        <div className="mt-9 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,52%)] lg:gap-14">
+          <ul className="grid list-none gap-x-10 gap-y-0 p-0 sm:grid-cols-2 lg:grid-cols-1">
+            {product.components.map((c) => (
+              <li
+                key={c}
+                className="border-b border-hairline-soft py-3 text-[0.9375rem] text-ink-2"
+              >
+                {c}
+              </li>
+            ))}
+          </ul>
+          <Reveal>
+            <figure className="m-0">
+              <div className="overflow-hidden rounded-xl border border-hairline bg-white shadow-e3">
+                <img
+                  src="/DSC05397-1024x695.jpg"
+                  alt="The NaviNetics stereotactic frame assembly."
+                  width={1024}
+                  height={695}
+                  loading="lazy"
+                  decoding="async"
+                  className="block h-auto w-full"
+                />
+              </div>
+              <figcaption className="mt-3 font-data text-[0.625rem] uppercase tracking-[0.12em] text-ink-3">
+                The frame assembly
+              </figcaption>
+            </figure>
+          </Reveal>
+        </div>
       </Section>
 
       {/* ── close ──────────────────────────────────────────────────────────── */}

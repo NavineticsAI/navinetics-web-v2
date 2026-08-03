@@ -181,15 +181,22 @@ export function ScienceBand({
                 'overflow-hidden rounded-xl border bg-white p-3 shadow-e3 sm:p-5',
                 light ? 'border-hairline' : 'border-nn-300/25',
               )}>
-                <img
-                  src={figure.src}
-                  alt={figure.alt}
-                  width={figure.w}
-                  height={figure.h}
-                  loading="lazy"
-                  decoding="async"
-                  className="block h-auto w-full"
-                />
+                {figure.video ? (
+                  /* Plays only while the band is on screen, and only if the
+                     reader has not asked for less motion — in which case the
+                     poster is the figure and the video never loads at all. */
+                  <BandVideo figure={figure} reduced={reduced} />
+                ) : (
+                  <img
+                    src={figure.src}
+                    alt={figure.alt}
+                    width={figure.w}
+                    height={figure.h}
+                    loading="lazy"
+                    decoding="async"
+                    className="block h-auto w-full"
+                  />
+                )}
               </div>
               <figcaption className="mt-3 font-data text-[0.625rem] uppercase tracking-[0.12em] text-ink-3">
                 {figure.caption}
@@ -199,5 +206,61 @@ export function ScienceBand({
         )}
       </div>
     </section>
+  );
+}
+
+/**
+ * A figure that moves.
+ *
+ * Muted, looping and silent, so it can play without being asked to — but only
+ * while the band is actually on screen, because a video decoding behind three
+ * screenfuls of other content is pure battery. Under reduced motion it never
+ * loads: the poster is the figure, and that is the honest reading of the
+ * preference rather than a paused video with a play button.
+ */
+function BandVideo({ figure, reduced }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || reduced) return undefined;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) el.play().catch(() => { /* autoplay refused; poster stands */ });
+        else el.pause();
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [reduced]);
+
+  if (reduced) {
+    return (
+      <img
+        src={figure.poster}
+        alt={figure.alt}
+        width={figure.w}
+        height={figure.h}
+        loading="lazy"
+        decoding="async"
+        className="block h-auto w-full"
+      />
+    );
+  }
+  return (
+    <video
+      ref={ref}
+      src={figure.video}
+      poster={figure.poster}
+      width={figure.w}
+      height={figure.h}
+      muted
+      loop
+      playsInline
+      preload="none"
+      aria-label={figure.alt}
+      className="block h-auto w-full"
+    />
   );
 }
