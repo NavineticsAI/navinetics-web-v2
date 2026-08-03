@@ -70,15 +70,21 @@ export default function Home() {
                   className="aspect-square w-full"
                 />
                 {/* One lens panel floating over the plate — the showcase moment */}
-                <Lens className="absolute bottom-5 left-5 right-5 rounded-md p-4 md:bottom-6 md:left-6 md:right-auto md:max-w-[18rem] md:p-5">
-                  <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-action">
-                    {product.metrics[0].label}
-                  </span>
-                  <div className="mt-1 text-xl font-semibold tracking-[-0.03em]">
-                    {product.metrics[0].value}
-                  </div>
-                  <div className="text-xs text-ink-3">{product.metrics[0].unit}</div>
-                </Lens>
+{/* Guarded: `metrics` is optional on a product record, and indexing it
+                    blindly took the whole home page down when a record shipped
+                    without one. A missing optional field should cost its own
+                    panel, not the site. */}
+                {product.metrics?.[0] && (
+                  <Lens className="absolute bottom-5 left-5 right-5 rounded-md p-4 md:bottom-6 md:left-6 md:right-auto md:max-w-[18rem] md:p-5">
+                    <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-action">
+                      {product.metrics[0].label}
+                    </span>
+                    <div className="mt-1 text-xl font-semibold tracking-[-0.03em]">
+                      {product.metrics[0].value}
+                    </div>
+                    <div className="text-xs text-ink-3">{product.metrics[0].unit}</div>
+                  </Lens>
+                )}
               </div>
             </Reveal>
           </div>

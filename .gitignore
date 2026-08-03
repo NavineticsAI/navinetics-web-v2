@@ -73,3 +73,6 @@ src/assets/d1/*.STEP
 # Scratch for tools/d1-frame.mjs: the tessellated mesh and the PNG frames it
 # renders before they are cropped and encoded. Only the WebPs are committed.
 tools/.d1/
+
+# Scratch profile for tools/check-routes.mjs.
+tools/.routes/

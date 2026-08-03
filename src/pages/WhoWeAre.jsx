@@ -143,7 +143,7 @@ export default function WhoWeAre() {
                 <h3 className="text-xl tracking-[-0.03em]">{p.tagline.replace('\n', ' ')}</h3>
                 <p className="flex-1 text-sm leading-relaxed text-ink-2">{p.summary}</p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                  {p.metrics.slice(0, 2).map((m) => (
+                  {(p.metrics ?? []).slice(0, 2).map((m) => (
                     <span
                       key={m.label}
                       className="rounded-instr bg-action-soft px-1.5 py-0.5 font-data

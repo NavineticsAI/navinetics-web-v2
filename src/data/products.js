@@ -132,6 +132,11 @@ export const products = [
      * compatibility claims: all of those are regulated and none have been
      * supplied. The page renders the ComingSoon treatment until they are.
      */
+    metrics: [
+      { label: 'Models specified', value: '5', unit: 'one to six motions' },
+      { label: 'Load capacity', value: '230', unit: 'kg, every model' },
+      { label: 'Table top', value: 'Carbon fibre', unit: 'always in the beam' },
+    ],
     intro:
       'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fibre construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
     hero: tableShot,
