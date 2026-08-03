@@ -1,3 +1,6 @@
+import mavenDevice from '../assets/maven/device.webp';
+import mavenDetail from '../assets/maven/detail.webp';
+
 /**
  * The product catalogue.
  *
@@ -145,10 +148,30 @@ export const products = [
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
     summary:
       'Synchronised neurochemical and electrophysiological recording with stimulation, engineered to minimise stimulation artefact.',
+    /**
+     * MAVEN is the product name — confirmed by NaviNetics. The copy below used
+     * to be written around "the WINCS Harmoni Device" throughout; it now names
+     * MAVEN, which is what the artwork, the summary slide and the deck all
+     * call it. If the lineage between the two is worth stating on the page,
+     * that is a sentence NaviNetics should supply rather than one to infer.
+     *
+     * The bespoke page at /products/maven-neuromodulation reads only `name`,
+     * `shortName`, `tagline` and the catalogue fields from this record. The
+     * rest — sequence, detail, specs, highlights, components, gallery — is not
+     * rendered anywhere at the moment. It is kept because it describes a real
+     * product and may come back, not because something is using it.
+     */
     intro:
-      'Improving the efficacy of deep brain stimulation (DBS) by studying the role of neurochemical and electrophysiological biomarkers with the WINCS Harmoni Device.',
-    hero: '/WINC-Harmoni-Device.png',
-    heroAlt: 'The WINCS Harmoni device',
+      'Improving the efficacy of deep brain stimulation (DBS) by studying the role of neurochemical and electrophysiological biomarkers.',
+    /* The unit's own artwork, cut out. This replaces /WINC-Harmoni-Device.png,
+       which is a four-panel journal figure — device dimensions, a software
+       block diagram, a chip die and a calibration curve — and was standing in
+       as product photography here, on the neuromodulation technology page and
+       in this record's gallery. It is still in public/ and still listed in
+       data/media.js; whether it should be is a permissions question. */
+    hero: mavenDevice,
+    heroAlt: 'The MAVEN system',
+    heroTone: 'bay',
     metrics: [
       { label: 'Measures', value: 'Chem + Ephys', unit: 'synchronised' },
       { label: 'Telemetry', value: 'Wireless', unit: 'real-time' },
@@ -171,11 +194,11 @@ export const products = [
     detail: {
       title: 'Preclinical Research',
       image: '/WINCS-Swine-Model-1024x668.png',
-      imageAlt: 'WINCS applied in a preclinical model',
+      imageAlt: 'MAVEN applied in a preclinical model',
       fit: 'cover',
       paragraphs: [
-        'WINCS can be used to quantify neuronal electrical activity and neurochemical levels such as dopamine, serotonin, and adenosine. By analyzing multimodal recordings, it addresses a critical gap in understanding normal and pathologic neurophysiology.',
-        'With wireless control and telemetry, WINCS provides a seamless real-time platform for identifying and characterizing potential biomarkers.',
+        'MAVEN can be used to quantify neuronal electrical activity and neurochemical levels such as dopamine, serotonin, and adenosine. By analyzing multimodal recordings, it addresses a critical gap in understanding normal and pathologic neurophysiology.',
+        'With wireless control and telemetry, MAVEN provides a seamless real-time platform for identifying and characterizing potential biomarkers.',
       ],
     },
     specs: [
@@ -195,7 +218,7 @@ export const products = [
       'Addresses a critical gap in understanding normal and pathologic neurophysiology.',
     ],
     components: [
-      'WINCS Harmoni Base Unit',
+      'MAVEN Base Unit',
       'Carbon-Fibre Microelectrodes',
       'Reference Electrode',
       'Wireless Telemetry Module',
@@ -203,8 +226,8 @@ export const products = [
       'Acquisition Software',
     ],
     gallery: [
-      { src: '/WINC-Harmoni-Device.png', caption: 'WINCS Harmoni device', fit: 'contain' },
-      { src: '/WINCS-Swine-Model-1024x668.png', caption: 'Preclinical application', fit: 'cover' },
+      { src: mavenDevice, caption: 'The MAVEN system', fit: 'contain' },
+      { src: mavenDetail, caption: 'Front panel', fit: 'contain' },
       { src: '/surgical_probe.png', caption: 'Sensing probe', fit: 'contain' },
     ],
   },

@@ -1,3 +1,5 @@
+import mavenDevice from '../assets/maven/device.webp';
+
 /**
  * The technology platforms.
  *
@@ -66,8 +68,10 @@ export const technologies = [
     tagline: 'Measuring what\nstimulation changes.',
     summary:
       'Recording neurochemical and electrophysiological activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
-    hero: '/WINC-Harmoni-Device.png',
-    heroAlt: 'The WINCS Harmoni device',
+    /* The MAVEN unit's own artwork. This replaced a journal figure that was
+       standing in as a product shot — see the note in data/products.js. */
+    hero: mavenDevice,
+    heroAlt: 'The MAVEN system',
     principles: [
       {
         title: 'Chemistry, measured electrically',

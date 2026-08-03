@@ -23,17 +23,22 @@ export function Card({ as: As = 'div', lift = false, className, children, ...pro
 /**
  * Product plate.
  *
- * INTERIM TREATMENT. Product shots still rely on mix-blend-multiply, which
- * only works over a light ground — on the dark theme they would become black
- * mush. The plate stays light in both themes so the images survive. Replace
- * with transparent-background cutouts when they exist; this is the only place
- * mix-blend-multiply is permitted.
+ * INTERIM TREATMENT. Most product shots still rely on mix-blend-multiply,
+ * which only works over a light ground — on the dark theme they would become
+ * black mush. The plate stays light in both themes so those images survive,
+ * and this is the only place mix-blend-multiply is permitted.
+ *
+ * `tone="bay"` is the way out of it, and MAVEN is the first product to use it:
+ * a real cutout on a transparent ground, set on the instrument bay with no
+ * blending at all. A white-bodied unit would disappear entirely on the light
+ * plate. As other products get proper cutouts they should move to it too.
  */
-export function ProductPlate({ src, alt = '', fit = 'contain', className, imgClassName, children }) {
+export function ProductPlate({ src, alt = '', fit = 'contain', tone = 'plate', className, imgClassName, children }) {
   return (
     <div
       className={cn(
-        'nn-plate relative flex items-center justify-center overflow-hidden rounded-xl',
+        'relative flex items-center justify-center overflow-hidden rounded-xl',
+        tone === 'bay' ? 'bg-[var(--mv-bay)]' : 'nn-plate',
         className,
       )}
     >
@@ -70,6 +75,7 @@ export function ProductCard({ product, className }) {
         <ProductPlate
           src={product.hero}
           alt={product.heroAlt}
+          tone={product.heroTone}
           className="h-full w-full rounded-none"
           imgClassName="group-hover/pc:scale-105"
         />
