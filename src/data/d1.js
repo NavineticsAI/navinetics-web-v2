@@ -13,10 +13,10 @@
  * of a mesh, which cannot be turned back into geometry. No dimension, travel,
  * angle or tolerance from that file appears anywhere on the page.
  *
- * ONE RENDER, MOVED. The hero does not rotate. It arrives small, offset and
- * dim, and comes into focus by translating and scaling into place as the page
- * scrolls — so the entire quality budget goes into a single image instead of
- * being divided across frames that only ever exist in motion.
+ * ONE RENDER, STILL. The hero does not rotate, settle or arrive. It is simply
+ * there, correct at first paint — so the entire quality budget goes into a
+ * single image instead of being divided across frames that only ever exist in
+ * motion.
  *
  * NOTHING IN THE FIGURE IS NAMED, and that is deliberate. The tool can
  * separate the assembly into six groups and light any of them independently —
