@@ -21,11 +21,10 @@ import mavenDevice from '../assets/maven/device.webp';
  */
 
 /**
- * ASSET WARNING — do not use /stereotactic_halo.png or /halo_ring.png.
- * The first carries a competitor's trademark (Stryker) on the device and
- * appears to be an AI render; the second is an unbranded AI render of a
- * base head ring — the component NaviNetics' anchor key replaces. Neither
- * depicts a NaviNetics product. Use photography of actual devices.
+ * ASSET NOTE — the four fabricated device images that used to sit in public/
+ * were deleted on 2026-08-03. See the note in data/media.js for what they were
+ * and why. Use photography of actual devices, or renders derived from our own
+ * CAD — see tools/d1-frame.mjs.
  */
 
 export const technologies = [

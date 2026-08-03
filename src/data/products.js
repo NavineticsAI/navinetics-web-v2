@@ -239,7 +239,6 @@ export const products = [
     gallery: [
       { src: mavenDevice, caption: 'The MAVEN system', fit: 'contain' },
       { src: mavenDetail, caption: 'Front panel', fit: 'contain' },
-      { src: '/surgical_probe.png', caption: 'Sensing probe', fit: 'contain' },
     ],
   },
 ];

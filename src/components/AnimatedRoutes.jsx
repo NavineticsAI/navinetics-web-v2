@@ -37,6 +37,10 @@ const Maven = lazy(() => import('../pages/Maven.jsx'));
 const Neuromodulation = lazy(() => import('../pages/Neuromodulation.jsx'));
 /* The surgical tables carry the motion explorer and two more scene builders. */
 const SurgicalTables = lazy(() => import('../pages/SurgicalTables.jsx'));
+/* D1 carries a 36-frame turntable rendered from the assembly CAD — the heaviest
+   asset on the site by some way, and the strongest argument for splitting it
+   off its own route. Its fallback is the instrument bay, like MAVEN's. */
+const D1 = lazy(() => import('../pages/D1.jsx'));
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -70,6 +74,16 @@ const routes = [
     element: (
       <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
         <SurgicalTables />
+      </Suspense>
+    ),
+  },
+  // D1 is the third: its opening is the assembly itself, turning. The template
+  // has one hero image and no way to express that.
+  {
+    path: '/products/d1-stereotactic-frame',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-[var(--mv-bay)]" />}>
+        <D1 />
       </Suspense>
     ),
   },

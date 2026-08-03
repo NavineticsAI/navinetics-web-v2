@@ -63,3 +63,13 @@ src/assets/maven/detail.png
 
 *.pdf
 *.pptx
+*.step
+# The D1 assembly CAD. 73 MB of SolidWorks AP214 that git would keep every
+# revision of forever, and nothing in the build reads it: tools/d1-frame.mjs
+# turns it into the turntable in src/assets/d1/turn/, and those renders are
+# committed. Keep the STEP wherever the CAD lives.
+src/assets/d1/*.STEP
+
+# Scratch for tools/d1-frame.mjs: the tessellated mesh and the PNG frames it
+# renders before they are cropped and encoded. Only the WebPs are committed.
+tools/.d1/
