@@ -176,10 +176,16 @@ export function ScienceBand({
             <figure className="m-0 lg:-mr-3">
               {/* Scientific figures are drawn on white. Rather than pretend
                   otherwise, they sit on a plate — which is what keeps a figure
-                  with fine black annotation legible on either ground. */}
+                  with fine black annotation legible on either ground.
+
+                  `bare` is for the ones that are not: a cut-out object with its
+                  own alpha, which wants the band's ground behind it and reads
+                  as mounted on a card if you give it a plate. */}
               <div className={cn(
-                'overflow-hidden rounded-xl border bg-white p-3 shadow-e3 sm:p-5',
-                light ? 'border-hairline' : 'border-nn-300/25',
+                figure.bare
+                  ? 'overflow-visible'
+                  : 'overflow-hidden rounded-xl border bg-white p-3 shadow-e3 sm:p-5',
+                figure.bare ? '' : light ? 'border-hairline' : 'border-nn-300/25',
               )}>
                 {figure.video ? (
                   /* Plays only while the band is on screen, and only if the
@@ -194,7 +200,13 @@ export function ScienceBand({
                     height={figure.h}
                     loading="lazy"
                     decoding="async"
-                    className="block h-auto w-full"
+                    /* A plated figure fills its column. A cut-out object is
+                       usually tall and narrow, and filling the column with one
+                       makes it two thousand pixels high — so it is capped by
+                       height and centred instead. */
+                    className={figure.bare
+                      ? 'mx-auto block h-auto w-auto max-h-[26rem] max-w-full sm:max-h-[32rem] lg:max-h-[38rem]'
+                      : 'block h-auto w-full'}
                   />
                 )}
               </div>

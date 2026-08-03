@@ -40,6 +40,10 @@
 
 import heroArt from '../assets/d1/hero.webp';
 import detailArt from '../assets/d1/detail.webp';
+/* Supplied photography, not a render: the frame fitted to a head model. The
+   black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
+   band's own dark ground, like the traced images do. */
+import headArt from '../assets/d1/head.webp';
 /* The arc-centred band's figure is the existing video of the instrument
    turning on a head model with a probe on its trajectory — which is precisely
    what arc-centred means, and no still can show it. Same encode the education
@@ -87,10 +91,12 @@ export const bands = [
     ],
     meta: [{ label: 'Fixation', value: 'Anchor key' }, { label: 'Fitting', value: 'Percutaneous screws' }],
     figure: {
-      src: '/model-head-clean-750x998-1-451x600.png',
-      w: 451, h: 600,
-      alt: 'The NaviNetics skull anchor key fitted to an anatomical head model.',
-      caption: 'The anchor key on a model',
+      src: headArt,
+      w: 444, h: 1042,
+      bare: true,
+      alt: 'The D1 frame fitted to an anatomical head model, held clear of the face, with a probe '
+        + 'on its trajectory.',
+      caption: 'Fitted to a model, face clear',
     },
   },
   {
