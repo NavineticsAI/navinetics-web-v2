@@ -99,7 +99,7 @@ export default function SurgicalTables() {
           src: art.tableSide, w: 1400, h: 672,
           alt: 'A carbon-fibre table in side elevation, its top cantilevered clear of the column '
             + 'so nothing but carbon sits over the base.',
-          caption: 'Nothing under the top but air',
+          caption: 'The top, cantilevered clear of the column',
         }}
       />
 
@@ -160,7 +160,7 @@ export default function SurgicalTables() {
         ground="light"
         tone="soft"
         eyebrow="Motion"
-        title={'Move the table,\nnot the C-arm.'}
+        title={'Bring the\nanatomy to\nthe beam.'}
         lead="A C-arm is heavy, sterile-draped and awkward to reposition mid-procedure. A table that
           floats, slides and tilts lets the anatomy be brought to the beam instead — which is why
           the range runs from one motion up to six."
@@ -189,7 +189,7 @@ export default function SurgicalTables() {
           src: art.tableMotion, w: 1400, h: 856,
           alt: 'The same table photographed with its tilt positions ghosted over one another, '
             + 'showing the arc the top sweeps through.',
-          caption: 'The positions, one over another',
+          caption: 'The tilt positions, superimposed',
         }}
       />
 

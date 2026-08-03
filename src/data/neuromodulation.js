@@ -85,7 +85,7 @@ export const chapters = [
        the animation has somewhere to be seen, which at this type size is
        about ten characters a line — an authored line longer than that
        wraps again and a three-line heading becomes five. */
-    title: 'The level,\nnot just\nthe change.',
+    title: 'Reporting an\namount.',
     lead: 'Fast-scan voltammetry subtracts its own background, and the baseline goes with it — so '
       + 'it reports change beautifully and cannot report an amount. Multiple cyclic square wave '
       + 'voltammetry models the capacitive current instead of subtracting a neighbouring sweep, '
@@ -97,12 +97,12 @@ export const chapters = [
           + 'over minutes and hours, in disease and in response to a drug or to stimulation.',
       },
       {
-        label: 'Selectivity had to be shown, not assumed.',
+        label: 'Selectivity had to be demonstrated.',
         body: 'The paper reports the method against the usual electroactive interferents — '
           + 'ascorbic acid, DOPAC, and changes in pH.',
       },
       {
-        label: 'In vivo, not in a beaker.',
+        label: 'Demonstrated in living tissue.',
         body: 'Tonic dopamine tracked in the living brain, which is the whole difficulty.',
       },
     ],
@@ -148,7 +148,7 @@ export const chapters = [
     figure: {
       src: figField, w: 577, h: 513,
       alt: 'A square-wave voltammogram: current in colour across potential and scan number.',
-      caption: 'The response a model reads',
+      caption: 'A square-wave voltammogram',
     },
     readMore: { label: 'Neurochemical detection, explained', to: '/resources/education#neurochemical' },
   },
@@ -159,7 +159,7 @@ export const chapters = [
     scene: 'stim',
     tone: 'stim',
     eyebrow: 'Watching stimulation act',
-    title: 'Stimulate,\nthen ask\nwhy.',
+    title: 'Asking what\nthe response\nmeans.',
     lead: 'Deep brain stimulation is known to help before it is understood to. Measuring the '
       + 'chemistry while the stimulation runs turns an outcome into a mechanism — which is the '
       + 'difference between knowing that a setting works and knowing what to change when it '
@@ -197,7 +197,7 @@ export const chapters = [
     scene: 'spikes',
     tone: 'ephys',
     eyebrow: 'Both signals at once',
-    title: 'One probe,\nboth\nsignals.',
+    title: 'On one\ntimebase.',
     lead: 'The chemistry and the electrophysiology had been separate instruments answering '
       + 'separate questions. A multimodal platform records both in real time, through one probe, '
       + 'on one timebase — which is what lets what was released be lined up against what fired.',

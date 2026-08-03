@@ -56,7 +56,7 @@ export default function NaviNeticsAI() {
       <Section>
         <SectionHead
           eyebrow="The software"
-          title="One workspace, from import to plan."
+          title="The whole job, in one workspace."
           lead="NaviNetics AI is a standalone desktop application for stereotactic neurosurgical
             planning. It covers the whole job in one place, and everything stays on the machine
             in front of you."
@@ -212,7 +212,7 @@ function AboutThisDemo() {
         <Badge tone="warn" dot>
           Simulated interface · synthetic dataset
         </Badge>
-        <h2 className="text-d2">A simulation, not a scan.</h2>
+        <h2 className="text-d2">The anatomy is synthetic.</h2>
         <p className="text-lead leading-[1.55] text-ink-2">
           The workspace is a real reconstruction running in your browser, driven by the same
           arc-centred geometry the frame imposes. The anatomy is not.

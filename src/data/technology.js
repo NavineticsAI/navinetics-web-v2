@@ -89,7 +89,7 @@ export const technologies = [
         body: 'Neurotransmitters are detected by their oxidation and reduction at an electrode surface. Fast-scan cyclic voltammetry sweeps the electrode potential and reads the resulting current; the shape of that response identifies the analyte.',
       },
       {
-        title: 'Absolute, not just relative',
+        title: 'Absolute concentration',
         body: 'Multiple cyclic square wave voltammetry measures absolute concentration in the extracellular space rather than only phasic change — which matters if you want to compare across sessions or subjects.',
       },
       {

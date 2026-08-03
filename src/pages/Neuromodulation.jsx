@@ -67,7 +67,7 @@ export default function Neuromodulation() {
       <Section wide band>
         <SectionHead
           eyebrow="The evidence"
-          title="Four papers, eight years."
+          title="The published record."
           lead="Peer-reviewed and resolved from Crossref against their DOIs — the same records the
             publications page carries."
         />

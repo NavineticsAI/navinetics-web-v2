@@ -31,7 +31,7 @@ const REASONS = [
       + 'in the way this morning, not as a summary of a survey some months later.',
   },
   {
-    title: 'Prototypes can be carried, not shipped',
+    title: 'Prototypes travel by hand',
     body:
       'A part can be machined, taken across town, held in gloved hands, criticised and changed '
       + 'again inside a week. Distance is the thing that usually stops that loop closing.',

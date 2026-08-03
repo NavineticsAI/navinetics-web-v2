@@ -74,7 +74,7 @@ export const bands = [
     ground: 'bay',
     tone: 'chem',
     eyebrow: 'Fixation',
-    title: 'A key,\nnot a ring.',
+    title: 'Anchored to\nthe skull.',
     lead: 'In place of the head ring that frame-based systems are built around, a small anchor key '
       + 'is affixed to the skull with percutaneous screws. Everything else attaches to that.',
     points: [
@@ -96,7 +96,7 @@ export const bands = [
       bare: true,
       alt: 'The D1 frame fitted to an anatomical head model, held clear of the face, with a probe '
         + 'on its trajectory.',
-      caption: 'Fitted to a model, face clear',
+      caption: 'The frame on a head model',
     },
   },
   {
@@ -127,7 +127,7 @@ export const bands = [
       w: 1280, h: 720,
       alt: 'The stereotactic frame on a head model, turning, with a probe held on its trajectory '
         + 'as the arc moves around it.',
-      caption: 'Every approach, one point',
+      caption: 'The arc moving through its approaches',
     },
   },
   {
@@ -140,7 +140,7 @@ export const bands = [
       + 'down the line the frame has already set, rather than beside it.',
     points: [
       {
-        label: 'On the line, not beside it.',
+        label: 'Coaxial with the approach.',
         body: 'The drive is coaxial with the approach, so advancing does not disturb what the '
           + 'frame has already set.',
       },
@@ -183,7 +183,7 @@ export const bands = [
       src: detailArt,
       w: 759, h: 1134,
       alt: 'The D1 frame from the opposite side, rendered from the assembly CAD.',
-      caption: 'The same instrument, from the other side',
+      caption: 'The frame from the opposite side',
     },
   },
 ];

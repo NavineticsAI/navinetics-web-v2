@@ -199,13 +199,13 @@ export const FEATURE_BANDS = [
     scene: 'fusion',
     tint: '#e8a838',
     eyebrow: 'Multimodal fusion',
-    title: 'Two scans.\nOne space.',
+    title: 'Into the same\ncoordinate\nspace.',
     lead: 'The stereotactic CT carries the frame. The MR carries the anatomy you are actually '
       + 'aiming at. Fusion puts them in the same coordinate space, so a target picked on the MR '
       + 'means something to the frame.',
     points: [
       { label: 'Reference and moving.', body: 'The CT stays fixed; the MR is brought onto it, so frame geometry is never disturbed by the alignment.' },
-      { label: 'Verified, not assumed.', body: 'Edge agreement is reported per plane, and both surfaces can be reviewed together in 3D before anything is planned.' },
+      { label: 'Agreement is measured.', body: 'Edge agreement is reported per plane, and both surfaces can be reviewed together in 3D before anything is planned.' },
       { label: 'Any series.', body: 'T1, T2, FGATIR, GAD and post-operative studies register into the same space.' },
     ],
     meta: [
@@ -290,7 +290,7 @@ export const FEATURE_BANDS = [
     image: {
       src: dti2Shot, w: 2126, h: 1137,
       alt: 'Reconstructed tracts shown on the planning views alongside the trajectory.',
-      caption: 'Tractography in the plan',
+      caption: 'Tractography in the surgical plan',
     },
   },
 ];

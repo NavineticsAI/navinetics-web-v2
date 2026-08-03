@@ -101,9 +101,9 @@ export const products = [
       'DBS Lead Implantation Accessories',
     ],
     gallery: [
-      { src: '/model-head-clean-750x998-1-451x600.png', caption: 'Anchor key on model', fit: 'contain' },
-      { src: '/DSC05397-1024x695.jpg', caption: 'Stereotactic frame', fit: 'cover' },
-      { src: '/microdrive-image-1024x797.png', caption: 'Mechanical microdrive', fit: 'contain' },
+      { src: '/model-head-clean-750x998-1-451x600.png', caption: 'The anchor key on a head model', fit: 'contain' },
+      { src: '/DSC05397-1024x695.jpg', caption: 'The stereotactic frame', fit: 'cover' },
+      { src: '/microdrive-image-1024x797.png', caption: 'The mechanical microdrive', fit: 'contain' },
     ],
   },
 
@@ -238,7 +238,7 @@ export const products = [
     ],
     gallery: [
       { src: mavenDevice, caption: 'The MAVEN system', fit: 'contain' },
-      { src: mavenDetail, caption: 'Front panel', fit: 'contain' },
+      { src: mavenDetail, caption: 'The MAVEN front panel', fit: 'contain' },
     ],
   },
 ];

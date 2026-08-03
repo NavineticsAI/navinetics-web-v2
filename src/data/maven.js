@@ -219,7 +219,7 @@ export const bands = [
     scene: 'spikes',
     tone: 'ephys',
     eyebrow: 'Electrophysiology',
-    title: 'One probe,\ntwo kinds\nof signal.',
+    title: 'The same tip\nhears the\ntissue.',
     lead: 'The electrode that reads the chemistry also hears the tissue’s electrical activity. '
       + 'Local field potentials and single-unit firing are recorded on their own channel, at the '
       + 'same instant, through the same piece of hardware.',
@@ -249,7 +249,7 @@ export const bands = [
     scene: 'stim',
     tone: 'stim',
     eyebrow: 'Neuromodulation',
-    title: 'Stimulate,\nand watch\nwhat answers.',
+    title: 'The response\nto stimulation.',
     lead: 'Deep brain stimulation goes in on one channel while the other two keep recording. That '
       + 'is the point of the instrument — deliver something, then see what the tissue does about '
       + 'it, without the stimulation swamping the measurement of its own effect.',
@@ -287,13 +287,13 @@ export const bands = [
     scene: 'stack',
     tone: 'soft',
     eyebrow: 'Software & analysis',
-    title: 'Every sweep\nkept, and\nread back.',
+    title: 'Every sweep\nis kept.',
     lead: 'A run is thousands of sweeps. They stack into a field with potential running one way '
       + 'and time the other; take off what the background was doing, and a concentration against '
       + 'time comes back out of it.',
     points: [
       {
-        label: 'Stacked, not summarised.',
+        label: 'Kept in full.',
         body: 'Every sweep is kept as its own column, so a run can be re-read rather than only '
           + 're-plotted.',
       },
@@ -316,7 +316,7 @@ export const bands = [
       src: figField, w: 577, h: 513,
       alt: 'A square-wave voltammogram as the software renders it: current in colour across '
         + 'potential and scan number.',
-      caption: 'The field, as the software renders it',
+      caption: 'The field as the software draws it',
     },
   },
 ];
