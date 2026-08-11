@@ -57,8 +57,10 @@ export default function Maven() {
           performance figure or regulatory position is added to it. */}
       {/* Light, and it follows the theme. The page ends by coming back to the
           rest of the site rather than leaving the reader in the bay. */}
-      <section className="border-t border-hairline-soft bg-canvas px-6 py-24 md:py-28 lg:px-8 lg:py-32">
-        <div className="mx-auto max-w-5xl">
+      {/* Hand-rolled rather than <Section> because of the border-t, but the
+          gutter, measure and rhythm are now the same values Section uses. */}
+      <section className="border-t border-hairline-soft bg-canvas px-6 py-16 md:py-20 lg:px-8 lg:py-24">
+        <div className="nn-frame mx-auto">
           <Reveal className="flex flex-col items-center gap-6 text-center">
             <span className="eyebrow text-action">Where it stands</span>
             <h2 className="text-d2">A research instrument.</h2>
@@ -67,14 +69,32 @@ export default function Maven() {
               electrophysiology and the stimulation be observed together, so the mechanisms behind
               neuromodulation can be studied rather than inferred.
             </p>
+            {/* NO REGULATORY STATEMENT HERE — deliberately, and it is worth
+                knowing why it was removed rather than never written.
+
+                A box was added reading "MAVEN is a preclinical research
+                instrument. It is not a cleared medical device and is not for
+                use in human subjects." The first sentence is supported —
+                navinetics.com calls this work "preclinical research". The last
+                clause was not: that site describes the neurochemical sensing
+                work as enabling "both research development in preclinical
+                studies AND HUMAN RECORDINGS", so a flat no-human-use statement
+                may be plainly wrong.
+
+                Writing a restriction onto a product because it looks like the
+                cautious thing to do is the same error as writing a claim onto
+                one. Nothing goes here until NaviNetics states MAVEN's actual
+                use status. The heading and lead below are theirs and are
+                accurate, and they already say this is research. */}
             <div className="mt-2 flex flex-wrap justify-center gap-3">
-              <Button to="/contact" size="lg" arrow>
+              <Button to="/contact?reason=maven" size="lg" arrow>
                 Talk to the team
               </Button>
               <Button to="/resources/publications" size="lg" variant="secondary">
                 Read the research
               </Button>
             </div>
+
             <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
               Sensing and stimulating electrodes are placed through the same stereotactic route as
               the rest of our work — the{' '}

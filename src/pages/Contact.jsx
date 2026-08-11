@@ -1,17 +1,46 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { usePageMeta } from '../lib/meta.js';
 import { Button, Field, Hero, Reveal, Section, Switch } from '../ui/index.js';
 
+/**
+ * Where the form posts.
+ *
+ * Set VITE_CONTACT_ENDPOINT to a form handler that accepts a JSON POST —
+ * Formspree, Netlify Forms and a small serverless function all do, and all
+ * work from a static GitHub Pages host. In CI set it as a repository variable
+ * and expose it to the build step.
+ *
+ * When it is unset the form does NOT pretend to send. It hands the message to
+ * the visitor's mail client with everything they typed already in it, so the
+ * words they wrote survive. The previous behaviour — validate, show a success
+ * panel, then admit nothing was transmitted — lost every enquiry that arrived
+ * through the only conversion point on the site.
+ */
+const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || '';
+const INBOX = 'info@navinetics.com';
+
+/**
+ * A device company needs the complaint path to be a route a person can find,
+ * not a line in a footer. Keeping it in the same list as sales enquiries means
+ * it cannot be missed and cannot be mistaken for one.
+ */
 const REASONS = [
-  'Frame System enquiry',
+  'D1 Frame System enquiry',
+  'Surgical tables enquiry',
   'Neuromodulation research',
+  'Distribution and partnerships',
+  'Product complaint or device issue',
+  'Press and media',
   'Careers',
   'Something else',
 ];
 
+const COMPLAINT = 'Product complaint or device issue';
+
 const details = [
-  { Icon: Mail, label: 'Email', value: 'info@navinetics.com', href: 'mailto:info@navinetics.com' },
+  { Icon: Mail, label: 'Email', value: INBOX, href: `mailto:${INBOX}` },
   { Icon: Phone, label: 'Phone', value: '+1.507.361.3570', href: 'tel:+15073613570' },
   { Icon: MapPin, label: 'Address', value: '206 S Broadway, STE 700\nRochester, MN 55904' },
 ];
@@ -20,13 +49,23 @@ export default function Contact() {
   usePageMeta({
     title: 'Contact',
     description:
-      'Get in touch with NaviNetics about the Frame System, neuromodulation research or careers.',
+      'Get in touch with NaviNetics about the D1 Frame System, surgical tables, neuromodulation '
+      + 'research, distribution, careers, or to report a product issue.',
   });
 
-  const [form, setForm] = useState({ name: '', email: '', reason: REASONS[0], message: '' });
+  /* Product pages link here with ?reason=… so the form arrives set to the
+     right enquiry — "Request a quote" on the D1 page should not land a visitor
+     on a generic form they have to re-classify themselves. */
+  const [params] = useSearchParams();
+  const PRESET = { d1: REASONS[0], tables: REASONS[1], maven: REASONS[2], complaint: COMPLAINT };
+  const [form, setForm] = useState({
+    name: '', email: '', organisation: '',
+    reason: PRESET[params.get('reason')] ?? REASONS[0],
+    message: '',
+  });
   const [updates, setUpdates] = useState(false);
   const [errors, setErrors] = useState({});
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | handoff | failed
 
   const set = (k) => (e) => {
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -43,13 +82,47 @@ export default function Contact() {
     return next;
   };
 
-  const onSubmit = (e) => {
+  /** Everything typed, in a body a mail client will carry intact. */
+  const mailtoHref = () => {
+    const body = [
+      `Name: ${form.name}`,
+      `Email: ${form.email}`,
+      form.organisation.trim() ? `Organisation: ${form.organisation}` : null,
+      `Reason: ${form.reason}`,
+      updates ? 'Research updates: yes, please subscribe me' : null,
+      '',
+      form.message,
+    ].filter(Boolean).join('\n');
+    return `mailto:${INBOX}?subject=${encodeURIComponent(`${form.reason} — ${form.name}`)}`
+      + `&body=${encodeURIComponent(body)}`;
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
     const next = validate();
     setErrors(next);
-    // NOTE: no backend yet. States are wired; submission is a stub.
-    if (Object.keys(next).length === 0) setSent(true);
+    if (Object.keys(next).length > 0) return;
+
+    if (!ENDPOINT) {
+      window.location.href = mailtoHref();
+      setStatus('handoff');
+      return;
+    }
+
+    setStatus('sending');
+    try {
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ ...form, updates }),
+      });
+      setStatus(res.ok ? 'sent' : 'failed');
+    } catch {
+      setStatus('failed');
+    }
   };
+
+  const isComplaint = form.reason === COMPLAINT;
 
   return (
     <>
@@ -87,6 +160,18 @@ export default function Contact() {
                 </div>
               ))}
             </dl>
+
+            {/* A complaint route stated in plain words, separate from sales. */}
+            <div className="mt-10 rounded-md border border-hairline-soft bg-surface p-5">
+              <h3 className="text-sm font-semibold">Reporting a problem with a device</h3>
+              <p className="mt-2 text-sm text-ink-2">
+                If a NaviNetics device did not perform as expected, tell us. Choose
+                “{COMPLAINT}” in the form, or email{' '}
+                <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>{' '}
+                with the device, the date, and what happened. If a patient or user has been
+                harmed, contact us by phone as well so we reach it the same day.
+              </p>
+            </div>
           </Reveal>
 
           <Reveal delay={0.08}>
@@ -97,25 +182,36 @@ export default function Contact() {
             >
               <h2 className="text-2xl tracking-[-0.03em]">Send a message</h2>
 
-              {sent ? (
-                <div
-                  role="status"
-                  className="mt-8 rounded-md border border-ok bg-ok-soft p-6 text-center"
-                >
-                  <p className="font-semibold text-ok">Message ready to send.</p>
+              {status === 'sent' ? (
+                <div role="status" className="mt-8 rounded-md border border-ok bg-ok-soft p-6 text-center">
+                  <p className="font-semibold text-ok">Message sent.</p>
                   <p className="mt-2 text-sm text-ink-2">
-                    This form has no backend yet, so nothing was transmitted. Email{' '}
-                    <a href="mailto:info@navinetics.com" className="font-semibold text-action">
-                      info@navinetics.com
-                    </a>{' '}
-                    directly in the meantime.
+                    Thank you — we read every message and will reply to {form.email}.
                   </p>
-                  <Button variant="secondary" className="mt-5" onClick={() => setSent(false)}>
-                    Edit message
+                </div>
+              ) : status === 'handoff' ? (
+                <div role="status" className="mt-8 rounded-md border border-ok bg-ok-soft p-6 text-center">
+                  <p className="font-semibold text-ok">Your email client is opening.</p>
+                  <p className="mt-2 text-sm text-ink-2">
+                    Everything you wrote is in the draft — press send there. If nothing
+                    opened, email{' '}
+                    <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>{' '}
+                    or copy your message from the form below.
+                  </p>
+                  <Button variant="secondary" className="mt-5" onClick={() => setStatus('idle')}>
+                    Back to the form
                   </Button>
                 </div>
               ) : (
                 <div className="mt-7 flex flex-col gap-5">
+                  {status === 'failed' && (
+                    <p role="alert" className="rounded-md border border-crit bg-crit-soft p-4 text-sm text-ink-2">
+                      That did not send. Please email{' '}
+                      <a href={mailtoHref()} className="font-semibold text-action">{INBOX}</a>{' '}
+                      — your message is already in the draft.
+                    </p>
+                  )}
+
                   <Field
                     label="Full name"
                     value={form.name}
@@ -133,11 +229,27 @@ export default function Contact() {
                     placeholder="jane.okafor@hospital.org"
                     autoComplete="email"
                   />
+                  <Field
+                    label="Hospital or organisation"
+                    hint="Optional"
+                    value={form.organisation}
+                    onChange={set('organisation')}
+                    placeholder="Mayo Clinic, Department of Neurosurgery"
+                    autoComplete="organization"
+                  />
                   <Field as="select" label="I'm reaching out about" value={form.reason} onChange={set('reason')}>
                     {REASONS.map((r) => (
                       <option key={r}>{r}</option>
                     ))}
                   </Field>
+
+                  {isComplaint && (
+                    <p className="rounded-md border border-warn bg-warn-soft p-4 text-sm text-ink-2">
+                      Please include the device, the approximate date, and what happened. Do not
+                      include patient names or other identifying details.
+                    </p>
+                  )}
+
                   <Field
                     as="textarea"
                     label="Message"
@@ -154,10 +266,20 @@ export default function Contact() {
                       onChange={setUpdates}
                       label="Send me research updates"
                     />
-                    <Button type="submit" arrow>
-                      Send message
+                    <Button type="submit" arrow disabled={status === 'sending'}>
+                      {status === 'sending' ? 'Sending…' : 'Send message'}
                     </Button>
                   </div>
+
+                  {/* Stating what happens to what they typed, where they type it. */}
+                  <p className="text-xs leading-relaxed text-ink-3">
+                    We use what you send here only to answer you. We do not sell it or pass it
+                    to anyone outside NaviNetics.{' '}
+                    {updates && 'Research updates are occasional and you can stop them from any email. '}
+                    Ask us at{' '}
+                    <a href={`mailto:${INBOX}`} className="underline hover:text-action">{INBOX}</a>{' '}
+                    for a copy of what we hold about you, or to have it deleted.
+                  </p>
                 </div>
               )}
             </form>

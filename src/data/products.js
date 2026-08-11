@@ -2,6 +2,7 @@ import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
 import mavenDetail from '../assets/maven/detail.webp';
 import tableShot from '../assets/or-tables/table.webp';
+import { asset } from '../lib/asset.js';
 
 /**
  * The product catalogue.
@@ -33,9 +34,66 @@ export const products = [
   {
     slug: 'd1-stereotactic-frame',
     path: '/products/d1-stereotactic-frame',
-    name: 'D1 Stereotactic Frame',
+    /**
+     * The full name carries both generations. navinetics.com sells this as the
+     * "NaviNetics Frame System"; D1 appears nowhere there. Merging the two —
+     * rather than renaming outright and footnoting the old name — keeps the
+     * product findable for anyone who knows it already, and is how the rest of
+     * the field does it (Medtronic Stealth Autoguide, Leksell Vantage
+     * Stereotactic System).
+     *
+     * This replaced a separate "Also known as the NaviNetics Frame System"
+     * line on the page. Once the name itself carries the continuity that line
+     * is redundant, and an aka footnote on a product page reads as though the
+     * product were renamed to get away from something.
+     */
+    name: 'NaviNetics D1 Stereotactic Frame System',
     shortName: 'D1',
-    family: 'D1 Stereotactic Frame',
+    family: 'NaviNetics D1 Stereotactic Frame System',
+    /* No `aka`: the full name above carries the old one. Note that Goerss's
+       biography also calls this the "NaviNetics Reusable Stereotactic System",
+       which is deliberately NOT used anywhere — the bio describes a "prototype
+       version", and after the WINCS/MAVEN mix-up below, a name that might
+       belong to an earlier generation does not go on the site without
+       NaviNetics confirming it. */
+    /**
+     * REGULATORY STATUS.
+     *
+     * Taken verbatim in substance from navinetics.com's own Frame System page:
+     * "NaviNetics has developed an FDA cleared system…". This is not a new
+     * claim — it is the claim the company already publishes, restored to the
+     * page that replaces theirs. It had been left off, which made this site
+     * less informative than the one it supersedes on the first question a
+     * hospital value-analysis committee asks.
+     *
+     * STILL WANTED, and the reason `number` is null rather than absent: the
+     * 510(k) number and the clearance date. A bare "FDA cleared" is weaker
+     * than it needs to be, and the number is public record once NaviNetics
+     * confirms which one it is. Nothing else — CE, UKCA, TGA, NMPA — is stated
+     * anywhere by the company, so nothing else is stated here.
+     */
+    regulatory: {
+      /* "FDA 510(k) cleared", not "FDA cleared · United States".
+         ─────────────────────────────────────────────────────────────────
+         The market tag was redundant: FDA already means the United States,
+         so it added a word without adding information. Naming the pathway
+         instead does add some — 510(k) clearance is a different thing from
+         PMA approval, and a clinical reader knows the difference.
+
+         `market` is kept in the shape, null for now. It earns its place the
+         moment there is a second market to distinguish from, at which point
+         the chip becomes one per market: "US · FDA 510(k) cleared",
+         "EU · CE marked".
+
+         Lowercase k in 510(k) is the standard form; the chip does not
+         uppercase-transform for that reason. */
+      status: 'FDA 510(k) cleared',
+      market: null,
+      number: null,
+      statement:
+        'NaviNetics has developed an FDA cleared system to reduce the burden of establishing '
+        + 'the stereotactic coordinate system for both the surgeon and the patient.',
+    },
     tag: { label: 'Flagship', tone: 'action' },
     technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nRadically comfortable.',
@@ -68,7 +126,7 @@ export const products = [
     ],
     detail: {
       title: 'The Stereotactic Frame',
-      image: '/DSC05397-1024x695.jpg',
+      image: asset('/DSC05397-1024x695.jpg'),
       imageAlt: 'The NaviNetics stereotactic frame assembly',
       fit: 'cover',
       paragraphs: [
@@ -83,6 +141,7 @@ export const products = [
       { k: 'Patient fixation', v: 'Skull anchor key' },
       { k: 'Imaging localisers', v: 'MR · CT · X-ray' },
       { k: 'Reusable', v: 'Yes' },
+      { k: 'Regulatory status', v: 'FDA 510(k) cleared' },
     ],
     /** Enumerated set the reader traverses completely — numbering is meaningful. */
     highlights: [
@@ -93,19 +152,43 @@ export const products = [
       'Excellent burr hole access and sterile field integrity throughout procedure.',
       'DBS-optimized and Frame accuracy verification accessories provided.',
     ],
+    /**
+     * The "System Components" list from navinetics.com, verbatim.
+     *
+     * That page carries TWO lists and they are not the same thing:
+     *
+     *   · a prose sentence naming seven FUNCTIONAL parts — "a stereotactic
+     *     head frame, the skull anchor key, an MR localizer, a CT Localizer,
+     *     X-ray reticles, a mechanical microdrive, and DBS lead implantation
+     *     accessories". That sentence is used in the page copy.
+     *   · a "System Components" list of nine KITS, below. This is the bill of
+     *     materials — what is actually ordered and shipped — which is what
+     *     this field feeds and what the "what the frame comes with" section is.
+     *
+     * They were briefly merged into one twelve-item list here, which produced
+     * near-duplicates ("MR Localizer" beside "MR Localizer Kit"). Kept
+     * separate now.
+     *
+     * OPEN QUESTION FOR NAVINETICS: X-ray reticles, the mechanical microdrive
+     * and the DBS lead implantation accessories are named in the prose but do
+     * NOT appear in the System Components list. Do they ship as standard, or
+     * are they ordered separately? The page does not say, so neither does this.
+     */
     components: [
-      'Stereotactic Head Frame',
-      'Skull Anchor Key',
-      'MR Localizer',
-      'CT Localizer',
-      'X-ray Reticles',
-      'Mechanical Microdrive',
-      'DBS Lead Implantation Accessories',
+      'Frame Kit',
+      'MR Localizer Kit',
+      'CT Localizer Kit',
+      'Key Sterilization Tray',
+      'Frame Sterilization Tray',
+      'Skull Anchor Key Kit',
+      'Ground Truth Fixture Kit',
+      'Key Placement Guide (KPG)',
+      'Screw Kits',
     ],
     gallery: [
-      { src: '/model-head-clean-750x998-1-451x600.png', caption: 'The anchor key on a head model', fit: 'contain' },
-      { src: '/DSC05397-1024x695.jpg', caption: 'The stereotactic frame', fit: 'cover' },
-      { src: '/microdrive-image-1024x797.png', caption: 'The mechanical microdrive', fit: 'contain' },
+      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The anchor key on a head model', fit: 'contain' },
+      { src: asset('/DSC05397-1024x695.jpg'), caption: 'The stereotactic frame', fit: 'cover' },
+      { src: asset('/microdrive-image-1024x797.png'), caption: 'The mechanical microdrive', fit: 'contain' },
     ],
   },
 
@@ -161,6 +244,45 @@ export const products = [
     name: 'Maven Neuromodulation',
     shortName: 'Maven',
     family: 'Maven Neuromodulation',
+    /**
+     * NO `aka` HERE, deliberately.
+     *
+     * WINCS — the Wireless Instantaneous Neurotransmitter Concentration
+     * Sensing System on navinetics.com and in the published papers — is an
+     * EARLIER GENERATION, confirmed by NaviNetics. It is not another name for
+     * MAVEN, and listing it as one would tell a researcher that the papers
+     * describe this instrument when they describe its predecessor.
+     *
+     * The note at data/maven.js:61 already said the lineage is a sentence
+     * NaviNetics should supply rather than one to infer. It was inferred here
+     * anyway and removed. If the relationship is worth stating, it needs their
+     * words: which generation, what changed, and which papers apply to which.
+     */
+    /**
+     * NOT A CLEARED DEVICE, and the company says so in its own words:
+     * navinetics.com describes this work as "Preclinical research for
+     * understanding brain mechanisms" and makes no regulatory or human-use
+     * claim about it anywhere.
+     *
+     * Stated here because the page otherwise presents MAVEN with the same
+     * weight as the D1 — a cleared surgical instrument — and a reader has no
+     * way to tell the two apart. This is the company's existing framing, not
+     * an added claim.
+     */
+    /**
+     * NO `regulatory` RECORD — pending an answer from NaviNetics.
+     *
+     * A statement was written here reading "not a cleared medical device and
+     * not for use in human subjects" and it was withdrawn. The no-human-use
+     * half was invented: navinetics.com describes the neurochemical sensing
+     * work as enabling "both research development in preclinical studies and
+     * human recordings", which may contradict it outright.
+     *
+     * OPEN QUESTION FOR NAVINETICS: is MAVEN used in human recordings, and
+     * under what authorisation — IDE, IRB, research use only? The answer
+     * decides what belongs on this page, and until it arrives the page says
+     * only what the company already says: that this is preclinical research.
+     */
     tag: { label: 'Research', tone: 'line' },
     technology: 'neuromodulation',
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
@@ -211,7 +333,7 @@ export const products = [
     ],
     detail: {
       title: 'Preclinical Research',
-      image: '/WINCS-Swine-Model-1024x668.png',
+      image: asset('/WINCS-Swine-Model-1024x668.png'),
       imageAlt: 'MAVEN applied in a preclinical model',
       fit: 'cover',
       paragraphs: [

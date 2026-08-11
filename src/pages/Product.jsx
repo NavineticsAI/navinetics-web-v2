@@ -52,8 +52,8 @@ export default function Product() {
       {isPlaceholder(product) ? (
         <Section>
           <ComingSoon
-            title={`${product.name} isn't specified yet.`}
-            body="The product is real and in development. Its dimensions, load ratings and radiolucency characteristics are regulated claims, so rather than fill a spec table with plausible numbers, here's what's outstanding."
+            title={`${product.name} is in development.`}
+            body="The product is real and being built. Its dimensions, load ratings and radiolucency characteristics are regulated claims and we will publish them once they are settled — until then, ask us and we will tell you where it stands."
             needs={product.needsContent}
           />
         </Section>

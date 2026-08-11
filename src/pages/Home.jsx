@@ -25,12 +25,20 @@ export default function Home() {
 
   return (
     <>
+      {/* The lead used to read "Transforming the future of neurosurgery through
+          unparalleled precision and patient comfort." That is a comparative
+          accuracy claim about a targeting device, in the first sentence on the
+          site, with no accuracy figure anywhere to substantiate it — the
+          products data file withholds those on purpose. What replaced it says
+          what we make and who for, which a cold visitor was not being told
+          either. The H1 above it is still brand rather than substance; that is
+          a decision for NaviNetics, not a fix to make quietly. */}
       <Hero
         size="lg"
         targeting
         eyebrow="NaviNetics"
         title={'Innovate.\nElevate.'}
-        lead="Transforming the future of neurosurgery through unparalleled precision and patient comfort."
+        lead="Stereotactic frames, neuromodulation instruments and carbon-fibre operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic."
       >
         <div className="flex flex-wrap gap-3">
           <Button to={products[0].path} size="lg" arrow>
@@ -85,7 +93,14 @@ export default function Home() {
                     use the theme's ink tokens — in light mode they resolve to
                     near-black on near-black. Hence the fixed pale set. */}
                 {product.metrics?.[0] && (
-                  <Lens className="absolute bottom-5 left-5 right-5 rounded-md p-4 md:bottom-6 md:left-6 md:right-auto md:max-w-[18rem] md:p-5">
+                  /* BELOW the plate on a phone, over it from md up.
+                     Overlaid at every size it spanned the full width of a
+                     square plate and covered the bottom third of it — on the
+                     D1 card that is the frame's legs and the head model, i.e.
+                     the product. The floating panel is a desktop showcase
+                     move; on a 375px screen the honest thing is to put the
+                     figure under the picture and let the picture be seen. */
+                  <Lens className="mt-3 rounded-md p-4 md:absolute md:bottom-6 md:left-6 md:right-auto md:mt-0 md:max-w-[18rem] md:p-5">
                     <span className={cn(
                       'font-data text-[0.6875rem] uppercase tracking-[0.14em]',
                       product.heroTone === 'bay' ? 'text-sg-300' : 'text-action',

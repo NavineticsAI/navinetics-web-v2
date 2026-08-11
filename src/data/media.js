@@ -27,13 +27,15 @@
  * devices, or renders derived from our own CAD — see tools/d1-frame.mjs.
  */
 
+import { asset } from '../lib/asset.js';
+
 export const mediaItems = [
   {
     id: 'anchor-key-model',
     title: 'Skull anchor key on anatomical model',
     kind: 'image',
     category: 'Devices',
-    src: '/model-head-clean-750x998-1-451x600.png',
+    src: asset('/model-head-clean-750x998-1-451x600.png'),
     fit: 'contain',
     caption: 'The anchor key replaces the base head ring, leaving the face unobstructed.',
   },
@@ -42,7 +44,7 @@ export const mediaItems = [
     title: 'D1 stereotactic frame',
     kind: 'image',
     category: 'Devices',
-    src: '/DSC05397-1024x695.jpg',
+    src: asset('/DSC05397-1024x695.jpg'),
     fit: 'cover',
     caption: 'Arc-centred frame assembly.',
   },
@@ -51,7 +53,7 @@ export const mediaItems = [
     title: 'Mechanical microdrive',
     kind: 'image',
     category: 'Devices',
-    src: '/microdrive-image-1024x797.png',
+    src: asset('/microdrive-image-1024x797.png'),
     fit: 'contain',
     caption: 'Fine advancement of electrodes and leads along the planned trajectory.',
   },
@@ -60,7 +62,7 @@ export const mediaItems = [
     title: 'WINCS Harmoni device',
     kind: 'image',
     category: 'Research',
-    src: '/WINC-Harmoni-Device.png',
+    src: asset('/WINC-Harmoni-Device.png'),
     fit: 'contain',
     caption: 'Wireless neurochemical and electrophysiological recording.',
   },
@@ -69,7 +71,7 @@ export const mediaItems = [
     title: 'WINCS in a preclinical model',
     kind: 'image',
     category: 'Research',
-    src: '/WINCS-Swine-Model-1024x668.png',
+    src: asset('/WINCS-Swine-Model-1024x668.png'),
     fit: 'cover',
     caption: 'Preclinical application.',
   },

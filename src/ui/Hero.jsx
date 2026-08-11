@@ -56,7 +56,11 @@ export function Hero({
     <header
       ref={ref}
       className={cn(
-        'relative flex flex-col justify-center overflow-hidden px-6 pb-20 pt-36 lg:px-8',
+        /* pt-36 is nav clearance, not rhythm — the navbar is fixed and the
+           heading has to clear it. pb matches Section's own padding so the
+           gap from hero to first section is the same 192px as every other
+           section-to-section gap. */
+        'relative flex flex-col justify-center overflow-hidden px-6 pb-16 pt-36 md:pb-20 lg:px-8 lg:pb-24',
         pad,
         dark ? 'bg-nn-950 text-nn-50' : 'bg-canvas',
         className,
@@ -94,7 +98,9 @@ export function Hero({
         </div>
       )}
 
-      <div className="relative z-[2] mx-auto w-full max-w-5xl">
+      {/* nn-frame is the site's single measure — this was max-w-5xl, which put
+          every page's hero 128px right of the sections beneath it. */}
+      <div className="nn-frame relative z-[2] mx-auto w-full">
         {eyebrow && (
           <motion.div {...step(0)}>
             <Eyebrow className={dark ? '!text-sg-300' : undefined}>{eyebrow}</Eyebrow>
@@ -128,8 +134,13 @@ export function Hero({
       </div>
 
       {targeting && !reduced && (
+        /* Held to the frame, not the viewport edge. Pinned to the section it
+           sat 1300px clear of the content on a 3840px ultrawide — a stray
+           instrument readout alone in the right margin. inset-x with the frame
+           and mx-auto puts it under the content's own right edge, which is the
+           thing it belongs to. */
         <div
-          className="absolute bottom-7 right-6 z-[2] hidden gap-4 font-data text-[0.6875rem] tabular-nums text-ink-3 md:flex lg:right-8"
+          className="nn-frame pointer-events-none absolute inset-x-0 bottom-7 z-[2] mx-auto hidden justify-end gap-4 px-6 font-data text-[0.6875rem] tabular-nums text-ink-3 md:flex lg:px-8"
           aria-hidden="true"
         >
           <span>

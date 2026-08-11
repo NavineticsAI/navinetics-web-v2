@@ -44,6 +44,7 @@ export default function Careers() {
           <>
             <SectionHead
               eyebrow="Open roles"
+              level="h1"
               title={`${jobs.length} ${jobs.length === 1 ? 'opening' : 'openings'}`}
             />
             <ul className="mt-10 flex flex-col gap-3">
@@ -73,8 +74,12 @@ export default function Careers() {
           </>
         ) : (
           <>
+            {/* Careers has no Hero, so this is the page's only top-level
+                heading — without level it rendered an h2 and the document
+                outline started at 2 with no h1 above it. */}
             <SectionHead
               eyebrow="Open roles"
+              level="h1"
               title="Nothing posted right now."
               lead={
                 'Which is not the same as "don\'t write." We hire against the trajectories below ' +
@@ -127,7 +132,7 @@ export default function Careers() {
           Currently hidden — see SHOW_DISCIPLINE_DIAGRAM above. */}
       {SHOW_DISCIPLINE_DIAGRAM && (
         <section className="bg-nn-950 pt-20 text-nn-50">
-          <div className="mx-auto max-w-5xl px-6 lg:px-8">
+          <div className="nn-frame mx-auto px-6 lg:px-8">
             <TickLine className="!bg-white/15" />
             <Eyebrow className="!text-sg-300">Careers at NaviNetics</Eyebrow>
           </div>

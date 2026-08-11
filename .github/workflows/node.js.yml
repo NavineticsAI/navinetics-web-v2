@@ -41,6 +41,12 @@ jobs:
       - name: Build Vite application
         run: npm run build
 
+      # Gates on the failures that are invisible in dev and fatal in production:
+      # a missing 404.html, assets that lost the base path, and public/ files
+      # referenced at the server root. All three shipped once already.
+      - name: Check build output
+        run: npm run check:build
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 

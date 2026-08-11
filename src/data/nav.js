@@ -70,4 +70,8 @@ export const redirects = [
   ['/what-we-do/neuromodulation', '/products/maven-neuromodulation'],
   ['/careers', '/resources/careers'],
   ['/investment-opportunities', '/contact'],
+  // Shipped as live CTAs on Who We Are, Community and the About stat tiles
+  // before anyone noticed neither path was ever a route.
+  ['/company/careers', '/resources/careers'],
+  ['/products', '/products/d1-stereotactic-frame'],
 ];

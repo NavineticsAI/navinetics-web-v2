@@ -66,7 +66,11 @@ export const gap = {
     + 'neurological and psychiatric disease actually lives. A stimulator that could read the '
     + 'chemistry might one day respond to it — but only if the chemistry can be measured in '
     + 'living tissue, at the right speed, while the stimulation is running.',
-  note: 'Four papers, over eight years, working toward that. This page is those four.',
+  /* Was: "…working toward that. This page is those four." The second sentence
+     describes the page's own structure to the reader, which is a note to
+     ourselves about how the page was built. The first sentence is the useful
+     part — eight years of sustained work is evidence, and it stays. */
+  note: 'Four papers, over eight years, each one a step toward it.',
 };
 
 /**

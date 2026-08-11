@@ -122,6 +122,20 @@
   --crit-soft: rgb(195 60 64 / 0.12);
   --action-glow: rgb(31 104 144 / 0.1);
 
+  /* The light ScienceBand scrim, as three explicit stops.
+     ───────────────────────────────────────────────────────────────────────
+     These were written inline as rgb(from var(--canvas) r g b / .88) and so
+     on. Relative colour syntax is Safari 16.4+ and Chrome 119+; on iOS 16.3
+     and below the whole linear-gradient declaration fails to parse, and the
+     band loses its scrim entirely — leaving the copy sitting on the raw
+     animation with nothing holding it readable.
+
+     Same reasoning as the soft tints above: derive nothing at runtime that
+     an older engine has to resolve. Keep in step with --canvas (#f4f7f9). */
+  --band-scrim-1: rgb(244 247 249 / 0.88);
+  --band-scrim-2: rgb(244 247 249 / 0.06);
+  --band-scrim-3: rgb(244 247 249 / 0.34);
+
   --glass-bg: rgb(255 255 255 / 0.6);
   --glass-bg-lens: rgb(255 255 255 / 0.26);
   --glass-rim-hi: rgb(255 255 255 / 0.98);
@@ -143,7 +157,10 @@
      mark and the wordmark — one flat value, not a gradient. `--logo-lit` is
      how hard the travelling light hits it, which has to come down on the dark
      theme because it is lightening a pale fill rather than a deep one.    */
-  --logo-src: url("/logo-378x75-1.png");
+  /* Imported rather than served from public/: a root-absolute url() is not
+     rewritten for the deployed sub-path, so the mark 404'd everywhere the
+     logo mask is used. A relative url() from src/ Vite resolves and hashes. */
+  --logo-src: url("./assets/logo.png");
   --logo-ink: #185273;
   --logo-lit: 0.5;
   --logo-tint: 0.51;
@@ -187,6 +204,21 @@
   --on-action: #04141d;
   --action-soft: rgb(78 154 196 / 0.14);
   --action-glow: rgb(78 154 196 / 0.16);
+
+  /* Status ramp, restated for the dark ground.
+     ─────────────────────────────────────────────────────────────────────────
+     These were previously inherited from the light theme, where they are read
+     on #FFF-ish surfaces. Against --surface (#0a2231) the light values fall to
+     3.81:1 (ok), 4.12:1 (warn) and 3.14:1 (crit) — so the form error text on
+     Contact, and the "In development" label in the mega-menu, were below AA on
+     every dark page. Measured on --surface, the worst case: 8.3:1, 7.4:1 and
+     5.9:1. Keep them there if the surfaces move. */
+  --ok: #3fcfa8;
+  --warn: #e0a33f;
+  --crit: #f0757a;
+  --ok-soft: rgb(63 207 168 / 0.16);
+  --warn-soft: rgb(224 163 63 / 0.16);
+  --crit-soft: rgb(240 117 122 / 0.16);
 
   --glass-bg: rgb(150 195 215 / 0.07);
   --glass-bg-lens: rgb(150 195 215 / 0.04);
@@ -427,6 +459,36 @@
 
 /* ── Utilities ────────────────────────────────────────────────────────────── */
 @layer utilities {
+  /**
+   * THE FRAME. One measure for the whole site, in one place.
+   *
+   * Everything that centres content uses this: Section, Hero, the navbar pill,
+   * the footer, and both scene bands. Replacing a scattered mix of max-w-5xl,
+   * max-w-7xl, max-w-4xl and max-w-[96rem] with a single class is what stopped
+   * the left edge stepping in and out as you scrolled.
+   *
+   * It STEPS at large viewports, and that is not a contradiction of "one
+   * measure" — it is one measure that knows how big the screen is. Held flat
+   * at 80rem, a 3840 × 1600 ultrawide showed 1280px of content in the middle
+   * and 2560px of empty ground: two thirds of the display carrying nothing.
+   * The steps below fill more of it without letting line length run away —
+   * long-form text is separately capped by max-w-prose, so widening the frame
+   * widens grids, figures and tables rather than paragraphs.
+   *
+   * 1920 and 2560 are the two thresholds worth having: the first covers
+   * ordinary desktop monitors, the second the 21:9 and 32:9 panels where the
+   * problem is actually visible.
+   */
+  .nn-frame {
+    max-width: 80rem;                 /* 1280 — laptops and ordinary desktops */
+  }
+  @media (min-width: 1920px) {
+    .nn-frame { max-width: 96rem; }   /* 1536 */
+  }
+  @media (min-width: 2560px) {
+    .nn-frame { max-width: 110rem; }  /* 1760 — matches the D1 hero's own cap */
+  }
+
   .font-data {
     font-family: var(--font-mono);
     font-weight: 500;

@@ -1,4 +1,5 @@
 import { hero, FRAME } from '../data/d1.js';
+import { getProduct } from '../data/products.js';
 
 /**
  * The D1 opening: the instrument, and what it is.
@@ -22,6 +23,8 @@ import { hero, FRAME } from '../data/d1.js';
  * NOTHING IS LABELLED, deliberately — see the notice in data/d1.js.
  */
 export function D1Hero() {
+  const reg = getProduct('d1-stereotactic-frame')?.regulatory;
+
   return (
     <header className="relative overflow-hidden bg-[var(--mv-bay)] text-nn-50">
       <div
@@ -52,7 +55,7 @@ export function D1Hero() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <span className="eyebrow text-sg-300">Products — D1 Stereotactic Frame</span>
+          <span className="eyebrow text-sg-300">Products — NaviNetics D1 Stereotactic Frame System</span>
           <h1 className="whitespace-pre-line text-d1">
             {'Robust. Low complexity.\nRadically comfortable.'}
           </h1>
@@ -60,6 +63,43 @@ export function D1Hero() {
             Arc-centred targeting with a skull anchor key in place of a base ring. Three linear
             degrees of freedom, two angles of rotation.
           </p>
+
+          {/*
+            REGULATORY STATUS, ABOVE THE FOLD.
+            ─────────────────────────────────────────────────────────────────
+            Whether a device is cleared decides whether a surgeon can use it,
+            so it is not fine print and it does not go at the bottom of the
+            page. It is the second thing a clinical reader needs after what
+            the device is.
+
+            HOW IT IS PRESENTED, and why it looks like this rather than like a
+            badge. 21 CFR 807.97: clearance "does not in any way denote
+            official approval", and any representation creating an impression
+            of official approval is misbranding. A tick, a shield, a seal or
+            an agency logo creates exactly that impression. A typographic
+            status line does not — it reads as a specification, which is what
+            it is.
+
+            "CLEARED", never "APPROVED". 510(k) clearance is not PMA approval,
+            and describing a cleared device as FDA approved is among the most
+            commonly cited promotional violations. The word is load-bearing.
+
+            The 510(k) number renders as soon as it is filled in at
+            data/products.js — `regulatory.number` is null until NaviNetics
+            confirms it. A number is materially stronger than a bare claim: it
+            is checkable in the FDA database.
+          */}
+          {reg?.status && (
+            /* Not uppercase-transformed, unlike the rest of the site's data
+               idiom: 510(k) takes a lowercase k, and rendering it 510(K) is
+               the kind of detail a regulatory reader reads as carelessness. */
+            <p className="mt-1 inline-flex w-fit items-baseline gap-2 rounded-sm border border-sg-300/35
+              bg-sg-300/10 px-3 py-2 font-data text-[0.75rem] tracking-[0.04em] text-sg-300">
+              <span className="font-semibold">{reg.status}</span>
+              {reg.number && <span className="text-nn-200/70">· {reg.number}</span>}
+              {reg.market && <span className="text-nn-200/70">· {reg.market}</span>}
+            </p>
+          )}
         </div>
       </div>
     </header>

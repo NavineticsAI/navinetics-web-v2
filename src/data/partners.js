@@ -4,6 +4,7 @@ import lituo from '../assets/partners/lituo-medical.webp';
 import naviAsia from '../assets/partners/navinetics-asia.webp';
 import elim from '../assets/partners/elim-dmp.webp';
 import delta from '../assets/partners/delta-medical.webp';
+import naviLogo from '../assets/logo.png';
 
 /**
  * Where the systems can be delivered, and who delivers them.
@@ -60,7 +61,7 @@ export const territories = [
       {
         /* Served from public/ rather than imported: it is the same file the
            navbar uses, and one copy cannot drift from the other. */
-        logo: '/logo-378x75-1.png',
+        logo: naviLogo,
         name: 'NaviNetics, Inc.',
         role: 'Headquarters',
         body:

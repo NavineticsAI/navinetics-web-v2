@@ -2,7 +2,7 @@ import { cn } from '../lib/cn.js';
 import { Badge } from './Badge.jsx';
 import { Button } from './Button.jsx';
 import { Reticle } from './Reticle.jsx';
-import { Eyebrow, Reveal } from './Section.jsx';
+import { Reveal } from './Section.jsx';
 
 /**
  * Honest placeholder for a page whose content doesn't exist yet.
@@ -12,7 +12,7 @@ import { Eyebrow, Reveal } from './Section.jsx';
  * regulated claims. This states plainly that the page is incomplete and, in
  * development, lists what is outstanding so it can't be quietly forgotten.
  */
-export function ComingSoon({ title, body, needs, action = true, badge = true, className }) {
+export function ComingSoon({ title, body, needs: _needs, action = true, badge = true, className }) {
   return (
     <Reveal>
       <Reticle
@@ -33,22 +33,20 @@ export function ComingSoon({ title, body, needs, action = true, badge = true, cl
           {body && <p className="max-w-prose text-lead leading-[1.55] text-ink-2">{body}</p>}
         </div>
 
-        {needs?.length > 0 && (
-          <div className="mt-9 border-t border-hairline-soft pt-7">
-            <Eyebrow className="!text-ink-3">Still to come</Eyebrow>
-            <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
-              {needs.map((n) => (
-                <li key={n} className="flex items-start gap-3 text-sm text-ink-2">
-                  <span
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-warn"
-                    aria-hidden="true"
-                  />
-                  {n}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* `needs` is NO LONGER RENDERED.
+            It used to print a "Still to come" checklist — entries like
+            "Regulatory status", "Imaging-system compatibility", "Radiolucency
+            characteristics — no attenuation figure is published". That is a
+            project-management list about what NaviNetics has not documented,
+            shown to a surgeon or a purchasing manager who asked what the
+            product does. Publishing the gaps does not make the page more
+            honest; it makes it read as unfinished, and it hands a competitor a
+            list of what we cannot substantiate.
+
+            The prop is deliberately still accepted, and callers still pass it,
+            so the record of what is outstanding stays with the product data
+            where it is useful — see data/products.js and data/technology.js,
+            and docs/shubham/04-open-items.md. */}
 
         {action && (
           <div className="mt-9 flex flex-wrap gap-3">

@@ -21,7 +21,7 @@ export function DemoLauncher({ eyebrow, title, lead, note, actions = [], about }
   const [aboutOpen, setAboutOpen] = useState(false);
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-24 md:py-32 lg:px-8">
+    <section className="nn-frame mx-auto px-6 py-16 md:py-20 lg:px-8 lg:py-24">
       <div className="rounded-xl border border-hairline bg-surface p-8 md:p-12">
         <div className="max-w-prose">
           {/* Said before it is opened, not only inside it. Somebody who reads

@@ -100,7 +100,9 @@ export function ScienceBand({
          padding otherwise reads as one void and the page loses its joints.
          The light bands follow the page theme; the bay ones never do. */
       className={cn(
-        'relative overflow-hidden border-t px-6 py-24 md:py-28 lg:py-32 lg:pl-8 lg:pr-5',
+        /* Full-bleed ground, framed content — same reasoning as SceneBand.
+           The canvas and gradient stay inset-0; the copy joins max-w-7xl. */
+        'relative overflow-hidden border-t px-6 py-16 md:py-20 lg:px-8 lg:py-24',
         light
           ? 'border-hairline-soft bg-canvas text-ink'
           : 'border-[var(--mv-rule-2)] bg-[var(--mv-bay)] text-nn-50',
@@ -124,15 +126,19 @@ export function ScienceBand({
         className="pointer-events-none absolute inset-0"
         aria-hidden="true"
         style={{
+          /* Explicit stop tokens rather than rgb(from var(--canvas) …): the
+             relative-colour form is Safari 16.4+, and below that the whole
+             gradient fails to parse and the copy loses its scrim. See the
+             tokens in index.css. */
           background: light
-            ? 'linear-gradient(96deg,var(--canvas) 0%,rgb(from var(--canvas) r g b/.88) 30%,'
-              + 'rgb(from var(--canvas) r g b/.06) 52%,rgb(from var(--canvas) r g b/.34) 100%)'
+            ? 'linear-gradient(96deg,var(--canvas) 0%,var(--band-scrim-1) 30%,'
+              + 'var(--band-scrim-2) 52%,var(--band-scrim-3) 100%)'
             : 'linear-gradient(96deg,rgb(3 16 26/.95) 0%,rgb(3 16 26/.84) 30%,'
               + 'rgb(3 16 26/.08) 52%,rgb(3 16 26/.3) 100%)',
         }}
       />
 
-      <div className="relative mx-auto grid max-w-[96rem] items-center gap-12 lg:grid-cols-[minmax(0,28%)_minmax(190px,1fr)_minmax(0,46%)] lg:gap-10">
+      <div className="nn-frame relative mx-auto grid items-center gap-12 lg:grid-cols-[minmax(0,30%)_minmax(150px,1fr)_minmax(0,46%)] lg:gap-10">
         <div className="max-w-[min(52ch,100%)]">
           <Eyebrow style={{ color: 'var(--tint)' }}>{eyebrow}</Eyebrow>
           <h2 className="mt-4 whitespace-pre-line text-d1 !tracking-[-0.04em]">{title}</h2>

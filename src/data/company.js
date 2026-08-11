@@ -114,11 +114,11 @@ export const numbers = () => {
     { value: String(publications.length), label: 'Selected papers',
       unit: `${Math.min(...years)}–${Math.max(...years)}`, to: '/resources/publications' },
     { value: String(products.length), label: 'Product lines',
-      unit: 'stereotaxy and neuromodulation', to: '/products' },
+      unit: 'stereotaxy and neuromodulation', to: '/products/d1-stereotactic-frame' },
     { value: String(territories.length), label: 'Territories',
       unit: 'covered by partners or a subsidiary', to: '/company/partners' },
     { value: String(disciplines.length), label: 'Disciplines',
-      unit: 'clinical, engineering, regulatory', to: '/company/careers' },
+      unit: 'clinical, engineering, regulatory', to: '/resources/careers' },
   ];
 };
 

@@ -15,7 +15,7 @@ export default function Footer() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-7xl">
+      <div className="nn-frame relative mx-auto">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
           <div>
             <div className="text-2xl font-semibold tracking-[-0.03em]">
@@ -28,6 +28,15 @@ export default function Footer() {
             </p>
             <p className="mt-4 eyebrow text-sg-300">
               Quality and simplicity, in everything we do
+            </p>
+            {/* The legal entity. navinetics.com named two — NaviNetics, Inc.
+                and NaviNetics NeuroModulation, Inc. — but they have since
+                merged, and NaviNetics, Inc. is now the single entity. A device
+                company's site should say who it is. */}
+            <p className="mt-6 text-[0.8125rem] leading-relaxed text-nn-300">
+              NaviNetics, Inc.<br />
+              206 S Broadway, STE 700<br />
+              Rochester, MN 55904, USA
             </p>
           </div>
 
@@ -72,7 +81,7 @@ export default function Footer() {
             </span>
           </div>
           <p className="font-data text-[0.6875rem] text-nn-300">
-            © 2021–{new Date().getFullYear()} NaviNetics · All rights reserved
+            © 2021–{new Date().getFullYear()} NaviNetics, Inc. · All rights reserved
           </p>
         </div>
       </div>

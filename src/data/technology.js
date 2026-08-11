@@ -1,4 +1,5 @@
 import mavenDevice from '../assets/maven/device.webp';
+import { asset } from '../lib/asset.js';
 
 /**
  * The technology platforms.
@@ -36,7 +37,7 @@ export const technologies = [
     tagline: 'Reaching one point\nfrom any angle.',
     summary:
       'Arc-centred targeting: three linear degrees of freedom place a target at the focus of an arc, and two rotations set the trajectory to it.',
-    hero: '/DSC05397-1024x695.jpg',
+    hero: asset('/DSC05397-1024x695.jpg'),
     heroAlt: 'The NaviNetics stereotactic frame assembly',
     principles: [
       {
@@ -112,8 +113,13 @@ export const technologies = [
     tagline: 'Software for\nplanning and targeting.',
     summary:
       'Software work applying machine learning to neuronavigation — including automated landmark localisation, a method the team has already published.',
-    hero: '/microdrive-image-1024x797.png',
-    heroAlt: 'Placeholder image — NaviNetics AI visuals pending',
+    hero: asset('/microdrive-image-1024x797.png'),
+    /* Alt text is read aloud by a screen reader and shown if the image fails.
+       It was "Placeholder image — NaviNetics AI visuals pending", which
+       announces our content backlog to the one visitor who cannot see the
+       picture. It describes the photograph instead; that the artwork is a
+       stand-in is an internal fact and lives in the note below. */
+    heroAlt: 'A mechanical microdrive for advancing electrodes along a planned trajectory',
     /**
      * IN DEVELOPMENT — copy pending from NaviNetics.
      *

@@ -84,7 +84,7 @@ export function NextSection({ eyebrow, title, lead }) {
   });
 
   return (
-    <section className="relative flex min-h-[min(60vh,560px)] items-center overflow-hidden bg-nn-950 px-6 py-24 text-nn-50 md:py-28 lg:px-8">
+    <section className="relative flex min-h-[min(60vh,560px)] items-center overflow-hidden bg-nn-950 px-6 py-16 text-nn-50 md:py-20 lg:px-8 lg:py-24">
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />
 
       <div
@@ -97,7 +97,7 @@ export function NextSection({ eyebrow, title, lead }) {
         }}
       />
 
-      <div className="relative mx-auto w-full max-w-7xl">
+      <div className="relative nn-frame mx-auto w-full">
         <div className="max-w-[min(38rem,100%)]">
           <motion.div {...step(0)}>
             <Eyebrow className="!text-nn-300">{eyebrow}</Eyebrow>

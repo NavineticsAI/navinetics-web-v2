@@ -88,10 +88,16 @@ export default function NaviNeticsAI() {
           {[
             ['Complete', 'ok', 'Functional prototype built and working',
               'Fusion, registration, targeting and tractography run end to end.'],
+            /* The benchmark figure that used to close this row — "around
+               0.6 mm deviation" against industry-standard planning software —
+               is gone. It was a quantitative comparative claim, with no
+               comparator named, no method and no n, published for software the
+               row four below states has had no submission and no clearance. It
+               does not come back until regulatory has signed off the number
+               together with the protocol that produced it, and then it comes
+               back as a cited result rather than a sentence. */
             ['In progress', 'action', 'Validating in the real-world OR',
-              'Running the pipeline under operating-room conditions rather than on archived cases. '
-              + 'Benchmarking against industry-standard planning software currently shows around '
-              + '0.6 mm deviation.'],
+              'Running the pipeline under operating-room conditions rather than on archived cases.'],
             ['Next', 'muted', 'Clinical validation studies',
               'Formal studies. No availability, performance or regulatory claim is made until they exist.'],
             /* The supporting detail is deliberately not on the page: the
@@ -132,14 +138,27 @@ export default function NaviNeticsAI() {
           sections competing for the same moment at the end of the page. They
           are the same decision — "what now?" — so they are one block of
           buttons, and the demo opens over the page rather than by scroll. */}
+      {/* The `note` below was: "Simplified stand-in · synthetic head · no
+          patient data · makes no claim about performance, accuracy or
+          regulatory status".
+
+          The last clause went: the status ladder further up this page already
+          states that no submission has been made and no clearance is claimed,
+          so repeating it here read as hedging rather than as information.
+          "Simplified stand-in" went too — it says nothing a reader can act on.
+
+          What is LEFT is not boilerplate and should not be trimmed further.
+          This demo looks like a working clinical planning workstation; a
+          screenshot of it, passed on without context, could be taken for a
+          cleared product running on a patient. Saying plainly that the head is
+          generated is the one line that prevents that. */}
       <DemoLauncher
         eyebrow="Try it yourself"
         title="A glimpse of the workspace."
         lead="Not the application — a small demonstration of it, rebuilt to run in a browser on
           generated anatomy. It covers one thing: setting a trajectory against the geometry an
           arc-centred frame imposes."
-        note="Simplified stand-in · synthetic head · no patient data · makes no claim about
-          performance, accuracy or regulatory status"
+        note="Synthetic head — generated, not patient data"
         actions={[
           { label: 'Ask us about it', href: 'mailto:info@navinetics.com', arrow: true },
           ...(tech?.readMore ?? []).map((r) => ({ label: r.label, to: r.to, arrow: true })),

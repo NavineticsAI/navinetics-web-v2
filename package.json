@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "check:build": "node tools/check-build.mjs",
+    "check:routes": "node tools/check-routes.mjs",
+    "check:mobile": "node tools/check-mobile.mjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },
