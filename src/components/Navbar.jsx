@@ -8,6 +8,7 @@ import { nav } from '../data/nav.js';
 import { Button } from '../ui/Button.jsx';
 import { ProductPlate } from '../ui/Card.jsx';
 import { Logo } from '../ui/Logo.jsx';
+import { TechMark } from '../ui/TechMark.jsx';
 import { ThemeToggle } from '../ui/ThemeToggle.jsx';
 
 const MENU_W = 240;
@@ -25,6 +26,7 @@ export default function Navbar() {
   const navRef = useRef(null);
   const pillRef = useRef(null);
   const itemRefs = useRef([]);
+  const panelRef = useRef(null);
 
   /**
    * Panels are positioned manually because they render OUTSIDE the frosted
@@ -86,13 +88,52 @@ export default function Navbar() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'Escape') {
+        // Give focus back to the trigger, or Escape strands the reader at the
+        // top of the document with the panel gone from under them.
+        if (openIdx != null) itemRefs.current[openIdx]?.querySelector('a')?.focus();
         setOpenIdx(null);
         setMobileOpen(false);
       }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, []);
+  }, [openIdx]);
+
+  /**
+   * KEYBOARD ACCESS TO THE PANELS.
+   *
+   * The panels render as SIBLINGS of the bar — they have to, so they can
+   * escape the frosted pill's stacking context — which puts their links after
+   * every trigger, the theme toggle and the Contact button in DOM order. And
+   * because focusing the next trigger calls open() for THAT one, the panel you
+   * were on unmounts before you reach it. The net effect was that no link
+   * inside Company, Products, Technology or Resources could be reached by
+   * keyboard at all: eleven of the site's pages, unreachable from the nav.
+   *
+   * Down-arrow opens the panel and moves into it — the disclosure-navigation
+   * pattern. Enter still follows the trigger to its section landing page,
+   * which is what an anchor should do, so nothing is taken away from anyone.
+   */
+  const openInto = useCallback((idx) => {
+    open(idx);
+    // After the panel has mounted and framer-motion has committed it.
+    requestAnimationFrame(() => {
+      panelRef.current?.querySelector('a')?.focus();
+    });
+  }, [open]);
+
+  const onTriggerKey = useCallback((e, idx) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      openInto(idx);
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const next = e.key === 'ArrowRight'
+        ? (idx + 1) % nav.length
+        : (idx - 1 + nav.length) % nav.length;
+      itemRefs.current[next]?.querySelector('a')?.focus();
+    }
+  }, [openInto]);
 
   const panelMotion = reduced
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, exit: { opacity: 0 } }
@@ -119,7 +160,11 @@ export default function Navbar() {
         className={cn(
           'nn-glass mx-auto flex min-h-14 items-center gap-5 rounded-full py-2 pl-5 pr-2 [--gb:16px]',
           'transition-[max-width] duration-[420ms] ease-out',
-          scrolled ? 'max-w-5xl' : 'max-w-7xl',
+          // Unscrolled, the pill matches the content frame — including its
+          // wide steps, so on an ultrawide the nav is not a 1280px island
+          // above 1760px of content. Scrolled, it contracts, which is the
+          // point of the animation.
+          scrolled ? 'max-w-5xl' : 'nn-frame',
         )}
       >
         <Link to="/" className="flex shrink-0 items-center" aria-label="NaviNetics home">
@@ -140,7 +185,10 @@ export default function Navbar() {
               <NavLink
                 to={link.path}
                 onFocus={() => open(idx)}
+                onKeyDown={(e) => onTriggerKey(e, idx)}
                 aria-expanded={openIdx === idx}
+                aria-controls={openIdx === idx ? 'nav-panel' : undefined}
+                aria-haspopup="true"
                 className={({ isActive }) =>
                   cn(
                     // whitespace-nowrap is load-bearing: without it the labels
@@ -168,7 +216,10 @@ export default function Navbar() {
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-            className="grid h-9 w-9 cursor-pointer place-items-center rounded-full text-ink lg:hidden"
+            /* 44 × 44 — the size a finger reliably hits, and the WCAG 2.2 AA
+               target minimum. This was 36 × 36, and it is the ONLY way into
+               the navigation on a phone. */
+            className="grid h-11 w-11 cursor-pointer place-items-center rounded-full text-ink lg:hidden"
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -183,6 +234,14 @@ export default function Navbar() {
             key={active.title}
             {...panelMotion}
             transition={{ duration: 0.18, ease: EASE_OUT }}
+            ref={panelRef}
+            id="nav-panel"
+            aria-label={active.title}
+            /* Tabbing out of the last link should close the panel rather than
+               leave it hanging open over the page behind. */
+            onBlur={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget)) setOpenIdx(null);
+            }}
             className="absolute hidden lg:block"
             style={{ left: anchor.left, top: anchor.top, width: anchor.width }}
           >
@@ -198,12 +257,20 @@ export default function Navbar() {
                         to={it.path}
                         className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
                       >
-                        <ProductPlate
-                          src={it.image}
-                          alt=""
-                          className="h-14 w-16 shrink-0 rounded-sm"
-                          imgClassName="!p-1.5"
-                        />
+                        {/* Products carry photography; Technology carries a
+                            drawn mark. Same slot, different kind of thing —
+                            which is the distinction the two panels exist to
+                            make. */}
+                        {it.mark ? (
+                          <TechMark name={it.mark} />
+                        ) : (
+                          <ProductPlate
+                            src={it.image}
+                            alt=""
+                            className="h-14 w-16 shrink-0 rounded-sm"
+                            imgClassName="!p-1.5"
+                          />
+                        )}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-semibold leading-tight group-hover/mega:text-action">

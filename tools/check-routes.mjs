@@ -20,11 +20,16 @@
  */
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
 const DIR = `${ROOT}tools/.routes/`;
 const PORT = 9541;
-const BASE = 'http://localhost:4319';
+/* The deployed base, not the server root. Checking '/' when the site is served
+   from a sub-path exercises a URL shape that does not exist in production —
+   which is exactly how the missing Router basename survived this check. */
+const BASE = (process.argv[2] || 'http://localhost:4319') + '/navinetics-web-v2';
 const CHROME = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
@@ -44,7 +49,10 @@ const ROUTES = [
 mkdirSync(DIR, { recursive: true });
 spawn(CHROME, ['--headless=new', '--disable-gpu', '--use-gl=swiftshader', '--enable-unsafe-swiftshader',
   `--remote-debugging-port=${PORT}`, '--window-size=1440,900', '--no-first-run',
-  `--user-data-dir=${DIR}.chrome-all`, 'about:blank'], { stdio: 'ignore' });
+  /* Outside the project tree. A Chrome profile under tools/ is inside Vite's
+     file watcher, and Vite exits with EBUSY the moment Chrome touches its own
+     session db — which kills the dev server this check is pointed at. */
+  `--user-data-dir=${join(tmpdir(), 'nn-chrome-routes')}`, 'about:blank'], { stdio: 'ignore' });
 let pg;
 for (let i = 0; i < 80 && !pg; i++) {
   try { pg = (await (await fetch(`http://127.0.0.1:${PORT}/json/list`)).json()).find((t) => t.type === 'page'); }

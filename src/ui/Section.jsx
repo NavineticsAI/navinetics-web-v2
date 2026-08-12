@@ -2,30 +2,49 @@ import { motion } from 'framer-motion';
 import { cn } from '../lib/cn.js';
 import { fadeUp, reveal, revealProps, usePrefersReducedMotion } from '../lib/motion.js';
 
-/** Page section with the standard vertical rhythm. `band` recesses it. */
+/**
+ * Page section: the one place the site's gutter, measure and vertical rhythm
+ * are declared. Anything that builds its own <section> re-declares all three
+ * and drifts — docs/shubham/03-layout-system.md has what that measured out to.
+ *
+ * THE MEASURE. One frame, max-w-7xl (1280px), for every section on every page.
+ * It used to be two: max-w-5xl by default, max-w-7xl behind a `wide` prop. That
+ * put about half the site's sections on a 1024px measure and half on 1280px,
+ * alternating within single pages — a 128px jump in the left edge between
+ * adjacent sections at 1440px, which is the whole reason the site read as
+ * unaligned. Long-form text stays readable through max-w-prose on the text
+ * itself, which is the right place for it: the frame should not narrow because
+ * a paragraph is inside it.
+ *
+ * `wide` is still accepted so existing callers keep working, but it no longer
+ * changes anything. Drop it from call sites as they are touched.
+ *
+ * THE RHYTHM. py-16 md:py-20 lg:py-24 — 96px a side at desktop. Sections stack,
+ * so the gap between two of them is TWICE the padding: 192px here, where the
+ * previous lg:py-40 gave 320px — about a third of a laptop screen with nothing
+ * in it. `band` recesses a section onto the sunk ground.
+ */
 export function Section({
   as: As = 'section',
   band = false,
   dark = false,
   className,
   innerClassName,
-  wide = false,
+  wide: _wide = false,
   children,
   ...props
 }) {
   return (
     <As
       className={cn(
-        'px-6 py-24 md:py-32 lg:py-40 lg:px-8',
+        'px-6 py-16 md:py-20 lg:px-8 lg:py-24',
         band && 'bg-sunk',
         dark && 'bg-nn-950 text-nn-50',
         className,
       )}
       {...props}
     >
-      <div className={cn('mx-auto', wide ? 'max-w-7xl' : 'max-w-5xl', innerClassName)}>
-        {children}
-      </div>
+      <div className={cn('nn-frame mx-auto', innerClassName)}>{children}</div>
     </As>
   );
 }

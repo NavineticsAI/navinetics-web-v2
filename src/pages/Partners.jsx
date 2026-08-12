@@ -47,7 +47,7 @@ export default function Partners() {
       {/* pt-36 matches Hero — it is what clears the fixed navbar. The bottom
           padding is what is cut, not the top. */}
       <section className="px-6 pb-10 pt-36 lg:px-8 lg:pb-12">
-        <div className="mx-auto max-w-7xl">
+        <div className="nn-frame mx-auto">
           <TickLine className="max-w-[120px]" />
           <span className="eyebrow mt-3.5 block text-action">Company — Partners</span>
           <h1 className="mt-3.5 text-[clamp(2.35rem,5vw,3.9rem)]">Our global presence.</h1>
@@ -58,7 +58,7 @@ export default function Partners() {
       </section>
 
       <section className="px-6 pb-4 lg:px-8">
-        <div className="mx-auto max-w-7xl">
+        <div className="nn-frame mx-auto">
           {/* The container is dark in both themes, like the globe inside it.
               A lit sphere needs a room to be lit in, and the pale version put
               five territory colours against a near-white ocean where the

@@ -1,3 +1,4 @@
+import { asset } from '../lib/asset.js';
 import { usePageMeta } from '../lib/meta.js';
 import { Hero, Reveal, Section } from '../ui/index.js';
 
@@ -8,7 +9,7 @@ const founders = [
        different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
-    image: '/kendall-lee-150-500x400-1.jpg',
+    image: asset('/kendall-lee-150-500x400-1.jpg'),
     bio: [
       'Dr. Lee earned his B.A. in biology with a minor in philosophy (Summa Cum Laude) from the University of Colorado at Denver. He attended Yale University Graduate School, where he received his Master of Philosophy, M.D. (Cum Laude) and Ph.D. in neurobiology. He completed an internship in internal medicine at the Hospital of St. Raphael, Yale University School of Medicine and a residency in neurology at Harvard Medical School.',
       'He further trained at Dartmouth Hitchcock Medical Center, completing an internship in general surgery and a residency and chief residency in neurosurgery. In his clinical practice, Dr. Lee is an expert on neurological disorders, seeing patients with Parkinson’s disease, Tourette’s syndrome, dystonia, and other neurodegenerative diseases.',
@@ -23,7 +24,7 @@ const founders = [
        different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
-    image: '/kevin-bennet-150-500x400-1.jpg',
+    image: asset('/kevin-bennet-150-500x400-1.jpg'),
     bio: [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',
       'He holds patents concerning neurosurgery, diamond, semiconductor and optical technology and has founded several technology-based companies. He received a degree in Chemical Engineering from the Massachusetts Institute of Technology, an MBA from Harvard and his doctorate from Deakin University.',
@@ -34,7 +35,7 @@ const founders = [
   {
     name: 'Stephan J. Goerss',
     role: 'Co-Founder',
-    image: '/stephan-goerss-150.jpg',
+    image: asset('/stephan-goerss-150.jpg'),
     bio: [
       'Steve Goerss has 40 years of experience in designing and fabricating neurosurgical devices and stereotactic instrumentation. He has been awarded three patents with two more pending. He joined the Mayo Clinic in 1984 with the Department of Neurologic Surgery until 2016.',
       'During this time, he supported all computer-assisted neurosurgical procedures, trained neurosurgical residents in the use of this technology, and developed custom neurosurgical instruments and systems for the neurosurgical staff. He also became an Assistant Professor of the Mayo Medical School. He has authored and co-authored 51 peer reviewed papers and two book chapters.',

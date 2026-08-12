@@ -1,0 +1,9 @@
+# NaviNetics — https://navineticsai.github.io/navinetics-web-v2/
+#
+# The site is a client-rendered SPA, so there are no crawlable links in the
+# served HTML. The sitemap is the only complete list of URLs a crawler gets.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://navineticsai.github.io/navinetics-web-v2/sitemap.xml

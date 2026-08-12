@@ -188,10 +188,21 @@ export const lineup = [
   },
 ];
 
-/** The six the line-up sheet closes on, in its own words. */
+/**
+ * The six the line-up sheet closes on — restated as descriptions rather than
+ * as the sheet's marketing adjectives, because the page renders them in
+ * NaviNetics' voice, not the supplier's.
+ *
+ * "Superior radiolucency" was the first of them: a comparative performance
+ * claim with no comparator, on the one property this file states outright it
+ * has no figure for (see the claims notice above — no aluminium-equivalent
+ * value, no attenuation percentage). "Lightweight and safe" carried the same
+ * problem in the second half. What is left is what the tables are, which is
+ * what a buyer scanning six words actually needs.
+ */
 export const strengths = [
-  'Superior radiolucency',
-  'Lightweight and safe',
+  'Radiolucent carbon-fibre construction',
+  'Low mass for the span',
   'Wide motion range',
   'Reliable and durable',
   'Custom solutions',

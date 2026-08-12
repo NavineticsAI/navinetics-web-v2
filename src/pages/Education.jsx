@@ -192,38 +192,109 @@ function Topic({ t }) {
         </Reveal>
       )}
 
-      {t.figures?.map((f) => (
-        <EduFigure key={f} name={f} />
-      ))}
+      {/*
+        The last figure and a lone picture share a row.
+        ─────────────────────────────────────────────────────────────────────
+        The interactive figures are wide cards that do not fill their width —
+        the implanted-system diagram is a body outline with three labelled
+        nodes, and the right third of it is empty. Meanwhile a topic with one
+        picture left that picture alone in a three-column grid, using a third
+        of its own dedicated band.
 
-      <Reveal>
-        {/* A chevron, because without one this reads as a card rather than as
-            something you can open. */}
-        <details className="group mt-6 overflow-hidden rounded-lg border border-hairline-soft bg-surface">
-          <summary className="flex cursor-pointer list-none items-center gap-3 px-5 py-3.5 text-[0.9375rem] font-semibold marker:content-none">
-            {t.deep.label}
-            <ChevronDown
-              size={16}
-              aria-hidden="true"
-              className="ml-auto shrink-0 text-ink-3 transition-transform duration-200 group-open:rotate-180"
-            />
-          </summary>
-          <p className="max-w-prose px-5 pb-4 leading-[1.7] text-ink-2">{t.deep.body}</p>
-        </details>
-      </Reveal>
+        Two half-empty rows, one after the other. So the picture moves up
+        beside the figure and both rows become one. Only when there is a
+        single picture: two or more still want their own row, and three fill
+        the grid the grid was built for.
+      */}
+      {(() => {
+        const figures = t.figures ?? [];
+        const shots = t.shots ?? [];
+        const inlineShot = figures.length > 0 && shots.length === 1;
 
-      {/* A slot holds a picture or a brief. A brief stays a labelled gap until
-          the picture exists, which is more honest than a stand-in that looks
-          like a decision already made. */}
-      {t.shots && (
-        <Reveal>
-          <div className="mt-10 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {t.shots.map((s, i) => (
-              <Shot key={s.title} shot={s} label={`${t.n}.${i + 1}`} />
-            ))}
-          </div>
-        </Reveal>
-      )}
+        if (!inlineShot) {
+          return figures.map((f) => <EduFigure key={f} name={f} />);
+        }
+
+        const last = figures[figures.length - 1];
+        return (
+          <>
+            {figures.slice(0, -1).map((f) => <EduFigure key={f} name={f} />)}
+            {/* Proportional, not a fixed sidebar. At a fixed 17rem the picture
+                sat beside a card three times its size and read as an
+                afterthought pinned to the edge. Two thirds / one third makes
+                them peers — the diagram still leads, the photograph is still
+                clearly a photograph, and neither looks like a leftover. */}
+            <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
+              <EduFigure name={last} />
+              {/* Pushed down by the figure's own mt-9 so their tops align. */}
+              <div className="lg:mt-9">
+                <Shot shot={shots[0]} label={`${t.n}.1`} />
+              </div>
+            </div>
+          </>
+        );
+      })()}
+
+      {/*
+        The deep-dive, and any pictures the figure row did not already take.
+        ─────────────────────────────────────────────────────────────────────
+        A single picture has gone up beside the last figure. What is left here
+        is two pictures — which pair with the deep-dive panel and fill the row
+        — or three, which keep the grid that arrangement was built for.
+      */}
+      {(() => {
+        const figures = t.figures ?? [];
+        const all = t.shots ?? [];
+        // Already rendered beside the figure; do not draw it twice.
+        const shots = figures.length > 0 && all.length === 1 ? [] : all;
+        const paired = shots.length > 0 && shots.length < 3;
+
+        const deep = (
+          /* A chevron, because without one this reads as a card rather than as
+             something you can open. */
+          <details className="group overflow-hidden rounded-lg border border-hairline-soft bg-surface">
+            <summary className="flex cursor-pointer list-none items-center gap-3 px-5 py-3.5 text-[0.9375rem] font-semibold marker:content-none">
+              {t.deep.label}
+              <ChevronDown
+                size={16}
+                aria-hidden="true"
+                className="ml-auto shrink-0 text-ink-3 transition-transform duration-200 group-open:rotate-180"
+              />
+            </summary>
+            <p className="max-w-prose px-5 pb-4 leading-[1.7] text-ink-2">{t.deep.body}</p>
+          </details>
+        );
+
+        if (!paired) {
+          return (
+            <>
+              <Reveal className="mt-6">{deep}</Reveal>
+              {shots.length > 0 && (
+                <Reveal>
+                  <div className="mt-10 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {shots.map((s, i) => (
+                      <Shot key={s.title} shot={s} label={`${t.n}.${i + 1}`} />
+                    ))}
+                  </div>
+                </Reveal>
+              )}
+            </>
+          );
+        }
+
+        return (
+          <Reveal>
+            <div className="mt-6 grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)]">
+              {deep}
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+                {shots.map((s, i) => (
+                  <Shot key={s.title} shot={s} label={`${t.n}.${i + 1}`} />
+                ))}
+              </div>
+            </div>
+          </Reveal>
+        );
+      })()}
     </section>
   );
 }

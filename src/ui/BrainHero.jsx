@@ -151,7 +151,7 @@ export function BrainHero({ eyebrow, title, lead, facts = [] }) {
           }}
         />
 
-        <div className="relative mx-auto w-full max-w-7xl">
+        <div className="relative nn-frame mx-auto w-full">
           {/* Wide enough, and sized small enough, that each authored line of
               the headline stays on one line. The break points are in the
               string; if the type outgrows the column the browser adds its own

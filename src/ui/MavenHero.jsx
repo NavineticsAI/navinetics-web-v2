@@ -436,7 +436,7 @@ export function MavenHero({ product }) {
               : 'pointer-events-none absolute inset-x-0 top-0 px-6 pt-32 lg:px-8 lg:pt-36'
           }
         >
-          <div className="mx-auto w-full max-w-7xl">
+          <div className="nn-frame mx-auto w-full">
             <div className={reduced ? 'max-w-2xl' : 'max-w-lg'}>
               <Eyebrow className="!text-sg-300">{`Products — ${product.shortName}`}</Eyebrow>
               <h1 className="mt-5 whitespace-pre-line text-d1 !tracking-[-0.045em]">{product.tagline}</h1>
@@ -478,7 +478,7 @@ export function MavenHero({ product }) {
           ref={stripRef}
           className={
             reduced
-              ? 'relative mx-auto w-full max-w-7xl'
+              ? 'relative nn-frame mx-auto w-full'
               : 'absolute inset-x-0 bottom-0 px-6 pb-9 opacity-0 lg:px-8'
           }
         >
@@ -486,7 +486,7 @@ export function MavenHero({ product }) {
               no names of its own, so this is the only place the four are
               written down — but the channel list under each has to go, or the
               strip grows tall enough to stand on the instrument. */}
-          <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-x-6 gap-y-4 border-t
+          <div className="nn-frame mx-auto grid w-full grid-cols-2 gap-x-6 gap-y-4 border-t
             border-[var(--mv-rule-2)] pt-4 sm:gap-x-8 lg:grid-cols-4 lg:gap-y-5 lg:pt-5">
             {domains.map((d) => (
               <div key={d.id} className="flex flex-col gap-1.5">

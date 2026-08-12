@@ -107,7 +107,7 @@ function Progress({ total, progress }) {
 /** Reduced-motion fallback. Nothing is lost but the movement. */
 function StackedSequence({ steps, image, imageAlt, className }) {
   return (
-    <div className={cn('bg-sunk px-6 py-24 lg:px-8', className)}>
+    <div className={cn('bg-sunk px-6 py-16 md:py-20 lg:px-8 lg:py-24', className)}>
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-2 lg:items-center">
         <ProductPlate src={image} alt={imageAlt} className="aspect-square w-full" />
         <div className="flex flex-col gap-5">

@@ -49,7 +49,7 @@ export function ConvergenceDiagram({ items, className }) {
 
   return (
     <div className={className}>
-      <div className="mx-auto max-w-5xl px-6 lg:px-8">
+      <div className="nn-frame mx-auto px-6 lg:px-8">
         <div className="relative mx-auto mt-6 aspect-[560/392] w-full max-w-[640px] min-h-[300px]">
           <svg
             viewBox={`${VB.x} ${VB.y} ${VB.w} ${VB.h}`}
@@ -127,7 +127,7 @@ export function ConvergenceDiagram({ items, className }) {
 
       {/* Detail panel — full-bleed band beneath the diagram */}
       <div className="mt-11 border-t border-white/10 bg-white/[0.02]">
-        <div className="mx-auto grid max-w-5xl gap-7 px-6 pb-16 pt-9 lg:grid-cols-2 lg:gap-12 lg:px-8">
+        <div className="nn-frame mx-auto grid gap-7 px-6 pb-16 pt-9 lg:grid-cols-2 lg:gap-12 lg:px-8">
           <div>
             <span className="eyebrow !text-sg-300">{d.role}</span>
             <h3 className="mt-2 text-[clamp(1.6rem,3vw,2.25rem)]">{d.title}</h3>

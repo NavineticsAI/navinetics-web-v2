@@ -1,4 +1,26 @@
 import mavenDevice from '../assets/maven/device.webp';
+/**
+ * Mega-panel thumbnails, separate from `hero`.
+ *
+ * `hero` is the PAGE's opening image and stays what it is. The nav panel had
+ * been reading `hero` too, which meant the Technology dropdown showed the same
+ * three pictures as the Products dropdown — the D1 frame photograph appeared in
+ * both, and NaviNetics AI, which is software, was illustrated with a mechanical
+ * microdrive.
+ *
+ * These are figures rather than product photography, which is the distinction
+ * the two panels are meant to draw: Products shows the object you buy,
+ * Technology shows how it works.
+ *
+ * DRAWN, not photographed. `mark` names one of the glyphs in ui/TechMark.jsx.
+ *
+ * Photography was tried twice here and failed both times. The slot is 64 × 56
+ * CSS px — about 3,600 pixels. The full science figures became a brown blob, a
+ * white box with a smudge, and a field of noise; cropping them (see
+ * tools/crop-icons.mjs, kept for reference) helped and was still not good
+ * enough. Nothing photographic survives that size. A mark drawn for it does.
+ */
+import { asset } from '../lib/asset.js';
 
 /**
  * The technology platforms.
@@ -36,7 +58,9 @@ export const technologies = [
     tagline: 'Reaching one point\nfrom any angle.',
     summary:
       'Arc-centred targeting: three linear degrees of freedom place a target at the focus of an arc, and two rotations set the trajectory to it.',
-    hero: '/DSC05397-1024x695.jpg',
+    hero: asset('/DSC05397-1024x695.jpg'),
+    // An arc and the one point every approach along it reaches.
+    mark: 'stereotaxy',
     heroAlt: 'The NaviNetics stereotactic frame assembly',
     principles: [
       {
@@ -70,6 +94,8 @@ export const technologies = [
     /* The MAVEN unit's own artwork. This replaced a journal figure that was
        standing in as a product shot — see the note in data/products.js. */
     hero: mavenDevice,
+    // The triangular FSCV sweep, and the response it draws out.
+    mark: 'neuro',
     heroAlt: 'The MAVEN system',
     /**
      * This slug does NOT use the Technology template. It has its own route and
@@ -112,8 +138,15 @@ export const technologies = [
     tagline: 'Software for\nplanning and targeting.',
     summary:
       'Software work applying machine learning to neuronavigation — including automated landmark localisation, a method the team has already published.',
-    hero: '/microdrive-image-1024x797.png',
-    heroAlt: 'Placeholder image — NaviNetics AI visuals pending',
+    hero: asset('/microdrive-image-1024x797.png'),
+    /* Alt text is read aloud by a screen reader and shown if the image fails.
+       It was "Placeholder image — NaviNetics AI visuals pending", which
+       announces our content backlog to the one visitor who cannot see the
+       picture. It describes the photograph instead; that the artwork is a
+       stand-in is an internal fact and lives in the note below. */
+    heroAlt: 'A mechanical microdrive for advancing electrodes along a planned trajectory',
+    // Four planning panes with one target running through them.
+    mark: 'ai',
     /**
      * IN DEVELOPMENT — copy pending from NaviNetics.
      *

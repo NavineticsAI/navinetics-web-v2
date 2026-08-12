@@ -6,6 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "check:build": "node tools/check-build.mjs",
+    "check:routes": "node tools/check-routes.mjs",
+    "check:mobile": "node tools/check-mobile.mjs",
+    "check:webkit": "node tools/check-webkit.mjs",
+    "check:perf": "node tools/check-perf.mjs",
     "lint": "oxlint",
     "preview": "vite preview"
   },
@@ -25,6 +30,7 @@
     "@vitejs/plugin-react": "^6.0.4",
     "autoprefixer": "^10.5.4",
     "oxlint": "^1.75.0",
+    "playwright": "^1.62.1",
     "postcss": "^8.5.25",
     "tailwindcss": "^4.3.3",
     "vite": "^8.2.0"

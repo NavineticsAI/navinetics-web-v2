@@ -270,31 +270,123 @@ function DbsFigure() {
     role: 'button',
     'aria-label': DBS_PARTS.find((p) => p[0] === id)[1],
     className: 'cursor-pointer outline-none',
+    /* `pointer-events: all` rather than relying on a transparent fill being
+       treated as painted. Under the default `visiblePainted`, WebKit does not
+       hit-test a fully transparent fill — probed on this figure, the topmost
+       element at the generator's own centre was the <svg>, not the <rect>
+       inside it. `all` hit-tests the geometry regardless of paint, which is
+       what an invisible hit area needs. */
+    style: { pointerEvents: 'all' },
   });
 
   return (
     <Figure title="The implanted system" hint="Hover or tap a part">
-      <svg viewBox="0 0 620 300" className="mx-auto block w-full max-w-[740px]" aria-hidden="true">
+      {/*
+        REDRAWN. The previous version had a 620 × 300 viewBox with nothing left
+        of x=150 — a quarter of the figure was empty by construction — and it
+        showed a head, a long wire, and a rectangle floating in the corner with
+        no body between them. The drawing is the point of this figure: where
+        these three parts sit RELATIVE to each other is the whole explanation.
+
+        Now it is anatomical: cranium at the left, neck, and a chest wall
+        running right, with the generator sitting on it below the collarbone.
+        That is also the answer to the question the deep-dive below asks — why
+        the generator is in the chest and not the head.
+
+        NOT aria-hidden any more. The three groups are role="button" with
+        labels, and burying focusable controls inside an aria-hidden subtree
+        told screen readers they did not exist while leaving them tabbable.
+      */}
+      <svg
+        viewBox="0 0 620 340"
+        className="mx-auto block w-full max-w-[740px]"
+        role="group"
+        aria-label="The three implanted parts: lead, extension and pulse generator"
+      >
+        {/* Head in profile, facing left — brow, nose and jaw, so it reads as a
+            head rather than a circle. The generator is on the chest, so the
+            person has to be facing away from it for the anatomy to make sense. */}
         <path
-          d="M150 120C150 62 196 26 250 26s100 36 100 94c0 36-14 58-20 76l-12 54-68 12-68-12-12-54c-6-18-20-40-20-76Z"
+          d="M100 138C100 78 142 40 184 40c44 0 76 38 76 88 0 32-8 52-15 68l-9 24
+             c-4 12-15 18-28 18h-38c-10 0-18-4-24-11l-14-16-16-6c-5-2-6-8-2-12l12-13
+             c-6-14-10-28-10-42Z"
           className="fill-none stroke-hairline" strokeWidth="2"
         />
-        <path d="M318 250c42 12 74 24 122 36h160" className="fill-none stroke-hairline" strokeWidth="2" />
-        <ellipse cx="250" cy="118" rx="62" ry="52" className="fill-none stroke-hairline-soft" strokeWidth="1.4" strokeDasharray="3 4" />
+        {/* Neck, shoulder and chest wall. The body is the reason this figure
+            exists — where the parts sit relative to each other IS the lesson. */}
+        <path
+          d="M216 232c2 12 6 20 14 26 26 20 74 30 128 32h262"
+          className="fill-none stroke-hairline" strokeWidth="2"
+        />
+        <path
+          d="M156 240c-4 24 10 44 40 56 40 16 96 24 160 26h264"
+          className="fill-none stroke-hairline-soft" strokeWidth="1.6"
+        />
+        {/* the region the target sits in */}
+        <ellipse
+          cx="180" cy="128" rx="52" ry="44"
+          className="fill-none stroke-hairline-soft" strokeWidth="1.4" strokeDasharray="3 4"
+        />
 
+        {/*
+          HIT AREAS, invisible and wide.
+          ───────────────────────────────────────────────────────────────────
+          The parts are drawn as 2.4px strokes, and a 2.4px stroke is the only
+          thing that was hit-testable — so "Hover or tap a part" was a lie on
+          any touchscreen: a fingertip is roughly 9mm and there was nothing
+          within a fingertip's reach to hit. It worked with a mouse, which is
+          exactly why it survived.
+
+          `stroke="transparent"` rather than no stroke: SVG hit-testing under
+          the default `visiblePainted` needs the geometry to be PAINTED, and
+          transparent counts as painted while none does not. Same for the
+          generator's fill.
+        */}
         <g {...hit('ext')}>
-          <path d="M300 52c36 14 48 98 30 146l-10 48" className={cn('fill-none', stroke('ext'))} strokeWidth={width('ext')} strokeLinecap="round" />
-          <path d="M320 246c50 12 80 26 120 32" className={cn('fill-none', stroke('ext'))} strokeWidth={width('ext')} />
+          <path
+            d="M190 46c34 10 58 44 62 84 4 38-4 72-12 92-8 22 4 40 32 50 46 16 96 24 146 26"
+            fill="none" stroke="transparent" strokeWidth="26" strokeLinecap="round"
+          />
+          <path
+            d="M190 46c34 10 58 44 62 84 4 38-4 72-12 92-8 22 4 40 32 50 46 16 96 24 146 26"
+            className={cn('fill-none', stroke('ext'))}
+            strokeWidth={width('ext')} strokeLinecap="round"
+          />
         </g>
+
+        {/* lead — anchored at the burr hole, down to the target */}
         <g {...hit('lead')}>
-          <path d="M250 96V46c0-12 12-16 22-10l28 16" className={cn('fill-none', stroke('lead'))} strokeWidth={width('lead')} strokeLinecap="round" />
+          <path d="M170 44h30M184 46c1 30-2 58-4 80"
+            fill="none" stroke="transparent" strokeWidth="30" strokeLinecap="round" />
+          <path
+            d="M184 46c1 30-2 58-4 80"
+            className={cn('fill-none', stroke('lead'))}
+            strokeWidth={width('lead')} strokeLinecap="round"
+          />
+          <path
+            d="M170 44h30"
+            className={cn('fill-none', stroke('lead'))}
+            strokeWidth={width('lead')} strokeLinecap="round"
+          />
         </g>
+
+        {/* pulse generator — below the collarbone, on the chest wall */}
         <g {...hit('ipg')}>
-          <rect x="440" y="258" width="56" height="40" rx="9" className={cn('fill-none', stroke('ipg'))} strokeWidth={width('ipg')} />
+          {/* Padded hit area. The generator draws at 80×46 in a 620-wide
+              viewBox, which lands at about 40×24 CSS px on a phone — level
+              with the WCAG 2.2 AA minimum and well under the 44px iOS asks
+              for. The invisible rect gives a finger somewhere to land. */}
+          <rect x="396" y="256" width="124" height="86" fill="transparent" />
+          <rect
+            x="418" y="276" width="80" height="46" rx="11"
+            className={stroke('ipg')} fill="transparent" strokeWidth={width('ipg')}
+          />
         </g>
-        <circle cx="250" cy="96" r="4.5" className="fill-action" />
-        <text x="258" y="92" className="fill-ink-3 font-data" fontSize="11">TARGET</text>
-        <text x="506" y="282" className="fill-ink-3 font-data" fontSize="11">GENERATOR</text>
+
+        <circle cx="180" cy="128" r="4.5" className="fill-action" />
+        <text x="192" y="124" className="fill-ink-3 font-data" fontSize="11">TARGET</text>
+        <text x="300" y="272" className="fill-ink-3 font-data" fontSize="11">EXTENSION</text>
+        <text x="512" y="304" className="fill-ink-3 font-data" fontSize="11">GENERATOR</text>
       </svg>
       <p className="mt-3.5 min-h-[3em] text-sm text-ink-2">
         <strong className="font-semibold text-ink">{active[1]}.</strong> {active[2]}

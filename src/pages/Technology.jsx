@@ -43,9 +43,16 @@ export default function Technology() {
 
       {isTechPlaceholder(tech) ? (
         <Section>
+          {/* The body used to end "…rather than fill this page with
+              plausible-sounding claims, here's what's outstanding", and the
+              title said the page "isn't documented yet". Both explain our
+              editorial process to a visitor who did not ask about it. The
+              restraint they describe stays; the commentary about it does not.
+              `needs` is still passed — ComingSoon no longer renders it to the
+              page, but it stays as the internal record of what is missing. */}
           <ComingSoon
-            title={`${tech.name} isn't documented yet.`}
-            body="The work is real — automated landmark localisation for neuronavigation is already published. What isn't settled is how to describe the software itself, so rather than fill this page with plausible-sounding claims, here's what's outstanding."
+            title={`${tech.name} is in development.`}
+            body="Automated landmark localisation for neuronavigation is published work. The software built on it is in development, and we would rather talk to you about it than publish specifications before they are settled."
             needs={tech.needsContent}
           />
         </Section>

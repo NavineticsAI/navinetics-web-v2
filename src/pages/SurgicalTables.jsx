@@ -230,16 +230,23 @@ export default function SurgicalTables() {
       {/* ── close ──────────────────────────────────────────────────────────── */}
       <Section>
         <Reveal className="flex flex-col items-center gap-6 text-center">
-          <span className="eyebrow text-action">What is still open</span>
-          <h2 className="text-d2">Regulatory status is not stated.</h2>
+          {/* This close used to be headed "What is still open" and explain
+              which figures were absent from which supplier document and why.
+              That is a note to NaviNetics about the state of the content, not
+              something a surgeon or a purchasing manager needs — a buyer
+              reading a product page wants to know what to do next. The
+              discipline it recorded is real and still holds; it belongs in the
+              claims notice in data/orTables.js, which is where it now lives
+              alone. */}
+          <span className="eyebrow text-action">Next step</span>
+          <h2 className="text-d2">Find the table for your room.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            The dimensions, motions and load figures on this page are transcribed from the
-            manufacturer&rsquo;s own specification. Regulatory status and imaging-system
-            compatibility are not stated in either document, so they are not stated here.
+            Five models, each specified for a different procedure and imaging setup. Tell us
+            the room and the workload and we will point you to the right one.
           </p>
           <div className="mt-2 flex flex-wrap justify-center gap-3">
-            <Button to="/contact" size="lg" arrow>
-              Ask about a table
+            <Button to="/contact?reason=tables" size="lg" arrow>
+              Request a quote
             </Button>
             <Button to="/company/partners" size="lg" variant="secondary">
               Where they come from

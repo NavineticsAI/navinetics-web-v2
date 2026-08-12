@@ -11,6 +11,63 @@
       content="NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery. Born from the Neural Engineering Laboratories at Mayo Clinic."
     />
 
+    <!--
+      Sharing and crawling. The site is client-rendered, so a crawler or a link
+      unfurler that does not execute JavaScript sees only what is in this file.
+      Before these tags every shared link — a product page emailed to a surgeon,
+      a page posted to LinkedIn — rendered as a bare URL with no title, summary
+      or image. src/lib/meta.js rewrites the per-route values after mount for
+      crawlers that do run JS; these are the floor for the ones that do not.
+    -->
+    <link rel="canonical" href="https://navineticsai.github.io/navinetics-web-v2/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NaviNetics" />
+    <meta property="og:title" content="NaviNetics — Precision stereotactic and neuromodulation devices" />
+    <meta
+      property="og:description"
+      content="NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery. Born from the Neural Engineering Laboratories at Mayo Clinic."
+    />
+    <meta property="og:url" content="https://navineticsai.github.io/navinetics-web-v2/" />
+    <meta
+      property="og:image"
+      content="https://navineticsai.github.io/navinetics-web-v2/DSC05397-1024x695.jpg"
+    />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="695" />
+    <meta property="og:image:alt" content="The NaviNetics D1 arc-centred stereotactic frame assembly." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NaviNetics — Precision stereotactic and neuromodulation devices" />
+    <meta
+      name="twitter:description"
+      content="Stereotactic and neuromodulation devices for functional neurosurgery, from the Neural Engineering Laboratories at Mayo Clinic."
+    />
+    <meta
+      name="twitter:image"
+      content="https://navineticsai.github.io/navinetics-web-v2/DSC05397-1024x695.jpg"
+    />
+
+    <!--
+      Organization schema. A search engine has no other structured signal about
+      who this company is: there is no server-rendered content to parse.
+      Deliberately states only what is verifiable from the site itself — no
+      certifications, clearances or claims are asserted here.
+    -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "NaviNetics",
+        "url": "https://navineticsai.github.io/navinetics-web-v2/",
+        "description": "NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Rochester",
+          "addressRegion": "MN",
+          "addressCountry": "US"
+        }
+      }
+    </script>
+
     <!-- Self-hosted; preload the two faces used above the fold. -->
     <link
       rel="preload"

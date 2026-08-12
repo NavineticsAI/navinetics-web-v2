@@ -95,7 +95,14 @@ export function SceneBand({ scene, tint, eyebrow, title, lead, points = [], meta
 
   return (
     <section
-      className="relative overflow-hidden bg-nn-950 px-6 py-24 text-nn-50 md:py-32 lg:pl-8 lg:pr-5 lg:py-40"
+      /* The GROUND is full-bleed — the canvas and the gradient below are
+         inset-0 and always will be. The CONTENT is not: it sits in the same
+         max-w-7xl frame as every other section, so a product page built out of
+         these bands lines up with the rest of the site instead of running to
+         both edges. The gutter is the site gutter; the old asymmetric
+         lg:pl-8 lg:pr-5 existed to push the screenshot toward the right edge,
+         which is what made the misalignment read as deliberate. */
+      className="relative overflow-hidden bg-nn-950 px-6 py-16 text-nn-50 md:py-20 lg:px-8 lg:py-24"
       style={{ '--tint': tint }}
     >
       {/* Height is capped, not `inset-0`.
@@ -104,9 +111,18 @@ export function SceneBand({ scene, tint, eyebrow, title, lead, points = [], meta
           the page stutter on a scaled display, and would have been worse on a
           phone. On a desktop band the cap is above the natural height, so
           nothing changes there. */}
+      {/* The canvas is held to the SAME max-w-7xl frame as the copy below it.
+          It used to span the band full-bleed, which put every scene's
+          bottom-right readout — "AC-PC DISTANCE 19.8 mm" and the rest — out in
+          the page margin, past the right edge of the screenshot it annotates
+          and level with nothing. It read as a stray number.
+
+          Inside the frame it lands under the screenshot's right edge, which is
+          the thing it belongs to. The scenes are unchanged; only where they
+          are allowed to draw is. */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-x-0 top-1/2 h-full max-h-[880px] w-full -translate-y-1/2"
+        className="nn-frame absolute inset-x-0 top-1/2 mx-auto h-full max-h-[880px] w-full -translate-y-1/2"
         aria-hidden="true"
       />
 
@@ -126,7 +142,7 @@ export function SceneBand({ scene, tint, eyebrow, title, lead, points = [], meta
       {/* text | animation | image. The middle column is deliberately empty —
           it is the window the scene shows through, and it is sized as
           generously as the copy and the screenshot will allow. */}
-      <div className="relative mx-auto grid max-w-[96rem] items-center gap-12 lg:grid-cols-[minmax(0,28%)_minmax(190px,1fr)_minmax(0,48%)] lg:gap-10">
+      <div className="nn-frame relative mx-auto grid items-center gap-12 lg:grid-cols-[minmax(0,30%)_minmax(150px,1fr)_minmax(0,48%)] lg:gap-10">
         <div className="max-w-[min(52ch,100%)]">
           <Eyebrow style={{ color: 'var(--tint)' }}>{eyebrow}</Eyebrow>
           <h2 className="mt-4 whitespace-pre-line text-d1 !tracking-[-0.04em]">{title}</h2>

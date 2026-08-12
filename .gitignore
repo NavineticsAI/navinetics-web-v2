@@ -76,3 +76,6 @@ tools/.d1/
 
 # Scratch profile for tools/check-routes.mjs.
 tools/.routes/
+tools/.mobile/
+tools/.shots/
+tools/.webkit/

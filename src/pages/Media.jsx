@@ -1,5 +1,6 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { X } from 'lucide-react';
+import { useDialog } from '../lib/dialog.js';
 import { usePageMeta } from '../lib/meta.js';
 import { mediaCategories, mediaItems } from '../data/media.js';
 import { cn } from '../lib/cn.js';
@@ -21,6 +22,11 @@ export default function Media() {
 
   const [category, setCategory] = useState('all');
   const [lightbox, setLightbox] = useState(null);
+
+  /* Stable, so useDialog's effect does not tear down and re-run — which would
+     re-move focus on every render while the lightbox is open. */
+  const close = useCallback(() => setLightbox(null), []);
+  const dialogRef = useDialog(Boolean(lightbox), close);
 
   const shown = useMemo(
     () => (category === 'all' ? mediaItems : mediaItems.filter((m) => m.category === category)),
@@ -82,18 +88,23 @@ export default function Media() {
       </Section>
 
       {lightbox && (
+        /* role="dialog" and aria-modal promise Escape, a focus move, a focus
+           trap and focus return. None of them were implemented — this markup
+           was here, the behaviour was not. useDialog supplies all four. */
         <div
+          ref={dialogRef}
           role="dialog"
           aria-modal="true"
           aria-label={lightbox.title}
+          tabIndex={-1}
           onClick={() => setLightbox(null)}
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-nn-950/80 p-6 backdrop-blur-md"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-nn-950/80 p-6 outline-none backdrop-blur-md"
         >
           <button
             type="button"
             aria-label="Close"
             onClick={() => setLightbox(null)}
-            className="absolute right-5 top-5 grid h-10 w-10 cursor-pointer place-items-center rounded-full bg-white/10 text-nn-50"
+            className="absolute right-5 top-5 grid h-11 w-11 cursor-pointer place-items-center rounded-full bg-white/10 text-nn-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sg-300"
           >
             <X size={18} />
           </button>

@@ -124,7 +124,7 @@ export default function Community() {
             <Button to="/contact" size="lg" arrow>
               Get in touch
             </Button>
-            <Button to="/company/careers" size="lg" variant="secondary">
+            <Button to="/resources/careers" size="lg" variant="secondary">
               Open roles
             </Button>
           </div>

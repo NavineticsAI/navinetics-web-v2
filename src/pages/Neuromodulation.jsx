@@ -153,7 +153,7 @@ function Citation({ chapter }) {
   const p = paperFor(chapter.doi);
   return (
     <div className="border-b border-hairline-soft bg-sunk px-6 py-4 lg:px-8">
-      <div className="mx-auto flex max-w-[96rem] flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+      <div className="nn-frame mx-auto flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
         <p className="text-[0.8125rem] leading-relaxed text-ink-2">
           <span className="font-data text-[0.625rem] uppercase tracking-[0.14em] text-ink-3">
             {'Paper · '}

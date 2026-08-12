@@ -2,8 +2,9 @@ import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getProduct } from '../data/products.js';
 import { bands } from '../data/d1.js';
+import { asset } from '../lib/asset.js';
 import * as D1_SCENES from '../lib/d1Scenes.js';
-import { Button, Reveal, Section } from '../ui/index.js';
+import { Button, Reveal, Section, SpecTable } from '../ui/index.js';
 import { D1Hero } from '../ui/D1Hero.jsx';
 import { ScienceBand } from '../ui/ScienceBand.jsx';
 
@@ -35,8 +36,8 @@ export default function D1() {
   usePageMeta({
     title: product.name,
     description:
-      'Arc-centred stereotactic targeting with a skull anchor key in place of a base ring — three '
-      + 'linear degrees of freedom, two angles of rotation.',
+      'The NaviNetics Frame System — arc-centred stereotactic targeting with a skull anchor key in '
+      + 'place of a base ring. FDA cleared. Three linear degrees of freedom, two angles of rotation.',
   });
 
   return (
@@ -47,15 +48,48 @@ export default function D1() {
         <ScienceBand key={b.scene} builders={BUILDERS} {...b} />
       ))}
 
+      {/* ── specification ──────────────────────────────────────────────────
+          The specs existed in data/products.js and rendered on no live route:
+          the only component that draws them, SpecTable, is used by Product.jsx,
+          and Product.jsx is unreachable because all three product slugs are
+          claimed by static routes declared above /products/:slug. So the
+          flagship surgical device had no specification table at all, which is
+          the first thing a purchasing committee looks for. */}
+      <Section wide>
+        <Reveal>
+          <div className="flex flex-col gap-3.5">
+            <span className="eyebrow text-action">Specification</span>
+            <h2 className="text-d2">What it is, in figures.</h2>
+            {/* Deliberately no paragraph explaining which figures are absent
+                and why — that is a note to ourselves, not something a surgeon
+                asked. Dimensions, weights, materials and travel ranges are
+                still outstanding from NaviNetics; the line below gives a
+                reader who needs them somewhere to go instead. */}
+            <p className="max-w-prose text-sm leading-relaxed text-ink-2">
+              For full dimensional, materials and compatibility documentation,{' '}
+              <Link to="/contact?reason=d1" className="text-action underline-offset-4 hover:underline">
+                ask us
+              </Link>
+              .
+            </p>
+          </div>
+        </Reveal>
+        <Reveal className="mt-9">
+          <SpecTable rows={product.specs} caption={`${product.name} specification`} />
+        </Reveal>
+      </Section>
+
       {/* ── what comes in the case ─────────────────────────────────────────── */}
       <Section wide band>
         <Reveal>
           <div className="flex flex-col gap-3.5">
             <span className="eyebrow text-action">The system</span>
             <h2 className="text-d2">What the frame comes with.</h2>
+            {/* Was: "The components named on the product record, as it names
+                them. Nothing is claimed about any of them beyond that." */}
             <p className="max-w-prose text-sm leading-relaxed text-ink-2">
-              The components named on the product record, as it names them. Nothing is claimed
-              about any of them beyond that.
+              Everything supplied with the system, including both sterilisation trays and the
+              accuracy verification fixture.
             </p>
           </div>
         </Reveal>
@@ -77,7 +111,7 @@ export default function D1() {
             <figure className="m-0">
               <div className="overflow-hidden rounded-xl border border-hairline bg-white shadow-e3">
                 <img
-                  src="/DSC05397-1024x695.jpg"
+                  src={asset('/DSC05397-1024x695.jpg')}
                   alt="The NaviNetics stereotactic frame assembly."
                   width={1024}
                   height={695}
@@ -102,14 +136,27 @@ export default function D1() {
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             {product.intro}
           </p>
+          {/* The status itself is in the hero, where a clinical reader needs
+              it. This is the company's own sentence, kept at the close for
+              anyone who read the whole page. */}
+          {product.regulatory?.statement && (
+            <p className="max-w-prose text-sm leading-relaxed text-ink-2">
+              {product.regulatory.statement}
+            </p>
+          )}
+
           <div className="mt-2 flex flex-wrap justify-center gap-3">
-            <Button to="/contact" size="lg" arrow>
-              Ask about the D1
+            {/* A quote route, which navinetics.com already has as a "Quote
+                Request" block and this site had dropped. The reason is passed
+                so the form arrives already set to the right enquiry. */}
+            <Button to="/contact?reason=d1" size="lg" arrow>
+              Request a quote
             </Button>
             <Button to="/technology/stereotactic-devices" size="lg" variant="secondary">
               The technology behind it
             </Button>
           </div>
+
           <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
             The frame is shown in{' '}
             <Link to="/resources/media" className="text-action underline-offset-4 hover:underline">

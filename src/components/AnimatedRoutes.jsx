@@ -3,11 +3,8 @@ import { Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 import Home from '../pages/Home.jsx';
-import Product from '../pages/Product.jsx';
-import Technology from '../pages/Technology.jsx';
 import WhoWeAre from '../pages/WhoWeAre.jsx';
 import Founders from '../pages/Founders.jsx';
-import Partners from '../pages/Partners.jsx';
 import Community from '../pages/Community.jsx';
 import Media from '../pages/Media.jsx';
 import Publications from '../pages/Publications.jsx';
@@ -41,6 +38,17 @@ const SurgicalTables = lazy(() => import('../pages/SurgicalTables.jsx'));
    asset on the site by some way, and the strongest argument for splitting it
    off its own route. Its fallback is the instrument bay, like MAVEN's. */
 const D1 = lazy(() => import('../pages/D1.jsx'));
+/* Partners pulls PartnerGlobe, which pulls data/worldDots.js — 4,846 coastline
+   dots, decoded at module scope. Eagerly imported it sat in the entry chunk and
+   was parsed by every visitor to every page, to draw a globe on one of them.
+   Its fallback is the page ground; the hero above it is plain markup. */
+const Partners = lazy(() => import('../pages/Partners.jsx'));
+/* The two catalogue templates. Every product slug that exists today is claimed
+   by a dedicated page above, so Product is currently reached by nothing at all;
+   Technology serves one slug. Neither belongs in the chunk every visitor
+   downloads, and both carry SpecTable, ComparisonTable and ComingSoon. */
+const Product = lazy(() => import('../pages/Product.jsx'));
+const Technology = lazy(() => import('../pages/Technology.jsx'));
 
 const routes = [
   { path: '/', element: <Home /> },
@@ -48,7 +56,14 @@ const routes = [
   // Company
   { path: '/company/who-we-are', element: <WhoWeAre /> },
   { path: '/company/our-founders', element: <Founders /> },
-  { path: '/company/partners', element: <Partners /> },
+  {
+    path: '/company/partners',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+        <Partners />
+      </Suspense>
+    ),
+  },
   { path: '/company/community', element: <Community /> },
 
   // Products and Technology are each one data-driven route: adding a record to
@@ -87,7 +102,14 @@ const routes = [
       </Suspense>
     ),
   },
-  { path: '/products/:slug', element: <Product /> },
+  {
+    path: '/products/:slug',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+        <Product />
+      </Suspense>
+    ),
+  },
 
   // NaviNetics AI has its own page rather than the Technology template: its
   // hero is the software itself. Declared before the dynamic route — React
@@ -112,7 +134,14 @@ const routes = [
       </Suspense>
     ),
   },
-  { path: '/technology/:slug', element: <Technology /> },
+  {
+    path: '/technology/:slug',
+    element: (
+      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+        <Technology />
+      </Suspense>
+    ),
+  },
 
   // Resources
   { path: '/resources/media', element: <Media /> },

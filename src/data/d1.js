@@ -50,6 +50,7 @@ import headArt from '../assets/d1/head.webp';
    page uses; there is no second copy. */
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
+import { asset } from '../lib/asset.js';
 
 
 /** The one render: traced at 1700 × 2430 and encoded down to this. */
@@ -152,7 +153,7 @@ export const bands = [
     ],
     meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],
     figure: {
-      src: '/microdrive-image-1024x797.png',
+      src: asset('/microdrive-image-1024x797.png'),
       w: 1024, h: 797,
       alt: 'The NaviNetics mechanical microdrive.',
       caption: 'The mechanical microdrive',

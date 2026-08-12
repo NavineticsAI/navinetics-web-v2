@@ -42,7 +42,11 @@ export const nav = [
       title: t.name,
       subtitle: t.summary,
       path: t.path,
-      image: t.hero,
+      /* A drawn mark rather than a picture. Reading `hero` here made this
+         panel a copy of the Products panel — the D1 photograph appeared in
+         both — and photography does not survive the slot size anyway. See the
+         note in data/technology.js. */
+      mark: t.mark,
       note: t.status === 'in-development' ? 'In development' : null,
     })),
   },
@@ -70,4 +74,8 @@ export const redirects = [
   ['/what-we-do/neuromodulation', '/products/maven-neuromodulation'],
   ['/careers', '/resources/careers'],
   ['/investment-opportunities', '/contact'],
+  // Shipped as live CTAs on Who We Are, Community and the About stat tiles
+  // before anyone noticed neither path was ever a route.
+  ['/company/careers', '/resources/careers'],
+  ['/products', '/products/d1-stereotactic-frame'],
 ];

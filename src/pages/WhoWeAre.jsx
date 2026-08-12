@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { numbers, principles, timeline } from '../data/company.js';
 import { isPlaceholder, products } from '../data/products.js';
+import { asset } from '../lib/asset.js';
 import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
 import { Timeline } from '../ui/Timeline.jsx';
 
@@ -17,13 +18,13 @@ const SHOW_TIMELINE = false;
 const FOUNDERS = [
   { name: 'Kendall H. Lee', suffix: 'M.D., Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Neurosurgeon at Mayo Clinic. Deep brain stimulation for Parkinson’s, tremor, depression, OCD and epilepsy.',
-    image: '/kendall-lee-150-500x400-1.jpg' },
+    image: asset('/kendall-lee-150-500x400-1.jpg') },
   { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Thirty years in technology development. Patents in neurosurgery, diamond, semiconductor and optical technology.',
-    image: '/kevin-bennet-150-500x400-1.jpg' },
+    image: asset('/kevin-bennet-150-500x400-1.jpg') },
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
-    image: '/stephan-goerss-150.jpg' },
+    image: asset('/stephan-goerss-150.jpg') },
 ];
 
 /**
@@ -40,14 +41,21 @@ export default function WhoWeAre() {
     title: 'About NaviNetics',
     description:
       'NaviNetics makes medical devices that change lives, by listening to patients and physicians '
-      + 'and translating those conversations into safe, effective devices. Out of the Neural '
-      + 'Engineering Laboratories at Mayo Clinic.',
+      + 'and translating those conversations into safe, effective and high-quality device '
+      + 'offerings. Out of the Neural Engineering Laboratories at Mayo Clinic.',
   });
 
   const shipping = products.filter((p) => !isPlaceholder(p));
 
   return (
     <>
+      {/* "Safe, effective and high-quality" is NaviNetics' own established
+          wording — it is on navinetics.com and has been since 2021. It was
+          briefly removed here on the reasoning that "safe and effective" is
+          FDA's phrase for a device it has authorised. NaviNetics reviewed that
+          and kept the wording, which is their call to make: it is their claim,
+          on their products, and the D1 is in fact cleared. Restored verbatim so
+          both sites say the same thing. */}
       <Hero
         eyebrow="Company — Who we are"
         title="Devices that change lives."
@@ -184,7 +192,7 @@ export default function WhoWeAre() {
             <Button to="/company/community" size="lg" arrow>
               Where we are
             </Button>
-            <Button to="/company/careers" size="lg" variant="secondary">
+            <Button to="/resources/careers" size="lg" variant="secondary">
               Work with us
             </Button>
           </div>

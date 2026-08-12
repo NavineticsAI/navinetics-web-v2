@@ -69,26 +69,24 @@ export const topics = [
         + 'head. The cost is the extension — a second connection, tunnelled the length of the neck, which '
         + 'is one of the places a system can fail mechanically.',
     },
+    /* Two BRIEFS were removed from here, for the same reason the three under
+       `chemistry` went (see the note further down this file): a brief renders
+       as a dashed box printing a photo-shoot instruction — "Studio shoot,
+       unbranded / The three implanted parts laid out on a neutral ground…" and
+       "Clinical photography, consented / A clinician adjusting settings…" — to
+       a visitor who came to read about deep brain stimulation. It is a
+       commissioning note to ourselves, published.
+
+       The shoots are still wanted. They are recorded in
+       docs/shubham/04-open-items.md, which is where a production task belongs;
+       when the photography exists, add it back here as `src` and it fills the
+       slot with no other change. */
     shots: [
-      {
-        title: 'Hardware, at scale',
-        brief:
-          'The three implanted parts laid out on a neutral ground — lead, extension, generator — with a '
-          + 'scale reference. Shows how small the lead is against the generator.',
-        source: 'Studio shoot, unbranded',
-      },
       {
         title: 'Lead in place',
         src: lead,
         caption:
           'Two leads at their targets, with the frame’s skull anchor above. Volume-rendered CT.',
-      },
-      {
-        title: 'Programming',
-        brief:
-          'A clinician adjusting settings with the patient present. The human half of the therapy, and '
-          + 'the part that shows it continues after surgery.',
-        source: 'Clinical photography, consented',
       },
     ],
   },
