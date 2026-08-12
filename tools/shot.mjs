@@ -12,11 +12,12 @@ import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { dir } from './lib/paths.mjs';
 
 const [path = '/', width = 1440, height = 900, scroll = 0, name = 'shot',
   base = 'http://localhost:5173'] = process.argv.slice(2);
 
-const DIR = new URL('./.shots/', import.meta.url).pathname.replace(/^\//, '');
+const DIR = dir('./.shots/', import.meta.url);
 const PORT = 9544;
 const CHROME = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',

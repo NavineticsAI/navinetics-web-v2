@@ -10,8 +10,9 @@
  */
 import { spawn } from 'node:child_process';
 import { existsSync, statSync, writeFileSync } from 'node:fs';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = ROOT + 'src/assets/education/';
 const NAME = '02.1.vid';        // the master, left untouched
 const OUT = '02.1.web';         // what the page imports
@@ -66,7 +67,7 @@ const ev = async (e) => {
 writeFileSync(ROOT + 'tools/.edu.html', '<body style="margin:0;background:#111"></body>');
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Page.navigate', { url: 'file:///' + ROOT + 'tools/.edu.html' });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.edu.html') });
 await sleep(1000);
 
 /* H.264 in MP4 if this Chrome can record it — every browser plays that, and
@@ -82,7 +83,7 @@ console.log(`encoding as ${mime}`);
 
 const meta = await ev(`(async () => {
   const v = document.createElement('video');
-  v.src = 'file:///${DIR}${NAME}.mp4';
+  v.src = ${JSON.stringify(fileUrl(DIR + NAME + '.mp4'))};
   v.muted = true; v.playsInline = true;
   document.body.appendChild(v);
   await new Promise((res, rej) => { v.onloadedmetadata = res; v.onerror = () => rej(new Error('decode failed')); });

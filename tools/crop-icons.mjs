@@ -24,8 +24,9 @@
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { webkit } from 'playwright';
+import { dir } from './lib/paths.mjs';
 
-const OUT = new URL('../src/assets/icons/', import.meta.url).pathname.replace(/^\//, '');
+const OUT = dir('../src/assets/icons/', import.meta.url);
 mkdirSync(OUT, { recursive: true });
 
 /* Crop boxes as fractions of the source, so they survive a re-export at a

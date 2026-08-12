@@ -62,8 +62,9 @@
  */
 import { spawn } from 'node:child_process';
 import { mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { dir } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const CAD = `${ROOT}src/assets/d1/`;
 const WORK = `${ROOT}tools/.d1/`;
 

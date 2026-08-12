@@ -25,8 +25,9 @@
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { inflateRawSync } from 'node:zlib';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = ROOT + 'src/assets/partners/';
 const DECK = DIR + 'info.pptx';
 const PORT = 9425;
@@ -136,7 +137,7 @@ const ev = async (e) => {
 };
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Page.navigate', { url: 'file:///' + ROOT + 'tools/.partners.html' });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.partners.html') });
 await sleep(1000);
 
 const png = (uri, path) => writeFileSync(path, Buffer.from(uri.split(',')[1], 'base64'));

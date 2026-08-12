@@ -10,10 +10,11 @@
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { webkit } from 'playwright';
+import { dir } from './lib/paths.mjs';
 
 const WHICH = process.argv[2] || 'Technology';
 const BASE = (process.argv[3] || 'http://localhost:4319') + '/navinetics-web-v2';
-const DIR = new URL('./.shots/', import.meta.url).pathname.replace(/^\//, '');
+const DIR = dir('./.shots/', import.meta.url);
 mkdirSync(DIR, { recursive: true });
 
 const browser = await webkit.launch();

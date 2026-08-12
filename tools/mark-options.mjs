@@ -11,8 +11,9 @@
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { webkit } from 'playwright';
+import { dir } from './lib/paths.mjs';
 
-const DIR = new URL('./.shots/', import.meta.url).pathname.replace(/^\//, '');
+const DIR = dir('./.shots/', import.meta.url);
 mkdirSync(DIR, { recursive: true });
 
 /* ── the candidates ────────────────────────────────────────────────────────

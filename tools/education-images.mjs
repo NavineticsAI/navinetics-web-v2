@@ -9,8 +9,9 @@
  */
 import { spawn } from 'node:child_process';
 import { existsSync, statSync, writeFileSync } from 'node:fs';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = ROOT + 'src/assets/education/';
 const PORT = 9412;
 const CHROME = [
@@ -58,14 +59,14 @@ const ev = async (e) => {
 
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Page.navigate', { url: 'file:///' + ROOT + 'tools/.edu.html' });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.edu.html') });
 await sleep(1200);
 
 let before = 0, after = 0;
 
 for (const n of USED) {
   const d = await ev(`(async () => {
-    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = 'file:///${DIR}${n}.png'; });
+    const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = ${JSON.stringify(fileUrl(DIR + n + '.png'))}; });
     const k = Math.min(1, ${MAX_W} / img.naturalWidth);
     const cv = document.createElement('canvas');
     cv.width = Math.round(img.naturalWidth * k);

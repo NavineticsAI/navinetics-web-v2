@@ -27,8 +27,9 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { Worker } from 'node:worker_threads';
 import { availableParallelism } from 'node:os';
 import { deflateSync } from 'node:zlib';
+import { dir } from '../lib/paths.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../../', import.meta.url);
 const WORK = `${ROOT}tools/.d1/`;
 
 const W = +(process.argv[2] || 1440);

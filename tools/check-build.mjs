@@ -14,6 +14,7 @@
  */
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { dir } from './lib/paths.mjs';
 
 const DIST = new URL('../dist/', import.meta.url);
 const dist = (p) => new URL(p, DIST);
@@ -54,7 +55,7 @@ check('every asset in index.html carries the base path', unprefixed.length === 0
 const publicFiles = readdirSync(new URL('../public/', import.meta.url), { withFileTypes: true })
   .filter((e) => e.isFile() && !/^(favicon\.svg|icons\.svg|CNAME|robots\.txt|sitemap\.xml)$/.test(e.name))
   .map((e) => e.name);
-const jsDir = join(new URL('../dist/assets/', import.meta.url).pathname.replace(/^\//, ''), '');
+const jsDir = join(dir('../dist/assets/', import.meta.url), '');
 const bundles = readdirSync(jsDir).filter((f) => f.endsWith('.js') || f.endsWith('.css'));
 const leaked = [];
 for (const file of bundles) {

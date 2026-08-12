@@ -13,8 +13,9 @@
  */
 import { readdirSync, writeFileSync } from 'node:fs';
 import { parse, args, ref, str, nums, placement, mul, invert as inv4, apply, IDENT } from './step.mjs';
+import { dir } from '../lib/paths.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../../', import.meta.url);
 const CAD = ROOT + 'src/assets/d1/';
 const WORK = ROOT + 'tools/.d1/';
 
