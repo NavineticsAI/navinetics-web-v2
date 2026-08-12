@@ -10,8 +10,9 @@
  */
 import { spawn } from 'node:child_process';
 import { writeFileSync, readdirSync, statSync } from 'node:fs';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = ROOT + 'src/assets/software/';
 /* These are screenshots of a UI — fine text and flat panels — so they ring
    badly at the quality that suits a photograph. Held high, and wide enough to
@@ -26,7 +27,7 @@ if (!names.length) { console.log('nothing to do'); process.exit(0); }
 
 writeFileSync(ROOT + 'tools/.screens.html',
   '<body style="margin:0">'
-  + names.map((n) => `<img id="${n}" src="file:///${DIR}${n}.png">`).join('')
+  + names.map((n) => `<img id="${n}" src="${fileUrl(DIR + n + '.png')}">`).join('')
   + '</body>');
 
 spawn(CHROME, ['--headless=new', '--disable-gpu', '--use-gl=swiftshader', '--enable-unsafe-swiftshader',
@@ -55,7 +56,7 @@ const ev = async (e) => {
 
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Page.navigate', { url: 'file:///' + ROOT + 'tools/.screens.html' });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.screens.html') });
 await sleep(3500);
 
 let before = 0;

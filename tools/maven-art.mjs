@@ -31,8 +31,9 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync, statSync, rmSync } from 'node:fs';
 import { inflateRawSync } from 'node:zlib';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = ROOT + 'src/assets/maven/';
 const PORT = 9427;
 const CHROME = [
@@ -356,7 +357,7 @@ const ev = async (e) => {
 };
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Page.navigate', { url: 'file:///' + ROOT + 'tools/.maven.html' });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.maven.html') });
 await sleep(900);
 
 /* ── 2 · web copies ───────────────────────────────────────────────────────── */

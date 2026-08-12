@@ -3,8 +3,9 @@
    frame so the object cannot jump between them. */
 import { spawn } from 'node:child_process';
 import { existsSync, writeFileSync, readdirSync } from 'node:fs';
+import { dir, fileUrl } from '../lib/paths.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../../', import.meta.url);
 const DIR = ROOT + 'tools/.d1/';
 const OUTDIR = ROOT + 'src/assets/d1/turn/';
 const PORT = 9462;
@@ -42,7 +43,7 @@ const ev = async (e) => {
 };
 await send('Page.enable'); await send('Runtime.enable');
 writeFileSync(`${DIR}.webp.html`, '<body style="margin:0"></body>');
-await send('Page.navigate', { url: `file:///${DIR}.webp.html` });
+await send('Page.navigate', { url: fileUrl(DIR + '.webp.html') });
 await sleep(700);
 
 const list = JSON.stringify(files);
@@ -51,7 +52,7 @@ const box = await ev(`(async () => {
   let x0=1e9,y0=1e9,x1=-1,y1=-1;
   for (const f of ${list}) {
     const im = new Image();
-    im.src = 'file:///${DIR}turn/' + f;
+    im.src = ${JSON.stringify(fileUrl(DIR + 'turn/'))} + f;
     await im.decode();
     window.__imgs[f] = im;
     const c = document.createElement('canvas');

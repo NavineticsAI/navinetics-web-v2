@@ -19,8 +19,9 @@
  */
 import { spawn } from 'node:child_process';
 import { existsSync, writeFileSync, statSync } from 'node:fs';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = `${ROOT}src/assets/d1/`;
 const SRC = `${DIR}head.png`;
 const PORT = 9600 + (process.pid % 300);
@@ -68,12 +69,12 @@ const ev = async (e) => {
 };
 await send('Page.enable'); await send('Runtime.enable');
 writeFileSync(`${ROOT}tools/.d1/.photo.html`, '<body style="margin:0"></body>');
-await send('Page.navigate', { url: `file:///${ROOT}tools/.d1/.photo.html` });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.d1/.photo.html') });
 await sleep(700);
 
 const out = await ev(`(async () => {
   const im = new Image();
-  im.src = 'file:///${SRC}';
+  im.src = ${JSON.stringify(fileUrl(SRC))};
   await im.decode();
   const W = im.width, H = im.height;
   const c = document.createElement('canvas');

@@ -27,9 +27,10 @@
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { webkit, devices } from 'playwright';
+import { dir } from './lib/paths.mjs';
 
 const BASE = (process.argv[2] || 'http://localhost:4319') + '/navinetics-web-v2';
-const DIR = new URL('./.webkit/', import.meta.url).pathname.replace(/^\//, '');
+const DIR = dir('./.webkit/', import.meta.url);
 mkdirSync(DIR, { recursive: true });
 
 const ROUTES = [

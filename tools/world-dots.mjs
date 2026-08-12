@@ -20,8 +20,9 @@
  * committed rather than fetched at build time.
  */
 import { writeFileSync } from 'node:fs';
+import { dir } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const SRC = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson';
 
 /**

@@ -32,8 +32,9 @@
 import { spawn } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import { deflateSync, inflateSync } from 'node:zlib';
+import { dir, fileUrl } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = ROOT + 'src/assets/or-tables/';
 const BROCHURE = DIR + 'CBH_Brochure_2026yr.pdf';
 const PORT = 9429;
@@ -237,7 +238,7 @@ const ev = async (e) => {
 };
 await send('Page.enable');
 await send('Runtime.enable');
-await send('Page.navigate', { url: 'file:///' + ROOT + 'tools/.ortables.html' });
+await send('Page.navigate', { url: fileUrl(ROOT + 'tools/.ortables.html') });
 await sleep(900);
 
 console.log('');

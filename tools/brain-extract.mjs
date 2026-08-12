@@ -10,8 +10,9 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { inflateRawSync } from 'node:zlib';
+import { dir } from './lib/paths.mjs';
 
-const DIR = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const DIR = dir('../', import.meta.url);
 const MODEL = DIR + 'tmp/motion-init/brain3D.3mf';
 
 /**

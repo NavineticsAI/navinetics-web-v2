@@ -3,8 +3,9 @@
    out — unlike the turntable this replaces, nothing has to share a crop box. */
 import { spawn } from 'node:child_process';
 import { existsSync, writeFileSync, statSync } from 'node:fs';
+import { dir, fileUrl } from '../lib/paths.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../../', import.meta.url);
 const WORK = `${ROOT}tools/.d1/`;
 const OUT = `${ROOT}src/assets/d1/`;
 /* Port and profile are per-process, and Chrome is killed on the way out. Two
@@ -47,7 +48,7 @@ const ev = async (e) => {
 };
 await send('Page.enable'); await send('Runtime.enable');
 writeFileSync(`${WORK}.enc.html`, '<body style="margin:0"></body>');
-await send('Page.navigate', { url: `file:///${WORK}.enc.html` });
+await send('Page.navigate', { url: fileUrl(WORK + '.enc.html') });
 await sleep(700);
 
 /* 'union' measures every frame first and crops them all to one box. A
@@ -58,7 +59,7 @@ if (MODE === 'union') {
   shared = await ev(`(async () => {
     let x0 = 1e9, y0 = 1e9, x1 = -1, y1 = -1, W = 0, H = 0;
     for (const n of ${JSON.stringify(NAMES)}) {
-      const im = new Image(); im.src = 'file:///${WORK}' + n + '.png'; await im.decode();
+      const im = new Image(); im.src = ${JSON.stringify(WORK)} + n; await im.decode();
       W = im.width; H = im.height;
       const c = document.createElement('canvas');
       c.width = W; c.height = H;
@@ -82,7 +83,7 @@ for (const name of NAMES) {
   const src = `${WORK}${name}.png`;
   if (!existsSync(src)) { console.log(`  ${name}.png missing — skipped`); continue; }
   const out = await ev(`(async () => {
-    const im = new Image(); im.src = 'file:///${WORK}${name}.png'; await im.decode();
+    const im = new Image(); im.src = ${JSON.stringify(fileUrl(WORK + name + '.png'))}; await im.decode();
     const c = document.createElement('canvas');
     c.width = im.width; c.height = im.height;
     const x = c.getContext('2d'); x.drawImage(im, 0, 0);

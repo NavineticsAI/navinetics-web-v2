@@ -9,8 +9,9 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
+import { dir } from '../lib/paths.mjs';
 
-const ROOT = new URL('../../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../../', import.meta.url);
 const DIR = ROOT + 'tools/.d1/';
 const SS = 2;                                  // supersample factor
 const OUT = +(process.argv[2] || 1000);        // output edge, px

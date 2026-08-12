@@ -26,8 +26,9 @@ import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { dir } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const DIR = `${ROOT}tools/.mobile/`;
 const PORT = 9542;
 const BASE = (process.argv[2] || 'http://localhost:4319') + '/navinetics-web-v2';

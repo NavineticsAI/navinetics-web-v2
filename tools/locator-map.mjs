@@ -15,8 +15,9 @@
  * Only this tool needs the network. The output is committed.
  */
 import { writeFileSync } from 'node:fs';
+import { dir } from './lib/paths.mjs';
 
-const ROOT = new URL('../', import.meta.url).pathname.replace(/^\//, '');
+const ROOT = dir('../', import.meta.url);
 const SRC = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_1_states_provinces.geojson';
 
 /** Minnesota is the subject; the rest are there so it is not a blob in space. */
