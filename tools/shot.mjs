@@ -61,4 +61,6 @@ const data = shot.result?.result?.data ?? shot.result?.data;
 if (!data) { console.error('no image returned'); process.exit(1); }
 writeFileSync(`${DIR}${name}.webp`, Buffer.from(data, 'base64'));
 console.log(`tools/.shots/${name}.webp  ${width}x${height}  ${path}  scroll=${scroll}`);
+// Shut Chrome down — leaked instances pile up and skew every later run.
+await send('Browser.close').catch(() => {});
 process.exit(0);

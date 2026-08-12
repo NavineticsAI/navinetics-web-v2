@@ -226,4 +226,6 @@ for (const dev of DEVICES) {
 
 console.log(`\n${bad === 0 ? 'all routes clean on mobile' : `${bad} route/device combination(s) with problems`}`);
 console.log(`screenshots in tools/.mobile/`);
+// Shut Chrome down — leaked instances pile up and skew every later run.
+await send('Browser.close').catch(() => {});
 process.exit(bad === 0 ? 0 : 1);

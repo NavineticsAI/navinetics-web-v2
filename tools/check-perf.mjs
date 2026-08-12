@@ -83,9 +83,16 @@ const OBSERVERS = `
   }).observe({ type: 'layout-shift', buffered: true });
 `;
 
-async function measure(path, label) {
+/* Installed ONCE. Called per route it stacks: by the sixth page there were six
+   copies of the script, six PerformanceObservers, and every long task counted
+   six times — which reported 13,314ms of blocking inside a 9,000ms window, a
+   number that is impossible on its face and should have been caught the moment
+   it was read. If a measurement exceeds its own wall clock, the instrument is
+   wrong, not the subject. */
+await send('Page.addScriptToEvaluateOnNewDocument', { source: OBSERVERS });
+
+async function measure(path, label, quiet = false) {
   await send('Network.clearBrowserCache');
-  await send('Page.addScriptToEvaluateOnNewDocument', { source: OBSERVERS });
   await send('Emulation.setCPUThrottlingRate', { rate: CPU });
   await send('Network.emulateNetworkConditions', {
     offline: false, latency: 150, downloadThroughput: 1_600_000 / 8, uploadThroughput: 750_000 / 8,
@@ -111,21 +118,85 @@ async function measure(path, label) {
     };
   })()`);
 
-  const slow = m.lcp > 4000 || m.tbt > 600;
-  console.log(`${slow ? 'SLOW' : ' ok '} ${label.padEnd(34)}`
-    + `FCP ${String(m.fcp).padStart(5)}  LCP ${String(m.lcp).padStart(5)}  `
-    + `TBT ${String(m.tbt).padStart(5)}  longtasks ${String(m.long).padStart(3)} (worst ${m.worst})  `
-    + `CLS ${m.cls}  js ${m.js}kB`);
+  if (!quiet) {
+    const slow = m.lcp > 4000 || m.tbt > 600;
+    console.log(`${slow ? 'SLOW' : ' ok '} ${label.padEnd(34)}`
+      + `FCP ${String(m.fcp).padStart(5)}  LCP ${String(m.lcp).padStart(5)}  `
+      + `TBT ${String(m.tbt).padStart(5)}  longtasks ${String(m.long).padStart(3)} (worst ${m.worst})  `
+      + `CLS ${m.cls}  js ${m.js}kB`);
+  }
   return m;
 }
 
-console.log(`\n═══ PAGE LOAD — ${CPU}x CPU throttle, ~1.6Mbps/150ms ═══`);
+/**
+ * MEDIAN OF THREE, and this is not optional.
+ *
+ * A single run of this on a machine also hosting a dev server, a preview
+ * server and headless Chrome measured /company/partners at 828ms, 2615ms and
+ * 1654ms on IDENTICAL code. The run-to-run spread was three times larger than
+ * the change being measured, which makes any single-run before/after comparison
+ * worthless — worse than worthless, because it looks like evidence.
+ *
+ * Three runs, median reported, spread shown. If the spread is wide, the number
+ * is not trustworthy and the report should say so rather than quote the middle
+ * of it as fact.
+ */
+const REPEATS = 3;
+const median = (xs) => [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)];
+
+console.log(`\n═══ PAGE LOAD — ${CPU}x CPU throttle, ~1.6Mbps/150ms, median of ${REPEATS} ═══`);
 console.log('    LCP under 2500 is good, over 4000 is poor. TBT under 200 is good, over 600 is poor.\n');
-for (const r of ROUTES) await measure(r, r);
+
+for (const r of ROUTES) {
+  const runs = [];
+  for (let i = 0; i < REPEATS; i++) runs.push(await measure(r, r, true));
+  const tbt = runs.map((m) => m.tbt);
+  const lcp = runs.map((m) => m.lcp);
+  const spread = Math.max(...tbt) - Math.min(...tbt);
+  const mTbt = median(tbt);
+  const slow = median(lcp) > 4000 || mTbt > 600;
+  console.log(`${slow ? 'SLOW' : ' ok '} ${r.padEnd(34)}`
+    + `LCP ${String(median(lcp)).padStart(5)}  TBT ${String(mTbt).padStart(5)}`
+    + `  (runs ${tbt.join('/')}, spread ${spread})`
+    + `  longtasks ${median(runs.map((m) => m.long))}`);
+}
 
 /* ── the hamburger ─────────────────────────────────────────────────────────
    Loaded at phone width, then tapped, then timed until the panel is painted
    and has stopped moving. */
+/* ── steady state ──────────────────────────────────────────────────────────
+   The metric that actually describes "it feels laggy".
+
+   TBT measures the load. But the complaint here is about a page sitting still
+   with an animation running: the main thread never goes idle, so every tap
+   waits. That is a BUSY RATIO — what fraction of wall-clock the thread spends
+   inside long tasks once the page has settled — and unlike load-time TBT it is
+   stable run to run, because it is not competing with parsing and layout.
+
+   Under 5% is a page you can interact with. Over 30% is one that fights back. */
+console.log(`\n═══ STEADY STATE — 5s after settle, ${CPU}x CPU, median of ${REPEATS} ═══`);
+console.log('    busy% = share of wall-clock spent in long tasks with the page idle.\n');
+
+for (const path of ['/', '/company/partners', '/products/maven-neuromodulation', '/resources/education']) {
+  const runs = [];
+  for (let i = 0; i < REPEATS; i++) {
+    await send('Page.navigate', { url: BASE + path });
+    await sleep(8000);
+    const busy = await ev(`(async () => {
+      window.__perf.long.length = 0;
+      const t0 = performance.now();
+      await new Promise((r) => setTimeout(r, 5000));
+      const ms = window.__perf.long.reduce((a, d) => a + d, 0);
+      return { pct: +(100 * ms / (performance.now() - t0)).toFixed(1), n: window.__perf.long.length };
+    })()`);
+    runs.push(busy);
+  }
+  const pcts = runs.map((r) => r.pct);
+  const m = median(pcts);
+  console.log(`${m > 30 ? 'BUSY' : m > 5 ? 'warn' : ' ok '} ${path.padEnd(34)}`
+    + `busy ${String(m).padStart(5)}%   (runs ${pcts.join('/')})   long tasks/5s ${median(runs.map((r) => r.n))}`);
+}
+
 console.log(`\n═══ HAMBURGER — 375px, ${CPU}x CPU ═══\n`);
 await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 812, deviceScaleFactor: 2, mobile: true });
 await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
@@ -161,5 +232,13 @@ for (const path of ['/', '/technology/navinetics-ai']) {
   }
 }
 
+/* CLOSE THE BROWSER.
+   Every tool in here spawned a headless Chrome and none of them ever shut one
+   down. After a session's worth of runs there were nine of them alive, having
+   burned 257 CPU-seconds between them, competing for the same cores as the
+   thing being measured — which made each successive run look worse than the
+   last no matter what the code did. A performance harness that degrades the
+   machine it measures on is worse than no harness. */
 console.log('');
+await send('Browser.close').catch(() => {});
 process.exit(0);

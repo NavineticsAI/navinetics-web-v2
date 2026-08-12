@@ -42,7 +42,11 @@ export const nav = [
       title: t.name,
       subtitle: t.summary,
       path: t.path,
-      image: t.hero,
+      /* A drawn mark rather than a picture. Reading `hero` here made this
+         panel a copy of the Products panel — the D1 photograph appeared in
+         both — and photography does not survive the slot size anyway. See the
+         note in data/technology.js. */
+      mark: t.mark,
       note: t.status === 'in-development' ? 'In development' : null,
     })),
   },

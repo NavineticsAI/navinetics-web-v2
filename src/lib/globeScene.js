@@ -131,25 +131,50 @@ function stroke(ctx, pts) {
   ctx.stroke();
 }
 
+/**
+ * The graticule as unit vectors, built ONCE at module load.
+ *
+ * These lines are fixed on the sphere — only the viewer moves — so their unit
+ * vectors never change. Rebuilding them per frame called unit() for every point
+ * of every line: 5 parallels at 121 points plus 12 meridians at 60, about 1,300
+ * points and ~5,300 trigonometric calls, to redraw the same wireframe from the
+ * same numbers. Now each frame only rotates and projects what already exists.
+ *
+ * Honest note: this did NOT measurably move the page's busy ratio (93.1% before,
+ * 93.8% after — i.e. within noise), so it is not the bottleneck on this page.
+ * It is kept because it is strictly less work for an identical picture, and
+ * because knowing it is *not* the cause narrows where to look next.
+ */
+const GRATICULE = (() => {
+  const lines = [];
+  for (let lat = -60; lat <= 60; lat += 30) {
+    const line = [];
+    for (let lon = -180; lon <= 180; lon += 3) line.push(unit(lat, lon));
+    lines.push(line);
+  }
+  for (let lon = -180; lon < 180; lon += 30) {
+    const line = [];
+    for (let lat = -88; lat <= 88; lat += 3) line.push(unit(lat, lon));
+    lines.push(line);
+  }
+  return lines;
+})();
+
 function meridians(ctx, r, view, colour) {
   ctx.strokeStyle = colour;
   ctx.lineWidth = 1;
-  for (let lat = -60; lat <= 60; lat += 30) {
-    const pts = [];
-    for (let lon = -180; lon <= 180; lon += 3) {
-      const p = project(unit(lat, lon), r, view);
-      pts.push({ x: p.x, y: p.y, vis: p.z > 0 });
+  // One path for the whole wireframe rather than one per line.
+  ctx.beginPath();
+  for (const line of GRATICULE) {
+    let open = false;
+    for (const v of line) {
+      const p = project(v, r, view);
+      if (p.z <= 0) { open = false; continue; }
+      if (open) ctx.lineTo(p.x, p.y);
+      else { ctx.moveTo(p.x, p.y); open = true; }
     }
-    stroke(ctx, pts);
   }
-  for (let lon = -180; lon < 180; lon += 30) {
-    const pts = [];
-    for (let lat = -88; lat <= 88; lat += 3) {
-      const p = project(unit(lat, lon), r, view);
-      pts.push({ x: p.x, y: p.y, vis: p.z > 0 });
-    }
-    stroke(ctx, pts);
-  }
+  ctx.stroke();
 }
 
 /**
@@ -203,9 +228,30 @@ export function drawGlobe(ctx, view, dots, state, pal) {
     ctx.restore();
   }
 
-  // the land
+  /* ── the land ────────────────────────────────────────────────────────────
+     BATCHED BY COLOUR, and it matters more here than anywhere else on the
+     site. There are 4,846 dots. Drawn one at a time — a withAlpha() string
+     built per dot, assigned to fillStyle (which re-parses it), then
+     beginPath/arc/fill — that is roughly 24,000 canvas operations and 4,846
+     string allocations PER FRAME, about 290,000 a second at 60fps. Measured
+     on the built site under a 4x CPU throttle it produced 486 long tasks and
+     7,260ms of total blocking time on /company/partners: the main thread was
+     never free, so taps queued behind it and the whole page felt broken.
+
+     Alpha varies continuously with depth, so it is quantised to 1/16ths and
+     dots are grouped into one Path2D per (colour, alpha) bucket. Radius may
+     still vary freely within a bucket — only the fill colour has to be
+     constant. That turns ~4,846 fills into fewer than a hundred, and builds
+     each colour string once per bucket instead of once per dot.
+
+     moveTo before each arc is load-bearing: without it every arc is joined to
+     the previous subpath and the globe fills in as one solid blob.        */
   const base = Math.max(1.05, R / 150);
   const { ca, sa, cb, sb } = r;
+  const TAU = Math.PI * 2;
+  const STEPS = 16;
+  const buckets = new Map();
+
   for (let i = 0; i < dots.n; i++) {
     const x1 = dots.x[i] * ca + dots.z[i] * sa;
     const z1 = -dots.x[i] * sa + dots.z[i] * ca;
@@ -214,32 +260,45 @@ export function drawGlobe(ctx, view, dots, state, pal) {
     const px = X + R * x1;
     const py = Y - R * y2;
 
+    let key, colour, rad;
+
     if (z2 <= 0) {
       if (!state.ghost) continue;
-      ctx.fillStyle = pal.ghost;
-      ctx.beginPath();
-      ctx.arc(px, py, base * 0.62, 0, Math.PI * 2);
-      ctx.fill();
-      continue;
-    }
-    // dots near the limb are seen almost edge-on, so they fade rather than
-    // piling up into a hard ring
-    const edge = Math.min(1, z2 * 3.2);
-    let rad = base * (0.7 + 0.45 * z2);
-    let colour;
-    if (dots.t[i] < 0) {
-      colour = withAlpha(pal.land, 0.5 + 0.5 * edge);
+      key = 'g';
+      colour = pal.ghost;
+      rad = base * 0.62;
     } else {
-      const id = state.ids[dots.t[i]];
-      const glow = state.glow[id] ?? 0;
-      const a = (0.62 + 0.38 * glow) * edge;
-      colour = withAlpha(pal.terr[id], dots.s[i] === 1 ? a : a * 0.45);
-      rad *= 1 + 0.28 * glow;
+      // dots near the limb are seen almost edge-on, so they fade rather than
+      // piling up into a hard ring
+      const edge = Math.min(1, z2 * 3.2);
+      rad = base * (0.7 + 0.45 * z2);
+      const t = dots.t[i];
+      if (t < 0) {
+        const q = Math.round((0.5 + 0.5 * edge) * STEPS);
+        if (q <= 0) continue;
+        key = `l${q}`;
+        colour = withAlpha(pal.land, q / STEPS);
+      } else {
+        const id = state.ids[t];
+        const glow = state.glow[id] ?? 0;
+        const a = (0.62 + 0.38 * glow) * edge * (dots.s[i] === 1 ? 1 : 0.45);
+        const q = Math.round(a * STEPS);
+        if (q <= 0) continue;
+        key = `t${t}_${q}`;
+        colour = withAlpha(pal.terr[id], q / STEPS);
+        rad *= 1 + 0.28 * glow;
+      }
     }
-    ctx.fillStyle = colour;
-    ctx.beginPath();
-    ctx.arc(px, py, rad, 0, Math.PI * 2);
-    ctx.fill();
+
+    let b = buckets.get(key);
+    if (!b) { b = { colour, path: new Path2D() }; buckets.set(key, b); }
+    b.path.moveTo(px + rad, py);
+    b.path.arc(px, py, rad, 0, TAU);
+  }
+
+  for (const b of buckets.values()) {
+    ctx.fillStyle = b.colour;
+    ctx.fill(b.path);
   }
 
   ctx.beginPath();

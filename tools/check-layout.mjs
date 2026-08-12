@@ -190,4 +190,6 @@ if (padSet.size > 3) {
 }
 
 console.log('');
+// Shut Chrome down — leaked instances pile up and skew every later run.
+await send('Browser.close').catch(() => {});
 process.exit(0);

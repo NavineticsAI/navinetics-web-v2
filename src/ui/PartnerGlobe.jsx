@@ -230,8 +230,29 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
       }
     };
 
+    /* ── when the loop is allowed to run ──────────────────────────────────
+       It used to run unconditionally, forever: while the globe was below the
+       fold, while the tab was in the background, and at whatever rate the
+       display offered. SceneBand and ScienceBand both gate on visibility;
+       this one never did, and it is the most expensive scene on the site.
+
+       Capped at 30fps as well. The globe drifts at 4°/s — at 30fps that is
+       0.13° a frame, which no eye resolves, and it halves the work. */
+    let onScreen = true;
+    const io = new IntersectionObserver(
+      ([e]) => { onScreen = e.isIntersecting; },
+      { rootMargin: '120px' },
+    );
+    io.observe(cv);
+
+    const MIN_DT = 1000 / 30;
+    let lastDraw = 0;
+
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
+      if (!onScreen || document.hidden) return;
+      if (now - lastDraw < MIN_DT) return;
+      lastDraw = now;
       const s = sc.current;
       /* Nothing to draw until the canvas has been measured. Without this, a
          zero-size or not-yet-laid-out box feeds NaN straight into
@@ -278,7 +299,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
     };
 
     raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
   }, [pal, territories, anchors, siteVecs, ids, reduced]);
 
   /* ── Drag ───────────────────────────────────────────────────────────────── */

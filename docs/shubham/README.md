@@ -18,6 +18,7 @@ Started 2026-08-11 against `main` at `e20b6ef`.
 | [06-copy-policy.md](06-copy-policy.md) | Internal reasoning stays in the code, never on the page |
 | [07-scene-accuracy.md](07-scene-accuracy.md) | Which animations are built from the science and which are texture; `makeAnchor` rebuild tried and reverted |
 | [08-existing-site.md](08-existing-site.md) | What navinetics.com already says — including the FDA clearance the rebuild dropped |
+| [09-performance.md](09-performance.md) | Measured performance, the two pages that peg the main thread, and how the measurements went wrong first |
 
 ## The one-paragraph summary
 

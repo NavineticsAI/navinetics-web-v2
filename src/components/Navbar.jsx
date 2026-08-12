@@ -8,6 +8,7 @@ import { nav } from '../data/nav.js';
 import { Button } from '../ui/Button.jsx';
 import { ProductPlate } from '../ui/Card.jsx';
 import { Logo } from '../ui/Logo.jsx';
+import { TechMark } from '../ui/TechMark.jsx';
 import { ThemeToggle } from '../ui/ThemeToggle.jsx';
 
 const MENU_W = 240;
@@ -256,12 +257,20 @@ export default function Navbar() {
                         to={it.path}
                         className="group/mega flex gap-3 rounded-md p-2.5 transition-colors duration-100 hover:bg-action-soft"
                       >
-                        <ProductPlate
-                          src={it.image}
-                          alt=""
-                          className="h-14 w-16 shrink-0 rounded-sm"
-                          imgClassName="!p-1.5"
-                        />
+                        {/* Products carry photography; Technology carries a
+                            drawn mark. Same slot, different kind of thing —
+                            which is the distinction the two panels exist to
+                            make. */}
+                        {it.mark ? (
+                          <TechMark name={it.mark} />
+                        ) : (
+                          <ProductPlate
+                            src={it.image}
+                            alt=""
+                            className="h-14 w-16 shrink-0 rounded-sm"
+                            imgClassName="!p-1.5"
+                          />
+                        )}
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
                             <span className="text-sm font-semibold leading-tight group-hover/mega:text-action">

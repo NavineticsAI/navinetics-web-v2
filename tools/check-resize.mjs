@@ -130,4 +130,6 @@ for (const route of ROUTES) {
 }
 
 console.log(`\n${failed === 0 ? 'survived every resize' : `${failed} step(s) with problems`}`);
+// Shut Chrome down — leaked instances pile up and skew every later run.
+await send('Browser.close').catch(() => {});
 process.exit(failed === 0 ? 0 : 1);
