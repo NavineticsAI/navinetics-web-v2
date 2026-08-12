@@ -1,5 +1,10 @@
 # Dev documentation — NaviNetics website
 
+> **Publication pack:** [INDEX_WEBSITE.md](INDEX_WEBSITE.md) · [PR_BODY.md](PR_BODY.md) ·
+> [tickets/](tickets/) — nine issue-ready tickets in the house format from
+> `navinetics-ai-suite/documentation/dev/shubham/TICKET_PUBLICATION_FLOW.md`.
+> The documents below are the supporting record those tickets draw on.
+
 Working notes kept as the site is repaired and unified. Written to be useful to
 whoever picks this up next, including future us: every entry says what was
 wrong, what changed, and how to tell if it regresses.
