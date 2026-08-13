@@ -1,46 +1,41 @@
 import { cn } from '../lib/cn.js';
+import logo from '../assets/logo.png';
+import logoReversed from '../assets/logo-reversed.png';
 
 /**
  * The NaviNetics lockup.
  *
- * Not an `<img>`. The same file the site has always shipped is used as a
- * mask, which is what lets the artwork be filled with one flat brand colour
- * and lit from underneath without a single shape being redrawn — the
- * letterforms, the weights and the spacing are the file's own.
+ * The artwork itself, drawn as an image — the same file navinetics.com serves,
+ * byte for byte.
  *
- * The mark is two ribbon strokes, and a light runs each of them in turn every
- * eight seconds; the word answers with a pass of its own and a slow hue
- * drift. All of it is styling — see `.nn-logo` in index.css — so this
- * component is only the boxes those rules need.
+ * It used to be a CSS mask: this PNG supplied the silhouette, and a single flat
+ * `--logo-ink` was poured through it, lit by a travelling highlight and drifted
+ * in hue. That treatment could recolour itself per theme, but a mask reads only
+ * the alpha channel — so it discarded the gradient across the ribbon, the fold
+ * shading, and the fact that the mark and the wordmark are two different blues
+ * (#196184 and #164f6a). Every placement rendered one flat colour that matched
+ * neither, and the light-mode footer did not even match the light-mode navbar.
+ * An image cannot get the colour wrong, because it is the colour.
  *
- * @param {number} height  rendered height in px; everything else scales from it
+ * The trade is that an image cannot recolour itself for a dark ground, which is
+ * what `reversed` is for. src/assets/logo-reversed.png is derived from the same
+ * master — lightness remapped onto a light band, hues held — so the gradient and
+ * the folds survive. It is not a white silhouette.
+ *
+ * @param {number}  height    rendered height in px; width follows the artwork
+ * @param {boolean} reversed  use the light lockup, for dark grounds
  */
-export function Logo({ height = 28, className }) {
+export function Logo({ height = 28, className, reversed = false }) {
   return (
-    <span
-      role="img"
-      aria-label="NaviNetics"
-      className={cn('nn-logo', className)}
-      style={{ '--h': height }}
-    >
-      <span className="nn-logo-stage">
-        <span className="nn-logo-piece nn-logo-mark">
-          <span className="nn-logo-lay">
-            <i className="nn-logo-fx nn-logo-run nn-logo-run-1" />
-          </span>
-          <span className="nn-logo-lay">
-            <i className="nn-logo-fx nn-logo-run nn-logo-run-2" />
-          </span>
-        </span>
-        <span className="nn-logo-piece nn-logo-word">
-          <span className="nn-logo-lay">
-            <i className="nn-logo-fx nn-logo-wave" />
-          </span>
-          <span className="nn-logo-lay nn-logo-lay-hue">
-            <i className="nn-logo-fx nn-logo-hue" />
-          </span>
-        </span>
-      </span>
-    </span>
+    <img
+      src={reversed ? logoReversed : logo}
+      alt="NaviNetics"
+      /* Intrinsic size of the artwork. Both are 375×74; giving the browser the
+         ratio up front means the header does not reflow as the logo loads. */
+      width={375}
+      height={74}
+      className={cn('block w-auto', className)}
+      style={{ height }}
+    />
   );
 }
