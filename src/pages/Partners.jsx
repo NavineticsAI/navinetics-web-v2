@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePageMeta } from '../lib/meta.js';
-import { territories } from '../data/partners.js';
-import { Card, Reveal, Section, TickLine } from '../ui/index.js';
-import { Mark, PartnerGlobe } from '../ui/PartnerGlobe.jsx';
+import { collaborators, territories } from '../data/partners.js';
+import { Card, Reveal, Section, SectionHead, TickLine } from '../ui/index.js';
+import { Mark, PartnerGlobe, leadOrg } from '../ui/PartnerGlobe.jsx';
 
 /**
  * Partners.
@@ -50,10 +50,10 @@ export default function Partners() {
         <div className="nn-frame mx-auto">
           <TickLine className="max-w-[120px]" />
           <span className="eyebrow mt-3.5 block text-action">Company — Partners</span>
+          {/* No lead paragraph. It read "The organisations we work with, and
+              the territories they cover", which is what the globe and the cards
+              directly beneath it already show. */}
           <h1 className="mt-3.5 text-[clamp(2.35rem,5vw,3.9rem)]">Our global presence.</h1>
-          <p className="mt-4 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-ink-2">
-            The organisations we work with, and the territories they cover.
-          </p>
         </div>
       </section>
 
@@ -94,13 +94,33 @@ export default function Partners() {
                   ${selected === t.id ? '!border-action' : ''}`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <Mark org={t.orgs[0]} h={20} />
-                  <span className="eyebrow text-ink-3">{t.orgs[0].role}</span>
+                  <Mark org={leadOrg(t)} h={20} />
+                  <span className="eyebrow text-ink-3">{t.orgs[0]?.role ?? 'Market'}</span>
                 </div>
                 <h3 className="text-lg tracking-[-0.03em]">{t.label}</h3>
                 <p className="text-sm leading-relaxed text-ink-2">{t.summary}</p>
                 <Coverage cover={t.cover.slice(0, 3)} extra={t.cover.length - 3} className="mt-auto pt-1" />
               </Card>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* Research relationships, not distribution — hence a plain list rather
+          than more pins on the globe. Every name sits on the same plate at the
+          same height, which is what keeps them a consistent size whether they
+          are set in type or, later, carry real artwork. */}
+      <Section wide band>
+        <SectionHead eyebrow="Research" title="Scientific collaborators." />
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {collaborators.map((c, i) => (
+            <Reveal key={c.name} delay={Math.min(i, 7) * 0.04}>
+              <div className="flex h-full min-h-[5.25rem] items-center justify-center rounded-lg
+                border border-hairline-soft bg-surface p-5 text-center">
+                {c.logo
+                  ? <Mark org={c} h={22} />
+                  : <span className="text-sm leading-snug text-ink-2">{c.name}</span>}
+              </div>
             </Reveal>
           ))}
         </div>
@@ -170,6 +190,10 @@ function Panel({ territory, onClose }) {
           </div>
 
           <div className="flex flex-col gap-5 overflow-auto px-5 pb-6 pt-4">
+            {territory.orgs.length === 0 && territory.note && (
+              <p className="text-[0.8125rem] leading-relaxed text-ink-2">{territory.note}</p>
+            )}
+
             {territory.orgs.map((org, i) => (
               <div key={org.name} className="flex flex-col gap-2.5">
                 {i > 0 && <div className="-mt-2.5 mb-1 h-px bg-hairline-soft" />}

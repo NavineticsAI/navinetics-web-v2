@@ -371,7 +371,9 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           className="nn-pin nn-pin-site"
         >
           <i />
-          <span className="sr-only">{`${s[2]} — covered by ${t.orgs[0].name}`}</span>
+          <span className="sr-only">
+            {t.orgs[0] ? `${s[2]} — covered by ${t.orgs[0].name}` : s[2]}
+          </span>
         </button>
       )))}
 
@@ -384,11 +386,11 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           type="button"
           ref={(el) => { chips.current.set(t.id, el); }}
           onClick={() => pick(t.id)}
-          aria-label={`${t.label} — ${t.orgs[0].name}`}
+          aria-label={t.orgs[0] ? `${t.label} — ${t.orgs[0].name}` : t.label}
           className={`nn-chip hidden items-center gap-2 rounded-sm border bg-surface px-2.5 py-2
             shadow-e2 lg:flex ${selected === t.id ? 'border-action' : 'border-hairline'}`}
         >
-          <Mark org={t.orgs[0]} h={18} />
+          <Mark org={leadOrg(t)} h={18} />
           {t.orgs.length > 1 && (
             <span className="font-data text-[0.6875rem] tracking-[0.1em] text-ink-3">
               {`+${t.orgs.length - 1}`}
@@ -409,7 +411,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
             className={`flex flex-none items-center rounded-sm border bg-surface px-2 py-1.5 shadow-e1
               ${selected === t.id ? 'border-action' : 'border-hairline'}`}
           >
-            <Mark org={t.orgs[0]} h={15} />
+            <Mark org={leadOrg(t)} h={15} />
           </button>
         ))}
       </div>
@@ -424,18 +426,29 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
   );
 }
 
+/**
+ * The mark a territory leads with.
+ *
+ * A territory whose organisation has not been named yet — see `note` in
+ * data/partners.js — has no orgs at all, and every caller here used to index
+ * orgs[0] blindly. Falling back to the territory's own label puts its name on
+ * the plate in mono, which is the same treatment any organisation without
+ * artwork already gets, so nothing looks like a hole.
+ */
+export const leadOrg = (t) => t.orgs[0] ?? { name: t.label };
+
 /** A partner's mark on a white plate, or its name set in mono if it has none. */
 export function Mark({ org, h = 18 }) {
-  /* NaviNetics' own tile draws the real lockup rather than the flat PNG, so the
-     mark here is the same component the navbar and footer use. The plate is
-     white in both themes, so the ink is pinned light — see .nn-logo-on-light. */
+  /* NaviNetics' own tile draws the lockup through the same component the navbar
+     and footer use, so one file is the mark everywhere. The plate is white in
+     both themes, so it takes the master artwork rather than the reversed one. */
   if (org.self) {
     return (
       <span
         className="nn-mark flex items-center justify-center rounded-[5px] px-1.5"
         style={{ height: h + 8 }}
       >
-        <Logo height={h} className="nn-logo-on-light" />
+        <Logo height={h} />
       </span>
     );
   }
