@@ -34,7 +34,7 @@ import tableMotion from '../assets/or-tables/table-motion.webp';
  * deliberately NOT on the page.
  *
  * NOT HERE, deliberately:
- *   · Any radiolucency figure. Carbon fibre attenuates X-rays far less than
+ *   · Any radiolucency figure. Carbon fiber attenuates X-rays far less than
  *     steel or aluminium — that is physics and the page says it — but no
  *     aluminium-equivalent value, no attenuation percentage and no image-
  *     quality claim appears anywhere in either PDF, so none appears here.
@@ -178,7 +178,7 @@ export const lineup = [
     ],
   },
   {
-    group: 'Customised',
+    group: 'Customized',
     blurb: 'Tailored to a specific imaging system or clinical application.',
     items: [
       { name: 'CXR-70F_N', note: 'For L&C AI Mobile CT' },
@@ -201,7 +201,7 @@ export const lineup = [
  * what a buyer scanning six words actually needs.
  */
 export const strengths = [
-  'Radiolucent carbon-fibre construction',
+  'Radiolucent carbon-fiber construction',
   'Low mass for the span',
   'Wide motion range',
   'Reliable and durable',

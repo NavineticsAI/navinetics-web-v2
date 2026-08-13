@@ -38,7 +38,7 @@ export default function NaviNeticsAI() {
           "one target, two coordinate systems" comes from. */}
       <BrainHero
         eyebrow="Technology — Software"
-        title={'Stereotaxis, revolutionised.\nPrecision, made easier.'}
+        title={'Stereotaxis, revolutionized.\nPrecision, made easier.'}
         lead="A desktop workstation for stereotactic neurosurgical planning."
         facts={[
           // Together these are a complete stereotactic setting: three to
@@ -157,7 +157,7 @@ export default function NaviNeticsAI() {
         title="A glimpse of the workspace."
         lead="Not the application — a small demonstration of it, rebuilt to run in a browser on
           generated anatomy. It covers one thing: setting a trajectory against the geometry an
-          arc-centred frame imposes."
+          arc-centered frame imposes."
         note="Synthetic head — generated, not patient data"
         actions={[
           { label: 'Ask us about it', href: 'mailto:info@navinetics.com', arrow: true },
@@ -211,7 +211,7 @@ const SOFTWARE = [
     head: 'Portable by design',
     body: 'It runs on an ordinary Windows machine, with no cloud service and no upload — the '
       + 'study stays where it is. A GPU is used when one is present and never required, and the '
-      + 'result is the same either way. The localiser’s geometry is configuration rather than '
+      + 'result is the same either way. The localizer’s geometry is configuration rather than '
       + 'code, so a different frame is a change to its data rather than to its software.',
   },
 ];
@@ -234,7 +234,7 @@ function AboutThisDemo() {
         <h2 className="text-d2">The anatomy is synthetic.</h2>
         <p className="text-lead leading-[1.55] text-ink-2">
           The workspace is a real reconstruction running in your browser, driven by the same
-          arc-centred geometry the frame imposes. The anatomy is not.
+          arc-centered geometry the frame imposes. The anatomy is not.
         </p>
       </div>
 

@@ -5,9 +5,9 @@ import tableShot from '../assets/or-tables/table.webp';
 import { asset } from '../lib/asset.js';
 
 /**
- * The product catalogue.
+ * The product catalog.
  *
- * One record yields: a card in the catalogue grid, a detail page at
+ * One record yields: a card in the catalog grid, a detail page at
  * /products/:slug, an entry in the Products nav mega-panel, and a column in the
  * comparison grid. Adding a product means adding a record here — no new
  * components, no new routes.
@@ -17,7 +17,7 @@ import { asset } from '../lib/asset.js';
  * without duplicating each other.
  *
  * `status: 'in-development'` renders the ComingSoon treatment instead of the
- * full detail template, so an unfinished product can appear in the catalogue
+ * full detail template, so an unfinished product can appear in the catalog
  * without fabricating specifications for it.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -76,20 +76,29 @@ export const products = [
      * anywhere by the company, so nothing else is stated here.
      */
     regulatory: {
-      /* "FDA 510(k) cleared", not "FDA cleared · United States".
-         ─────────────────────────────────────────────────────────────────
-         The market tag was redundant: FDA already means the United States,
-         so it added a word without adding information. Naming the pathway
-         instead does add some — 510(k) clearance is a different thing from
-         PMA approval, and a clinical reader knows the difference.
-
-         `market` is kept in the shape, null for now. It earns its place the
-         moment there is a second market to distinguish from, at which point
-         the chip becomes one per market: "US · FDA 510(k) cleared",
-         "EU · CE marked".
-
-         Lowercase k in 510(k) is the standard form; the chip does not
-         uppercase-transform for that reason. */
+      /**
+       * WITHHELD FROM THE SITE ON NAVINETICS' INSTRUCTION, 2026-08-13.
+       *
+       * `published: false` is what hides it. The record is kept intact rather
+       * than deleted because this is the second time it has moved, and the
+       * history matters:
+       *
+       *   · The rebuild originally stated nothing. documentation/.../01-audit
+       *     logged that as a high-severity gap.
+       *   · PR #3 RESTORED it, on the reasoning that navinetics.com publishes
+       *     "an FDA cleared system" today and matching an existing public
+       *     statement is not inventing one. See PR-TICKET.md.
+       *   · NaviNetics has now asked for it off the site again.
+       *
+       * So the live company site and this site currently disagree, and that is
+       * a deliberate company decision rather than an oversight. Flipping
+       * `published` back to true restores the chip, the spec row and the meta
+       * description in one edit — nothing else has to change.
+       *
+       * The statement below is navinetics.com's own wording, kept verbatim so
+       * that restoring it does not mean rewriting it.
+       */
+      published: false,
       status: 'FDA 510(k) cleared',
       market: null,
       number: null,
@@ -101,7 +110,7 @@ export const products = [
     technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nRadically comfortable.',
     summary:
-      'Arc-centred targeting from a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
+      'Arc-centered targeting from a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
     intro:
       'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
     hero: d1Head,
@@ -109,7 +118,7 @@ export const products = [
     heroTone: 'bay',
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
-      { label: 'Localisers', value: 'MR · CT', unit: 'plus X-ray reticles' },
+      { label: 'Localizers', value: 'MR · CT', unit: 'plus X-ray reticles' },
       { label: 'Fixation', value: 'Anchor key', unit: 'percutaneous screws' },
     ],
     /** Scroll-pinned narrative. Capped at three steps by the template. */
@@ -138,13 +147,13 @@ export const products = [
       ],
     },
     specs: [
-      { k: 'Classification', v: 'Arc-centred' },
+      { k: 'Classification', v: 'Arc-centered' },
       { k: 'Linear degrees of freedom', v: '3 — X, Y, Z' },
       { k: 'Angular rotations', v: '2 — ring, arc' },
       { k: 'Patient fixation', v: 'Skull anchor key' },
-      { k: 'Imaging localisers', v: 'MR · CT · X-ray' },
+      { k: 'Imaging localizers', v: 'MR · CT · X-ray' },
       { k: 'Reusable', v: 'Yes' },
-      { k: 'Regulatory status', v: 'FDA 510(k) cleared' },
+      /* No regulatory row — withheld on instruction, see `regulatory` above. */
     ],
     /** Enumerated set the reader traverses completely — numbering is meaningful. */
     highlights: [
@@ -213,7 +222,7 @@ export const products = [
      */
     tagline: 'Radiolucent by design.',
     summary:
-      'Carbon fibre tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
+      'Carbon fiber tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
     /**
      * PLACEHOLDER — content pending from NaviNetics.
      * Deliberately no dimensions, load ratings, radiolucency figures or
@@ -223,12 +232,12 @@ export const products = [
     metrics: [
       { label: 'Models specified', value: '5', unit: 'one to six motions' },
       { label: 'Load capacity', value: '230', unit: 'kg, every model' },
-      { label: 'Table top', value: 'Carbon fibre', unit: 'always in the beam' },
+      { label: 'Table top', value: 'Carbon fiber', unit: 'always in the beam' },
     ],
     intro:
-      'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fibre construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
+      'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fiber construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
     hero: tableShot,
-    heroAlt: 'A carbon-fibre operating table',
+    heroAlt: 'A carbon-fiber operating table',
     heroTone: 'bay',
     /* Four of the five gaps were closed by the brochure — photography,
        dimensions, load ratings and the range itself. These two are still not
@@ -245,7 +254,7 @@ export const products = [
     slug: 'maven-neuromodulation',
     path: '/products/maven-neuromodulation',
     /* MAVEN, not "Maven" — see the note below on the product name. These three
-       fields are the ones the catalogue, the nav and the page heading read, and
+       fields are the ones the catalog, the nav and the page heading read, and
        they were the last place on the site still setting it in title case. */
     name: 'MAVEN Neuromodulation',
     shortName: 'MAVEN',
@@ -285,7 +294,7 @@ export const products = [
      * human recordings", which may contradict it outright.
      *
      * OPEN QUESTION FOR NAVINETICS: is MAVEN used in human recordings, and
-     * under what authorisation — IDE, IRB, research use only? The answer
+     * under what authorization — IDE, IRB, research use only? The answer
      * decides what belongs on this page, and until it arrives the page says
      * only what the company already says: that this is preclinical research.
      */
@@ -293,7 +302,7 @@ export const products = [
     technology: 'neuromodulation',
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
     summary:
-      'Synchronised neurochemical and electrophysiological recording with stimulation, engineered to minimise stimulation artefact.',
+      'Synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact.',
     /**
      * MAVEN is the product name — confirmed by NaviNetics. The copy below used
      * to be written around "the WINCS Harmoni Device" throughout; it now names
@@ -302,7 +311,7 @@ export const products = [
      * that is a sentence NaviNetics should supply rather than one to infer.
      *
      * The bespoke page at /products/maven-neuromodulation reads only `name`,
-     * `shortName`, `tagline` and the catalogue fields from this record. The
+     * `shortName`, `tagline` and the catalog fields from this record. The
      * rest — sequence, detail, specs, highlights, components, gallery — is not
      * rendered anywhere at the moment. It is kept because it describes a real
      * product and may come back, not because something is using it.
@@ -319,22 +328,22 @@ export const products = [
     heroAlt: 'The MAVEN system',
     heroTone: 'bay',
     metrics: [
-      { label: 'Measures', value: 'Chem + Ephys', unit: 'synchronised' },
+      { label: 'Measures', value: 'Chem + Ephys', unit: 'synchronized' },
       { label: 'Telemetry', value: 'Wireless', unit: 'real-time' },
       { label: 'Targets', value: 'DA · 5-HT', unit: 'and adenosine' },
     ],
     sequence: [
       {
-        title: 'Synchronised',
-        body: 'Independent but synchronised neurochemical and electrophysiological measurements alongside stimulation.',
+        title: 'Synchronized',
+        body: 'Independent but synchronized neurochemical and electrophysiological measurements alongside stimulation.',
       },
       {
-        title: 'Artefact-Free',
-        body: 'The integration minimises the impact of stimulation artefact on the measurement, ensuring pure, uncompromised recorded data.',
+        title: 'Artifact-Free',
+        body: 'The integration minimizes the impact of stimulation artifact on the measurement, ensuring pure, uncompromised recorded data.',
       },
       {
         title: 'Wireless',
-        body: 'Wireless control and telemetry provide a seamless real-time platform for identifying and characterising potential biomarkers.',
+        body: 'Wireless control and telemetry provide a seamless real-time platform for identifying and characterizing potential biomarkers.',
       },
     ],
     detail: {
@@ -351,13 +360,13 @@ export const products = [
       { k: 'Modality', v: 'Neurochemical + electrophysiological' },
       { k: 'Technique', v: 'FSCV · MCSWV' },
       { k: 'Telemetry', v: 'Wireless' },
-      { k: 'Stimulation', v: 'Synchronised, artefact-minimised' },
+      { k: 'Stimulation', v: 'Synchronized, artifact-minimized' },
       { k: 'Analytes', v: 'Dopamine, serotonin, adenosine' },
       { k: 'Use', v: 'Preclinical research' },
     ],
     highlights: [
-      'Independent but synchronised measurement and stimulation channels.',
-      'Stimulation artefact minimised at the point of integration.',
+      'Independent but synchronized measurement and stimulation channels.',
+      'Stimulation artifact minimized at the point of integration.',
       'Quantifies neuronal electrical activity alongside neurochemical levels.',
       'Wireless control and telemetry for real-time preclinical work.',
       'Supports both fast-scan cyclic and multiple cyclic square wave voltammetry.',
@@ -365,7 +374,7 @@ export const products = [
     ],
     components: [
       'MAVEN Base Unit',
-      'Carbon-Fibre Microelectrodes',
+      'Carbon-Fiber Microelectrodes',
       'Reference Electrode',
       'Wireless Telemetry Module',
       'Stimulation Channel',
@@ -398,7 +407,7 @@ export const comparison = {
   rows: [
     { k: 'Patient fixation', v: ['Skull anchor key', 'Rigid head fixation', 'Bone fiducials / mask'] },
     { k: 'Facial obstruction', v: ['None', 'Significant', 'Minimal'] },
-    { k: 'Targeting principle', v: ['Arc-centred', 'Arc-centred', 'Trajectory guide'] },
+    { k: 'Targeting principle', v: ['Arc-centered', 'Arc-centered', 'Trajectory guide'] },
     { k: 'Adjustment location', v: ['At surgical field', 'At the frame', 'Varies'] },
   ],
 };

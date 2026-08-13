@@ -83,7 +83,7 @@ export function makeAnchor(light) {
 
    An arc swings through its rotations and a probe runs down it. Wherever the
    arc is, the probe's tip lands on the same place. That is the whole of what
-   arc-centred means, and it is the one thing worth drawing.
+   arc-centered means, and it is the one thing worth drawing.
    ═══════════════════════════════════════════════════════════════════════════ */
 export function makeArc(light) {
   const P = palette(light);
@@ -104,7 +104,7 @@ export function makeArc(light) {
       ctx.stroke();
 
       if (g === 0) {
-        // the probe, on the arc, pointed at the centre
+        // the probe, on the arc, pointed at the center
         const pa = Math.PI + a + Math.sin(t * 0.9) * 0.9;
         const px = cx + Math.cos(pa) * R;
         const py = cy + Math.sin(pa) * R;
@@ -138,7 +138,7 @@ export function makeArc(light) {
    Advancement — even steps against a still scale
 
    A column descends in discrete equal increments while its scale stays put.
-   The steps are deliberately quantised: a microdrive advances by turns, not
+   The steps are deliberately quantized: a microdrive advances by turns, not
    by sliding.
    ═══════════════════════════════════════════════════════════════════════════ */
 export function makeDrive(light) {

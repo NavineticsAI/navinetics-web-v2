@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   The N-BAR localiser, as geometry the demo can draw.
+   The N-BAR localizer, as geometry the demo can draw.
 
    The rod endpoints are NOT invented and not traced off a screenshot: they
    are the same numbers the application registers against, copied from its
@@ -11,10 +11,10 @@
 
    The rails around them are proportioned from the CAD's measured bounds
    (203 × 208 × 187 mm, from tools/stl-bounds.mjs against nbar_cad_stereo.stl)
-   rather than modelled from its 335k triangles, which would be several
+   rather than modeled from its 335k triangles, which would be several
    megabytes to ship for a shape that reads as a box.
 
-   Colours are sampled from the application's own render, not chosen.
+   Colors are sampled from the application's own render, not chosen.
    ══════════════════════════════════════════════════════════════════════════ */
 import { fromFrame } from './stereo.js';
 
@@ -119,7 +119,7 @@ for (const rod of RODS) {
   }
 }
 
-/* One box around the whole localiser. Most of a tall 3-D pane is background,
+/* One box around the whole localizer. Most of a tall 3-D pane is background,
    and testing 18 rails and 9 rods per background pixel is the bulk of the
    render for nothing — this rejects all of it in a single slab test. */
 export const FRAME_LO = [Infinity, Infinity, Infinity];

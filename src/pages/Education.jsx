@@ -196,7 +196,7 @@ function Topic({ t }) {
         The last figure and a lone picture share a row.
         ─────────────────────────────────────────────────────────────────────
         The interactive figures are wide cards that do not fill their width —
-        the implanted-system diagram is a body outline with three labelled
+        the implanted-system diagram is a body outline with three labeled
         nodes, and the right third of it is empty. Meanwhile a topic with one
         picture left that picture alone in a three-column grid, using a third
         of its own dedicated band.

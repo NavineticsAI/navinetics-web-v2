@@ -31,7 +31,7 @@ const FOUNDERS = [
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
     image: asset('/stephan-goerss-150.jpg'), focus: '78% 0%' },
   { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'Co-Founder',
-    line: 'Associate Director of the Neural Engineering Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
+    line: 'Associate Director of the Neural Engineering and Precision Surgery Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
     image: asset('/yoonbae-oh.jpg'), focus: '89% 0%' },
 ];
 
@@ -50,7 +50,7 @@ export default function WhoWeAre() {
     description:
       'NaviNetics makes medical devices that change lives, by listening to patients and physicians '
       + 'and translating those conversations into safe, effective and high-quality device '
-      + 'offerings. Out of the Neural Engineering Laboratories at Mayo Clinic.',
+      + 'offerings. Out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic.',
   });
 
   const shipping = products.filter((p) => !isPlaceholder(p));
@@ -60,7 +60,7 @@ export default function WhoWeAre() {
       {/* "Safe, effective and high-quality" is NaviNetics' own established
           wording — it is on navinetics.com and has been since 2021. It was
           briefly removed here on the reasoning that "safe and effective" is
-          FDA's phrase for a device it has authorised. NaviNetics reviewed that
+          FDA's phrase for a device it has authorized. NaviNetics reviewed that
           and kept the wording, which is their call to make: it is their claim,
           on their products, and the D1 is in fact cleared. Restored verbatim so
           both sites say the same thing. */}
@@ -99,7 +99,7 @@ export default function WhoWeAre() {
         <Section wide band>
           <SectionHead
             eyebrow="Where this came from"
-            title="A neurosurgeon and an engineer, in the same building as the operating theatre."
+            title="A neurosurgeon and an engineer, in the same building as the operating theater."
             lead="NaviNetics did not start as a company. It started as instruments built inside a
               neurosurgery department, for the people using them down the corridor."
           />
@@ -197,7 +197,7 @@ export default function WhoWeAre() {
           <h2 className="text-d2">Come and find us.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             We are in downtown Rochester, Minnesota — next door to one of the world's leading
-            medical centres, which is not incidental to how the work gets done.
+            medical centers, which is not incidental to how the work gets done.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button to="/company/community" size="lg" arrow>

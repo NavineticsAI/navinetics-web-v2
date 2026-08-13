@@ -26,7 +26,7 @@ const SPIN = 3.1;          // degrees per second, ~two minutes for a full turn
 const BEAD_PERIOD = 2600;  // ms for one pass of the route marker
 
 /**
- * The globe's colours.
+ * The globe's colors.
  *
  * Every token read here is theme-independent — the globe is a lit sphere in
  * both themes — so `--terr-*-lit` rather than `--terr-*`, which stays
@@ -36,7 +36,7 @@ const BEAD_PERIOD = 2600;  // ms for one pass of the route marker
  * attribute rather than the value from useTheme(): ThemeProvider writes that
  * attribute from an effect of its own, and a parent's effect runs AFTER its
  * children's, so reading on the context change samples the OUTGOING theme's
- * colours — and because the dependency never fires again, keeps them for good.
+ * colors — and because the dependency never fires again, keeps them for good.
  * Measured when this component had that bug: one toggle later the tokens read
  * #03121b and the canvas was still painting #d2e1ea. Nothing here is
  * theme-dependent today, so the observer is currently a no-op; it is four
@@ -117,7 +117,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
     cv.width = Math.round(r.width * dpr);
     cv.height = Math.round(r.height * dpr);
     cv.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-    /* Wide screens put the globe left of centre so the detail panel has room
+    /* Wide screens put the globe left of center so the detail panel has room
        to open beside it. Narrow ones have no such room: the panel becomes a
        sheet and the globe slides up out from under it — see `bias` below. */
     const wide = r.width >= 900;
@@ -172,11 +172,11 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
       for (const t of territories) {
         const p = project(anchors[t.id], r, view);
         const front = p.z > 0.02;
-        const colour = pal.terr[t.id];
+        const color = pal.terr[t.id];
 
         const pin = pins.current.get(t.id);
         if (pin) {
-          pin.style.setProperty('--pc', colour);
+          pin.style.setProperty('--pc', color);
           pin.style.left = `${p.x}px`;
           pin.style.top = `${p.y}px`;
           pin.style.opacity = front ? 1 : 0;
@@ -186,14 +186,14 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           if (!el) return;
           const q = project(siteVecs[t.id][i], r, view);
           const vis = q.z > 0.02;
-          el.style.setProperty('--pc', colour);
+          el.style.setProperty('--pc', color);
           el.style.left = `${q.x}px`;
           el.style.top = `${q.y}px`;
           el.style.opacity = vis ? 0.9 : 0;
           el.style.pointerEvents = vis ? 'auto' : 'none';
         });
 
-        /* The chip is pushed radially outward from the globe's centre, then
+        /* The chip is pushed radially outward from the globe's center, then
            nudged off anything already placed. Anchoring it to the pin's own
            direction is what keeps five chips from stacking on one side. */
         let dx = p.x - view.cx;
@@ -222,7 +222,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           ctx.beginPath();
           ctx.moveTo(cxp, cyp);
           ctx.lineTo(p.x, p.y);
-          ctx.strokeStyle = sel === t.id ? colour : pal.land;
+          ctx.strokeStyle = sel === t.id ? color : pal.land;
           ctx.globalAlpha = sel === t.id ? 0.85 : 0.4;
           ctx.lineWidth = 1;
           ctx.stroke();
@@ -416,8 +416,8 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
         ))}
       </div>
 
-      {/* No colour key. The chips already name each territory and sit in its
-          colour, so a legend restated what the globe was showing rather than
+      {/* No color key. The chips already name each territory and sit in its
+          color, so a legend restated what the globe was showing rather than
           explaining it. */}
       <span className="eyebrow absolute bottom-5 right-5 z-[5] hidden text-ink-3 opacity-75 lg:block">
         Drag to turn · click a mark
@@ -429,10 +429,10 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
 /**
  * The mark a territory leads with.
  *
- * A territory whose organisation has not been named yet — see `note` in
+ * A territory whose organization has not been named yet — see `note` in
  * data/partners.js — has no orgs at all, and every caller here used to index
  * orgs[0] blindly. Falling back to the territory's own label puts its name on
- * the plate in mono, which is the same treatment any organisation without
+ * the plate in mono, which is the same treatment any organization without
  * artwork already gets, so nothing looks like a hole.
  */
 export const leadOrg = (t) => t.orgs[0] ?? { name: t.label };

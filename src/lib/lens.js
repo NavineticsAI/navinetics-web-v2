@@ -132,7 +132,7 @@ function lensMap(size) {
       let k = 0;
       if (t < 1 && L > 0) {
         const s = Math.sin(t * Math.PI);
-        k = s * s; // zero at centre and rim, peak between
+        k = s * s; // zero at center and rim, peak between
         nx = dx / L;
         ny = dy / L;
       }
@@ -189,7 +189,7 @@ function filterMarkup(state, w, h, opts) {
     `<feComposite class="nn-amp" in="blobFull" in2="neutral" operator="arithmetic" k1="0" k2="${a.toFixed(3)}" k3="${(1 - a).toFixed(3)}" k4="0" result="ptr"/>` +
     `<feImage href="${state.edgeHref}" x="0" y="0" width="${w}" height="${h}" preserveAspectRatio="none" result="edgeRaw"/>` +
     `<feComposite in="edgeRaw" in2="neutral" operator="arithmetic" k1="0" k2="${eA.toFixed(3)}" k3="${(1 - eA).toFixed(3)}" k4="0" result="edge"/>` +
-    // both maps are centred on 0.5, so one must be subtracted back out
+    // both maps are centered on 0.5, so one must be subtracted back out
     `<feComposite in="ptr" in2="edge" operator="arithmetic" k1="0" k2="1" k3="1" k4="-0.5" result="map"/>` +
     displace +
     `</filter>`

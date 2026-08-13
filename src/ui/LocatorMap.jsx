@@ -11,7 +11,7 @@ import { locatorMap, places } from '../data/locatorMap.js';
  * places are real focusable elements, and it stays sharp at any zoom.
  *
  * The outline replaces a photograph of downtown Rochester that was hotlinked
- * from a third-party image CDN with no licence on file. Natural Earth is
+ * from a third-party image CDN with no license on file. Natural Earth is
  * public domain and the whole thing is a few kilobytes.
  */
 
@@ -41,7 +41,7 @@ function useProjection(pad = 0.14, aspect = 1.5) {
     let h = (c[1][1] - c[0][1]) * (1 + pad * 2);
     /* Minnesota is very nearly square in this projection, and a square map in a
        half-width column stands taller than the fold. Growing the short side to
-       a fixed 3:2 keeps the block landscape and lets the neighbouring states
+       a fixed 3:2 keeps the block landscape and lets the neighboring states
        show, which is what makes it read as a location rather than a shape. */
     if (w / h < aspect) w = h * aspect; else h = w / aspect;
     const mx = (c[0][0] + c[1][0]) / 2;

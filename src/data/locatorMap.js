@@ -3,7 +3,7 @@
  * Regenerate with:  node tools/locator-map.mjs
  *
  * Natural Earth 1:50m state borders (public domain), simplified with
- * Ramer–Douglas–Peucker and quantised to three decimal places — about 110 m,
+ * Ramer–Douglas–Peucker and quantized to three decimal places — about 110 m,
  * which is far finer than a 600px map can resolve. Plain [lon, lat] degrees.
  */
 export const locatorMap = {

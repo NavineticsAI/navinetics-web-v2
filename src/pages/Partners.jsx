@@ -50,7 +50,7 @@ export default function Partners() {
         <div className="nn-frame mx-auto">
           <TickLine className="max-w-[120px]" />
           <span className="eyebrow mt-3.5 block text-action">Company — Partners</span>
-          {/* No lead paragraph. It read "The organisations we work with, and
+          {/* No lead paragraph. It read "The organizations we work with, and
               the territories they cover", which is what the globe and the cards
               directly beneath it already show. */}
           <h1 className="mt-3.5 text-[clamp(2.35rem,5vw,3.9rem)]">Our global presence.</h1>
@@ -61,7 +61,7 @@ export default function Partners() {
         <div className="nn-frame mx-auto">
           {/* The container is dark in both themes, like the globe inside it.
               A lit sphere needs a room to be lit in, and the pale version put
-              five territory colours against a near-white ocean where the
+              five territory colors against a near-white ocean where the
               weakest pair fell to 3.6 contrast. */}
           <div className="overflow-hidden rounded-lg border border-[rgb(130_186_217/0.14)]
             bg-[radial-gradient(120%_90%_at_50%_8%,#0a2c40,var(--globe-bay)_70%)]">

@@ -31,10 +31,10 @@ import naviLogo from '../assets/logo.png';
  * subsidiary traded as CBH until March 2026 and the company's instruction is to
  * keep that name, so the name now follows the logo rather than the reverse.
  *
- * China and Singapore are separate territories with no organisation named yet —
- * see `note` on each. "Greater China & Singapore" grouped three markets under
+ * China, Taiwan and Singapore are separate territories with no organization named
+ * yet — see `note` on each. "Greater China & Singapore" grouped all three under
  * one distributor; with that distributor gone the grouping had nothing holding
- * it together, and Taiwan is no longer claimed at all.
+ * it together, so each stands on its own.
  *
  * The `id` of each territory must match the order in tools/world-dots.mjs —
  * that is what ties a record to the dots the globe tints for it. Both files
@@ -95,7 +95,7 @@ export const territories = [
     id: 'cn',
     label: 'China',
     anchor: [34, 104],
-    summary: 'A market we cover. The organisation behind it is still to be named.',
+    summary: 'A market we cover. The organization behind it is still to be named.',
     orgs: [],
     note: 'NaviNetics is naming the partner or collaborator for this market. '
       + 'It will be listed here once it is confirmed.',
@@ -111,7 +111,7 @@ export const territories = [
         logo: paragon,
         name: 'Paragon Care',
         role: 'Distribution',
-        body: 'Distribution in Australia, and the route into neighbouring markets in the region.',
+        body: 'Distribution in Australia, and the route into neighboring markets in the region.',
       },
     ],
     cover: [['Australia', 1]],
@@ -141,16 +141,30 @@ export const territories = [
     id: 'sg',
     label: 'Singapore',
     anchor: [1.35, 103.8],
-    summary: 'A market we cover. The organisation behind it is still to be named.',
+    summary: 'A market we cover. The organization behind it is still to be named.',
     orgs: [],
     note: 'NaviNetics is naming the partner or collaborator for this market. '
       + 'It will be listed here once it is confirmed.',
     cover: [['Singapore', 1]],
     sites: [[1.35, 103.8, 'Singapore']],
   },
+  {
+    /* Taiwan, listed separately for the same reason as Singapore. It bakes to a
+       single dot at 1.5 degrees, so it also carries a point marker rather than
+       relying on a tinted region a reader would struggle to see. */
+    id: 'tw',
+    label: 'Taiwan',
+    anchor: [23.7, 121],
+    summary: 'A market we cover. The organization behind it is still to be named.',
+    orgs: [],
+    note: 'NaviNetics is naming the partner or collaborator for this market. '
+      + 'It will be listed here once it is confirmed.',
+    cover: [['Taiwan', 1]],
+    sites: [[23.7, 121, 'Taiwan']],
+  },
 ];
 
-/** CSS custom property holding a territory's colour. See :root in index.css. */
+/** CSS custom property holding a territory's color. See :root in index.css. */
 export const territoryVar = (id) => `--terr-${id}`;
 
 /**

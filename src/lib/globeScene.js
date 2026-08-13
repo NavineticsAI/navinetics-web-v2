@@ -3,7 +3,7 @@
  *
  * Orthographic, which is what a globe seen from far away actually is, and the
  * projection every atlas uses for this picture. Two rotations set what faces
- * the viewer — `lon0` is the longitude at the centre of the disc and `lat0` the
+ * the viewer — `lon0` is the longitude at the center of the disc and `lat0` the
  * latitude — and a point is on the near side when its rotated z is positive.
  *
  * The maths lives here rather than in the component so it can be reasoned about
@@ -90,7 +90,7 @@ export function withAlpha(hex, a) {
  * Each sample says whether it is visible, and that test is the part worth
  * stating: a point lifted off the sphere can be seen even when the ground under
  * it is on the far side — that is exactly what an arc crossing the horizon
- * looks like. So a sample is hidden only when it is behind the centre plane AND
+ * looks like. So a sample is hidden only when it is behind the center plane AND
  * its projected position falls inside the disc. Testing z alone chops the arc
  * at the limb and leaves a stray hook floating in space.
  */
@@ -160,8 +160,8 @@ const GRATICULE = (() => {
   return lines;
 })();
 
-function meridians(ctx, r, view, colour) {
-  ctx.strokeStyle = colour;
+function meridians(ctx, r, view, color) {
+  ctx.strokeStyle = color;
   ctx.lineWidth = 1;
   // One path for the whole wireframe rather than one per line.
   ctx.beginPath();
@@ -229,7 +229,7 @@ export function drawGlobe(ctx, view, dots, state, pal) {
   }
 
   /* ── the land ────────────────────────────────────────────────────────────
-     BATCHED BY COLOUR, and it matters more here than anywhere else on the
+     BATCHED BY COLOR, and it matters more here than anywhere else on the
      site. There are 4,846 dots. Drawn one at a time — a withAlpha() string
      built per dot, assigned to fillStyle (which re-parses it), then
      beginPath/arc/fill — that is roughly 24,000 canvas operations and 4,846
@@ -238,11 +238,11 @@ export function drawGlobe(ctx, view, dots, state, pal) {
      7,260ms of total blocking time on /company/partners: the main thread was
      never free, so taps queued behind it and the whole page felt broken.
 
-     Alpha varies continuously with depth, so it is quantised to 1/16ths and
-     dots are grouped into one Path2D per (colour, alpha) bucket. Radius may
-     still vary freely within a bucket — only the fill colour has to be
+     Alpha varies continuously with depth, so it is quantized to 1/16ths and
+     dots are grouped into one Path2D per (color, alpha) bucket. Radius may
+     still vary freely within a bucket — only the fill color has to be
      constant. That turns ~4,846 fills into fewer than a hundred, and builds
-     each colour string once per bucket instead of once per dot.
+     each color string once per bucket instead of once per dot.
 
      moveTo before each arc is load-bearing: without it every arc is joined to
      the previous subpath and the globe fills in as one solid blob.        */
@@ -260,12 +260,12 @@ export function drawGlobe(ctx, view, dots, state, pal) {
     const px = X + R * x1;
     const py = Y - R * y2;
 
-    let key, colour, rad;
+    let key, color, rad;
 
     if (z2 <= 0) {
       if (!state.ghost) continue;
       key = 'g';
-      colour = pal.ghost;
+      color = pal.ghost;
       rad = base * 0.62;
     } else {
       // dots near the limb are seen almost edge-on, so they fade rather than
@@ -277,7 +277,7 @@ export function drawGlobe(ctx, view, dots, state, pal) {
         const q = Math.round((0.5 + 0.5 * edge) * STEPS);
         if (q <= 0) continue;
         key = `l${q}`;
-        colour = withAlpha(pal.land, q / STEPS);
+        color = withAlpha(pal.land, q / STEPS);
       } else {
         const id = state.ids[t];
         const glow = state.glow[id] ?? 0;
@@ -285,19 +285,19 @@ export function drawGlobe(ctx, view, dots, state, pal) {
         const q = Math.round(a * STEPS);
         if (q <= 0) continue;
         key = `t${t}_${q}`;
-        colour = withAlpha(pal.terr[id], q / STEPS);
+        color = withAlpha(pal.terr[id], q / STEPS);
         rad *= 1 + 0.28 * glow;
       }
     }
 
     let b = buckets.get(key);
-    if (!b) { b = { colour, path: new Path2D() }; buckets.set(key, b); }
+    if (!b) { b = { color, path: new Path2D() }; buckets.set(key, b); }
     b.path.moveTo(px + rad, py);
     b.path.arc(px, py, rad, 0, TAU);
   }
 
   for (const b of buckets.values()) {
-    ctx.fillStyle = b.colour;
+    ctx.fillStyle = b.color;
     ctx.fill(b.path);
   }
 
@@ -311,17 +311,17 @@ export function drawGlobe(ctx, view, dots, state, pal) {
 }
 
 /** The route from home to a selected territory, plus one bead running it. */
-export function drawRoute(ctx, view, from, to, r, colour, alpha, bead) {
+export function drawRoute(ctx, view, from, to, r, color, alpha, bead) {
   const pts = greatCircle(from, to, r, view);
   if (!pts.length) return;
   ctx.lineWidth = 1.6;
   ctx.lineCap = 'round';
-  ctx.strokeStyle = withAlpha(colour, 0.8 * alpha);
+  ctx.strokeStyle = withAlpha(color, 0.8 * alpha);
   stroke(ctx, pts);
   if (bead == null) return;
   const p = pts[Math.round(bead * (pts.length - 1))];
   if (!p || !p.vis) return;
-  ctx.fillStyle = withAlpha(colour, alpha);
+  ctx.fillStyle = withAlpha(color, alpha);
   ctx.beginPath();
   ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
   ctx.fill();

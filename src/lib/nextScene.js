@@ -9,7 +9,7 @@
 
    That is the whole idea of the section — something new arrives, it lines up
    with what is already there, and the planning follows from it. Nothing is
-   labelled and nothing is claimed; it is deliberately abstract.
+   labeled and nothing is claimed; it is deliberately abstract.
 
    Very low contrast on purpose. Peak alpha is around a quarter, the cycle is
    half a minute, and the whole thing sits behind a scrim — if it draws the

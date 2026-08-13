@@ -14,7 +14,7 @@ const smooth = (t) => t * t * (3 - 2 * t);
 
 /* ── where each scene sits, and how big it is ─────────────────────────────
    The band is three columns: copy, an empty window, then the screenshot. A
-   scene centred and sized to the band ends up mostly behind one or the
+   scene centered and sized to the band ends up mostly behind one or the
    other, so each is fitted to the window instead — placed at `cx` (fraction
    of band width) and scaled so that at most a tenth of its lit area falls
    behind the copy and a twentieth behind the image.
@@ -41,13 +41,13 @@ function rng(seed) {
 }
 
 /** Bottom-right figure, shared by all four scenes. */
-function readout(ctx, w, h, label, value, colour) {
+function readout(ctx, w, h, label, value, color) {
   ctx.textAlign = 'right';
   ctx.font = '600 10px "IBM Plex Mono", monospace';
   ctx.fillStyle = 'rgba(169,195,208,0.6)';
   ctx.fillText(label, w - 28, h - 42);
   ctx.font = '600 23px "IBM Plex Mono", monospace';
-  ctx.fillStyle = colour;
+  ctx.fillStyle = color;
   ctx.fillText(value, w - 28, h - 16);
 }
 
@@ -155,7 +155,7 @@ export function makeFusion() {
 /* ══════════════════════════════════════════════════════════════════════
    2 · N-BAR STEREOTACTIC REGISTRATION
 
-   The N-localiser principle, animated. Three rods per plate — two upright,
+   The N-localizer principle, animated. Three rods per plate — two upright,
    one diagonal — and an image plane descending through them. Every slice
    yields three points per plate, so the fiducials accumulate into dense
    strings along each rod, which is exactly how the detected set looks in
@@ -283,7 +283,7 @@ export function makeTargeting() {
   const uLo = Math.min(...us), uHi = Math.max(...us);
   const vLo = Math.min(...vs), vHi = Math.max(...vs);
 
-  /* The mid-commissural point sits close to the centre of the cerebrum, a
+  /* The mid-commissural point sits close to the center of the cerebrum, a
      little below its vertical midpoint. AC and PC straddle it about 26 mm
      apart — roughly 15% of the front-to-back extent — with AC anterior. */
   const MCP = [uLo + (uHi - uLo) * 0.5, vLo + (vHi - vLo) * 0.56];
@@ -441,7 +441,7 @@ export function makeTargeting() {
    that genuinely run in different principal directions — so the colouring
    covers all three DEC axes instead of collapsing onto one.
 
-   Directionally-encoded colour, coronal view: screen-horizontal is
+   Directionally-encoded color, coronal view: screen-horizontal is
    left-right (RED), screen-vertical is superior-inferior (BLUE), and the
    axis into the screen is anterior-posterior (GREEN). Curving bundles blend
    between them, which is where the mixed hues come from.
@@ -452,19 +452,19 @@ export function makeTargeting() {
 
    Streamlines are INTEGRATED through a direction field rather than drawn as
    parametric curves. That is how real tractography works, and it is what
-   makes the result look anatomical: neighbouring streamlines share the local
+   makes the result look anatomical: neighboring streamlines share the local
    direction so bundles stay coherent, but each one wanders on its own, so
    none of them reads as a formula.
 
    The field is assembled from three regimes that blend smoothly into each
-   other — projection fibres radiating from the internal capsule, association
-   fibres running front to back, and a callosal arc riding over the ventricle
+   other — projection fibers radiating from the internal capsule, association
+   fibers running front to back, and a callosal arc riding over the ventricle
    — plus a low-frequency perturbation, and a tangential bend near the
-   surface so fibres turn to follow the cortex instead of running into it.
+   surface so fibers turn to follow the cortex instead of running into it.
 
    Shape, boundary and cortical surface all come from the supplied mesh.
 
-   Directionally-encoded colour, sagittal view: screen-horizontal is
+   Directionally-encoded color, sagittal view: screen-horizontal is
    anterior-posterior (GREEN), screen-vertical is superior-inferior (BLUE),
    and the axis into the screen is left-right (RED). Bundles that curve blend
    between them.
@@ -472,7 +472,7 @@ export function makeTargeting() {
 export function makeDti() {
   /* Field, streamlines and containment all live in tractField.js now, so the
      hero draws the same bundles instead of its own hand-placed guesses. */
-  /* Colour is quantised into buckets so each is stroked once. Every distinct
+  /* Color is quantized into buckets so each is stroked once. Every distinct
      bucket is a separate additive stroke, though, so the resolution is a
      direct frame cost: at QC=5 a fully-grown frame issued up to 648 of them.
      At QC=3 it is 192, and with hairlines blending additively the difference
@@ -480,8 +480,8 @@ export function makeDti() {
   const QC = 3, QA = 3;
   const tracts = buildTracts({ count: 420, max: 46, step: 0.0062 });
 
-  /* Direction colour never changes, so quantise it once here rather than
-     normalising and rounding three channels on every segment of every frame.
+  /* Direction color never changes, so quantise it once here rather than
+     normalizing and rounding three channels on every segment of every frame.
      Only the alpha half of the bucket key is left to the frame. */
   for (const tr of tracts) {
     for (let k = 1; k < tr.pts.length; k++) {
@@ -495,7 +495,7 @@ export function makeDti() {
 
   /* Stroking every segment individually is tens of thousands of draw calls a
      frame and will not hold 60fps. Segments are collected into buckets keyed
-     by quantised colour and alpha, then each bucket is stroked once. */
+     by quantized color and alpha, then each bucket is stroked once. */
   const buckets = new Map();
 
   /* The tracts are drawn into a reduced-resolution buffer and blitted once.
@@ -513,7 +513,7 @@ export function makeDti() {
     ctx.clearRect(0, 0, w, h);
     /* Set further left and a little smaller than the other three. This scene
        is a whole brain and is by far the widest of them, so at the shared
-       centre it ran furthest under the screenshot. */
+       center it ran furthest under the screenshot. */
     const s = Math.min(w, h) * AT.dti.s;
     const cx = w * AT.dti.cx, cy = h * AT.dti.cy;
 

@@ -90,7 +90,7 @@ export default function Media() {
       {lightbox && (
         /* role="dialog" and aria-modal promise Escape, a focus move, a focus
            trap and focus return. None of them were implemented — this markup
-           was here, the behaviour was not. useDialog supplies all four. */
+           was here, the behavior was not. useDialog supplies all four. */
         <div
           ref={dialogRef}
           role="dialog"

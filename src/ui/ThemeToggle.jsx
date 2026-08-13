@@ -13,7 +13,7 @@ export function ThemeToggle({ className }) {
   return (
     <div
       role="group"
-      aria-label="Colour theme"
+      aria-label="Color theme"
       className={cn('nn-glass inline-flex gap-0.5 rounded-full p-0.5 [--gb:18px]', className)}
     >
       {options.map(({ id, Icon, label }) => (

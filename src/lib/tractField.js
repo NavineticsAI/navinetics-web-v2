@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   The fibre-direction field, and streamlines tracked through it.
+   The fiber-direction field, and streamlines tracked through it.
 
    Shared by the DTI feature band and the page hero so both draw the SAME
    bundles. The hero used to carry its own hand-placed families, which meant
@@ -33,7 +33,7 @@ for (let i = 0; i < N * N; i++) {
 }
 
 /* Two-pass chamfer. Gives both how deep a point is and, through its gradient,
-   which way the surface lies — used to bend fibres tangentially. */
+   which way the surface lies — used to bend fibers tangentially. */
 const dist = new Float32Array(N * N);
 {
   const BIG = 1e5;
@@ -108,7 +108,7 @@ export const depthAt = (u, v) => {
 };
 
 /**
- * How far off the midline a fibre may sit at (u, v).
+ * How far off the midline a fiber may sit at (u, v).
  *
  * Two corrections on top of the measured width. A boundary cell holds the
  * largest |z| anywhere in it, which near the poles is much wider than the
@@ -159,11 +159,11 @@ export function fieldAt(u, v) {
   // field collapses onto the association regime.
   const superior = Math.max(0, -dv / 0.42);
 
-  // projection fibres: radial from the capsule, fanning upward
+  // projection fibers: radial from the capsule, fanning upward
   const corridor = Math.exp(-((du / 0.27) ** 2));
   const wProj = corridor * (0.35 + 1.5 * Math.min(1, rad / 0.26)) * (0.45 + superior * 1.15);
 
-  // association fibres: front to back, everywhere the corridor is weak
+  // association fibers: front to back, everywhere the corridor is weak
   const wAssoc = (1 - corridor * 0.72) * (0.5 + 0.6 * Math.min(1, (v + 0.22) / 0.5));
 
   // callosal arc: tangential, in a ring riding over the ventricle
@@ -177,7 +177,7 @@ export function fieldAt(u, v) {
   const ca = Math.cos(ang), sa = Math.sin(ang);
   [dx, dy] = [dx * ca - dy * sa, dx * sa + dy * ca];
 
-  // near the surface, drop the outward component so fibres turn to run along
+  // near the surface, drop the outward component so fibers turn to run along
   // the cortex rather than straight into it
   const d = depthAt(u, v);
   if (d < 4.5) {
@@ -196,7 +196,7 @@ export function fieldAt(u, v) {
     }
   }
 
-  // Left-right component: strongest where fibres cross the midline, and in
+  // Left-right component: strongest where fibers cross the midline, and in
   // the cortical splay. Scaled to actually compete with the in-plane terms —
   // otherwise it never dominates and nothing in the field reads red.
   const dz = (nDepth(u * 4.5 + 9, v * 4.5) - 0.5) * 2.7
@@ -210,7 +210,7 @@ export function fieldAt(u, v) {
  * Track streamlines through the field, both ways from each seed.
  *
  * Each point is `[u, v, |dz|, |du|, |dv|, z]` — the three magnitudes are the
- * directionally-encoded colour (red left-right, green front-back, blue
+ * directionally-encoded color (red left-right, green front-back, blue
  * up-down) and `z` is the lateral position, integrated along the run and
  * held inside the mesh's own width.
  */

@@ -36,8 +36,8 @@ export default function D1() {
   usePageMeta({
     title: product.name,
     description:
-      'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centred stereotactic targeting from '
-      + 'a skull anchor key. FDA cleared. Three linear degrees of freedom, two angles of rotation.',
+      'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centered stereotactic targeting from '
+      + 'a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
   });
 
   return (
@@ -88,7 +88,7 @@ export default function D1() {
             {/* Was: "The components named on the product record, as it names
                 them. Nothing is claimed about any of them beyond that." */}
             <p className="max-w-prose text-sm leading-relaxed text-ink-2">
-              Everything supplied with the system, including both sterilisation trays and the
+              Everything supplied with the system, including both sterilization trays and the
               accuracy verification fixture.
             </p>
           </div>
@@ -136,10 +136,10 @@ export default function D1() {
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             {product.intro}
           </p>
-          {/* The status itself is in the hero, where a clinical reader needs
-              it. This is the company's own sentence, kept at the close for
-              anyone who read the whole page. */}
-          {product.regulatory?.statement && (
+          {/* Gated with the hero chip on the same `published` flag — this is
+              the company's own FDA sentence, and it comes off the site with
+              the rest of the clearance statement. See data/products.js. */}
+          {product.regulatory?.published && product.regulatory.statement && (
             <p className="max-w-prose text-sm leading-relaxed text-ink-2">
               {product.regulatory.statement}
             </p>

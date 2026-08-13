@@ -6,7 +6,7 @@
  * is generated from a handful of ellipsoids plus noise, so there is no scan
  * to de-identify and no consent to obtain.
  *
- * World coordinates are millimetres, centred on the head:
+ * World coordinates are millimetres, centered on the head:
  *   +x patient right   +y anterior   +z superior
  * The frame coordinates the UI displays are derived in stereo.js.
  *
@@ -57,7 +57,7 @@ export const fbm = (x, y, z) =>
   vnoise(x * 4.41, y * 4.41, z * 4.41) * 0.12;
 
 /* ── head geometry ──────────────────────────────────────────────────────── */
-export const HC = [0, 6, 8];        // centre
+export const HC = [0, 6, 8];        // center
 export const HR = [74, 97, 84];     // scalp radii: 148 wide, 194 front-to-back
 export const R_SCALP = 1.0;
 export const R_BONE = 0.955;
@@ -66,7 +66,7 @@ export const R_BRAIN = 0.846;
 export const Z_CUT = -52;           // inferior edge of the scanned volume
 
 /**
- * Normalised ellipsoid radius, 1 at the scalp. Perturbed by low-frequency
+ * Normalized ellipsoid radius, 1 at the scalp. Perturbed by low-frequency
  * noise so the contours are irregular the way a head is, rather than the
  * drawn ellipse a bare ellipsoid gives.
  */

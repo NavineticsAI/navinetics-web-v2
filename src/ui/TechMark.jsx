@@ -23,12 +23,12 @@ import { cn } from '../lib/cn.js';
  *   neuro       the triangular FSCV sweep, and the response it draws out
  *   ai          four planning panes with a crosshair through them
  *
- * `currentColor` throughout, so the caller sets the colour and dark mode is
+ * `currentColor` throughout, so the caller sets the color and dark mode is
  * automatic.
  */
 const MARKS = {
-  /* Arc-centred targeting. The arc, a probe running down it to the focus, and
-     the focus itself — which is the whole of what arc-centred means. */
+  /* Arc-centered targeting. The arc, a probe running down it to the focus, and
+     the focus itself — which is the whole of what arc-centered means. */
   stereotaxy: (
     <>
       <path d="M10 40a22 22 0 0 1 44 0" />

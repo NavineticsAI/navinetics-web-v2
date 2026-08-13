@@ -29,7 +29,7 @@ import {
  * The interaction is the application's, not a convenience:
  *   · clicking a slice moves the CURSOR only — it retargets nothing
  *   · the three orthogonal planes re-slice around the cursor, which is why
- *     the red dot always sits at pane centre
+ *     the red dot always sits at pane center
  *   · "Update Target" and "Update Entry" then assign the cursor
  *   · entry, target and the track between them are all draggable, and the
  *     three do different things: an endpoint moves that point alone, while
@@ -61,7 +61,7 @@ const f1 = (v) => v.toFixed(1);
 
 export function Workstation({ live = false, className }) {
   const rootRef = useRef(null);
-  // Initialised once so the ref callbacks only ever assign a field. Rebuilding
+  // Initialized once so the ref callbacks only ever assign a field. Rebuilding
   // these objects per render loses whichever ref fired first.
   const paneRefs = useRef(
     Object.fromEntries(ORTHO.map(({ view }) => [view, { el: null, slice: null, ovl: null, w: 0, h: 0 }])),
@@ -172,7 +172,7 @@ export function Workstation({ live = false, className }) {
   };
 
   /* ── the panes: three things to grab, or click to move the cursor ─────────
-     Modelled on the application, which distinguishes three drag origins on a
+     Modeled on the application, which distinguishes three drag origins on a
      trajectory and gives each different geometry:
 
        · the TARGET endpoint  — moves the target; the entry stays where it is
@@ -283,7 +283,7 @@ export function Workstation({ live = false, className }) {
         const u = aim(d, m);
         plan.current.entry = [T[0] + u[0] * g.len, T[1] + u[1] * g.len, T[2] + u[2] * g.len];
       }
-      /* Not `three`. The 3-D raster is the head and the localiser, and moving
+      /* Not `three`. The 3-D raster is the head and the localizer, and moving
          a trajectory changes neither — only its overlay, which is redrawn
          every flush regardless. Re-raytracing it per drag tick would put a
          ray-traced frame between every pointer move and the screen. */
@@ -334,7 +334,7 @@ export function Workstation({ live = false, className }) {
           grab.current = null;
           preview.current = false;
           // Not `three`, for the same reason the drag itself does not: the
-          // committed plan moves the slices, never the head or the localiser.
+          // committed plan moves the slices, never the head or the localizer.
           // Asking for it here put a full-quality raytrace between releasing
           // the pointer and seeing the result — a 58ms hitch on every drop.
           invalidate({ slices: true, probe: true });

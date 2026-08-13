@@ -115,7 +115,7 @@
   --ok: #0f8a72;
   --warn: #b0730c;
   --crit: #c33c40;
-  /* Explicit soft tints rather than /opacity modifiers on var-based colours,
+  /* Explicit soft tints rather than /opacity modifiers on var-based colors,
      so they never depend on the color-mix path resolving. */
   --ok-soft: rgb(15 138 114 / 0.12);
   --warn-soft: rgb(176 115 12 / 0.15);
@@ -125,7 +125,7 @@
   /* The light ScienceBand scrim, as three explicit stops.
      ───────────────────────────────────────────────────────────────────────
      These were written inline as rgb(from var(--canvas) r g b / .88) and so
-     on. Relative colour syntax is Safari 16.4+ and Chrome 119+; on iOS 16.3
+     on. Relative color syntax is Safari 16.4+ and Chrome 119+; on iOS 16.3
      and below the whole linear-gradient declaration fails to parse, and the
      band loses its scrim entirely — leaving the copy sitting on the raw
      animation with nothing holding it readable.
@@ -158,8 +158,8 @@
 
   /* The partners globe.
      ─────────────────────────────────────────────────────────────────────────
-     Five territory colours, picked by measuring CIE ΔE rather than by eye.
-     Which pairs need separating is a geography question, not a colour one:
+     Five territory colors, picked by measuring CIE ΔE rather than by eye.
+     Which pairs need separating is a geography question, not a color one:
      the globe shows at most a hemisphere, so China with South Korea and China
      with Australia are the pairs a reader actually has to tell apart, while
      Brazil and China are never on screen together. A first set that looked
@@ -178,6 +178,7 @@
      Placed by the same rule as the five above: furthest CIE ΔE from its
      co-visible neighbours, which in this region is cn (#b05c34) and kr. */
   --terr-sg: #2f6f77;
+  --terr-tw: #8a5a86;
 
 
   color-scheme: light;
@@ -238,6 +239,7 @@
   --terr-au: #4bb287;
   --terr-kr: #a48ccb;
   --terr-sg: #5aa8b2;
+  --terr-tw: #c294bd;
 
 
   color-scheme: dark;
@@ -266,7 +268,7 @@
   --ws-plan-rim: #506fb8; /* the plan card border is blue, not amber */
   --ws-entry-rim: #65a2dd;
   --ws-target-rim: #c7863a;
-  /* Axis colours. Arc and Collar carry the colour of the axis they rotate
+  /* Axis colors. Arc and Collar carry the color of the axis they rotate
      about, which is why Arc reads red like X and Collar green like Y. */
   --ws-ax-x: #d0553f;
   --ws-ax-y: #38a36f;
@@ -282,13 +284,13 @@
 /* ── Partners globe · THEME-INDEPENDENT ────────────────────────────────────
    The globe is a lit sphere on a stand, not a piece of page, so it stays dark
    in both themes — the same call the workstation and the MAVEN bay make. It
-   is also the honest one: the territory colours have to hold five categories
+   is also the honest one: the territory colors have to hold five categories
    apart against the ocean behind them, and the pale sky gave the weakest pair
    3.6 where this one gives 6.0.
 
-   `--terr-*-lit` is the on-dark variant of each territory colour, for the
+   `--terr-*-lit` is the on-dark variant of each territory color, for the
    canvas and the pins. `--terr-*` stays theme-aware because the ledger below
-   the globe is ordinary page, and a colour lifted for a dark sphere falls to
+   the globe is ordinary page, and a color lifted for a dark sphere falls to
    about 2.5 against a pale card. Same five hues either way, so a reader moving
    from the globe to the ledger is still following the same five threads. */
 :root {
@@ -306,6 +308,7 @@
   --terr-au-lit: #4bb287;
   --terr-kr-lit: #a48ccb;
   --terr-sg-lit: #5aa8b2;
+  --terr-tw-lit: #c294bd;
 }
 
 /* ── MAVEN · THEME-INDEPENDENT ─────────────────────────────────────────────
@@ -318,11 +321,11 @@
    from codes them in the Office 2007 theme accents, whose two greens sit at
    ΔE 29 from each other and whose lightest two fall to 2.0 and 2.4 contrast on
    a pale ground — a palette inherited from a template, not chosen. This set
-   holds the worst pair at ΔE 38 and every colour at 6.0 or better on #04141d.
+   holds the worst pair at ΔE 38 and every color at 6.0 or better on #04141d.
 
    Electrophysiology is deliberately the house blue rather than a fifth hue.
    It is the one domain that is already NaviNetics' own subject, and spending a
-   new colour on it would have pushed one of the other three into the
+   new color on it would have pushed one of the other three into the
    status ramp, where --ok/--warn/--crit have to stay legible. */
 :root {
   --mv-chem: #42bd74;
@@ -341,7 +344,7 @@
   /* The same four on a pale ground. Two of the four bands stand on the page's
      own canvas rather than in the bay, and the values above are lifted for a
      dark room — chem lands at 2.4 on #f4f7f9. These sit at 3.7 to 5.7, which
-     is where a categorical colour used as a graphic has to be. Same hues, so
+     is where a categorical color used as a graphic has to be. Same hues, so
      a reader crossing from a bay band to a light one is still following the
      same four threads. */
   --mv-chem-ink: #1c8a4e;
@@ -455,7 +458,7 @@
   /**
    * THE FRAME. One measure for the whole site, in one place.
    *
-   * Everything that centres content uses this: Section, Hero, the navbar pill,
+   * Everything that centers content uses this: Section, Hero, the navbar pill,
    * the footer, and both scene bands. Replacing a scattered mix of max-w-5xl,
    * max-w-7xl, max-w-4xl and max-w-[96rem] with a single class is what stopped
    * the left edge stepping in and out as you scrolled.
@@ -530,7 +533,7 @@
      frame, not shapes hit-tested inside it — that is the difference between
      something a keyboard can reach and something it cannot. Only the parts
      utilities cannot express live here: the ring pseudo-element, and the
-     `--pc` custom property that carries each territory's colour down from
+     `--pc` custom property that carries each territory's color down from
      the component.                                                        */
   .nn-pin {
     position: absolute;
@@ -554,7 +557,7 @@
     transition: transform 250ms var(--ease-out);
   }
   /* Rochester is the one place on the map that is us rather than a partner,
-     so it gets a second ring instead of a second colour. */
+     so it gets a second ring instead of a second color. */
   .nn-pin-home::after {
     content: "";
     position: absolute;
@@ -582,8 +585,8 @@
       box-shadow 250ms var(--ease-out),
       border-color 250ms var(--ease-out);
   }
-  /* Marks sit on a white plate at their supplied colours. Recolouring another
-     organisation's mark so it survives the dark theme is usually a breach of
+  /* Marks sit on a white plate at their supplied colors. Recolouring another
+     organization's mark so it survives the dark theme is usually a breach of
      their brand guidelines, and Abbott's wordmark is black — it would vanish.
      NOT `.nn-plate`: that one is the product-shot plate further down, and it
      puts mix-blend-multiply on its images, which would eat the white out of
@@ -597,7 +600,7 @@
      The channel nodes are real buttons over the SVG rather than circles
      inside it, the same call as the partners globe: a keyboard can reach a
      button. Only the halo pseudo-element and the `--nc` custom property that
-     carries each domain's colour down from the component are here — the rest
+     carries each domain's color down from the component are here — the rest
      of the node is utilities.
 
      `left`/`top` are set from the ring geometry and are allowed to land
@@ -915,16 +918,16 @@
 
   /* ── Logo ─────────────────────────────────────────────────────────────────
      Nothing here any more. The lockup used to be this artwork used as a CSS
-     mask, filled with one flat `--logo-ink` and lit by a travelling
+     mask, filled with one flat `--logo-ink` and lit by a traveling
      highlight — about 200 lines, plus four theme tokens. All removed.
 
      A mask reads only the alpha channel, so it discarded the gradient across
      the ribbon, the fold shading, and the fact that the mark (#196184) and
      the wordmark (#164f6a) are two different blues. Every placement rendered
-     one flat colour that matched neither, and in light mode the footer did
+     one flat color that matched neither, and in light mode the footer did
      not match the navbar.
 
-     It is an <img> now — src/ui/Logo.jsx — so the colour cannot drift from
+     It is an <img> now — src/ui/Logo.jsx — so the color cannot drift from
      the master. Dark grounds take assets/logo-reversed.png via `reversed`. */
 }
 

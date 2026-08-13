@@ -3,8 +3,8 @@ import { Reticle } from './Reticle.jsx';
 import { Eyebrow, Reveal } from './Section.jsx';
 
 /**
- * Short copy plus one action. Replaces the four different centred cards the
- * original build used — each in a different accent colour (slate on Careers,
+ * Short copy plus one action. Replaces the four different centered cards the
+ * original build used — each in a different accent color (slate on Careers,
  * emerald on the since-removed Investment page, emerald again on Community).
  * One component, one accent.
  */

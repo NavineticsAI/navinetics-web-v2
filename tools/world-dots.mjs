@@ -48,6 +48,9 @@ const TERRITORIES = [
      the page draws it as a point marker — see `sites` in data/partners.js.
      Listed anyway so this file and that one hold the same five... six ids. */
   { id: 'sg', countries: { Singapore: 1 } },
+  /* Same again for Taiwan: about a dot wide at 1.5 degrees, so it bakes to
+     little or nothing and the page carries it as a point marker. */
+  { id: 'tw', countries: { Taiwan: 1 } },
 ];
 
 /* Antarctica is cut. It is land, it would ring the whole bottom of the globe,

@@ -3,7 +3,7 @@ import { cn } from '../lib/cn.js';
 
 /**
  * Six disciplines on an arc, each an approach trajectory converging on a single
- * iso-centre — the same geometry the Frame System uses to reach a target.
+ * iso-center — the same geometry the Frame System uses to reach a target.
  *
  * The diagram doubles as the section's navigation: selecting a node drives the
  * detail panel, so the page needs no long scroll of near-identical role cards.

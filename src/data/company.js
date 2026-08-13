@@ -17,7 +17,7 @@ import { disciplines } from './disciplines.js';
  *
  * Two gaps NaviNetics needs to fill:
  *
- *   · The Neural Engineering Laboratories entry has no year. The founders'
+ *   · The Neural Engineering and Precision Surgery Laboratories entry has no year. The founders'
  *     biographies say Lee and Bennet founded the laboratories and co-direct
  *     them, but never say when. It is shown undated rather than guessed at.
  *
@@ -59,11 +59,11 @@ export const timeline = [
        in founding them, and never date it. Guessing would be the only way to
        fill this column, so it stays empty. */
     year: null,
-    title: 'The Neural Engineering Laboratories',
+    title: 'The Neural Engineering and Precision Surgery Laboratories',
     body:
-      'Kendall Lee and Kevin Bennet found the Neural Engineering Laboratories at Mayo Clinic and '
+      'Kendall Lee and Kevin Bennet found the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic and '
       + 'serve as co-directors. This is the room NaviNetics comes out of: a neurosurgeon and an '
-      + 'engineer, in the same building as the operating theatre.',
+      + 'engineer, in the same building as the operating theater.',
     source: 'Founder biographies — year not recorded',
   },
   {
@@ -76,9 +76,9 @@ export const timeline = [
     year: '2016',
     title: 'The prototype',
     body:
-      'Goerss joins the Neural Engineering Laboratories. There he designs a spinal stereotactic '
+      'Goerss joins the Neural Engineering and Precision Surgery Laboratories. There he designs a spinal stereotactic '
       + 'device, a relocatable porcine headframe, and the prototype of the reusable stereotactic '
-      + 'system NaviNetics now commercialises.',
+      + 'system NaviNetics now commercializes.',
     source: 'Founder biography',
   },
   {
@@ -127,7 +127,7 @@ export const principles = [
   {
     title: 'Design by listening',
     body:
-      'A co-founder is a practising neurosurgeon. Clinical input is not a quarterly advisory call — '
+      'A co-founder is a practicing neurosurgeon. Clinical input is not a quarterly advisory call — '
       + 'it is someone who will be holding the device at 7am, saying the hardware is in the way of '
       + 'their hands. The skull anchor key exists because of that complaint.',
   },

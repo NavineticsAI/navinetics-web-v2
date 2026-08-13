@@ -9,7 +9,7 @@
    THE RING
 
    Authored around the origin, so the assembly rotates about (0,0) and nothing
-   has to carry a centre through the maths. The page places it with a viewBox.
+   has to carry a center through the maths. The page places it with a viewBox.
 
    Angles are degrees from twelve o'clock, clockwise, which is how the layout
    was reasoned about on paper — not the atan2 convention. Converting once,
@@ -30,7 +30,7 @@
  * below its own 362px, so there is nothing to gain by going larger.
  */
 export const R = {
-  deviceH: 356, // height of the unit at the centre
+  deviceH: 356, // height of the unit at the center
   bezel: 206, // the hairline immediately outside it
   engrave: 222, // where the domain names are set, inside the band
   arc: 244, // the four domain arcs
@@ -99,21 +99,21 @@ export const sideOf = (deg) => (pt(1, deg)[0] > -0.02 ? 'right' : 'left');
    THE FIELD
 
    A voltammogram, near enough to read as one and no nearer. It carries no
-   axis, no unit and no number, because a labelled plot on a product page is a
+   axis, no unit and no number, because a labeled plot on a product page is a
    claim about what the instrument measured and this one measured nothing —
    see the claims notice in src/data/maven.js.
 
    What it does carry is the shape of the thing: a potential sweep across, scan
-   number down, current in colour, and the vertical striations that a real
+   number down, current in color, and the vertical striations that a real
    sweep leaves behind. As the page settles, the striations fall away and the
    peaks resolve, which is the only editorial idea in it.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /**
- * The colour bar out of src/assets/maven/graph.png, resampled at seventeen
+ * The color bar out of src/assets/maven/graph.png, resampled at seventeen
  * stops. It is the ordinary jet ramp that acquisition software has used for
  * thirty years, and it is here because it is the ramp the customer already
- * reads their own data in — not because a rainbow is a good colour scale.
+ * reads their own data in — not because a rainbow is a good color scale.
  * Low current first.
  */
 const RAMP = [
@@ -156,7 +156,7 @@ const LOBES = [
 const FW = 232;
 const FH = 132;
 
-/** The bay, as the colour everything is pulled toward when the field is a ground. */
+/** The bay, as the color everything is pulled toward when the field is a ground. */
 const BAY = [3, 16, 26];
 
 /**
@@ -190,7 +190,7 @@ const BAY = [3, 16, 26];
  * as emission rather than as a pale sheet laid on top, and it means the
  * curtains brighten where they cross without any ordering to get right.
  *
- * The colours are the ramp's own cool end and one warm, so the aurora belongs
+ * The colors are the ramp's own cool end and one warm, so the aurora belongs
  * to the same plot it is drifting over.
  */
 const CURTAINS = [

@@ -44,9 +44,9 @@ import detailArt from '../assets/d1/detail.webp';
    black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
    band's own dark ground, like the traced images do. */
 import headArt from '../assets/d1/head.webp';
-/* The arc-centred band's figure is the existing video of the instrument
+/* The arc-centered band's figure is the existing video of the instrument
    turning on a head model with a probe on its trajectory — which is precisely
-   what arc-centred means, and no still can show it. Same encode the education
+   what arc-centered means, and no still can show it. Same encode the education
    page uses; there is no second copy. */
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
@@ -105,8 +105,8 @@ export const bands = [
     ground: 'light',
     tone: 'ephys',
     eyebrow: 'Targeting',
-    title: 'Arc-centred.',
-    lead: 'Classified as an arc-centred stereotactic device: three linear degrees of freedom set '
+    title: 'Arc-centered.',
+    lead: 'Classified as an arc-centered stereotactic device: three linear degrees of freedom set '
       + 'the target, and two angles of rotation set how you get to it. Every approach the arc '
       + 'allows meets the same point.',
     points: [
@@ -121,7 +121,7 @@ export const bands = [
           + 'out at the rim of a ring.',
       },
     ],
-    meta: [{ label: 'Classification', value: 'Arc-centred' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
+    meta: [{ label: 'Classification', value: 'Arc-centered' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
     figure: {
       video: frameVideo,
       poster: framePoster,
@@ -179,7 +179,7 @@ export const bands = [
           + 'frameless one.',
       },
     ],
-    meta: [{ label: 'Localisers', value: 'MR · CT · X-ray' }, { label: 'Reusable', value: 'Yes' }],
+    meta: [{ label: 'Localizers', value: 'MR · CT · X-ray' }, { label: 'Reusable', value: 'Yes' }],
     figure: {
       src: detailArt,
       w: 759, h: 1134,

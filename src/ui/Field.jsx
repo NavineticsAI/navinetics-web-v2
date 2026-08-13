@@ -12,7 +12,7 @@ const CONTROL = cn(
 );
 
 /**
- * Labelled form control with full state coverage.
+ * Labeled form control with full state coverage.
  *
  * Error copy rule: say what to DO, not that something is wrong.
  * "Add the part after the @" beats "Invalid email" every time.

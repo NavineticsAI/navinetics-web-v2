@@ -7,7 +7,7 @@ import { LocatorMap } from '../ui/LocatorMap.jsx';
  *
  * ─────────────────────────────────────────────────────────────────────────────
  * The stock photograph that used to sit here was hotlinked from a third-party
- * image CDN with no licence on file — an uncontrolled dependency on a page
+ * image CDN with no license on file — an uncontrolled dependency on a page
  * NaviNetics owns, and flagged as a known gap in the design language docs. It
  * is gone. The drawn locator that replaces it is built from public-domain
  * Natural Earth borders by tools/locator-map.mjs, weighs a few kilobytes, and
@@ -33,13 +33,13 @@ const REASONS = [
   {
     title: 'Prototypes travel by hand',
     body:
-      'A part can be machined, taken across town, held in gloved hands, criticised and changed '
+      'A part can be machined, taken across town, held in gloved hands, criticized and changed '
       + 'again inside a week. Distance is the thing that usually stops that loop closing.',
   },
   {
     title: 'The laboratory is still here',
     body:
-      'The Neural Engineering Laboratories, where the founders work and where the first reusable '
+      'The Neural Engineering and Precision Surgery Laboratories, where the founders work and where the first reusable '
       + 'stereotactic system was prototyped, are in the same city.',
   },
 ];
@@ -95,7 +95,7 @@ export default function Community() {
         <SectionHead
           eyebrow="Why here"
           title="Proximity is a design tool."
-          lead="Being a short walk from the operating theatre changes what can be asked, how quickly it
+          lead="Being a short walk from the operating theater changes what can be asked, how quickly it
             can be answered, and how often a wrong assumption gets caught."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-3">

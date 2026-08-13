@@ -19,7 +19,7 @@ const BUILDERS = { beam: TABLE_SCENES.makeBeam, envelope: TABLE_SCENES.makeEnvel
  * the page is built and the fifth is still stated as missing rather than
  * quietly dropped.
  *
- * The centre of it is the motion explorer: pick one of the five specified
+ * The center of it is the motion explorer: pick one of the five specified
  * models and the drawing performs the motions that model's own specification
  * gives it, through the ranges it gives them. A CXR-701 offers three buttons
  * and a CXR-70S Tr offers five, because that is what the two tables say — the
@@ -38,7 +38,7 @@ export default function SurgicalTables() {
   usePageMeta({
     title: 'Carbon Fiber Surgical Tables',
     description:
-      'Carbon-fibre operating tables for imaging-guided procedures — a range from one to six '
+      'Carbon-fiber operating tables for imaging-guided procedures — a range from one to six '
       + 'motions, built so the table stays out of the picture.',
   });
 
@@ -54,7 +54,7 @@ export default function SurgicalTables() {
       >
         <img
           src={art.table}
-          alt="A carbon-fibre operating table, seen from the side"
+          alt="A carbon-fiber operating table, seen from the side"
           width={1500}
           height={571}
           className="mt-10 block h-auto w-full max-w-2xl"
@@ -70,7 +70,7 @@ export default function SurgicalTables() {
         eyebrow="Radiolucency"
         title={'Stay out of\nthe picture.'}
         lead="Everything between the source and the detector is in the image, whether you wanted it
-          there or not. Carbon fibre is far less absorbing than the steel or aluminium a table
+          there or not. Carbon fiber is far less absorbing than the steel or aluminium a table
           would otherwise be built from, so the structure holding the patient up contributes very
           little to what comes back."
         points={[
@@ -81,7 +81,7 @@ export default function SurgicalTables() {
           },
           {
             label: 'Lightweight, for the same reason.',
-            body: 'The property that makes carbon fibre transparent to X-rays is the same one '
+            body: 'The property that makes carbon fiber transparent to X-rays is the same one '
               + 'that makes it light: there is not much there to absorb anything.',
           },
           /* The absent radiolucency figure is no longer explained to the
@@ -90,12 +90,12 @@ export default function SurgicalTables() {
              narrate its own restraint. */
         ]}
         meta={[
-          { label: 'Top', value: 'Carbon fibre' },
+          { label: 'Top', value: 'Carbon fiber' },
           { label: 'In the beam', value: 'Always' },
         ]}
         figure={{
           src: art.tableSide, w: 1400, h: 672,
-          alt: 'A carbon-fibre table in side elevation, its top cantilevered clear of the column '
+          alt: 'A carbon-fiber table in side elevation, its top cantilevered clear of the column '
             + 'so nothing but carbon sits over the base.',
           caption: 'The top, cantilevered clear of the column',
         }}
@@ -170,7 +170,7 @@ export default function SurgicalTables() {
           },
           {
             label: 'Float is two travels at once.',
-            body: 'The top moves in X and Y over the column, so a target can be centred without '
+            body: 'The top moves in X and Y over the column, so a target can be centered without '
               + 'moving the patient or the arm.',
           },
           {

@@ -37,7 +37,7 @@ function readTheme() {
 export function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState(readTheme);
 
-  // Apply to the document, and keep the browser chrome colour in step. The
+  // Apply to the document, and keep the browser chrome color in step. The
   // theme-color meta tag can't follow data-theme on its own.
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

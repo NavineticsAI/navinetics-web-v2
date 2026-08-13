@@ -7,27 +7,27 @@ import { Hero, Reveal, Section } from '../ui/index.js';
  *
  * Every portrait is a landscape frame shown in a 4:5 box, so the browser keeps
  * the full height and crops the sides — and all four subjects sit right of
- * centre in their originals, which without this puts each face against the
- * right edge of the card. Moving the crop window is what centres them.
+ * center in their originals, which without this puts each face against the
+ * right edge of the card. Moving the crop window is what centers them.
  *
  * It is deliberately not done by cropping the files. Bennet's and Oh's 2026
- * portraits are much tighter shots than Lee's and Goerss', and a face-centred
+ * portraits are much tighter shots than Lee's and Goerss', and a face-centered
  * crop of those two could only be made by cutting in further still — which put
  * two head-and-shoulders portraits next to two three-quarter ones. Both are now
  * shipped at full frame, trimmed only to an exact 5:4, so the four read at the
- * same distance; the centring happens here instead. Lee's and Goerss' files are
+ * same distance; the centering happens here instead. Lee's and Goerss' files are
  * the old site's web-resolution exports and could not be re-cropped anyway
  * without throwing away pixels the page already upscales.
  *
  * The vertical half stays at 0% — see object-top on the <img>. Percentages are
  * (face − 32) / 36, which is where a 64%-wide window has to start to put the
- * face at its centre.
+ * face at its center.
  */
 const founders = [
   {
     name: 'Kendall H. Lee, M.D., Ph.D.',
     /* Their title at NaviNetics. The "Co-Director" further down each bio is a
-       different job — the Mayo Clinic Neural Engineering Laboratories — and is
+       different job — the Mayo Clinic Neural Engineering and Precision Surgery Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kendall-lee-150-500x400-1.jpg'),
@@ -37,13 +37,13 @@ const founders = [
       'He further trained at Dartmouth Hitchcock Medical Center, completing an internship in general surgery and a residency and chief residency in neurosurgery. In his clinical practice, Dr. Lee is an expert on neurological disorders, seeing patients with Parkinson’s disease, Tourette’s syndrome, dystonia, and other neurodegenerative diseases.',
       'His research focuses on developing deep brain stimulation for the treatment of Parkinson’s disease, tremor, depression, obsessive-compulsive disorder and epilepsy. Dr. Lee is fascinated with the possibility of combining sophisticated electrophysiological and electrochemical recordings with miniaturized analytical elements to augment or repair disrupted function of the brain.',
       'His team was awarded the Mayo Clinic Distinguished Team Science award in 2015. He was a Commander in the US Navy Reserve and in 2013 served a 6-month deployment in Germany, using his neurosurgery skills to treat soldiers wounded in the conflict in the Middle East.',
-      'Dr. Lee is a consultant in the Mayo Clinic Rochester, MN Department of Neurologic Surgery with joint appointments in the Department of Physiology and Biomedical Engineering and the Department of Physical Medicine and Rehabilitation. He holds the academic rank of professor of Neurosurgery and Biomedical Engineering, and is a co-founder of the Neural Engineering Laboratories, where he currently serves as Co-Director.',
+      'Dr. Lee is a consultant in the Mayo Clinic Rochester, MN Department of Neurologic Surgery with joint appointments in the Department of Physiology and Biomedical Engineering and the Department of Physical Medicine and Rehabilitation. He holds the academic rank of professor of Neurosurgery and Biomedical Engineering, and is a co-founder of the Neural Engineering and Precision Surgery Laboratories, where he currently serves as Co-Director.',
     ],
   },
   {
     name: 'Kevin E. Bennet, MBA, Ph.D.',
     /* Their title at NaviNetics. The "Co-Director" further down each bio is a
-       different job — the Mayo Clinic Neural Engineering Laboratories — and is
+       different job — the Mayo Clinic Neural Engineering and Precision Surgery Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kevin-bennet.jpg'),
@@ -52,7 +52,7 @@ const founders = [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',
       'He holds patents concerning neurosurgery, diamond, semiconductor and optical technology and has founded several technology-based companies. He received a degree in Chemical Engineering from the Massachusetts Institute of Technology, an MBA from Harvard and his doctorate from Deakin University.',
       'Dr. Bennet joined the Mayo Clinic in 1990 with past appointments as Chair of Strategic Alliances, Vice Chair of Information Technology Architecture Subcommittee, Clinical Practice Committee Equipment Subcommittee, Pharmacy and Therapeutics Committee, and Medical/Industry Relations Committee.',
-      'He is also a founder of the Mayo Clinic Neural Engineering Laboratories and currently serves as co-director. He holds additional appointments as Administrator of the Mayo Clinic Division of Engineering and Associate Professor of Neurosurgery.',
+      'He is also a founder of the Mayo Clinic Neural Engineering and Precision Surgery Laboratories and currently serves as co-director. He holds additional appointments as Administrator of the Mayo Clinic Division of Engineering and Associate Professor of Neurosurgery.',
     ],
   },
   {
@@ -63,7 +63,7 @@ const founders = [
     bio: [
       'Steve Goerss has 40 years of experience in designing and fabricating neurosurgical devices and stereotactic instrumentation. He has been awarded three patents with two more pending. He joined the Mayo Clinic in 1984 with the Department of Neurologic Surgery until 2016.',
       'During this time, he supported all computer-assisted neurosurgical procedures, trained neurosurgical residents in the use of this technology, and developed custom neurosurgical instruments and systems for the neurosurgical staff. He also became an Assistant Professor of the Mayo Medical School. He has authored and co-authored 51 peer reviewed papers and two book chapters.',
-      'He joined the Neural Engineering Laboratories at the Mayo Clinic in 2016. During this tenure, he designed and developed a spinal stereotactic device, a relocatable porcine stereotactic headframe/stereotactic device, and the prototype version of the NaviNetics Reusable Stereotactic System now commercialized by NaviNetics.',
+      'He joined the Neural Engineering and Precision Surgery Laboratories at the Mayo Clinic in 2016. During this tenure, he designed and developed a spinal stereotactic device, a relocatable porcine stereotactic headframe/stereotactic device, and the prototype version of the NaviNetics Reusable Stereotactic System now commercialized by NaviNetics.',
       'From 1986 to 1997, Mr. Goerss was a founder of COMPASS International, a computer-assisted stereotactic and medical device company, and served as President.',
     ],
   },
@@ -78,7 +78,7 @@ const founders = [
        Neurochemistry line). Nothing here is inferred. Replace with the full
        biography when it arrives; the layout takes any number of paragraphs. */
     bio: [
-      'Dr. Oh is Associate Director of the Neural Engineering Laboratories at Mayo Clinic and an Associate Professor of Neurosurgery at Mayo Clinic. He also holds an appointment as Professor of Biomedical Engineering at Korea University.',
+      'Dr. Oh is Associate Director of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic and an Associate Professor of Neurosurgery at Mayo Clinic. He also holds an appointment as Professor of Biomedical Engineering at Korea University.',
       'He is the senior author on the laboratory’s neurochemical sensing work: tracking tonic dopamine in vivo by multiple cyclic square wave voltammetry, resolving highly similar neurotransmitters using voltammetry and deep learning, and showing that deep brain stimulation alleviates tics in Tourette syndrome through striatal dopamine transmission.',
       'That line of research — measuring what the brain is doing chemically while it is being stimulated — is the science behind the NaviNetics MAVEN neurochemical sensing platform.',
     ],
@@ -97,7 +97,7 @@ export default function Founders() {
       <Hero
         eyebrow="Who we are — Our founders"
         title="The visionaries."
-        lead="Decades of expertise in neurosurgery, technology development and medical device innovation, brought out of the Mayo Clinic Neural Engineering Laboratories."
+        lead="Decades of expertise in neurosurgery, technology development and medical device innovation, brought out of the Mayo Clinic Neural Engineering and Precision Surgery Laboratories."
       />
 
       <Section wide>

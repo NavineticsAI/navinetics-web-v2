@@ -27,7 +27,7 @@ const BUILDERS = {
  * Not shared with SceneBand: that component owns the software page's scene
  * registry and its four bands, and the two would have to grow a props-shaped
  * plugin system to sit in one file. The layout is worth repeating; the wiring
- * is not worth generalising for three callers.
+ * is not worth generalizing for three callers.
  */
 /* `builders` lets a page bring its own scene registry. The MAVEN scenes are
    the default because they were here first; the carbon tables pass theirs. */
@@ -107,7 +107,7 @@ export function ScienceBand({
           ? 'border-hairline-soft bg-canvas text-ink'
           : 'border-[var(--mv-rule-2)] bg-[var(--mv-bay)] text-nn-50',
       )}
-      /* The tint is the domain's own colour, in the variant that survives the
+      /* The tint is the domain's own color, in the variant that survives the
          ground it is standing on — see the note beside the tokens. */
       style={{ '--tint': `var(--mv-${tone}${light ? '-ink' : ''})` }}
     >
@@ -127,7 +127,7 @@ export function ScienceBand({
         aria-hidden="true"
         style={{
           /* Explicit stop tokens rather than rgb(from var(--canvas) …): the
-             relative-colour form is Safari 16.4+, and below that the whole
+             relative-color form is Safari 16.4+, and below that the whole
              gradient fails to parse and the copy loses its scrim. See the
              tokens in index.css. */
           background: light
@@ -209,7 +209,7 @@ export function ScienceBand({
                     /* A plated figure fills its column. A cut-out object is
                        usually tall and narrow, and filling the column with one
                        makes it two thousand pixels high — so it is capped by
-                       height and centred instead. */
+                       height and centered instead. */
                     className={figure.bare
                       ? 'mx-auto block h-auto w-auto max-h-[26rem] max-w-full sm:max-h-[32rem] lg:max-h-[38rem]'
                       : 'block h-auto w-full'}

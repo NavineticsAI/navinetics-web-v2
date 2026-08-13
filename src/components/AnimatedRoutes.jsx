@@ -43,7 +43,7 @@ const D1 = lazy(() => import('../pages/D1.jsx'));
    was parsed by every visitor to every page, to draw a globe on one of them.
    Its fallback is the page ground; the hero above it is plain markup. */
 const Partners = lazy(() => import('../pages/Partners.jsx'));
-/* The two catalogue templates. Every product slug that exists today is claimed
+/* The two catalog templates. Every product slug that exists today is claimed
    by a dedicated page above, so Product is currently reached by nothing at all;
    Technology serves one slug. Neither belongs in the chunk every visitor
    downloads, and both carry SpecTable, ComparisonTable and ComingSoon. */

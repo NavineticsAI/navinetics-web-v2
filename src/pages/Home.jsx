@@ -18,7 +18,7 @@ export default function Home() {
   usePageMeta({
     title: 'Precision stereotactic and neuromodulation devices',
     description:
-      'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering Laboratories at Mayo Clinic.',
+      'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic.',
   });
 
   return (
@@ -41,7 +41,7 @@ export default function Home() {
            display size this is the same face every other page heading uses, and
            caps here would read as a different typographic system. */
         title={'Targeting the future.\nImproving today.'}
-        lead="Stereotactic frames, neuromodulation instruments and carbon-fibre operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic."
+        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic."
       >
         <div className="flex flex-wrap gap-3">
           <Button to={products[0].path} size="lg" arrow>
@@ -90,7 +90,7 @@ export default function Home() {
                     gone, at NaviNetics' request — "DEGREES OF FREEDOM 3 + 2" on
                     the NRSS plate and the equivalent first metric on the other
                     two. It covered the bottom-left of the product it was
-                    labelling. The figures are not lost: `metrics` still feeds
+                    labeling. The figures are not lost: `metrics` still feeds
                     the spec table on each product page. */}
               </div>
             </Reveal>
@@ -132,7 +132,7 @@ export default function Home() {
                 </span>
                 <h3 className="mt-3 text-2xl tracking-[-0.03em]">Mayo Clinic roots</h3>
                 <p className="mt-2.5 text-sm leading-relaxed opacity-85">
-                  Born from the Neural Engineering Laboratories, on decades of clinical experience.
+                  Born from the Neural Engineering and Precision Surgery Laboratories, on decades of clinical experience.
                 </p>
               </div>
               <Link
@@ -169,8 +169,8 @@ export default function Home() {
                 <Badge>Neuromodulation</Badge>
                 <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">Closed-loop, one day</h3>
                 <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                  Synchronised neurochemical and electrophysiological measurement, engineered so
-                  stimulation artefact never contaminates the recording.
+                  Synchronized neurochemical and electrophysiological measurement, engineered so
+                  stimulation artifact never contaminates the recording.
                 </p>
               </div>
               <LinkAction to="/products/maven-neuromodulation" className="mt-5">

@@ -14,7 +14,7 @@ import { Button, Field, Hero, Reveal, Section, Switch } from '../ui/index.js';
  *
  * When it is unset the form does NOT pretend to send. It hands the message to
  * the visitor's mail client with everything they typed already in it, so the
- * words they wrote survive. The previous behaviour — validate, show a success
+ * words they wrote survive. The previous behavior — validate, show a success
  * panel, then admit nothing was transmitted — lost every enquiry that arrived
  * through the only conversion point on the site.
  */
@@ -60,7 +60,7 @@ export default function Contact() {
   const [params] = useSearchParams();
   const PRESET = { d1: REASONS[0], tables: REASONS[1], maven: REASONS[2], complaint: COMPLAINT };
   const [form, setForm] = useState({
-    name: '', email: '', organisation: '',
+    name: '', email: '', organization: '',
     reason: PRESET[params.get('reason')] ?? REASONS[0],
     message: '',
   });
@@ -88,7 +88,7 @@ export default function Contact() {
     const body = [
       `Name: ${form.name}`,
       `Email: ${form.email}`,
-      form.organisation.trim() ? `Organisation: ${form.organisation}` : null,
+      form.organization.trim() ? `Organization: ${form.organization}` : null,
       `Reason: ${form.reason}`,
       updates ? 'Research updates: yes, please subscribe me' : null,
       '',
@@ -231,10 +231,10 @@ export default function Contact() {
                     autoComplete="email"
                   />
                   <Field
-                    label="Hospital or organisation"
+                    label="Hospital or organization"
                     hint="Optional"
-                    value={form.organisation}
-                    onChange={set('organisation')}
+                    value={form.organization}
+                    onChange={set('organization')}
                     placeholder="Mayo Clinic, Department of Neurosurgery"
                     autoComplete="organization"
                   />

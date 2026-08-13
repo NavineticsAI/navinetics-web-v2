@@ -240,7 +240,7 @@ export const FEATURE_BANDS = [
     tint: '#4ade80',
     eyebrow: 'Stereotactic registration',
     title: 'The frame,\nfound in\nthe scan.',
-    lead: 'A localiser carries rods in an N: two upright, one diagonal. Every image plane cutting '
+    lead: 'A localizer carries rods in an N: two upright, one diagonal. Every image plane cutting '
       + 'a plate meets all three, and where the middle point falls between the outer two tells you '
       + 'exactly how high that slice sits.',
     points: [
@@ -254,7 +254,7 @@ export const FEATURE_BANDS = [
     ],
     image: {
       src: nbarShot, w: 1399, h: 1124,
-      alt: 'The localiser box with detected fiducials strung along every rod.',
+      alt: 'The localizer box with detected fiducials strung along every rod.',
       caption: 'N-BAR detection',
     },
   },
@@ -291,7 +291,7 @@ export const FEATURE_BANDS = [
     // single word on the last line.
     title: 'Or target\nthe tract\nitself.',
     lead: 'Where a formula gives you a coordinate, diffusion gives you the structure. Water moves '
-      + 'further along a fibre than across it; tracking that anisotropy from a seed region '
+      + 'further along a fiber than across it; tracking that anisotropy from a seed region '
       + 'reconstructs the bundles running through the target, so it can be aimed at directly '
       + 'rather than derived.',
     points: [

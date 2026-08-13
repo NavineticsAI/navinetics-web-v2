@@ -60,7 +60,7 @@ export const evidence = publications
   .sort((a, b) => a.year - b.year);
 
 /**
- * The question the whole programme is an answer to. Deliberately the plainest
+ * The question the whole program is an answer to. Deliberately the plainest
  * paragraph on the page: everything after it is a step toward this.
  */
 export const gap = {
@@ -97,7 +97,7 @@ export const chapters = [
     title: 'Reporting an\namount.',
     lead: 'Fast-scan voltammetry subtracts its own background, and the baseline goes with it — so '
       + 'it reports change beautifully and cannot report an amount. Multiple cyclic square wave '
-      + 'voltammetry models the capacitive current instead of subtracting a neighbouring sweep, '
+      + 'voltammetry models the capacitive current instead of subtracting a neighboring sweep, '
       + 'which is what leaves the standing level intact underneath.',
     points: [
       {
@@ -156,7 +156,7 @@ export const chapters = [
     meta: [{ label: 'Method', value: 'Voltammetry + learning' }, { label: 'Reported', value: '2024' }],
     figure: {
       src: figField, w: 577, h: 513,
-      alt: 'A square-wave voltammogram: current in colour across potential and scan number.',
+      alt: 'A square-wave voltammogram: current in color across potential and scan number.',
       caption: 'A square-wave voltammogram',
     },
     readMore: { label: 'Neurochemical detection, explained', to: '/resources/education#neurochemical' },
@@ -193,7 +193,7 @@ export const chapters = [
     meta: [{ label: 'Journal', value: 'Brain' }, { label: 'Reported', value: '2023' }],
     figure: {
       src: figFscv, w: 717, h: 848,
-      alt: 'A voltammetric colour plot with the extracted concentration trace above it and the '
+      alt: 'A voltammetric color plot with the extracted concentration trace above it and the '
         + 'cyclic voltammogram inset; the stimulus is marked beneath the plot.',
       caption: 'A release event, with the stimulus marked beneath',
     },
@@ -217,7 +217,7 @@ export const chapters = [
           + 'monitoring for intraoperative neurosurgical applications.',
       },
       {
-        label: 'A carbon-fibre microelectrode does both jobs.',
+        label: 'A carbon-fiber microelectrode does both jobs.',
         body: 'Finer than a human hair, carrying the sensing surface and the electrical channel '
           + 'in one assembly.',
       },
@@ -233,9 +233,9 @@ export const chapters = [
     meta: [{ label: 'Signals', value: 'Chemical + electrical' }, { label: 'Reported', value: '2026' }],
     figure: {
       src: figSensor, w: 1308, h: 1026,
-      alt: 'A carbon-fibre microelectrode: the fibre, silica and polyamide tubing, and the inner '
+      alt: 'A carbon-fiber microelectrode: the fiber, silica and polyamide tubing, and the inner '
         + 'and outer cannula, photographed against a scale and drawn in section.',
-      caption: 'The carbon-fibre microelectrode',
+      caption: 'The carbon-fiber microelectrode',
     },
     readMore: { label: 'Phasic concentration recording, explained', to: '/resources/education#phasic' },
   },

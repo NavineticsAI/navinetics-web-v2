@@ -22,11 +22,11 @@ import { ScienceBand } from '../ui/ScienceBand.jsx';
  *
  * GROUND. The hero and two of the four bands are the instrument bay, which is
  * dark in both themes — the unit is a white cutout and the field is a
- * full-luminance colour scale, and neither survives a pale ground. The other
+ * full-luminance color scale, and neither survives a pale ground. The other
  * two bands and the close follow the site theme, so the page breathes instead
  * of running as one long tunnel, and it hands the reader back to the rest of
  * the site at the end. The scenes on the light bands are redrawn in ink rather
- * than being the same colours turned down; see palette() in lib/mavenScenes.
+ * than being the same colors turned down; see palette() in lib/mavenScenes.
  *
  * Copy is written from NaviNetics' own deck at the level of disclosure the
  * rest of the site already uses. What the deck holds that is deliberately NOT
@@ -39,7 +39,7 @@ export default function Maven() {
     title: product.name,
     description:
       'MAVEN — a multifunctional apparatus for voltammetry, electrophysiology and '
-      + 'neuromodulation. Neurochemical and electrophysiological recording, synchronised with '
+      + 'neuromodulation. Neurochemical and electrophysiological recording, synchronized with '
       + 'stimulation, for preclinical research.',
   });
 

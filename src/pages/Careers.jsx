@@ -127,7 +127,7 @@ export default function Careers() {
       </Section>
 
       {/* ── 2 · Careers at NaviNetics ──────────────────────────────────────
-          Arc-centred stereotaxy reaches one point from many angles. So does the
+          Arc-centered stereotaxy reaches one point from many angles. So does the
           team. The diagram is the company's own geometry, used as an org chart.
           Currently hidden — see SHOW_DISCIPLINE_DIAGRAM above. */}
       {SHOW_DISCIPLINE_DIAGRAM && (

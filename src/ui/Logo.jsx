@@ -9,13 +9,13 @@ import logoReversed from '../assets/logo-reversed.png';
  * byte for byte.
  *
  * It used to be a CSS mask: this PNG supplied the silhouette, and a single flat
- * `--logo-ink` was poured through it, lit by a travelling highlight and drifted
+ * `--logo-ink` was poured through it, lit by a traveling highlight and drifted
  * in hue. That treatment could recolour itself per theme, but a mask reads only
  * the alpha channel — so it discarded the gradient across the ribbon, the fold
  * shading, and the fact that the mark and the wordmark are two different blues
- * (#196184 and #164f6a). Every placement rendered one flat colour that matched
+ * (#196184 and #164f6a). Every placement rendered one flat color that matched
  * neither, and the light-mode footer did not even match the light-mode navbar.
- * An image cannot get the colour wrong, because it is the colour.
+ * An image cannot get the color wrong, because it is the color.
  *
  * The trade is that an image cannot recolour itself for a dark ground, which is
  * what `reversed` is for. src/assets/logo-reversed.png is derived from the same

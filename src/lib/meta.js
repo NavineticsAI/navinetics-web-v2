@@ -45,7 +45,7 @@ const prop = (property, content) =>
  *
  * A caveat worth keeping in view: nothing here helps a crawler that does not
  * run JavaScript, because the site is client-rendered. Prerendering the routes
- * at build time is the real fix; this is the correct behaviour underneath it.
+ * at build time is the real fix; this is the correct behavior underneath it.
  */
 export function usePageMeta({ title, description, image } = {}) {
   const { pathname } = useLocation();

@@ -52,7 +52,7 @@ export default function Technology() {
               page, but it stays as the internal record of what is missing. */}
           <ComingSoon
             title={`${tech.name} is in development.`}
-            body="Automated landmark localisation for neuronavigation is published work. The software built on it is in development, and we would rather talk to you about it than publish specifications before they are settled."
+            body="Automated landmark localization for neuronavigation is published work. The software built on it is in development, and we would rather talk to you about it than publish specifications before they are settled."
             needs={tech.needsContent}
           />
         </Section>

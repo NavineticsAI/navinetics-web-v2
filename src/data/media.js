@@ -20,7 +20,7 @@
  * carrying fake CE marks and invented model, serial and lot numbers; one bore
  * a competitor's trademark (Stryker) and one a fabricated Ø0.8 mm dimension
  * callout. surgical_probe.png was live here and in MAVEN's gallery, captioned
- * as a carbon-fibre microelectrode assembly, which it was not.
+ * as a carbon-fiber microelectrode assembly, which it was not.
  *
  * A fabricated specification or CE mark on a medical device company's site is
  * a regulatory problem, not a stock-photo problem. Use photography of actual
@@ -46,7 +46,7 @@ export const mediaItems = [
     category: 'Devices',
     src: asset('/DSC05397-1024x695.jpg'),
     fit: 'cover',
-    caption: 'Arc-centred frame assembly.',
+    caption: 'Arc-centered frame assembly.',
   },
   {
     id: 'microdrive',
