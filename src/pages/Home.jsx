@@ -42,7 +42,7 @@ export default function Home() {
       >
         <div className="flex flex-wrap gap-3">
           <Button to={products[0].path} size="lg" arrow>
-            Discover the Frame System
+            Discover the NRSS
           </Button>
           <Button to="/company/who-we-are" size="lg" variant="secondary">
             Who we are
@@ -141,7 +141,7 @@ export default function Home() {
             <Card lift className="nn-retic relative h-full min-h-56 overflow-hidden">
               <span className="eyebrow text-action">Unprecedented access</span>
               <h3 className="mt-3 text-2xl tracking-[-0.03em]">
-                The anchor key replaces the head ring
+                Fixation by a small skull anchor key
               </h3>
               <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
                 Leaving the patient's face completely unobstructed and giving the surgical team full

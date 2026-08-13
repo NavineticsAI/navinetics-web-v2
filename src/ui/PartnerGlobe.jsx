@@ -3,6 +3,7 @@ import { usePrefersReducedMotion } from '../lib/motion.js';
 import { worldDots } from '../data/worldDots.js';
 import { HOME } from '../data/partners.js';
 import { decodeDots, drawGlobe, drawRoute, project, unit } from '../lib/globeScene.js';
+import { Logo } from './Logo.jsx';
 
 /**
  * The partners globe.
@@ -425,6 +426,19 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
 
 /** A partner's mark on a white plate, or its name set in mono if it has none. */
 export function Mark({ org, h = 18 }) {
+  /* NaviNetics' own tile draws the real lockup rather than the flat PNG, so the
+     mark here is the same component the navbar and footer use. The plate is
+     white in both themes, so the ink is pinned light — see .nn-logo-on-light. */
+  if (org.self) {
+    return (
+      <span
+        className="nn-mark flex items-center justify-center rounded-[5px] px-1.5"
+        style={{ height: h + 8 }}
+      >
+        <Logo height={h} className="nn-logo-on-light" />
+      </span>
+    );
+  }
   if (!org.logo) {
     return (
       <span

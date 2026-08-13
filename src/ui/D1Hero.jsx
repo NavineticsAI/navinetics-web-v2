@@ -55,13 +55,15 @@ export function D1Hero() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <span className="eyebrow text-sg-300">Products — NaviNetics D1 Stereotactic Frame System</span>
+          <span className="eyebrow text-sg-300">
+            Products — NaviNetics Reusable Stereotactic System (NRSS)
+          </span>
           <h1 className="whitespace-pre-line text-d1">
             {'Robust. Low complexity.\nRadically comfortable.'}
           </h1>
           <p className="max-w-prose text-lead leading-[1.55] text-nn-200">
-            Arc-centred targeting with a skull anchor key in place of a base ring. Three linear
-            degrees of freedom, two angles of rotation.
+            Arc-centred targeting from a skull anchor key. Three linear degrees of freedom, two
+            angles of rotation.
           </p>
 
           {/*

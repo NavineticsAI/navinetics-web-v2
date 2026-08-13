@@ -939,6 +939,22 @@
     height: calc(var(--h) * 1px);
     width: calc(var(--h) * 375 / 74 * 1px);
   }
+  /* Two places draw the lockup on a ground that does not follow the theme: the
+     footer is dark in both themes, and the partners globe sets every mark on a
+     white plate. `--logo-ink` alone would leave each of them invisible in one
+     theme, so those two pin the ink rather than opt out of the component —
+     which is the point, one component draws the mark everywhere. The values
+     are the theme blocks' own; keep them in step with :root and [data-theme]. */
+  .nn-logo-on-dark {
+    --logo-ink: #82bad9;
+    --logo-lit: 0.3;
+    --logo-tint: 0.43;
+  }
+  .nn-logo-on-light {
+    --logo-ink: #185273;
+    --logo-lit: 0.5;
+    --logo-tint: 0.51;
+  }
   .nn-logo-stage {
     position: absolute;
     inset: 0;

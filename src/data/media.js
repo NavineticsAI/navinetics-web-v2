@@ -37,11 +37,11 @@ export const mediaItems = [
     category: 'Devices',
     src: asset('/model-head-clean-750x998-1-451x600.png'),
     fit: 'contain',
-    caption: 'The anchor key replaces the base head ring, leaving the face unobstructed.',
+    caption: 'The anchor key leaves the face unobstructed.',
   },
   {
     id: 'frame-assembly',
-    title: 'D1 stereotactic frame',
+    title: 'NRSS stereotactic frame',
     kind: 'image',
     category: 'Devices',
     src: asset('/DSC05397-1024x695.jpg'),

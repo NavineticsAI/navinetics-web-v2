@@ -27,7 +27,7 @@ const INBOX = 'info@navinetics.com';
  * it cannot be missed and cannot be mistaken for one.
  */
 const REASONS = [
-  'D1 Frame System enquiry',
+  'NRSS enquiry',
   'Surgical tables enquiry',
   'Neuromodulation research',
   'Distribution and partnerships',
@@ -49,7 +49,8 @@ export default function Contact() {
   usePageMeta({
     title: 'Contact',
     description:
-      'Get in touch with NaviNetics about the D1 Frame System, surgical tables, neuromodulation '
+      'Get in touch with NaviNetics about the NaviNetics Reusable Stereotactic System (NRSS), '
+      + 'surgical tables, neuromodulation '
       + 'research, distribution, careers, or to report a product issue.',
   });
 

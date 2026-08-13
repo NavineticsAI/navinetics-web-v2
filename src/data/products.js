@@ -47,15 +47,18 @@ export const products = [
      * is redundant, and an aka footnote on a product page reads as though the
      * product were renamed to get away from something.
      */
-    name: 'NaviNetics D1 Stereotactic Frame System',
-    shortName: 'D1',
-    family: 'NaviNetics D1 Stereotactic Frame System',
-    /* No `aka`: the full name above carries the old one. Note that Goerss's
-       biography also calls this the "NaviNetics Reusable Stereotactic System",
-       which is deliberately NOT used anywhere — the bio describes a "prototype
-       version", and after the WINCS/MAVEN mix-up below, a name that might
-       belong to an earlier generation does not go on the site without
-       NaviNetics confirming it. */
+    name: 'NaviNetics Reusable Stereotactic System (NRSS)',
+    shortName: 'NRSS',
+    family: 'NaviNetics Reusable Stereotactic System (NRSS)',
+    /* NRSS is the name, confirmed by NaviNetics — the open question recorded
+       here is now closed. It used to read "NaviNetics D1 Stereotactic Frame
+       System", and the note said the NRSS name from Goerss's biography was
+       deliberately not used because the bio describes a "prototype version"
+       and the name might have belonged to an earlier generation.
+
+       "D1" survives as the slug, the route, the page component and the asset
+       folder, so no link or import moves; it is simply not what the product is
+       called on screen any more. Still no `aka` — the full name is the name. */
     /**
      * REGULATORY STATUS.
      *
@@ -98,11 +101,11 @@ export const products = [
     technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nRadically comfortable.',
     summary:
-      'Arc-centred targeting with a skull anchor key in place of a base ring. Three linear degrees of freedom, two angles of rotation.',
+      'Arc-centred targeting from a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
     intro:
       'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
     hero: d1Head,
-    heroAlt: 'The D1 frame fitted to an anatomical head model, held clear of the face',
+    heroAlt: 'The NRSS fitted to an anatomical head model, held clear of the face',
     heroTone: 'bay',
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
@@ -113,7 +116,7 @@ export const products = [
     sequence: [
       {
         title: 'Anchor Key',
-        body: "In place of the typical head ring of frame-based systems, a small anchor key is affixed to the patient's skull with percutaneous screws.",
+        body: "A small anchor key is affixed to the patient's skull with percutaneous screws.",
       },
       {
         title: 'Patient Comfort',
@@ -241,9 +244,12 @@ export const products = [
   {
     slug: 'maven-neuromodulation',
     path: '/products/maven-neuromodulation',
-    name: 'Maven Neuromodulation',
-    shortName: 'Maven',
-    family: 'Maven Neuromodulation',
+    /* MAVEN, not "Maven" — see the note below on the product name. These three
+       fields are the ones the catalogue, the nav and the page heading read, and
+       they were the last place on the site still setting it in title case. */
+    name: 'MAVEN Neuromodulation',
+    shortName: 'MAVEN',
+    family: 'MAVEN Neuromodulation',
     /**
      * NO `aka` HERE, deliberately.
      *
@@ -388,11 +394,11 @@ export const otherProducts = (slug) => products.filter((p) => p.slug !== slug);
 export const comparison = {
   published: false,
   needsReview: true,
-  columns: ['NaviNetics Frame System', 'Traditional frame-based', 'Frameless'],
+  columns: ['NRSS', 'Traditional frame-based', 'Frameless'],
   rows: [
-    { k: 'Patient fixation', v: ['Skull anchor key', 'Full base head ring', 'Bone fiducials / mask'] },
+    { k: 'Patient fixation', v: ['Skull anchor key', 'Rigid head fixation', 'Bone fiducials / mask'] },
     { k: 'Facial obstruction', v: ['None', 'Significant', 'Minimal'] },
     { k: 'Targeting principle', v: ['Arc-centred', 'Arc-centred', 'Trajectory guide'] },
-    { k: 'Adjustment location', v: ['At surgical field', 'At base ring', 'Varies'] },
+    { k: 'Adjustment location', v: ['At surgical field', 'At the frame', 'Varies'] },
   ],
 };

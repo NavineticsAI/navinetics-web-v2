@@ -76,8 +76,8 @@ export const bands = [
     tone: 'chem',
     eyebrow: 'Fixation',
     title: 'Anchored to\nthe skull.',
-    lead: 'In place of the head ring that frame-based systems are built around, a small anchor key '
-      + 'is affixed to the skull with percutaneous screws. Everything else attaches to that.',
+    lead: 'A small anchor key is affixed to the skull with percutaneous screws. Everything else '
+      + 'attaches to that.',
     points: [
       {
         label: 'The face stays clear.',

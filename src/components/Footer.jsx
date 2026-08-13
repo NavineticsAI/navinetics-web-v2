@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Mail, MapPin, Phone } from 'lucide-react';
 import { nav } from '../data/nav.js';
 import { IsoMark } from '../ui/Reticle.jsx';
+import { Logo } from '../ui/Logo.jsx';
 
 /**
  * Footer columns mirror the navbar, both read from data/nav.js — so a new page
@@ -18,9 +19,11 @@ export default function Footer() {
       <div className="nn-frame relative mx-auto">
         <div className="grid gap-12 lg:grid-cols-[1.6fr_repeat(4,1fr)]">
           <div>
-            <div className="text-2xl font-semibold tracking-[-0.03em]">
-              Navi<span className="text-sg-300">Netics</span>
-            </div>
+            {/* The lockup, not a typographic stand-in. This used to be
+                "Navi<span>Netics</span>" set in the body face, so the footer
+                showed a different wordmark from the navbar on every page. The
+                footer ground is dark in both themes — hence on-dark. */}
+            <Logo height={30} className="nn-logo-on-dark" />
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-nn-200">
               NaviNetics strives to make medical devices that change people's lives — by listening to
               the patient and the physician, and translating those conversations into safe,

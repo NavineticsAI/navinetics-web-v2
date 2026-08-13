@@ -36,8 +36,8 @@ export default function D1() {
   usePageMeta({
     title: product.name,
     description:
-      'The NaviNetics Frame System — arc-centred stereotactic targeting with a skull anchor key in '
-      + 'place of a base ring. FDA cleared. Three linear degrees of freedom, two angles of rotation.',
+      'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centred stereotactic targeting from '
+      + 'a skull anchor key. FDA cleared. Three linear degrees of freedom, two angles of rotation.',
   });
 
   return (

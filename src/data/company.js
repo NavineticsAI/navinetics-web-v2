@@ -128,7 +128,7 @@ export const principles = [
     title: 'Design by listening',
     body:
       'A co-founder is a practising neurosurgeon. Clinical input is not a quarterly advisory call — '
-      + 'it is someone who will be holding the device at 7am, saying the base ring is in the way of '
+      + 'it is someone who will be holding the device at 7am, saying the hardware is in the way of '
       + 'their hands. The skull anchor key exists because of that complaint.',
   },
   {

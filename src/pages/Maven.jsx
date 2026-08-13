@@ -99,7 +99,7 @@ export default function Maven() {
               Sensing and stimulating electrodes are placed through the same stereotactic route as
               the rest of our work — the{' '}
               <Link to="/products/d1-stereotactic-frame" className="text-action underline-offset-4 hover:underline">
-                D1 frame
+                NRSS
               </Link>{' '}
               and{' '}
               <Link to="/technology/navinetics-ai" className="text-action underline-offset-4 hover:underline">

@@ -59,8 +59,11 @@ export const territories = [
     summary: 'Direct from Rochester, with Abbott carrying distribution.',
     orgs: [
       {
-        /* Served from public/ rather than imported: it is the same file the
-           navbar uses, and one copy cannot drift from the other. */
+        /* `self` makes the tile draw the <Logo> lockup — the same component the
+           navbar and the footer use — instead of the flat PNG. `logo` stays as
+           the fallback for anything that renders a mark without going through
+           <Mark>. */
+        self: true,
         logo: naviLogo,
         name: 'NaviNetics, Inc.',
         role: 'Headquarters',
