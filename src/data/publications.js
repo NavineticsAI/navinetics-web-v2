@@ -171,7 +171,7 @@ export const publications = [
 ];
 
 /** Bolded wherever they appear in an author list. */
-export const founders = ['K.H. Lee', 'K.E. Bennet', 'S.J. Goerss'];
+export const founders = ['K.H. Lee', 'K.E. Bennet', 'S.J. Goerss', 'Y. Oh'];
 
 /** Section order on the page. Derived, so a new `line` appears on its own. */
 export const publicationLines = [...new Set(publications.map((p) => p.line))];

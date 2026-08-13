@@ -218,7 +218,10 @@ export const chapters = [
       },
       {
         label: 'Thirty-six authors.',
-        body: 'Including both of NaviNetics’ scientific founders. It is the accumulation of the '
+        /* Bennet, Oh and Lee are all on this author list — it said "both" while
+           the founders page named two scientific founders, and Oh's addition
+           makes three. Check the byline in publications.js before editing. */
+        body: 'Three of them are NaviNetics founders. It is the accumulation of the '
           + 'three papers above, not a separate line of work.',
       },
     ],

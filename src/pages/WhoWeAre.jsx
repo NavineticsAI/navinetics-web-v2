@@ -15,16 +15,24 @@ import { Timeline } from '../ui/Timeline.jsx';
  */
 const SHOW_TIMELINE = false;
 
+/* `focus` is the portrait's CSS object-position, and it is the same value the
+   full biography page uses — see the note above `CENTRED` in
+   src/pages/Founders.jsx. It has no visible effect in this 4:3 card, which
+   crops these landscape frames vertically rather than horizontally, but the two
+   pages should not disagree about where a face is if either box changes shape. */
 const FOUNDERS = [
   { name: 'Kendall H. Lee', suffix: 'M.D., Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Neurosurgeon at Mayo Clinic. Deep brain stimulation for Parkinson’s, tremor, depression, OCD and epilepsy.',
-    image: asset('/kendall-lee-150-500x400-1.jpg') },
+    image: asset('/kendall-lee-150-500x400-1.jpg'), focus: '83% 0%' },
   { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Thirty years in technology development. Patents in neurosurgery, diamond, semiconductor and optical technology.',
-    image: asset('/kevin-bennet-150-500x400-1.jpg') },
+    image: asset('/kevin-bennet.jpg'), focus: '50% 0%' },
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
-    image: asset('/stephan-goerss-150.jpg') },
+    image: asset('/stephan-goerss-150.jpg'), focus: '78% 0%' },
+  { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'Co-Founder',
+    line: 'Associate Director of the Neural Engineering Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
+    image: asset('/yoonbae-oh.jpg'), focus: '50% 0%' },
 ];
 
 /**
@@ -107,7 +115,9 @@ export default function WhoWeAre() {
           eyebrow="The founders"
           title="Neurosurgery, engineering, and device design."
         />
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Four founders: 2×2 from sm, one row from xl. Three columns would
+            strand the fourth card alone on a second row. */}
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {FOUNDERS.map((f, i) => (
             <Reveal key={f.name} delay={i * 0.06}>
               <Link
@@ -123,6 +133,7 @@ export default function WhoWeAre() {
                     src={f.image}
                     alt={`Portrait of ${f.name}`}
                     loading="lazy"
+                    style={{ objectPosition: f.focus }}
                     className="h-full w-full scale-105 object-cover object-top transition-transform
                       duration-[1200ms] ease-out group-hover/f:scale-100"
                   />

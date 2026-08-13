@@ -2,6 +2,20 @@ import { asset } from '../lib/asset.js';
 import { usePageMeta } from '../lib/meta.js';
 import { Hero, Reveal, Section } from '../ui/index.js';
 
+/**
+ * `focus` is the CSS object-position for the portrait.
+ *
+ * Every portrait is a landscape frame shown in a 4:5 box, so the browser keeps
+ * the full height and crops the sides — and a subject who sits right of centre
+ * in the original ends up jammed against the right edge of the card. The two
+ * 2026 portraits (Bennet, Oh) were re-cropped on the face, so they take the
+ * default. Lee's and Goerss' files are the old site's web-resolution exports;
+ * re-cropping those would throw away pixels the page is already upscaling, so
+ * they are centred here instead, by moving the crop window rather than the
+ * image. The vertical half stays at 0% — see object-top on the <img>.
+ */
+const CENTRED = '50% 0%';
+
 const founders = [
   {
     name: 'Kendall H. Lee, M.D., Ph.D.',
@@ -10,6 +24,7 @@ const founders = [
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kendall-lee-150-500x400-1.jpg'),
+    focus: '83% 0%',
     bio: [
       'Dr. Lee earned his B.A. in biology with a minor in philosophy (Summa Cum Laude) from the University of Colorado at Denver. He attended Yale University Graduate School, where he received his Master of Philosophy, M.D. (Cum Laude) and Ph.D. in neurobiology. He completed an internship in internal medicine at the Hospital of St. Raphael, Yale University School of Medicine and a residency in neurology at Harvard Medical School.',
       'He further trained at Dartmouth Hitchcock Medical Center, completing an internship in general surgery and a residency and chief residency in neurosurgery. In his clinical practice, Dr. Lee is an expert on neurological disorders, seeing patients with Parkinson’s disease, Tourette’s syndrome, dystonia, and other neurodegenerative diseases.',
@@ -24,7 +39,8 @@ const founders = [
        different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
-    image: asset('/kevin-bennet-150-500x400-1.jpg'),
+    image: asset('/kevin-bennet.jpg'),
+    focus: CENTRED,
     bio: [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',
       'He holds patents concerning neurosurgery, diamond, semiconductor and optical technology and has founded several technology-based companies. He received a degree in Chemical Engineering from the Massachusetts Institute of Technology, an MBA from Harvard and his doctorate from Deakin University.',
@@ -36,11 +52,28 @@ const founders = [
     name: 'Stephan J. Goerss',
     role: 'Co-Founder',
     image: asset('/stephan-goerss-150.jpg'),
+    focus: '78% 0%',
     bio: [
       'Steve Goerss has 40 years of experience in designing and fabricating neurosurgical devices and stereotactic instrumentation. He has been awarded three patents with two more pending. He joined the Mayo Clinic in 1984 with the Department of Neurologic Surgery until 2016.',
       'During this time, he supported all computer-assisted neurosurgical procedures, trained neurosurgical residents in the use of this technology, and developed custom neurosurgical instruments and systems for the neurosurgical staff. He also became an Assistant Professor of the Mayo Medical School. He has authored and co-authored 51 peer reviewed papers and two book chapters.',
       'He joined the Neural Engineering Laboratories at the Mayo Clinic in 2016. During this tenure, he designed and developed a spinal stereotactic device, a relocatable porcine stereotactic headframe/stereotactic device, and the prototype version of the NaviNetics Reusable Stereotactic System now commercialized by NaviNetics.',
       'From 1986 to 1997, Mr. Goerss was a founder of COMPASS International, a computer-assisted stereotactic and medical device company, and served as President.',
+    ],
+  },
+  {
+    name: 'Yoonbae Oh, Ph.D.',
+    role: 'Co-Founder',
+    image: asset('/yoonbae-oh.jpg'),
+    focus: CENTRED,
+    /* Short by comparison because it is only what NaviNetics has supplied: the
+       three appointments, plus the publication record that is already on this
+       site (see src/data/publications.js — Dr. Oh is the senior author on the
+       Neurochemistry line). Nothing here is inferred. Replace with the full
+       biography when it arrives; the layout takes any number of paragraphs. */
+    bio: [
+      'Dr. Oh is Associate Director of the Neural Engineering Laboratories at Mayo Clinic and an Associate Professor of Neurosurgery at Mayo Clinic. He also holds an appointment as Professor of Biomedical Engineering at Korea University.',
+      'He is the senior author on the laboratory’s neurochemical sensing work: tracking tonic dopamine in vivo by multiple cyclic square wave voltammetry, resolving highly similar neurotransmitters using voltammetry and deep learning, and showing that deep brain stimulation alleviates tics in Tourette syndrome through striatal dopamine transmission.',
+      'That line of research — measuring what the brain is doing chemically while it is being stimulated — is the science behind the NaviNetics MAVEN neurochemical sensing platform.',
     ],
   },
 ];
@@ -76,6 +109,7 @@ export default function Founders() {
                     src={f.image}
                     alt={`Portrait of ${f.name}`}
                     loading="lazy"
+                    style={{ objectPosition: f.focus }}
                     className="absolute inset-0 h-full w-full scale-105 object-cover object-top transition-transform duration-1000 ease-out hover:scale-100"
                   />
                 </div>
