@@ -50,7 +50,12 @@ import { publications } from './publications.js';
 
 /** The papers this page is built on, oldest first — the order it tells them in. */
 export const evidence = publications
-  .filter((p) => p.line === 'Neurochemistry')
+  /* Must match a `line` value in data/publications.js. That file's lines were
+     renamed to the three technology lines and this filter was left on the old
+     'Neurochemistry', which matched nothing — `paperFor` then threw on the
+     first chapter and took the whole page to a blank screen. A filter that
+     silently returns [] is the failure mode to watch for here. */
+  .filter((p) => p.line === 'Neuromodulation')
   .slice()
   .sort((a, b) => a.year - b.year);
 
