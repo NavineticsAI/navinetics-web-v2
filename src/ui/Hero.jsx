@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../lib/cn.js';
 import { D, EASE_OUT, usePrefersReducedMotion } from '../lib/motion.js';
@@ -25,10 +25,10 @@ export function Hero({
 }) {
   const reduced = usePrefersReducedMotion();
   const ref = useRef(null);
-  const [coords, setCoords] = useState({ x: 0, y: 0, z: 41 });
   const dark = tone === 'dark';
 
-  // Live targeting readout — literally what the product does.
+  /* Drives the crosshair only. It used to also feed a coordinate readout,
+     which has been removed — see the note at the foot of this component. */
   useEffect(() => {
     const el = ref.current;
     if (!el || !targeting || reduced) return;
@@ -38,7 +38,6 @@ export function Hero({
       const py = (e.clientY - r.top) / r.height;
       el.style.setProperty('--px', `${(px * 100).toFixed(2)}%`);
       el.style.setProperty('--py', `${(py * 100).toFixed(2)}%`);
-      setCoords({ x: (px - 0.5) * 80, y: (0.5 - py) * 60, z: 41 + px * py * 8 });
     };
     el.addEventListener('pointermove', onMove, { passive: true });
     return () => el.removeEventListener('pointermove', onMove);
@@ -133,33 +132,11 @@ export function Hero({
         )}
       </div>
 
-      {targeting && !reduced && (
-        /* Held to the frame, not the viewport edge. Pinned to the section it
-           sat 1300px clear of the content on a 3840px ultrawide — a stray
-           instrument readout alone in the right margin. inset-x with the frame
-           and mx-auto puts it under the content's own right edge, which is the
-           thing it belongs to. */
-        <div
-          className="nn-frame pointer-events-none absolute inset-x-0 bottom-7 z-[2] mx-auto hidden justify-end gap-4 px-6 font-data text-[0.6875rem] tabular-nums text-ink-3 md:flex lg:px-8"
-          aria-hidden="true"
-        >
-          <span>
-            X <b className="font-medium text-ink-2">{fmt(coords.x)}</b>
-          </span>
-          <span>
-            Y <b className="font-medium text-ink-2">{fmt(coords.y)}</b>
-          </span>
-          <span>
-            Z <b className="font-medium text-ink-2">{coords.z.toFixed(1)}</b>
-          </span>
-          <span className="text-action">◎ ISO-CENTER</span>
-        </div>
-      )}
+      {/* The X / Y / Z / ◎ ISO-CENTER readout that used to sit here is gone,
+          at NaviNetics' request. The crosshair it belonged to stays: the
+          reticle is brand, but live coordinates on a marketing hero read as
+          instrument output and invite a precision reading of numbers that were
+          generated from the pointer position. */}
     </header>
   );
-}
-
-function fmt(v) {
-  const s = Math.abs(v).toFixed(1).padStart(5, '0');
-  return `${v < 0 ? '−' : '+'}${s}`;
 }

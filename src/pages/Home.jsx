@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { cn } from '../lib/cn.js';
 import { usePageMeta } from '../lib/meta.js';
 import { isPlaceholder, products } from '../data/products.js';
 import { publications } from '../data/publications.js';
@@ -7,7 +6,6 @@ import {
   Button,
   Card,
   Hero,
-  Lens,
   LinkAction,
   ProductPlate,
   Reveal,
@@ -37,7 +35,12 @@ export default function Home() {
         size="lg"
         targeting
         eyebrow="NaviNetics"
-        title={'Innovate.\nElevate.'}
+        /* The company slogan, which is what navinetics.com leads with. It
+           replaced "Innovate. Elevate.", which was the rebuild's own line and
+           said less. Set in sentence case rather than the live site's caps: at
+           display size this is the same face every other page heading uses, and
+           caps here would read as a different typographic system. */
+        title={'Targeting the future.\nImproving today.'}
         lead="Stereotactic frames, neuromodulation instruments and carbon-fibre operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic."
       >
         <div className="flex flex-wrap gap-3">
@@ -50,10 +53,10 @@ export default function Home() {
         </div>
       </Hero>
 
-      {/* Product features — alternating, one Lens panel each (budget: 3 max).
-          Products still in development are excluded: they have no metrics to
-          show, and a half-empty feature section reads worse than absence. They
-          still appear in the nav, the footer and product cross-sell. */}
+      {/* Product features — alternating plate and copy. Products still in
+          development are excluded: a half-empty feature section reads worse
+          than absence. They still appear in the nav, the footer and product
+          cross-sell. */}
       {products.filter((p) => !isPlaceholder(p)).map((product, i) => (
         <Section key={product.slug} wide band={i % 2 === 1}>
           <div
@@ -83,44 +86,12 @@ export default function Home() {
                   tone={product.heroTone}
                   className="aspect-square w-full"
                 />
-                {/* One lens panel floating over the plate — the showcase
-                    moment. Guarded because `metrics` is optional on a product
-                    record, and indexing it blindly took the whole home page
-                    down when a record shipped without one: a missing optional
-                    field should cost its own panel, not the site.
-
-                    The bay plate is dark in BOTH themes, so its lens cannot
-                    use the theme's ink tokens — in light mode they resolve to
-                    near-black on near-black. Hence the fixed pale set. */}
-                {product.metrics?.[0] && (
-                  /* BELOW the plate on a phone, over it from md up.
-                     Overlaid at every size it spanned the full width of a
-                     square plate and covered the bottom third of it — on the
-                     D1 card that is the frame's legs and the head model, i.e.
-                     the product. The floating panel is a desktop showcase
-                     move; on a 375px screen the honest thing is to put the
-                     figure under the picture and let the picture be seen. */
-                  <Lens className="mt-3 rounded-md p-4 md:absolute md:bottom-6 md:left-6 md:right-auto md:mt-0 md:max-w-[18rem] md:p-5">
-                    <span className={cn(
-                      'font-data text-[0.6875rem] uppercase tracking-[0.14em]',
-                      product.heroTone === 'bay' ? 'text-sg-300' : 'text-action',
-                    )}>
-                      {product.metrics[0].label}
-                    </span>
-                    <div className={cn(
-                      'mt-1 text-xl font-semibold tracking-[-0.03em]',
-                      product.heroTone === 'bay' && 'text-nn-50',
-                    )}>
-                      {product.metrics[0].value}
-                    </div>
-                    <div className={cn(
-                      'text-xs',
-                      product.heroTone === 'bay' ? 'text-nn-200' : 'text-ink-3',
-                    )}>
-                      {product.metrics[0].unit}
-                    </div>
-                  </Lens>
-                )}
+                {/* The floating lens panel that used to sit over each plate is
+                    gone, at NaviNetics' request — "DEGREES OF FREEDOM 3 + 2" on
+                    the NRSS plate and the equivalent first metric on the other
+                    two. It covered the bottom-left of the product it was
+                    labelling. The figures are not lost: `metrics` still feeds
+                    the spec table on each product page. */}
               </div>
             </Reveal>
           </div>
@@ -214,8 +185,7 @@ export default function Home() {
         <Reveal className="flex flex-col items-center gap-6 text-center">
           <h2 className="text-d2">Let's talk.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            Whether you're a surgeon, a researcher, or a prospective colleague — we'd like to hear
-            from you.
+            We would like to hear from you.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button to="/contact" size="lg" arrow>
