@@ -6,16 +6,23 @@ import { Hero, Reveal, Section } from '../ui/index.js';
  * `focus` is the CSS object-position for the portrait.
  *
  * Every portrait is a landscape frame shown in a 4:5 box, so the browser keeps
- * the full height and crops the sides — and a subject who sits right of centre
- * in the original ends up jammed against the right edge of the card. The two
- * 2026 portraits (Bennet, Oh) were re-cropped on the face, so they take the
- * default. Lee's and Goerss' files are the old site's web-resolution exports;
- * re-cropping those would throw away pixels the page is already upscaling, so
- * they are centred here instead, by moving the crop window rather than the
- * image. The vertical half stays at 0% — see object-top on the <img>.
+ * the full height and crops the sides — and all four subjects sit right of
+ * centre in their originals, which without this puts each face against the
+ * right edge of the card. Moving the crop window is what centres them.
+ *
+ * It is deliberately not done by cropping the files. Bennet's and Oh's 2026
+ * portraits are much tighter shots than Lee's and Goerss', and a face-centred
+ * crop of those two could only be made by cutting in further still — which put
+ * two head-and-shoulders portraits next to two three-quarter ones. Both are now
+ * shipped at full frame, trimmed only to an exact 5:4, so the four read at the
+ * same distance; the centring happens here instead. Lee's and Goerss' files are
+ * the old site's web-resolution exports and could not be re-cropped anyway
+ * without throwing away pixels the page already upscales.
+ *
+ * The vertical half stays at 0% — see object-top on the <img>. Percentages are
+ * (face − 32) / 36, which is where a 64%-wide window has to start to put the
+ * face at its centre.
  */
-const CENTRED = '50% 0%';
-
 const founders = [
   {
     name: 'Kendall H. Lee, M.D., Ph.D.',
@@ -40,7 +47,7 @@ const founders = [
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kevin-bennet.jpg'),
-    focus: CENTRED,
+    focus: '83% 0%',
     bio: [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',
       'He holds patents concerning neurosurgery, diamond, semiconductor and optical technology and has founded several technology-based companies. He received a degree in Chemical Engineering from the Massachusetts Institute of Technology, an MBA from Harvard and his doctorate from Deakin University.',
@@ -64,7 +71,7 @@ const founders = [
     name: 'Yoonbae Oh, Ph.D.',
     role: 'Co-Founder',
     image: asset('/yoonbae-oh.jpg'),
-    focus: CENTRED,
+    focus: '89% 0%',
     /* Short by comparison because it is only what NaviNetics has supplied: the
        three appointments, plus the publication record that is already on this
        site (see src/data/publications.js — Dr. Oh is the senior author on the
