@@ -119,7 +119,7 @@ export default function Home() {
               {/* Was "Unprecedented access" — a superlative with no comparator,
                   removed on instruction. The eyebrow now names the mechanism,
                   which is the term NaviNetics wants carried. */}
-              <span className="eyebrow text-action">Skull anchor key</span>
+              <span className="eyebrow text-action">Skull Anchor Key</span>
               <h3 className="mt-3 text-2xl tracking-[-0.03em]">
                 The frame anchors to a key on the skull
               </h3>

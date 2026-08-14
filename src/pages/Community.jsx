@@ -63,7 +63,7 @@ export default function Community() {
       <Hero
         eyebrow="Company — Community"
         title="Rochester, Minnesota."
-        lead="We are in the middle of downtown Rochester, in southeast Minnesota. The address is not incidental to the work — it is the reason the design loop closes as fast as it does."
+        lead="We are in the middle of downtown Rochester, in southeast Minnesota. The address is why the design loop closes as fast as it does."
       />
 
       <Section wide className="!pt-0">
@@ -95,16 +95,15 @@ export default function Community() {
         <SectionHead
           eyebrow="Why here"
           title="Proximity is a design tool."
-          lead="Being a short walk from the operating theater changes what can be asked, how quickly it
-            can be answered, and how often a wrong assumption gets caught."
+          lead="Being a short walk from the operating theater changes what can be asked, and how
+            quickly it can be answered."
         />
         <div className="mt-10 grid gap-4 md:grid-cols-3">
           {REASONS.map((r, i) => (
             <Reveal key={r.title} delay={i * 0.06}>
+              {/* No 01/02/03 markers. These three reasons are not a sequence —
+                  numbering implied an order the content does not have. */}
               <Card className="flex h-full flex-col gap-3">
-                <span className="font-data text-2xl leading-none text-action/40 tabular-nums">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
                 <h3 className="text-lg tracking-[-0.03em]">{r.title}</h3>
                 <p className="text-sm leading-relaxed text-ink-2">{r.body}</p>
               </Card>
@@ -113,23 +112,10 @@ export default function Community() {
         </div>
       </Section>
 
-      <Section band={false}>
-        <Reveal className="flex flex-col items-center gap-6 text-center">
-          <h2 className="text-d2">Visiting, or joining?</h2>
-          <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            Suite 700 is on South Broadway, a few minutes from the Mayo Clinic campus. Tell us
-            you're coming and we'll put the kettle on.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Button to="/contact" size="lg" arrow>
-              Get in touch
-            </Button>
-            <Button to="/resources/careers" size="lg" variant="secondary">
-              Open roles
-            </Button>
-          </div>
-        </Reveal>
-      </Section>
+      {/* The "Visiting, or joining?" close is removed on NaviNetics'
+          instruction, along with the assumption that a reader is coming to
+          Rochester at all. Contact and Careers are both one click away in the
+          nav and the footer, so nothing is lost by ending on the argument. */}
     </>
   );
 }

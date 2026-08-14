@@ -76,7 +76,7 @@ export const bands = [
     tone: 'chem',
     eyebrow: 'Fixation',
     title: 'Anchored to\nthe skull.',
-    lead: 'A small anchor key is affixed to the skull with percutaneous screws. Everything else '
+    lead: 'A small Skull Anchor Key is affixed to the skull with percutaneous screws. Everything else '
       + 'attaches to that.',
     points: [
       {
@@ -90,7 +90,7 @@ export const bands = [
           + 'and this is the part that delivers it.',
       },
     ],
-    meta: [{ label: 'Fixation', value: 'Anchor key' }, { label: 'Fitting', value: 'Percutaneous screws' }],
+    meta: [{ label: 'Fixation', value: 'Skull Anchor Key' }, { label: 'Fitting', value: 'Percutaneous screws' }],
     figure: {
       src: headArt,
       w: 444, h: 1042,
@@ -165,7 +165,7 @@ export const bands = [
     tone: 'soft',
     eyebrow: 'Access',
     title: 'Room\nto work.',
-    lead: 'Components attach to and detach from the anchor key as the procedure needs them, so '
+    lead: 'Components attach to and detach from the Skull Anchor Key as the procedure needs them, so '
       + 'the burr hole stays reachable and the sterile field stays intact from start to finish.',
     points: [
       {

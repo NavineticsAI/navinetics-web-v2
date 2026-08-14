@@ -108,9 +108,9 @@ export const products = [
     },
     tag: { label: 'Flagship', tone: 'action' },
     technology: 'stereotactic-devices',
-    tagline: 'Robust. Low complexity.\nRadically comfortable.',
+    tagline: 'Robust. Low complexity.\nComfortable.',
     summary:
-      'Arc-centered targeting from a skull anchor key. Three axes to set the target, two rotations to reach it.',
+      'Arc-centered targeting from a Skull Anchor Key. Three axes to set the target, two rotations to reach it.',
     intro:
       'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
     hero: d1Head,
@@ -119,13 +119,13 @@ export const products = [
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
       { label: 'Localizers', value: 'MR · CT', unit: 'plus X-ray reticles' },
-      { label: 'Fixation', value: 'Anchor key', unit: 'percutaneous screws' },
+      { label: 'Fixation', value: 'Skull Anchor Key', unit: 'percutaneous screws' },
     ],
     /** Scroll-pinned narrative. Capped at three steps by the template. */
     sequence: [
       {
-        title: 'Anchor Key',
-        body: "A small anchor key is affixed to the patient's skull with percutaneous screws.",
+        title: 'Skull Anchor Key',
+        body: "A small Skull Anchor Key is affixed to the patient's skull with percutaneous screws.",
       },
       {
         title: 'Patient Comfort',
@@ -133,7 +133,7 @@ export const products = [
       },
       {
         title: 'Total Flexibility',
-        body: 'Components can be seamlessly attached and removed from the anchor key, giving the surgical team unprecedented space to work.',
+        body: 'Components attach to and come away from the Skull Anchor Key, so the surgical team keeps the space it needs.',
       },
     ],
     detail: {
@@ -150,7 +150,7 @@ export const products = [
       { k: 'Classification', v: 'Arc-centered' },
       { k: 'Linear degrees of freedom', v: '3 — X, Y, Z' },
       { k: 'Angular rotations', v: '2 — ring, arc' },
-      { k: 'Patient fixation', v: 'Skull anchor key' },
+      { k: 'Patient fixation', v: 'Skull Anchor Key' },
       { k: 'Imaging localizers', v: 'MR · CT · X-ray' },
       { k: 'Reusable', v: 'Yes' },
       /* No regulatory row — withheld on instruction, see `regulatory` above. */
@@ -170,7 +170,7 @@ export const products = [
      * That page carries TWO lists and they are not the same thing:
      *
      *   · a prose sentence naming seven FUNCTIONAL parts — "a stereotactic
-     *     head frame, the skull anchor key, an MR localizer, a CT Localizer,
+     *     head frame, the Skull Anchor Key, an MR localizer, a CT Localizer,
      *     X-ray reticles, a mechanical microdrive, and DBS lead implantation
      *     accessories". That sentence is used in the page copy.
      *   · a "System Components" list of nine KITS, below. This is the bill of
@@ -198,7 +198,7 @@ export const products = [
       'Screw Kits',
     ],
     gallery: [
-      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The anchor key on a head model', fit: 'contain' },
+      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The Skull Anchor Key on a head model', fit: 'contain' },
       { src: asset('/DSC05397-1024x695.jpg'), caption: 'The stereotactic frame', fit: 'cover' },
       { src: asset('/microdrive-image-1024x797.png'), caption: 'The mechanical microdrive', fit: 'contain' },
     ],
@@ -231,7 +231,6 @@ export const products = [
      */
     metrics: [
       { label: 'Models specified', value: '5', unit: 'one to six motions' },
-      { label: 'Load capacity', value: '230', unit: 'kg, every model' },
       { label: 'Table top', value: 'Carbon fiber', unit: 'always in the beam' },
     ],
     intro:
@@ -405,7 +404,7 @@ export const comparison = {
   needsReview: true,
   columns: ['NRSS', 'Traditional frame-based', 'Frameless'],
   rows: [
-    { k: 'Patient fixation', v: ['Skull anchor key', 'Rigid head fixation', 'Bone fiducials / mask'] },
+    { k: 'Patient fixation', v: ['Skull Anchor Key', 'Rigid head fixation', 'Bone fiducials / mask'] },
     { k: 'Facial obstruction', v: ['None', 'Significant', 'Minimal'] },
     { k: 'Targeting principle', v: ['Arc-centered', 'Arc-centered', 'Trajectory guide'] },
     { k: 'Adjustment location', v: ['At surgical field', 'At the frame', 'Varies'] },

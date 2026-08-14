@@ -32,12 +32,12 @@ import { asset } from '../lib/asset.js';
 export const mediaItems = [
   {
     id: 'anchor-key-model',
-    title: 'Skull anchor key on anatomical model',
+    title: 'Skull Anchor Key on anatomical model',
     kind: 'image',
     category: 'Devices',
     src: asset('/model-head-clean-750x998-1-451x600.png'),
     fit: 'contain',
-    caption: 'The anchor key keeps the face clear.',
+    caption: 'The Skull Anchor Key keeps the face clear.',
   },
   {
     id: 'frame-assembly',

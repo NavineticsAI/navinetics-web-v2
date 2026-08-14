@@ -128,7 +128,7 @@ export const principles = [
     title: 'Design by listening',
     body:
       'A co-founder is a practicing neurosurgeon. Clinical input here comes from someone holding '
-      + 'the device at 7am, telling us where their hands need to be. The skull anchor key exists '
+      + 'the device at 7am, telling us where their hands need to be. The Skull Anchor Key exists '
       + 'because of that request.',
   },
   {

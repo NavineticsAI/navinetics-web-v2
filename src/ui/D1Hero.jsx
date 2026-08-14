@@ -58,10 +58,10 @@ export function D1Hero() {
             Products — NaviNetics Reusable Stereotactic System (NRSS)
           </span>
           <h1 className="whitespace-pre-line text-d1">
-            {'Robust. Low complexity.\nRadically comfortable.'}
+            {'Robust. Low complexity.\nComfortable.'}
           </h1>
           <p className="max-w-prose text-lead leading-[1.55] text-nn-200">
-            Arc-centered targeting from a skull anchor key. Three linear degrees of freedom, two
+            Arc-centered targeting from a Skull Anchor Key. Three linear degrees of freedom, two
             angles of rotation.
           </p>
 

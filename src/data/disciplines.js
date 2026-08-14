@@ -7,7 +7,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  * Every "problem" line traces to work NaviNetics has published or shipped —
- * the skull anchor key, automated landmark localization for neuronavigation,
+ * the Skull Anchor Key, automated landmark localization for neuronavigation,
  * ultra-high-field MRI guidance, the compact stereotactic system. Nothing was
  * invented, and no accuracy figures or setup times appear anywhere, since
  * those are regulated marketing claims.
@@ -25,7 +25,7 @@ export const disciplines = [
     group: 'Clinical',
     role: 'Clinical — Neurosurgery',
     title: 'They don’t advise. They operate.',
-    body: 'Our co-founder is a practicing neurosurgeon at Mayo Clinic. Clinical input here is not a quarterly advisory call — it is someone who will be holding the device at 7am, telling you the hardware is in the way of their hands. The skull anchor key exists because of exactly that complaint.',
+    body: 'Our co-founder is a practicing neurosurgeon at Mayo Clinic. Clinical input here is not a quarterly advisory call — it is someone who will be holding the device at 7am, telling you the hardware is in the way of their hands. The Skull Anchor Key exists because of exactly that complaint.',
     problem:
       '“The frame is blocking the patient’s face during an awake case. Give me the coordinate system without it.”',
     owns: ['Clinical requirements', 'Surgical workflow', 'Cadaver & OR validation', 'Trajectory planning'],
