@@ -102,21 +102,30 @@ export default function Home() {
       <Section wide>
         <SectionHead
           align="center"
-          eyebrow="Designed for the future"
+          eyebrow="How we build"
           title="Targeting, measurement and access."
-          lead="Surgical workflow, patient comfort, and exceptional accuracy — from a team that has spent decades in the operating room and the laboratory."
+          /* Was "Surgical workflow, patient comfort, and exceptional accuracy".
+             "Exceptional accuracy" is the same comparative claim the note at the
+             top of this file records removing from the hero, and no accuracy
+             figure exists anywhere on the site to support it — data/products.js
+             withholds those on purpose. The eyebrow was "Designed for the
+             future", which said nothing above a section about present work. */
+          lead="Surgical workflow and patient comfort, from a team that has spent decades in the operating room and the laboratory."
         />
 
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal className="sm:col-span-2">
             <Card lift className="nn-retic relative h-full min-h-56 overflow-hidden">
-              <span className="eyebrow text-action">Unprecedented access</span>
+              {/* Was "Unprecedented access" — a superlative with no comparator,
+                  removed on instruction. The eyebrow now names the mechanism,
+                  which is the term NaviNetics wants carried. */}
+              <span className="eyebrow text-action">Skull anchor key</span>
               <h3 className="mt-3 text-2xl tracking-[-0.03em]">
-                Fixation by a small skull anchor key
+                The frame anchors to a key on the skull
               </h3>
               <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                Leaving the patient's face completely unobstructed and giving the surgical team full
-                access to the field.
+                The patient's face stays clear, and the surgical team keeps full access to the
+                field.
               </p>
             </Card>
           </Reveal>
@@ -167,10 +176,18 @@ export default function Home() {
             <Card lift className="flex h-full min-h-56 flex-col justify-between">
               <div>
                 <Badge>Neuromodulation</Badge>
-                <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">Closed-loop, one day</h3>
+                {/* "Closed-loop, one day" left a reader unable to tell product
+                    from roadmap, above a link that reads as availability. And the
+                    body claimed artifact "never contaminates the recording" where
+                    data/products.js says "engineered to minimize" it — the home
+                    page was escalating a hedged engineering statement into an
+                    absolute, for a preclinical instrument. */}
+                <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">
+                  Stimulation for pre-clinical research
+                </h3>
                 <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                  Synchronized neurochemical and electrophysiological measurement, engineered so
-                  stimulation artifact never contaminates the recording.
+                  Synchronized neurochemical and electrophysiological measurement, engineered to
+                  minimize stimulation artifact.
                 </p>
               </div>
               <LinkAction to="/products/maven-neuromodulation" className="mt-5">
