@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getProduct } from '../data/products.js';
 import { art, getModel, lineup, models, motionsOf, strengths } from '../data/orTables.js';
@@ -39,7 +38,7 @@ export default function SurgicalTables() {
     title: 'Carbon Fiber Surgical Tables',
     description:
       'Carbon-fiber operating tables for imaging-guided procedures — a range from one to six '
-      + 'motions, built so the table stays out of the picture.',
+      + 'motions, built so the imaging sees the anatomy and not the table.',
   });
 
   return (
@@ -68,7 +67,7 @@ export default function SurgicalTables() {
         ground="light"
         tone="ephys"
         eyebrow="Radiolucency"
-        title={'Stay out of\nthe picture.'}
+        title={'Clear of\nthe image.'}
         lead="Everything between the source and the detector is in the image, whether you wanted it
           there or not. Carbon fiber is far less absorbing than the steel or aluminium a table
           would otherwise be built from, so the structure holding the patient up contributes very
@@ -168,16 +167,6 @@ export default function SurgicalTables() {
             body: 'The one motion every table in the range has, and the one the imaging chain is '
               + 'set up around.',
           },
-          {
-            label: 'Float is two travels at once.',
-            body: 'The top moves in X and Y over the column, so a target can be centered without '
-              + 'moving the patient or the arm.',
-          },
-          {
-            label: 'Trendelenburg and lateral tilt.',
-            body: 'Where a model has them, the specification states the angle each way, and the '
-              + 'drawing above is limited to exactly that.',
-          },
         ]}
         meta={[
           { label: 'Range', value: '1 to 6 motions' },
@@ -195,9 +184,8 @@ export default function SurgicalTables() {
       <Section wide band>
         <SectionHead
           eyebrow="Also in the line-up"
-          title="Premium, and made to order."
-          lead="Named in the range sheet without a specification behind them, so they are named here
-            the same way — and nothing is claimed about any of them."
+          title="The rest of the range."
+          lead="Named in the range sheet. Ask us for the specification on any of them."
         />
         <div className="mt-10 grid gap-8 md:grid-cols-2">
           {lineup.map((g) => (
@@ -252,13 +240,8 @@ export default function SurgicalTables() {
               Where they come from
             </Button>
           </div>
-          <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-            Built by our Korean subsidiary — see{' '}
-            <Link to="/company/partners" className="text-action underline-offset-4 hover:underline">
-              NaviNetics Asia
-            </Link>
-            .
-          </p>
+          {/* Footer line removed on instruction. It also named "NaviNetics
+              Asia", which is now presented as CBH — see data/partners.js. */}
         </Reveal>
       </Section>
     </>
@@ -271,7 +254,6 @@ function Specs({ model }) {
     ['Table top', `${model.top.w} × ${model.top.d} mm`],
     ...motionsOf(model).map((m) => [m.label, m.value]),
     ['Table weight', `${model.weight} kg`],
-    ['Load capacity', `${model.load} kg`],
     ['Mattress', model.mattress],
     ['Control', model.control],
   ];

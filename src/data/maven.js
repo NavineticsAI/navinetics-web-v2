@@ -144,13 +144,15 @@ export const channels = [
   { id: 'da', domain: 'chem', deg: -8, short: 'Dopamine', name: 'Dopamine', sub: 'DA' },
   { id: '5ht', domain: 'chem', deg: -33.5, short: 'Serotonin', name: 'Serotonin', sub: '5-HT' },
   { id: 'ado', domain: 'chem', deg: -59, short: 'Adenosine', name: 'Adenosine', sub: null },
-  { id: 'glu', domain: 'chem', deg: -84.5, short: 'Glutamate', name: 'Glutamate', sub: null },
-  { id: 'ach', domain: 'chem', deg: -110, short: 'Acetylcholine', name: 'Acetylcholine', sub: 'ACh' },
+  /* Glutamate and acetylcholine were named individually and are now folded
+     into one "Other" channel on NaviNetics' instruction. Two slots become one,
+     so this takes the midpoint of the angles they used to hold. */
+  { id: 'other', domain: 'chem', deg: -97, short: 'Other', name: 'Other neurochemicals', sub: null },
   { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: 'LFP' },
   { id: 'unit', domain: 'ephys', deg: 62, short: 'Single-unit', name: 'Single-unit activity', sub: null },
-  { id: 'dsp', domain: 'soft', deg: 108, short: 'Signal processing', name: 'Ephys & signal processing', sub: null },
+  { id: 'gui', domain: 'soft', deg: 108, short: 'Intuitive GUI', name: 'One interface for every channel', sub: null },
   { id: 'adv', domain: 'soft', deg: 138, short: 'Advanced analysis', name: 'Advanced analysis', sub: null },
-  { id: 'dbs', domain: 'stim', deg: 195, short: 'DBS', name: 'Deep brain stimulation', sub: 'DBS' },
+  { id: 'stim', domain: 'stim', deg: 195, short: 'Electrical stimulation', name: 'Electrical stimulation', sub: null },
 ];
 
 /** The three techniques, which are modes rather than channels. */
@@ -250,7 +252,7 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Neuromodulation',
     title: 'The response\nto stimulation.',
-    lead: 'Deep brain stimulation goes in on one channel while the other two keep recording. That '
+    lead: 'Electrical stimulation goes in on one channel while the other two keep recording. That '
       + 'is the point of the instrument — deliver something, then see what the tissue does about '
       + 'it, without the stimulation swamping the measurement of its own effect.',
     points: [
@@ -271,7 +273,7 @@ export const bands = [
       },
     ],
     meta: [
-      { label: 'Delivered', value: 'DBS' },
+      { label: 'Delivered', value: 'Electrical stimulation' },
       { label: 'Observed', value: 'Chemical + electrical' },
     ],
     figure: {

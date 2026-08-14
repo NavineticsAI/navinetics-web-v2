@@ -130,7 +130,7 @@ export const chapters = [
     ground: 'light',
     scene: 'stack',
     tone: 'soft',
-    eyebrow: 'Telling them apart',
+    eyebrow: 'Selectivity',
     title: 'Almost the\nsame answer.',
     lead: 'Dopamine and norepinephrine differ by one hydroxyl group, and a sweep asks them both '
       + 'much the same question. Where the waveform alone cannot separate two species, what is '

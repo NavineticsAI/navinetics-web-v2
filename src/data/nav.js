@@ -31,7 +31,9 @@ export const nav = [
       subtitle: p.family,
       path: p.path,
       image: p.hero,
-      note: p.status === 'in-development' ? 'In development' : null,
+      /* No "In development" badge, on instruction. `status` still drives the
+         placeholder filters and the ComingSoon treatment; only the label goes. */
+      note: null,
     })),
   },
   {
@@ -47,8 +49,22 @@ export const nav = [
          both — and photography does not survive the slot size anyway. See the
          note in data/technology.js. */
       mark: t.mark,
-      note: t.status === 'in-development' ? 'In development' : null,
-    })),
+      note: null,
+    })).concat([
+      /* Education moved here from Resources on NaviNetics' instruction: it
+         explains the science the three technology lines rest on, so it belongs
+         beside them rather than next to Media and Careers. Appended to the
+         mapped list rather than carried in a separate field, because the
+         navbar and the footer both render `items` and nothing else. The route
+         is unchanged — /resources/education still resolves. */
+      {
+        title: 'Education',
+        subtitle: 'The science behind the instruments, explained from first principles.',
+        path: '/resources/education',
+        mark: null,
+        note: null,
+      },
+    ]),
   },
   {
     title: 'Resources',
@@ -56,7 +72,6 @@ export const nav = [
     items: [
       { title: 'Media', path: '/resources/media' },
       { title: 'Careers', path: '/resources/careers' },
-      { title: 'Education', path: '/resources/education' },
       { title: 'Publications', path: '/resources/publications' },
     ],
   },
