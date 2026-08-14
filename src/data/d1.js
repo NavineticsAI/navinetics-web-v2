@@ -74,30 +74,24 @@ export const bands = [
     scene: 'anchor',
     ground: 'bay',
     tone: 'chem',
-    eyebrow: 'Fixation',
+    eyebrow: 'New mechanism',
     title: 'Anchored to\nthe skull.',
-    lead: 'A small Skull Anchor Key is affixed to the skull with percutaneous screws. Everything else '
-      + 'attaches to that.',
-    points: [
-      {
-        label: 'The face stays clear.',
-        body: 'Nothing crosses the facial area, which matters most in awake procedures where the '
-          + 'patient has to be spoken with and watched.',
-      },
-      {
-        label: 'Designed around comfort.',
-        body: 'The existing product record puts patient experience first among its improvements, '
-          + 'and this is the part that delivers it.',
-      },
-    ],
-    meta: [{ label: 'Fixation', value: 'Skull Anchor Key' }, { label: 'Fitting', value: 'Percutaneous screws' }],
+    /* Was "Fixation", and the lead named percutaneous screws. Both changed on
+       NaviNetics' instruction: the eyebrow now says what is new about it, and
+       the fitting detail comes out of the copy. The two supporting points went
+       with it — comfort is the argument, and it is made once, plainly. */
+    lead: 'A small Skull Anchor Key is affixed to the skull, and everything else attaches to that. '
+      + 'The patient\u2019s face stays clear throughout, which is what makes an awake procedure '
+      + 'easier on them.',
+    points: [],
+    meta: [{ label: 'Fixation', value: 'Skull Anchor Key' }],
     figure: {
       src: headArt,
       w: 444, h: 1042,
       bare: true,
       alt: 'The NRSS fitted to an anatomical head model, clear of the face, with a probe on its '
         + 'trajectory.',
-      caption: 'The frame on a head model',
+      caption: '',
     },
   },
   {
@@ -146,17 +140,17 @@ export const bands = [
           + 'frame has set.',
       },
       {
-        label: 'Part of the kit.',
-        body: 'Supplied with the frame, along with the DBS lead implantation and accuracy '
-          + 'verification accessories.',
+        label: 'A manual microdrive.',
+        body: 'Advanced by hand, supplied with the frame alongside the DBS lead implantation and '
+          + 'accuracy verification accessories. It also accepts Alpha Omega drives.',
       },
     ],
     meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
       w: 1024, h: 797,
-      alt: 'The NaviNetics mechanical microdrive.',
-      caption: 'The mechanical microdrive',
+      alt: 'The NaviNetics manual microdrive.',
+      caption: 'The manual microdrive',
     },
   },
   {

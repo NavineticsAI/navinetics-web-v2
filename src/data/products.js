@@ -119,13 +119,13 @@ export const products = [
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
       { label: 'Localizers', value: 'MR · CT', unit: 'plus X-ray reticles' },
-      { label: 'Fixation', value: 'Skull Anchor Key', unit: 'percutaneous screws' },
+      { label: 'Fixation', value: 'Skull Anchor Key', unit: 'no frame across the face' },
     ],
     /** Scroll-pinned narrative. Capped at three steps by the template. */
     sequence: [
       {
         title: 'Skull Anchor Key',
-        body: "A small Skull Anchor Key is affixed to the patient's skull with percutaneous screws.",
+        body: "A small Skull Anchor Key is affixed to the patient's skull, and the frame attaches to that.",
       },
       {
         title: 'Patient Comfort',

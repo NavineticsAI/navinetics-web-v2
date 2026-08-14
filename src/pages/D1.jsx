@@ -58,8 +58,10 @@ export default function D1() {
       <Section wide>
         <Reveal>
           <div className="flex flex-col gap-3.5">
+            {/* "What it is, in figures." removed on instruction — and it was
+                promising figures the table does not have: of seven rows only
+                two carry a number. */}
             <span className="eyebrow text-action">Specification</span>
-            <h2 className="text-d2">What it is, in figures.</h2>
             {/* Deliberately no paragraph explaining which figures are absent
                 and why — that is a note to ourselves, not something a surgeon
                 asked. Dimensions, weights, materials and travel ranges are
@@ -131,8 +133,10 @@ export default function D1() {
       {/* ── close ──────────────────────────────────────────────────────────── */}
       <Section>
         <Reveal className="flex flex-col items-center gap-6 text-center">
-          <span className="eyebrow text-action">Where it came from</span>
-          <h2 className="text-d2">Built to answer a constraint.</h2>
+          <span className="eyebrow text-action">Why it exists</span>
+          {/* Was "Built to answer a constraint." NaviNetics asked for the close
+              to look forward rather than back at the problem it started from. */}
+          <h2 className="text-d2">Built for the constraints of the next case.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             {product.intro}
           </p>
@@ -157,17 +161,8 @@ export default function D1() {
             </Button>
           </div>
 
-          <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-            The frame is shown in{' '}
-            <Link to="/resources/media" className="text-action underline-offset-4 hover:underline">
-              media
-            </Link>
-            , and the research behind it is in{' '}
-            <Link to="/resources/publications" className="text-action underline-offset-4 hover:underline">
-              publications
-            </Link>
-            .
-          </p>
+          {/* The media/publications footer line is removed on instruction —
+              both are one click away in the nav and the footer. */}
         </Reveal>
       </Section>
     </>
