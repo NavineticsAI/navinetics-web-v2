@@ -27,8 +27,8 @@ const INBOX = 'info@navinetics.com';
  * it cannot be missed and cannot be mistaken for one.
  */
 const REASONS = [
-  'NRSS enquiry',
-  'Surgical tables enquiry',
+  'NRSS inquiry',
+  'Surgical tables inquiry',
   'Neuromodulation research',
   'Distribution and partnerships',
   'Product complaint or device issue',
@@ -170,7 +170,7 @@ export default function Contact() {
                 “{COMPLAINT}” in the form, or email{' '}
                 <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>{' '}
                 with the device, the date, and what happened. If a patient or user has been
-                harmed, contact us by phone as well so we reach it the same day.
+                harmed, contact us by phone as well so we see it the same day.
               </p>
             </div>
           </Reveal>

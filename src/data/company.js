@@ -114,7 +114,7 @@ export const numbers = () => {
     { value: String(publications.length), label: 'Selected papers',
       unit: `${Math.min(...years)}–${Math.max(...years)}`, to: '/resources/publications' },
     { value: String(products.length), label: 'Product lines',
-      unit: 'stereotaxy and neuromodulation', to: '/products/d1-stereotactic-frame' },
+      unit: 'frames, tables, sensing', to: '/products/d1-stereotactic-frame' },
     { value: String(territories.length), label: 'Territories',
       unit: 'covered by partners or a subsidiary', to: '/company/partners' },
     { value: String(disciplines.length), label: 'Disciplines',
@@ -127,9 +127,9 @@ export const principles = [
   {
     title: 'Design by listening',
     body:
-      'A co-founder is a practicing neurosurgeon. Clinical input is not a quarterly advisory call — '
-      + 'it is someone who will be holding the device at 7am, saying the hardware is in the way of '
-      + 'their hands. The skull anchor key exists because of that complaint.',
+      'A co-founder is a practicing neurosurgeon. Clinical input here comes from someone holding '
+      + 'the device at 7am, telling us where their hands need to be. The skull anchor key exists '
+      + 'because of that request.',
   },
   {
     title: 'Quality and simplicity',
@@ -141,6 +141,6 @@ export const principles = [
     title: 'Publish the evidence',
     body:
       'The methods behind these devices are in the peer-reviewed record, under the founders’ names '
-      + 'and their laboratory’s. Claims that cannot be cited do not appear on this site.',
+      + 'and their laboratory’s. We cite what we claim.',
   },
 ];

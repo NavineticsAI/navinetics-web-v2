@@ -48,8 +48,8 @@ export default function Publications() {
         ))}
 
         <p className="mt-16 max-w-[70ch] border-t border-hairline-soft pt-6 text-sm text-ink-3">
-          A selection, not the whole record. Every citation was taken from the published DOI
-          rather than transcribed, and each title links to the paper.
+          A selection from a longer record. Every citation comes from the published DOI, and
+          each title links to the paper.
         </p>
       </Section>
     </>

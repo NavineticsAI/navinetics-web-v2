@@ -103,7 +103,7 @@ export default function Home() {
         <SectionHead
           align="center"
           eyebrow="Designed for the future"
-          title="Built to improve the whole workflow."
+          title="Targeting, measurement and access."
           lead="Surgical workflow, patient comfort, and exceptional accuracy — from a team that has spent decades in the operating room and the laboratory."
         />
 
@@ -157,7 +157,7 @@ export default function Home() {
                   peer-reviewed publications spanning decades
                 </p>
                 <LinkAction to="/resources/publications" className="mt-4 !text-sm">
-                  Browse {publications.length} selected
+                  Browse {publications.length} papers
                 </LinkAction>
               </div>
             </Card>
@@ -174,7 +174,7 @@ export default function Home() {
                 </p>
               </div>
               <LinkAction to="/products/maven-neuromodulation" className="mt-5">
-                Discover neuromodulation
+                See how MAVEN measures
               </LinkAction>
             </Card>
           </Reveal>

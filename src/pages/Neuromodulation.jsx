@@ -114,7 +114,7 @@ export default function Neuromodulation() {
             <SectionHead
               eyebrow="Applied in"
               title="The instrument it became."
-              lead="Everything above is why the system measures what it measures."
+              lead="Why it records chemistry and electrophysiology together."
             />
             <div className="mt-10 max-w-sm">
               {product && <ProductCard product={product} />}

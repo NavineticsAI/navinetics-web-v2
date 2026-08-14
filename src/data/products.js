@@ -110,7 +110,7 @@ export const products = [
     technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nRadically comfortable.',
     summary:
-      'Arc-centered targeting from a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
+      'Arc-centered targeting from a skull anchor key. Three axes to set the target, two rotations to reach it.',
     intro:
       'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
     hero: d1Head,

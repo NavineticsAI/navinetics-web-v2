@@ -113,7 +113,7 @@ export const domains = [
     tone: 'ephys',
     a0: 18,
     a1: 76,
-    line: 'The electrical activity recorded alongside it.',
+    line: 'What the same tip hears in the tissue.',
   },
   {
     id: 'soft',
@@ -228,8 +228,8 @@ export const bands = [
       { label: 'Single-unit activity.', body: 'Individual neurons, resolved as spikes.' },
       {
         label: 'Independent, but synchronized.',
-        body: 'The two run as separate channels of one instrument, so what the chemistry did can '
-          + 'be lined up against what the electrophysiology was doing when it did it.',
+        body: 'The two run as separate channels of one instrument, so the chemistry and the '
+          + 'electrophysiology line up on one timeline.',
       },
     ],
     meta: [
@@ -256,8 +256,8 @@ export const bands = [
     points: [
       {
         label: 'Synchronized with the measurement.',
-        body: 'Independent but synchronized neurochemical and electrophysiological recording '
-          + 'alongside stimulation.',
+        body: 'The stimulus sits on the same timeline as both signals, so what follows can be '
+          + 'read against it.',
       },
       {
         label: 'Artifact minimized at the integration.',
@@ -299,8 +299,8 @@ export const bands = [
       },
       {
         label: 'Background subtracted.',
-        body: 'What the electrode was doing before the event is taken off it, which is what '
-          + 'leaves the signal visible at all.',
+        body: 'The steady current the electrode draws before the event is taken off, so the '
+          + 'release itself is the signal.',
       },
       {
         label: 'Read as a trace.',

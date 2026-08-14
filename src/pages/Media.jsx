@@ -38,7 +38,7 @@ export default function Media() {
       <Hero
         eyebrow="Resources — Media"
         title="The library."
-        lead="Devices, research and the work behind them. For press enquiries or higher-resolution files, get in touch."
+        lead="Devices, research and the work behind them. For press inquiries or higher-resolution files, get in touch."
       />
 
       <Section wide>

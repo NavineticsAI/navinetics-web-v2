@@ -43,9 +43,8 @@ export function D1Hero() {
                and nothing about it should be deferred. */
             fetchPriority="high"
             decoding="async"
-            alt="The D1 stereotactic frame: an anodized blue arc-centered head frame with two curved
-              rails, a targeting stage, and a bare-steel mechanical microdrive rising from its
-              center."
+            alt="The NRSS: an anodized blue arc-centered head frame with two curved rails, a
+              targeting stage, and a bare-steel mechanical microdrive rising from its center."
             /* Sized by HEIGHT once there is a column to stand in. The render is
                tall and narrow, so capping its width instead puts the wheels
                through the bottom of a laptop viewport. */

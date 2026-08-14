@@ -95,8 +95,8 @@ export const bands = [
       src: headArt,
       w: 444, h: 1042,
       bare: true,
-      alt: 'The D1 frame fitted to an anatomical head model, held clear of the face, with a probe '
-        + 'on its trajectory.',
+      alt: 'The NRSS fitted to an anatomical head model, clear of the face, with a probe on its '
+        + 'trajectory.',
       caption: 'The frame on a head model',
     },
   },
@@ -106,14 +106,14 @@ export const bands = [
     tone: 'ephys',
     eyebrow: 'Targeting',
     title: 'Arc-centered.',
-    lead: 'Classified as an arc-centered stereotactic device: three linear degrees of freedom set '
-      + 'the target, and two angles of rotation set how you get to it. Every approach the arc '
-      + 'allows meets the same point.',
+    lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, '
+      + 'and two angles of rotation set how you reach it. Every approach the arc allows meets '
+      + 'the same point.',
     points: [
       {
         label: 'Three linear, two angular.',
-        body: 'X, Y and Z position the target; the ring and the arc choose the trajectory to it '
-          + 'without moving the target.',
+        body: 'X, Y and Z position the target, which stays fixed while the ring and the arc '
+          + 'choose the trajectory to it.',
       },
       {
         label: 'Adjustments near the field.',
@@ -138,17 +138,17 @@ export const bands = [
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
     lead: 'Once the arc has chosen the approach, a mechanical microdrive advances along it — '
-      + 'down the line the frame has already set, rather than beside it.',
+      + 'down the same line the frame has already set.',
     points: [
       {
         label: 'Coaxial with the approach.',
-        body: 'The drive is coaxial with the approach, so advancing does not disturb what the '
-          + 'frame has already set.',
+        body: 'The drive runs on the axis the arc chose, so advancing stays on the line the '
+          + 'frame has set.',
       },
       {
         label: 'Part of the kit.',
-        body: 'Supplied with the frame, along with the DBS lead implantation accessories and the '
-          + 'accuracy verification accessories.',
+        body: 'Supplied with the frame, along with the DBS lead implantation and accuracy '
+          + 'verification accessories.',
       },
     ],
     meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],

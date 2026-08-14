@@ -100,7 +100,7 @@ export const disciplines = [
   },
   {
     id: 'reg',
-    short: 'Medical & Reg.',
+    short: 'Regulatory',
     group: 'Regulatory',
     role: 'Medical, Regulatory & Quality',
     title: 'The part that makes it legal to help someone.',
