@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
+import { RotationInset } from '../ui/RotationInset.jsx';
 import { isPlaceholder, products } from '../data/products.js';
 import { publications } from '../data/publications.js';
 import {
@@ -89,9 +90,16 @@ export default function Home() {
                 {/* The floating lens panel that used to sit over each plate is
                     gone, at NaviNetics' request — "DEGREES OF FREEDOM 3 + 2" on
                     the NRSS plate and the equivalent first metric on the other
-                    two. It covered the bottom-left of the product it was
-                    labeling. The figures are not lost: `metrics` still feeds
-                    the spec table on each product page. */}
+                    two. The figures are not lost: `metrics` still feeds the
+                    spec table on each product page.
+
+                    In its place, on the NRSS plate only, a drawing of what that
+                    number means — the collar and the arc turning while the
+                    target holds still. Only this product is arc-centred, so
+                    only this plate gets it. */}
+                {product.slug === 'd1-stereotactic-frame' && (
+                  <RotationInset className="hidden md:block" />
+                )}
               </div>
             </Reveal>
           </div>
