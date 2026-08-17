@@ -92,10 +92,13 @@ export const timeline = [
   },
   {
     year: '2026',
-    title: 'NaviNetics Asia',
+    /* "NaviNetics Asia" and "subsidiary" both came off at the company's
+       request. CBH is named as itself, which is what the review asked for, and
+       what it does is unchanged. */
+    title: 'CBH joins',
     body:
-      'Formerly CBH, integrated as a subsidiary in March. It carries manufacturing, R&D, and the '
-      + 'Asia and Europe sales network.',
+      'CBH is integrated in March, carrying manufacturing, R&D, and the Asia and Europe sales '
+      + 'network.',
     source: 'Partner records',
     to: '/company/partners',
   },
@@ -114,11 +117,21 @@ export const numbers = () => {
     { value: String(publications.length), label: 'Selected papers',
       unit: `${Math.min(...years)}–${Math.max(...years)}`, to: '/resources/publications' },
     { value: String(products.length), label: 'Product lines',
-      unit: 'stereotaxy and neuromodulation', to: '/products/d1-stereotactic-frame' },
+      // The unit named two of the three and left the operating tables out.
+      unit: 'stereotaxy, imaging, neuromodulation', to: '/products/d1-stereotactic-frame' },
     { value: String(territories.length), label: 'Territories',
-      unit: 'covered by partners or a subsidiary', to: '/company/partners' },
+      /* Was "covered by partners", and the arithmetic did not survive a look:
+         the United States is sold direct, three territories have no named
+         organisation yet, and two partners are named anywhere on the site. The
+         count of territories is right; what they are covered BY is mixed, and
+         saying so is both accurate and unremarkable. */
+      unit: 'served, direct and through partners', to: '/company/partners' },
     { value: String(disciplines.length), label: 'Disciplines',
-      unit: 'clinical, engineering, regulatory', to: '/resources/careers' },
+      /* The unit named three where the number says six — see disciplines.js,
+         which runs surgery, product, mechanical, imaging, verification and
+         regulatory. Naming the span instead of a subset keeps the two in step
+         however the list changes. */
+      unit: 'surgery through to regulatory', to: '/resources/careers' },
   ];
 };
 
@@ -127,9 +140,10 @@ export const principles = [
   {
     title: 'Design by listening',
     body:
+      /* See data/disciplines.js — same sentence, same reason for the change. */
       'A co-founder is a practicing neurosurgeon. Clinical input is not a quarterly advisory call — '
-      + 'it is someone who will be holding the device at 7am, saying the hardware is in the way of '
-      + 'their hands. The skull anchor key exists because of that complaint.',
+      + 'it is someone who will be holding the device at 7am, telling you there is metal where '
+      + 'their hands need to be. The Skull Anchor Key exists because of that complaint.',
   },
   {
     title: 'Quality and simplicity',

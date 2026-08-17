@@ -25,7 +25,12 @@ export const disciplines = [
     group: 'Clinical',
     role: 'Clinical — Neurosurgery',
     title: 'They don’t advise. They operate.',
-    body: 'Our co-founder is a practicing neurosurgeon at Mayo Clinic. Clinical input here is not a quarterly advisory call — it is someone who will be holding the device at 7am, telling you the hardware is in the way of their hands. The skull anchor key exists because of exactly that complaint.',
+    /* "the hardware is in the way" was collateral from the base-ring sweep: the
+       original said "the base ring is in the way", and replacing a specific
+       object with a generic one turned a surgeon's concrete complaint into a
+       vague one. The ring cannot come back, so the specificity is restored the
+       other way — by naming what is in the way in that moment, the hands. */
+    body: 'Our co-founder is a practicing neurosurgeon at Mayo Clinic. Clinical input here is not a quarterly advisory call — it is someone who will be holding the device at 7am, telling you there is metal where their hands need to be. The Skull Anchor Key exists because of exactly that complaint.',
     problem:
       '“The frame is blocking the patient’s face during an awake case. Give me the coordinate system without it.”',
     owns: ['Clinical requirements', 'Surgical workflow', 'Cadaver & OR validation', 'Trajectory planning'],

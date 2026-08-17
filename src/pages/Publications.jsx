@@ -33,13 +33,19 @@ export default function Publications() {
       + 'stereotactic systems and intraoperative neurochemical sensing.',
   });
 
+  const years = publications.map((p) => p.year);
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
+
   return (
     <>
+      {/* The lead's years were hard-coded and went stale the moment a 2026 paper
+          was added — it said the list ran "to 2025" above a list opening on
+          2026. Derived from the records now, so it cannot disagree again. */}
       <Hero
         eyebrow="Resources — Publications"
         title="Highlighted research."
-        lead="Peer-reviewed work by our founders and their laboratory, from the first compact
-          stereotactic system in 2020 to a clinical evaluation of the NaviNetics system in 2025."
+        lead={`Peer-reviewed work by our founders and their laboratory, from ${minYear} to ${maxYear}.`}
       />
 
       <Section wide className="!pt-14 md:!pt-16">

@@ -102,38 +102,64 @@ export const products = [
       status: 'FDA 510(k) cleared',
       market: null,
       number: null,
+      /* Two things came out of this sentence. "FDA cleared" is withheld by
+         decision, and it survived here because this field feeds the generic
+         product template, which no route currently reaches — so the rendered-copy
+         audit could not see it. A withheld claim sitting in data is still a
+         withheld claim; the moment that template gets a route it publishes
+         itself. And "reduce the burden" framed the product by what is wrong
+         with the alternative rather than by what it does. */
       statement:
-        'NaviNetics has developed an FDA cleared system to reduce the burden of establishing '
-        + 'the stereotactic coordinate system for both the surgeon and the patient.',
+        'The coordinate system is set at the surgical field, from a single key fixed to the skull.',
     },
     tag: { label: 'Flagship', tone: 'action' },
     technology: 'stereotactic-devices',
-    tagline: 'Robust. Low complexity.\nRadically comfortable.',
+    /* "Radically comfortable" — the adverb went because it is the one word in
+       the line making a claim rather than stating a property, and the other two
+       sentences are flat by design. Comfort itself stays: it is the point of
+       fixing to an anchor key instead of encircling the head. */
+    tagline: 'Robust. Low complexity.\nComfortable.',
     summary:
-      'Arc-centered targeting from a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
+      'Arc-centered targeting from the Skull Anchor Key. Three linear degrees of freedom, two angles of rotation.',
+    /* THE OPENING CLAUSE WAS THE MOST EXPOSED SENTENCE ON THE SITE.
+       It read: "Stereotactic neurosurgical procedures are constrained by the
+       costs and limitations of commercially available stereotactic devices."
+       That is a disparaging comparative claim about every competing device on
+       the market — asserting they are expensive and limited — made without
+       naming one and with no substantiation held anywhere. A manufacturer is
+       expected to be able to support that, and we cannot.
+       What replaces it says what this device is, which needs no comparison. */
     intro:
-      'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
+      'The brief was a device robust enough for daily use and simple enough to trust, working '
+      + 'across stereotactic and functional procedures — deep brain stimulation among them. It was '
+      + 'written with the surgeons who would use it, and around the patient who would wear it.',
     hero: d1Head,
     heroAlt: 'The NRSS fitted to an anatomical head model, held clear of the face',
     heroTone: 'bay',
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
       { label: 'Localizers', value: 'MR · CT', unit: 'plus X-ray reticles' },
-      { label: 'Fixation', value: 'Anchor key', unit: 'percutaneous screws' },
+      { label: 'Fixation', value: 'Anchor key', unit: 'fixed to the skull' },
     ],
     /** Scroll-pinned narrative. Capped at three steps by the template. */
     sequence: [
       {
-        title: 'Anchor Key',
-        body: "A small anchor key is affixed to the patient's skull with percutaneous screws.",
+        title: 'Skull Anchor Key',
+        body: "The Skull Anchor Key is fixed to the patient's skull.",
       },
       {
         title: 'Patient Comfort',
-        body: 'Designed to be more comfortable for the patient and keeps the facial area completely free from obstruction during awake procedures.',
+        // "more comfortable" is a comparative without a comparator. What the
+        // patient actually experiences is stated instead.
+        body: 'The face stays open, so an awake patient can be spoken with and watched throughout the procedure.',
       },
       {
         title: 'Total Flexibility',
-        body: 'Components can be seamlessly attached and removed from the anchor key, giving the surgical team unprecedented space to work.',
+        // "unprecedented space to work" was a comparative claim against every
+        // competing system, unnamed and unsubstantiated. What replaces it is
+        // the thing that is actually true and specific: nothing encircles the
+        // head, so the face and the field stay clear.
+        body: 'Components attach to the key and come off it. The face stays clear and the team keeps the field.',
       },
     ],
     detail: {
@@ -143,21 +169,23 @@ export const products = [
       fit: 'cover',
       paragraphs: [
         'Classified as an arc centered stereotactic device, it provides three linear degrees of freedom (X, Y and Z axes) for target positioning, with two angles of rotation to optimize approach trajectory.',
-        'The compact design places all adjustments in close proximity to the surgical field, improving surgeon experience and reducing the burden of establishing the coordinate system.',
+        'The compact design places all adjustments in close proximity to the surgical field, so the coordinate system is established from where the surgeon is already standing.',
       ],
     },
     specs: [
       { k: 'Classification', v: 'Arc-centered' },
       { k: 'Linear degrees of freedom', v: '3 — X, Y, Z' },
-      { k: 'Angular rotations', v: '2 — ring, arc' },
-      { k: 'Patient fixation', v: 'Skull anchor key' },
+      { k: 'Angular rotations', v: '2 — collar, arc' },
+      { k: 'Patient fixation', v: 'Skull Anchor Key' },
       { k: 'Imaging localizers', v: 'MR · CT · X-ray' },
       { k: 'Reusable', v: 'Yes' },
       /* No regulatory row — withheld on instruction, see `regulatory` above. */
     ],
     /** Enumerated set the reader traverses completely — numbering is meaningful. */
     highlights: [
-      'Improved patient experience with Skull Anchor Key in place of a base frame.',
+      // "in place of a base frame" was both a comparison and the retired frame
+      // terminology, surviving inside a highlight nobody re-read.
+      'Improved patient experience: the Skull Anchor Key is all the patient wears.',
       'Surgeon ease-of-use & workflow of frame-based systems with compact frameless size.',
       'Intuitive, accessible targeting adjustment of device.',
       'Device size and range optimized for accelerating DBS workflow.',
@@ -198,7 +226,7 @@ export const products = [
       'Screw Kits',
     ],
     gallery: [
-      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The anchor key on a head model', fit: 'contain' },
+      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The Skull Anchor Key on a head model', fit: 'contain' },
       { src: asset('/DSC05397-1024x695.jpg'), caption: 'The stereotactic frame', fit: 'cover' },
       { src: asset('/microdrive-image-1024x797.png'), caption: 'The mechanical microdrive', fit: 'contain' },
     ],
@@ -301,8 +329,19 @@ export const products = [
     tag: { label: 'Research', tone: 'line' },
     technology: 'neuromodulation',
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
+    /* "A pre-clinical research device" leads, and it has to.
+       ────────────────────────────────────────────────────────────────────
+       This one string is the MAVEN card on the home page, the MAVEN entry in
+       Three Lines of Work on /company/who-we-are, and the catalogue tile. On
+       all three it sat beside the NRSS and the operating tables with nothing
+       to distinguish it, so a surgeon met MAVEN as a fourth thing they could
+       buy for theatre. The qualifier existed — but only in the last section of
+       MAVEN's own page, which is three clicks and eight screens too late.
+
+       Stated first rather than appended, because a reader who stops after one
+       clause should still have the important half. */
     summary:
-      'Synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact.',
+      'A pre-clinical research device: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact.',
     /**
      * MAVEN is the product name — confirmed by NaviNetics. The copy below used
      * to be written around "the WINCS Harmoni Device" throughout; it now names
@@ -405,7 +444,7 @@ export const comparison = {
   needsReview: true,
   columns: ['NRSS', 'Traditional frame-based', 'Frameless'],
   rows: [
-    { k: 'Patient fixation', v: ['Skull anchor key', 'Rigid head fixation', 'Bone fiducials / mask'] },
+    { k: 'Patient fixation', v: ['Skull Anchor Key', 'Rigid head fixation', 'Bone fiducials / mask'] },
     { k: 'Facial obstruction', v: ['None', 'Significant', 'Minimal'] },
     { k: 'Targeting principle', v: ['Arc-centered', 'Arc-centered', 'Trajectory guide'] },
     { k: 'Adjustment location', v: ['At surgical field', 'At the frame', 'Varies'] },

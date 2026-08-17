@@ -76,21 +76,51 @@ export const bands = [
     tone: 'chem',
     eyebrow: 'Fixation',
     title: 'Anchored to\nthe skull.',
-    lead: 'A small anchor key is affixed to the skull with percutaneous screws. Everything else '
-      + 'attaches to that.',
+    /* The screw passage came out at the company's request. The sentence still
+       has to say what the key does, so it says it is fixed to the skull and
+       carries everything else — which is the mechanism, without the detail. */
+    /* THE SECOND SENTENCE IS THE DIFFERENTIATOR, AND IT WAS BURIED.
+       It sat about 800 words into the education material, where a surgeon
+       evaluating this page would never reach it: "Historically the frame was a
+       large ring encircling the head; the NaviNetics system fixes near the top
+       of the skull instead, leaving the face clear."
+
+       It is also the model for how to differentiate WITHOUT a competitive
+       claim — it compares against a historical category rather than a company,
+       the same move the tables page makes against "the steel or aluminium a
+       table would otherwise be built from". Nothing here names a competitor or
+       asserts anything about one. */
+    lead: 'The Skull Anchor Key is fixed to the skull, and everything else attaches to that. '
+      + 'Historically a stereotactic frame was a ring encircling the head; this one fixes near the '
+      + 'top of the skull, leaving the face clear.',
     points: [
       {
         label: 'The face stays clear.',
-        body: 'Nothing crosses the facial area, which matters most in awake procedures where the '
-          + 'patient has to be spoken with and watched.',
+        /* The body used to open "Nothing crosses the facial area", which both
+           restates the label and states it as an absence. The label already
+           carries the fact; the body's job is why it matters. */
+        body: 'It matters most in awake procedures, where the patient has to be spoken with and '
+          + 'watched throughout.',
       },
       {
+        /* Was: "The existing product record puts patient experience first among
+           its improvements, and this is the part that delivers it." That is a
+           sentence about one of our own documents — it cites the product record
+           to a reader who has never seen it, and says nothing about what the
+           patient experiences. Replaced with the thing itself: what is on the
+           patient, and for how long. */
         label: 'Designed around comfort.',
-        body: 'The existing product record puts patient experience first among its improvements, '
-          + 'and this is the part that delivers it.',
+        /* Also rewritten away from comparison. "A key at the skull rather than
+           a frame around the head" measures the patient's experience against
+           the thing we do not make. What they actually experience is one small
+           part, in one place, for a known length of time — which is a stronger
+           sentence and needs no alternative to stand next to. */
+        body: 'The patient wears one small key at the skull, for as long as the procedure takes.',
       },
     ],
-    meta: [{ label: 'Fixation', value: 'Anchor key' }, { label: 'Fitting', value: 'Percutaneous screws' }],
+    /* "Percutaneous screws" came off with the rest of the screw passage. This
+       row was missed in that pass because it is a meta value rather than prose. */
+    meta: [{ label: 'Fixation', value: 'Anchor key' }, { label: 'Fitting', value: 'To the skull' }],
     figure: {
       src: headArt,
       w: 444, h: 1042,
@@ -112,13 +142,43 @@ export const bands = [
     points: [
       {
         label: 'Three linear, two angular.',
-        body: 'X, Y and Z position the target; the ring and the arc choose the trajectory to it '
+        body: 'X, Y and Z position the target; the collar and the arc choose the trajectory to it '
           + 'without moving the target.',
       },
       {
         label: 'Adjustments near the field.',
-        body: 'The compact design puts every adjustment close to where the work is, rather than '
-          + 'out at the rim of a ring.',
+        /* Was "... close to where the work is, rather than out at the rim of a
+           ring." Two problems. It defines the instrument against an unnamed
+           competitor instead of describing itself — the reader is told what we
+           are not, and has to already know the alternative for the sentence to
+           mean anything. And it put "ring" back on the page after the term was
+           removed everywhere else, which is how a retired word survives a sweep.
+           Stated on its own terms, the sentence needs no comparison. */
+        body: 'Every adjustment sits within reach of the surgical field, so the target is set '
+          + 'from where the surgeon is already standing.',
+      },
+      {
+        /* NO ACCURACY FIGURE ON THIS PAGE. Decided by NaviNetics, 2026-08-17.
+           ────────────────────────────────────────────────────────────────
+           A figure was added here and removed the same day. It is published and
+           it is good — Shin, Scheitler, Sharaf et al., Operative Neurosurgery
+           2025;29(1):93-101, already cited on /resources/publications, reports
+           mean radial error of 0.71 +/- 0.33 mm across 32 leads in 17 patients.
+
+           It comes off because the company does not want performance numbers on
+           the published site while the work is still developing, and because
+           navinetics.com states no accuracy figure either — putting one here
+           would make the two sites disagree about what NaviNetics claims.
+
+           The paper stays cited in full. A surgeon who wants the number can read
+           it in its own context, with its n and its conditions, which is where a
+           measured result belongs. What this page says instead is what the
+           instrument does, which needs no substantiation file.
+
+           DO NOT re-add a figure here without the company asking for it. */
+        label: 'One focus, every approach.',
+        body: 'Because the two rotations turn about the focus, changing the approach cannot move '
+          + 'the target.',
       },
     ],
     meta: [{ label: 'Classification', value: 'Arc-centered' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
@@ -165,7 +225,7 @@ export const bands = [
     tone: 'soft',
     eyebrow: 'Access',
     title: 'Room\nto work.',
-    lead: 'Components attach to and detach from the anchor key as the procedure needs them, so '
+    lead: 'Components attach to and detach from the Skull Anchor Key as the procedure needs them, so '
       + 'the burr hole stays reachable and the sterile field stays intact from start to finish.',
     points: [
       {

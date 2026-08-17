@@ -41,11 +41,22 @@ export default function Home() {
            display size this is the same face every other page heading uses, and
            caps here would read as a different typographic system. */
         title={'Targeting the future.\nImproving today.'}
-        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic."
+        /* THE SECOND SENTENCE IS THE THING THAT JOINS THE PRODUCTS.
+           It already existed, at the bottom of the third product page, under
+           the heading "Placed by the same route." — that everything NaviNetics
+           makes serves one act: getting an instrument to a point inside the
+           brain, seeing while you do it, and knowing what happened there.
+           Without it the site tells three separate stories and never says why
+           one company makes a frame, a table and a recording instrument.
+           It claims nothing new: every clause is already true on its own page. */
+        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic. One route to a target: plan it, see through the table, reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
+          {/* "Discover the NRSS" used an acronym that is first defined further
+              down this same page, so the primary call to action named a thing
+              the visitor had not been told about yet. */}
           <Button to={products[0].path} size="lg" arrow>
-            Discover the NRSS
+            Discover the frame
           </Button>
           <Button to="/company/who-we-are" size="lg" variant="secondary">
             Who we are
@@ -100,19 +111,33 @@ export default function Home() {
 
       {/* Bento */}
       <Section wide>
+        {/* "exceptional accuracy" came out of the lead. It is an adjective
+            standing where a figure belongs, on the one attribute a surgeon
+            checks first, and this site's own rule is that claims which cannot
+            be cited do not appear on it. The accuracy work IS published — two
+            validation papers on /resources/publications — but until a figure
+            from them is stated here, an adjective is the weakest possible
+            stand-in. Workflow and comfort stay: the pages behind them show the
+            mechanism. */}
         <SectionHead
           align="center"
           eyebrow="Designed for the future"
           title="Built to improve the whole workflow."
-          lead="Surgical workflow, patient comfort, and exceptional accuracy — from a team that has spent decades in the operating room and the laboratory."
+          lead="Surgical workflow and patient comfort, from a team that has spent decades in the operating room and the laboratory."
         />
 
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal className="sm:col-span-2">
             <Card lift className="nn-retic relative h-full min-h-56 overflow-hidden">
-              <span className="eyebrow text-action">Unprecedented access</span>
-              <h3 className="mt-3 text-2xl tracking-[-0.03em]">
-                Fixation by a small skull anchor key
+              {/* Was "Unprecedented access". That is a comparative claim about
+                  every other stereotactic system on the market, made without
+                  naming one, and a manufacturer is expected to hold
+                  substantiation for it. The part worth saying is the part that
+                  is specific and true — which is the anchor key itself. The
+                  eyebrow rule uppercases, so this renders SKULL ANCHOR KEY. */}
+              <span className="eyebrow text-action">Skull Anchor Key</span>
+              <h3 className="mt-3 text-2xl tracking-[-0.03em] sm:text-3xl">
+                Fixation by the Skull Anchor Key
               </h3>
               <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
                 Leaving the patient's face completely unobstructed and giving the surgical team full
@@ -149,15 +174,21 @@ export default function Home() {
               <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-ink-3">
                 Research
               </span>
+              {/* The number is the one we can stand behind. "100+" was uncited
+                  anywhere on the site and sat directly above a link reading
+                  "Browse 9 selected" — putting an unsupported figure next to a
+                  much smaller supported one, which invites the reader to notice
+                  the gap rather than the record. The nine are cited to their
+                  DOIs, so they are the stronger claim. */}
               <div>
                 <div className="text-5xl font-semibold leading-none tracking-[-0.045em] tabular-nums">
-                  100+
+                  {publications.length}
                 </div>
                 <p className="mt-2 text-sm text-ink-2">
-                  peer-reviewed publications spanning decades
+                  peer-reviewed papers by our founders and their laboratory, each one cited
                 </p>
                 <LinkAction to="/resources/publications" className="mt-4 !text-sm">
-                  Browse {publications.length} selected
+                  Read the publications
                 </LinkAction>
               </div>
             </Card>
@@ -168,9 +199,14 @@ export default function Home() {
               <div>
                 <Badge>Neuromodulation</Badge>
                 <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">Closed-loop, one day</h3>
+                {/* "never contaminates the recording" was an absolute claim, and
+                    it sat on the same screen as the MAVEN card's "engineered to
+                    minimize stimulation artifact" — two different strengths of
+                    the same claim, fifteen lines apart. "Minimize" is what the
+                    MAVEN page says and what we can support. */}
                 <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                  Synchronized neurochemical and electrophysiological measurement, engineered so
-                  stimulation artifact never contaminates the recording.
+                  Synchronized neurochemical and electrophysiological measurement, engineered to
+                  minimize stimulation artifact.
                 </p>
               </div>
               <LinkAction to="/products/maven-neuromodulation" className="mt-5">

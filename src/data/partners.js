@@ -53,7 +53,11 @@ export const territories = [
     label: 'United States',
     anchor: [39.5, -98.5],
     home: true,
-    summary: 'Direct from Rochester.',
+    /* Was "Direct from Rochester, with Abbott carrying distribution." Abbott
+       came off the list and what was left read as a shipping origin rather than
+       a sales model. This says the thing the row is actually for: who sells
+       into this territory. */
+    summary: 'Sold direct by NaviNetics.',
     orgs: [
       {
         /* `self` makes the tile draw the <Logo> lockup — the same component the
@@ -120,15 +124,21 @@ export const territories = [
     id: 'kr',
     label: 'South Korea',
     anchor: [36.5, 127.9],
-    summary: 'A subsidiary, not a distributor — manufacturing and R&D as well as sales.',
+    /* "Subsidiary" came out at the company's request, here and in the tile
+       below. What the row needs to convey is unchanged and is a fact rather
+       than a corporate structure: this territory does more than sell. */
+    summary: 'Manufacturing and R&D as well as sales.',
     orgs: [
       {
         logo: cbh,
+        /* Named here, because the carbon tables page says "Built by CBH in South
+           Korea — see our partners" and this page did not contain the letters
+           CBH anywhere. A cross-reference that does not resolve is worse than no
+           cross-reference. */
         name: 'CBH',
-        role: 'Subsidiary',
-        body:
-          'A subsidiary rather than a distributor: it carries manufacturing, R&D, and the Asia and '
-          + 'Europe sales network.',
+        role: 'Manufacturing, R&D and sales',
+        body: 'CBH carries manufacturing, R&D, and the Asia and Europe sales network. The carbon '
+          + 'fiber operating tables are built here.',
       },
     ],
     cover: [['South Korea', 1]],

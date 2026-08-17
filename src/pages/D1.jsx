@@ -37,7 +37,7 @@ export default function D1() {
     title: product.name,
     description:
       'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centered stereotactic targeting from '
-      + 'a skull anchor key. Three linear degrees of freedom, two angles of rotation.',
+      + 'the Skull Anchor Key. Three linear degrees of freedom, two angles of rotation.',
   });
 
   return (
@@ -132,7 +132,18 @@ export default function D1() {
       <Section>
         <Reveal className="flex flex-col items-center gap-6 text-center">
           <span className="eyebrow text-action">Where it came from</span>
-          <h2 className="text-d2">Built to answer a constraint.</h2>
+          {/* Was "Built to answer a constraint." — "constraint" names a
+              difficulty, and no other heading on this site does.
+              This is not invented: the home page already says the range is
+              "designed with the clinicians who use them", and Who We Are lists
+              "Design by listening" as one of three principles. The closing
+              section of a product page is exactly where that belongs, and
+              saying it in the words the site already uses is what makes the two
+              pages sound like one company.
+              The eyebrow above already says "Where it came from" and the
+              paragraph below opens on the brief, so the heading's job is to
+              hand off between them in as few words as possible. */}
+          <h2 className="text-d2">It began as a brief.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             {product.intro}
           </p>

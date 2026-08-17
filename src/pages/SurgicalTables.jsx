@@ -101,6 +101,53 @@ export default function SurgicalTables() {
         }}
       />
 
+      {/* MOTION IS EXPLAINED BEFORE THE MODELS ARE OFFERED.
+          ─────────────────────────────────────────────────────────────────
+          These two sections used to run the other way round, so the reader was
+          asked to choose between FLOAT 3-MOTION and FLOAT + TRENDELENBURG one
+          section before float and Trendelenburg were defined, and before the
+          page said the range runs from one motion to six. It was the clearest
+          case on the site of information arriving after the decision it was
+          needed for. */}
+      <ScienceBand
+        builders={BUILDERS}
+        scene="envelope"
+        ground="light"
+        tone="soft"
+        eyebrow="Motion"
+        title={'Bring the\nanatomy to\nthe beam.'}
+        lead="A C-arm is heavy, sterile-draped and awkward to reposition mid-procedure. A table that
+          floats, slides and tilts lets the anatomy be brought to the beam instead — which is why
+          the range runs from one motion up to six."
+        points={[
+          {
+            label: 'Height, on every model.',
+            body: 'The one motion every table in the range has, and the one the imaging chain is '
+              + 'set up around.',
+          },
+          {
+            label: 'Float is two travels at once.',
+            body: 'The top moves in X and Y over the column, so a target can be centered without '
+              + 'moving the patient or the arm.',
+          },
+          {
+            label: 'Trendelenburg and lateral tilt.',
+            body: 'Where a model has them, the specification states the angle each way, and the '
+              + 'drawing above is limited to exactly that.',
+          },
+        ]}
+        meta={[
+          { label: 'Range', value: '1 to 6 motions' },
+          { label: 'Specified here', value: '5 models' },
+        ]}
+        figure={{
+          src: art.tableMotion, w: 1400, h: 856,
+          alt: 'The same table photographed with its tilt positions ghosted over one another, '
+            + 'showing the arc the top sweeps through.',
+          caption: 'The tilt positions, superimposed',
+        }}
+      />
+
       {/* ── the interactive middle ─────────────────────────────────────────── */}
       <Section wide className="!bg-[var(--mv-bay)] text-nn-50">
         <Reveal>
@@ -152,52 +199,23 @@ export default function SurgicalTables() {
       </Section>
 
       {/* ── motion ─────────────────────────────────────────────────────────── */}
-      <ScienceBand
-        builders={BUILDERS}
-        scene="envelope"
-        ground="light"
-        tone="soft"
-        eyebrow="Motion"
-        title={'Bring the\nanatomy to\nthe beam.'}
-        lead="A C-arm is heavy, sterile-draped and awkward to reposition mid-procedure. A table that
-          floats, slides and tilts lets the anatomy be brought to the beam instead — which is why
-          the range runs from one motion up to six."
-        points={[
-          {
-            label: 'Height, on every model.',
-            body: 'The one motion every table in the range has, and the one the imaging chain is '
-              + 'set up around.',
-          },
-          {
-            label: 'Float is two travels at once.',
-            body: 'The top moves in X and Y over the column, so a target can be centered without '
-              + 'moving the patient or the arm.',
-          },
-          {
-            label: 'Trendelenburg and lateral tilt.',
-            body: 'Where a model has them, the specification states the angle each way, and the '
-              + 'drawing above is limited to exactly that.',
-          },
-        ]}
-        meta={[
-          { label: 'Range', value: '1 to 6 motions' },
-          { label: 'Specified here', value: '5 models' },
-        ]}
-        figure={{
-          src: art.tableMotion, w: 1400, h: 856,
-          alt: 'The same table photographed with its tilt positions ghosted over one another, '
-            + 'showing the arc the top sweeps through.',
-          caption: 'The tilt positions, superimposed',
-        }}
-      />
-
       {/* ── the rest of the range ──────────────────────────────────────────── */}
       <Section wide band>
+        {/* Title was "Premium, and made to order." Both words were positioning
+            rather than fact, and neither is substantiated anywhere.
+
+            The lead was: "Named in the range sheet without a specification
+            behind them, so they are named here the same way — and nothing is
+            claimed about any of them." Two faults in one sentence. It cites the
+            range sheet, which the reader has never seen and cannot consult. And
+            "nothing is claimed about any of them" is our editorial process,
+            published — honest internally, but it reads as a company hedging
+            about its own catalogue. Same restraint, stated as an offer. */}
         <SectionHead
           eyebrow="Also in the line-up"
-          title="Premium, and made to order."
-          lead="Named in the range sheet without a specification behind them, so they are named here
-            the same way — and nothing is claimed about any of them."
+          title="Also in the range."
+          lead="Five models are specified in full above. These are the rest of the range — ask us
+            and we will send the specification for any of them."
         />
         <div className="mt-10 grid gap-8 md:grid-cols-2">
           {lineup.map((g) => (
@@ -253,9 +271,11 @@ export default function SurgicalTables() {
             </Button>
           </div>
           <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-            Built by our Korean subsidiary — see{' '}
+            {/* "our Korean subsidiary — see NaviNetics Asia" both came off at
+                the company's request. CBH is named directly instead. */}
+            Built by CBH in South Korea — see{' '}
             <Link to="/company/partners" className="text-action underline-offset-4 hover:underline">
-              NaviNetics Asia
+              our partners
             </Link>
             .
           </p>

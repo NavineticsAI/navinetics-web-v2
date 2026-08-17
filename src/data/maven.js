@@ -144,13 +144,29 @@ export const channels = [
   { id: 'da', domain: 'chem', deg: -8, short: 'Dopamine', name: 'Dopamine', sub: 'DA' },
   { id: '5ht', domain: 'chem', deg: -33.5, short: 'Serotonin', name: 'Serotonin', sub: '5-HT' },
   { id: 'ado', domain: 'chem', deg: -59, short: 'Adenosine', name: 'Adenosine', sub: null },
-  { id: 'glu', domain: 'chem', deg: -84.5, short: 'Glutamate', name: 'Glutamate', sub: null },
-  { id: 'ach', domain: 'chem', deg: -110, short: 'Acetylcholine', name: 'Acetylcholine', sub: 'ACh' },
-  { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: 'LFP' },
+  /* Glutamate and acetylcholine were named individually and are not any more.
+     Dopamine, serotonin and adenosine are what the published work covers; the
+     rest belong behind one honest label rather than a list that implies a
+     validated channel for each.
+     One entry replaces the two. Each channel carries its own explicit `deg`, so
+     dropping a slot leaves the remaining angles exactly where they were rather
+     than respacing the ring — and -97 is the midpoint of the two it replaces,
+     which keeps the gap even. */
+  { id: 'oth', domain: 'chem', deg: -97, short: 'Other', name: 'Other neurochemicals', sub: null },
+  // `sub` was also 'LFP', so the ring rendered "LFP LFP" — the short label and
+  // the abbreviation are the same word here, unlike Dopamine/DA.
+  { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: null },
   { id: 'unit', domain: 'ephys', deg: 62, short: 'Single-unit', name: 'Single-unit activity', sub: null },
   { id: 'dsp', domain: 'soft', deg: 108, short: 'Signal processing', name: 'Ephys & signal processing', sub: null },
   { id: 'adv', domain: 'soft', deg: 138, short: 'Advanced analysis', name: 'Advanced analysis', sub: null },
-  { id: 'dbs', domain: 'stim', deg: 195, short: 'DBS', name: 'Deep brain stimulation', sub: 'DBS' },
+  /* "Electrical stimulation", not DBS. MAVEN is a pre-clinical research
+     instrument and DBS is a named clinical therapy — the broader term is both
+     what the review asked for and the accurate one for what this channel does.
+     Deliberately changed HERE and nowhere else: the phrase also appears in Dr
+     Lee's biography, in published paper titles on /resources/publications, and
+     on the two teaching pages, where it is the correct name of the procedure
+     and not product positioning. */
+  { id: 'stim', domain: 'stim', deg: 195, short: 'Stimulation', name: 'Electrical stimulation', sub: null },
 ];
 
 /** The three techniques, which are modes rather than channels. */

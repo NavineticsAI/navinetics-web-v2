@@ -183,7 +183,13 @@ export const lineup = [
     items: [
       { name: 'CXR-70F_N', note: 'For L&C AI Mobile CT' },
       { name: 'CXR-702D', note: 'For L&C Dentium WBCT' },
-      { name: 'V1 / V2', note: 'Non-invasive gamma stimulation' },
+      /* V1 / V2 is not a table. It is a gamma stimulation platform that the
+         supplier's range sheet lists alongside them, and on a page about
+         operating tables every reader stops on it. The note now says what it is
+         rather than leaving the reader to work out why a therapy device is in a
+         table line-up. If it does not belong in NaviNetics' catalogue at all,
+         delete the entry — that is a commercial call, not an editorial one. */
+      { name: 'V1 / V2', note: 'Gamma stimulation platform, not a table' },
     ],
   },
 ];
@@ -200,13 +206,20 @@ export const lineup = [
  * problem in the second half. What is left is what the tables are, which is
  * what a buyer scanning six words actually needs.
  */
+/* Three of these six were still the sheet's adjectives when the rest had been
+   rewritten, and adjectives are the one thing this page cannot afford:
+   "Reliable and durable" says nothing a buyer can check, "Custom solutions" is
+   the Customized group restated, and "Global service support" is a SERVICE
+   COMMITMENT — a promise about response times and coverage that nothing on this
+   site, or in the range sheet, stands behind. Replaced with properties the page
+   already demonstrates elsewhere. */
 export const strengths = [
   'Radiolucent carbon-fiber construction',
   'Low mass for the span',
   'Wide motion range',
-  'Reliable and durable',
-  'Custom solutions',
-  'Global service support',
+  'Float in X and Y over the column',
+  'Built for imaging-guided procedures',
+  'Five models specified in full',
 ];
 
 export const getModel = (id) => models.find((m) => m.id === id) ?? models[0];

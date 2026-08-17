@@ -1,5 +1,4 @@
 import { cn } from '../lib/cn.js';
-import { Badge } from './Badge.jsx';
 import { Button } from './Button.jsx';
 import { Reticle } from './Reticle.jsx';
 import { Reveal } from './Section.jsx';
@@ -12,7 +11,19 @@ import { Reveal } from './Section.jsx';
  * regulated claims. This states plainly that the page is incomplete and, in
  * development, lists what is outstanding so it can't be quietly forgotten.
  */
-export function ComingSoon({ title, body, needs: _needs, action = true, badge = true, className }) {
+/* THE "IN DEVELOPMENT" CHIP IS GONE, EVERYWHERE.
+   ───────────────────────────────────────────────────────────────────────────
+   Removed on NaviNetics' instruction, 2026-08-17, across all four pages that
+   rendered it rather than only the one the review named — the amber warning
+   tone made a page look unfinished before a reader had read a word of it, and
+   it said the same thing the copy below it already says in sentences.
+
+   The `badge` prop is kept and ignored so the four call sites do not all have
+   to change, and so this note stays attached to the decision. Nothing is being
+   hidden: each of these pages still states its own status in words, and the
+   NaviNetics AI page keeps its full COMPLETE / IN PROGRESS / NEXT / PLANNED
+   ladder, which is a great deal more honest than a chip. */
+export function ComingSoon({ title, body, needs: _needs, action = true, badge: _badge = true, className }) {
   return (
     <Reveal>
       <Reticle
@@ -22,13 +33,6 @@ export function ComingSoon({ title, body, needs: _needs, action = true, badge = 
         )}
       >
         <div className="flex flex-col items-start gap-4">
-          {/* Opt-out rather than removal: three other pages still rely on this
-              chip to state their status. */}
-          {badge && (
-            <Badge tone="warn" dot>
-              In development
-            </Badge>
-          )}
           <h2 className="text-d2">{title}</h2>
           {body && <p className="max-w-prose text-lead leading-[1.55] text-ink-2">{body}</p>}
         </div>
