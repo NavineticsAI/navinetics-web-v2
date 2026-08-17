@@ -2,20 +2,12 @@
 
 **Branch:** `founders-portraits-and-copy-consistency` → `main`
 **Type:** Content + copy + assets + performance
-**Status:** Local only. **Not pushed.** Ten commits landed, six more to make from the working tree.
+**Status:** Pushed. Merged with the parallel copy pass from the same branch.
 **Author:** shubhvmhaske
+**Tracker:** [BUG-129](documentation/dev/shubham/website/tickets/BUG-129_Maven-And-AI-Canvases-Peg-The-Main-Thread.md) · [TASK-004](documentation/dev/shubham/website/tickets/TASK-004_Facts-Needed-From-NaviNetics.md) · [BUG-128](documentation/dev/shubham/website/tickets/BUG-128_Partners-And-Maven-Peg-Main-Thread.md) · [TASK-001](documentation/dev/shubham/website/tickets/TASK-001_Published-Claims-And-Regulatory-Status.md) · [BUG-127](documentation/dev/shubham/website/tickets/BUG-127_Accessibility-Keyboard-Dialog-Contrast.md) · Issues: _not filed — tickets are tracked as files in this repository_
 
-**Tickets**
-
-| Ticket | Relationship |
-|---|---|
-| `BUG-129` — MAVEN and NaviNetics AI hold the main thread at ~95% | **Opened by this PR.** §11 fixes the rest of the phone problem; these two routes remain. Supersedes `BUG-128`, which named four routes — two are fixed here. |
-| `TASK-004` — Facts needed from NaviNetics before launch | **Opened by this PR.** The 17 gaps §12 found that cannot be written without inventing them. |
-| `BUG-128` — Partners and MAVEN peg the main thread | **Superseded** by `BUG-129`. |
-| `TASK-001` — Published claims and regulatory status | **Advanced.** The FDA line is settled (withheld), comparative claims are at zero, and the accuracy decision is recorded. Still open for the rest. |
-| `BUG-127` — Accessibility: keyboard, dialog, contrast | **Advanced.** Both `h1 → h3` heading skips fixed; the site now has zero structural faults. |
-
----
+| Ticket | Relationship to this PR |
+|---
 
 ## 0. STATUS (2026-08-17) — read this first
 
