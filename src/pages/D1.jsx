@@ -37,7 +37,7 @@ export default function D1() {
     title: product.name,
     description:
       'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centered stereotactic targeting from '
-      + 'the Skull Anchor Key. Three linear degrees of freedom, two angles of rotation.',
+      + 'a Skull Anchor Key. Three linear degrees of freedom, two angles of rotation.',
   });
 
   return (
@@ -58,8 +58,10 @@ export default function D1() {
       <Section wide>
         <Reveal>
           <div className="flex flex-col gap-3.5">
+            {/* "What it is, in figures." removed on instruction — and it was
+                promising figures the table does not have: of seven rows only
+                two carry a number. */}
             <span className="eyebrow text-action">Specification</span>
-            <h2 className="text-d2">What it is, in figures.</h2>
             {/* Deliberately no paragraph explaining which figures are absent
                 and why — that is a note to ourselves, not something a surgeon
                 asked. Dimensions, weights, materials and travel ranges are
@@ -131,19 +133,18 @@ export default function D1() {
       {/* ── close ──────────────────────────────────────────────────────────── */}
       <Section>
         <Reveal className="flex flex-col items-center gap-6 text-center">
-          <span className="eyebrow text-action">Where it came from</span>
-          {/* Was "Built to answer a constraint." — "constraint" names a
-              difficulty, and no other heading on this site does.
-              This is not invented: the home page already says the range is
-              "designed with the clinicians who use them", and Who We Are lists
-              "Design by listening" as one of three principles. The closing
-              section of a product page is exactly where that belongs, and
-              saying it in the words the site already uses is what makes the two
-              pages sound like one company.
-              The eyebrow above already says "Where it came from" and the
-              paragraph below opens on the brief, so the heading's job is to
-              hand off between them in as few words as possible. */}
-          <h2 className="text-d2">It began as a brief.</h2>
+          <span className="eyebrow text-action">How it was made</span>
+          {/* Was "Built to answer a constraint.", then "Built for the constraints
+              of the next case." Both named a difficulty, and no other heading on
+              this page does — they run "Anchored to the skull.", "Arc-centered.",
+              "Down the trajectory.", "Room to work."
+
+              This is the last thing read before the quote button, so its job is
+              to say why the four arguments above should be trusted. "By", not
+              "with": a co-founder operates at Mayo Clinic and another built
+              neurosurgical instruments for forty years and made the prototype,
+              so authorship is the true and the stronger claim. */}
+          <h2 className="text-d2">Built by the people who use it.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             {product.intro}
           </p>
@@ -168,17 +169,8 @@ export default function D1() {
             </Button>
           </div>
 
-          <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-            The frame is shown in{' '}
-            <Link to="/resources/media" className="text-action underline-offset-4 hover:underline">
-              media
-            </Link>
-            , and the research behind it is in{' '}
-            <Link to="/resources/publications" className="text-action underline-offset-4 hover:underline">
-              publications
-            </Link>
-            .
-          </p>
+          {/* The media/publications footer line is removed on instruction —
+              both are one click away in the nav and the footer. */}
         </Reveal>
       </Section>
     </>

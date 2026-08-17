@@ -37,7 +37,7 @@ export const mediaItems = [
     category: 'Devices',
     src: asset('/model-head-clean-750x998-1-451x600.png'),
     fit: 'contain',
-    caption: 'The Skull Anchor Key leaves the face unobstructed.',
+    caption: 'The Skull Anchor Key keeps the face clear.',
   },
   {
     id: 'frame-assembly',
@@ -55,7 +55,7 @@ export const mediaItems = [
     category: 'Devices',
     src: asset('/microdrive-image-1024x797.png'),
     fit: 'contain',
-    caption: 'Fine advancement of electrodes and leads along the planned trajectory.',
+    caption: 'Advances electrodes and leads along the planned trajectory.',
   },
   {
     id: 'wincs',
@@ -73,7 +73,7 @@ export const mediaItems = [
     category: 'Research',
     src: asset('/WINCS-Swine-Model-1024x668.png'),
     fit: 'cover',
-    caption: 'Preclinical application.',
+    caption: 'Recording in swine.',
   },
 ];
 

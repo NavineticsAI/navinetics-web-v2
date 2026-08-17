@@ -43,9 +43,8 @@ export function D1Hero() {
                and nothing about it should be deferred. */
             fetchPriority="high"
             decoding="async"
-            alt="The D1 stereotactic frame: an anodized blue arc-centered head frame with two curved
-              rails, a targeting stage, and a bare-steel mechanical microdrive rising from its
-              center."
+            alt="The NRSS: an anodized blue arc-centered head frame with two curved rails, a
+              targeting stage, and a bare-steel mechanical microdrive rising from its center."
             /* Sized by HEIGHT once there is a column to stand in. The render is
                tall and narrow, so capping its width instead puts the wheels
                through the bottom of a laptop viewport. */
@@ -59,11 +58,10 @@ export function D1Hero() {
             Products — NaviNetics Reusable Stereotactic System (NRSS)
           </span>
           <h1 className="whitespace-pre-line text-d1">
-            {/* Matches data/products.js — see the note there on why the adverb went. */}
             {'Robust. Low complexity.\nComfortable.'}
           </h1>
           <p className="max-w-prose text-lead leading-[1.55] text-nn-200">
-            Arc-centered targeting from the Skull Anchor Key. Three linear degrees of freedom, two
+            Arc-centered targeting from a Skull Anchor Key. Three linear degrees of freedom, two
             angles of rotation.
           </p>
 

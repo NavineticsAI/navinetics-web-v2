@@ -79,15 +79,15 @@ export const territories = [
     id: 'sa',
     label: 'South America',
     anchor: [-10.5, -52],
-    summary: 'Brazil as the primary market, the rest of the continent behind it.',
+    summary: 'Brazil first, then the rest of the continent.',
     orgs: [
       {
         logo: delta,
         name: 'Delta Medical',
         role: 'Distribution',
         body:
-          'Distribution across South America, with Brazil as the primary market and the remaining '
-          + 'countries served secondarily.',
+          'Distribution across South America, led by Brazil and reaching the rest of the '
+          + 'continent.',
       },
     ],
     cover: [
@@ -99,7 +99,7 @@ export const territories = [
     id: 'cn',
     label: 'China',
     anchor: [34, 104],
-    summary: 'A market we cover. The organization behind it is still to be named.',
+    summary: 'A market we cover. The partner is being confirmed.',
     orgs: [],
     note: 'NaviNetics is naming the partner or collaborator for this market. '
       + 'It will be listed here once it is confirmed.',
@@ -115,7 +115,7 @@ export const territories = [
         logo: paragon,
         name: 'Paragon Care',
         role: 'Distribution',
-        body: 'Distribution in Australia, and the route into neighboring markets in the region.',
+        body: 'Distribution in Australia, and the route into neighboring markets.',
       },
     ],
     cover: [['Australia', 1]],
@@ -151,7 +151,7 @@ export const territories = [
     id: 'sg',
     label: 'Singapore',
     anchor: [1.35, 103.8],
-    summary: 'A market we cover. The organization behind it is still to be named.',
+    summary: 'A market we cover. The partner is being confirmed.',
     orgs: [],
     note: 'NaviNetics is naming the partner or collaborator for this market. '
       + 'It will be listed here once it is confirmed.',
@@ -165,7 +165,7 @@ export const territories = [
     id: 'tw',
     label: 'Taiwan',
     anchor: [23.7, 121],
-    summary: 'A market we cover. The organization behind it is still to be named.',
+    summary: 'A market we cover. The partner is being confirmed.',
     orgs: [],
     note: 'NaviNetics is naming the partner or collaborator for this market. '
       + 'It will be listed here once it is confirmed.',

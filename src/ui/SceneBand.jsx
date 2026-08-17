@@ -265,7 +265,7 @@ export const FEATURE_BANDS = [
     scene: 'targeting',
     tint: '#7cc4f0',
     eyebrow: 'Targeting',
-    title: 'Indirect,\nthen exact.',
+    title: 'Direct,\nthen exact.',
     lead: 'Deep structures are often invisible on the scan you have. Indirect targeting solves '
       + 'that by measuring from landmarks that are visible: the anterior and posterior commissures. '
       + 'Take the line between them, put the origin at its midpoint, and a target becomes an offset '

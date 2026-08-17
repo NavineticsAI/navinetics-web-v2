@@ -7,7 +7,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  * Every "problem" line traces to work NaviNetics has published or shipped —
- * the skull anchor key, automated landmark localization for neuronavigation,
+ * the Skull Anchor Key, automated landmark localization for neuronavigation,
  * ultra-high-field MRI guidance, the compact stereotactic system. Nothing was
  * invented, and no accuracy figures or setup times appear anywhere, since
  * those are regulated marketing claims.
@@ -61,7 +61,7 @@ export const disciplines = [
     group: 'Engineering',
     role: 'Engineering — Mechanical',
     title: 'Kinematics you can trust with a skull.',
-    body: 'Arc-centered geometry: three linear degrees of freedom plus ring and arc rotation, all landing on one focus. Every tolerance in that stack is an error at the target. Then it has to survive autoclave cycles and still read true.',
+    body: 'Arc-centered geometry: three linear degrees of freedom plus collar and arc rotation, all landing on one focus. Every tolerance in that stack is an error at the target. Then it has to survive autoclave cycles and still read true.',
     problem:
       '“Hold the iso-center through a full reprocessing life, in a device small enough to sit at the surgical field.”',
     owns: ['Arc-centered kinematics', 'Tolerance stack-up', 'Materials & reprocessing', 'Microdrive & carriers'],
@@ -105,7 +105,7 @@ export const disciplines = [
   },
   {
     id: 'reg',
-    short: 'Medical & Reg.',
+    short: 'Regulatory',
     group: 'Regulatory',
     role: 'Medical, Regulatory & Quality',
     title: 'The part that makes it legal to help someone.',

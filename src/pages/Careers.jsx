@@ -80,10 +80,10 @@ export default function Careers() {
             <SectionHead
               eyebrow="Open roles"
               level="h1"
-              title="Nothing posted right now."
+              title="No open postings today."
               lead={
-                'Which is not the same as "don\'t write." We hire against the trajectories below ' +
-                'whenever the right person appears — so tell us which one is yours.'
+                'We hire against the six disciplines below whenever the right person appears — ' +
+                'so tell us which one is yours.'
               }
             />
 

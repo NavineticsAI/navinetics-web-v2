@@ -31,7 +31,8 @@ export const nav = [
       subtitle: p.family,
       path: p.path,
       image: p.hero,
-      // The "In development" note came off the nav panels with the chip itself.
+      /* No "In development" badge, on instruction. `status` still drives the
+         placeholder filters and the ComingSoon treatment; only the label goes. */
       note: null,
     })),
   },

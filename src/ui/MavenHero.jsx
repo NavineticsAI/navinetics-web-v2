@@ -289,6 +289,31 @@ export function MavenHero({ product }) {
           }}
         />
 
+        {/* PRE-CLINICAL RESEARCH, on the ring itself.
+            ─────────────────────────────────────────────────────────────
+            NaviNetics asked for a stamp here. It earns its place beyond the
+            instruction: this hero looks like a cleared clinical instrument,
+            and a screenshot of it passed on without context could be taken
+            for one. The page states the status in prose further down, but a
+            reader who only sees the ring never gets there.
+
+            Set as a typographic stamp rather than a badge or seal — the same
+            reasoning as the regulatory line on the NRSS page: a seal implies
+            an approval that has not been granted. This one carries no
+            regulatory meaning at all, which is exactly the point. */}
+        <div
+          /* Under the ring, not above it — at the top of the section it sat
+             behind the fixed navbar and was unreadable. Here it reads as a
+             label on the instrument, which is what it is. */
+          className="pointer-events-none absolute left-1/2 top-[78%] z-[3] -translate-x-1/2
+            rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
+            sm:top-[80%]"
+        >
+          <span className="font-data text-[0.625rem] uppercase tracking-[0.16em] text-sg-300">
+            Pre-clinical research
+          </span>
+        </div>
+
         {/* ── the assembly ─────────────────────────────────────────────── */}
         <div
           ref={stageRef}

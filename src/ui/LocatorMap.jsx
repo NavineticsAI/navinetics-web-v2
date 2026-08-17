@@ -23,10 +23,14 @@ import { locatorMap, places } from '../data/locatorMap.js';
  * three lines of arithmetic. Latitude is negated because SVG's y axis points
  * down and north does not.
  */
-function useProjection(pad = 0.14, aspect = 1.5) {
+function useProjection(pad = 0.05, aspect = 1.6) {
   return useMemo(() => {
     let x0 = 180, x1 = -180, y0 = 90, y1 = -90;
-    for (const r of locatorMap.home) {
+    /* Frame the WHOLE COUNTRY, not the home state. This used to bound only
+       `locatorMap.home` — right when the map was Minnesota and eight
+       neighbours, wrong now that the context is the lower 48: it framed one
+       state and let the rest of the country run off every edge. */
+    for (const r of [...locatorMap.home, ...locatorMap.context.flatMap((c) => c.rings)]) {
       for (const [x, y] of r) {
         if (x < x0) x0 = x; if (x > x1) x1 = x;
         if (y < y0) y0 = y; if (y > y1) y1 = y;
@@ -35,14 +39,13 @@ function useProjection(pad = 0.14, aspect = 1.5) {
     const k = Math.cos(((y0 + y1) / 2) * (Math.PI / 180));
     const project = ([lon, lat]) => [lon * k, -lat];
 
-    // frame the home state, then widen or heighten to the target aspect
+    // frame the country, then widen or heighten to the target aspect
     const c = [project([x0, y1]), project([x1, y0])];
     let w = (c[1][0] - c[0][0]) * (1 + pad * 2);
     let h = (c[1][1] - c[0][1]) * (1 + pad * 2);
-    /* Minnesota is very nearly square in this projection, and a square map in a
-       half-width column stands taller than the fold. Growing the short side to
-       a fixed 3:2 keeps the block landscape and lets the neighboring states
-       show, which is what makes it read as a location rather than a shape. */
+    /* The lower 48 are about 1.6:1 in this projection, so the correction is
+       small — it only guards the block against standing taller than the fold
+       in a half-width column. */
     if (w / h < aspect) w = h * aspect; else h = w / aspect;
     const mx = (c[0][0] + c[1][0]) / 2;
     const my = (c[0][1] + c[1][1]) / 2;
@@ -67,7 +70,7 @@ export function LocatorMap({ className }) {
         viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`}
         className="block w-full text-ink-3"
         role="img"
-        aria-label="Rochester, Minnesota, shown against the surrounding states"
+        aria-label="Rochester, Minnesota, shown on a map of the United States"
       >
         <defs>
           <radialGradient id={`${gid}-halo`}>

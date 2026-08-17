@@ -117,8 +117,7 @@ export const numbers = () => {
     { value: String(publications.length), label: 'Selected papers',
       unit: `${Math.min(...years)}–${Math.max(...years)}`, to: '/resources/publications' },
     { value: String(products.length), label: 'Product lines',
-      // The unit named two of the three and left the operating tables out.
-      unit: 'stereotaxy, imaging, neuromodulation', to: '/products/d1-stereotactic-frame' },
+      unit: 'frames, tables, sensing', to: '/products/d1-stereotactic-frame' },
     { value: String(territories.length), label: 'Territories',
       /* Was "covered by partners", and the arithmetic did not survive a look:
          the United States is sold direct, three territories have no named
@@ -155,6 +154,6 @@ export const principles = [
     title: 'Publish the evidence',
     body:
       'The methods behind these devices are in the peer-reviewed record, under the founders’ names '
-      + 'and their laboratory’s. Claims that cannot be cited do not appear on this site.',
+      + 'and their laboratory’s. We cite what we claim.',
   },
 ];

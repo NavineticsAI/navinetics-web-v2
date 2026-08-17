@@ -114,21 +114,9 @@ export const products = [
     },
     tag: { label: 'Flagship', tone: 'action' },
     technology: 'stereotactic-devices',
-    /* "Radically comfortable" — the adverb went because it is the one word in
-       the line making a claim rather than stating a property, and the other two
-       sentences are flat by design. Comfort itself stays: it is the point of
-       fixing to an anchor key instead of encircling the head. */
     tagline: 'Robust. Low complexity.\nComfortable.',
     summary:
-      'Arc-centered targeting from the Skull Anchor Key. Three linear degrees of freedom, two angles of rotation.',
-    /* THE OPENING CLAUSE WAS THE MOST EXPOSED SENTENCE ON THE SITE.
-       It read: "Stereotactic neurosurgical procedures are constrained by the
-       costs and limitations of commercially available stereotactic devices."
-       That is a disparaging comparative claim about every competing device on
-       the market — asserting they are expensive and limited — made without
-       naming one and with no substantiation held anywhere. A manufacturer is
-       expected to be able to support that, and we cannot.
-       What replaces it says what this device is, which needs no comparison. */
+      'Arc-centered targeting from a Skull Anchor Key. Three axes to set the target, two rotations to reach it.',
     intro:
       'The brief was a device robust enough for daily use and simple enough to trust, working '
       + 'across stereotactic and functional procedures — deep brain stimulation among them. It was '
@@ -139,13 +127,13 @@ export const products = [
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
       { label: 'Localizers', value: 'MR · CT', unit: 'plus X-ray reticles' },
-      { label: 'Fixation', value: 'Anchor key', unit: 'fixed to the skull' },
+      { label: 'Fixation', value: 'Skull Anchor Key', unit: 'no frame across the face' },
     ],
     /** Scroll-pinned narrative. Capped at three steps by the template. */
     sequence: [
       {
         title: 'Skull Anchor Key',
-        body: "The Skull Anchor Key is fixed to the patient's skull.",
+        body: "A small Skull Anchor Key is affixed to the patient's skull, and the frame attaches to that.",
       },
       {
         title: 'Patient Comfort',
@@ -155,11 +143,7 @@ export const products = [
       },
       {
         title: 'Total Flexibility',
-        // "unprecedented space to work" was a comparative claim against every
-        // competing system, unnamed and unsubstantiated. What replaces it is
-        // the thing that is actually true and specific: nothing encircles the
-        // head, so the face and the field stay clear.
-        body: 'Components attach to the key and come off it. The face stays clear and the team keeps the field.',
+        body: 'Components attach to and come away from the Skull Anchor Key, so the surgical team keeps the space it needs.',
       },
     ],
     detail: {
@@ -198,7 +182,7 @@ export const products = [
      * That page carries TWO lists and they are not the same thing:
      *
      *   · a prose sentence naming seven FUNCTIONAL parts — "a stereotactic
-     *     head frame, the skull anchor key, an MR localizer, a CT Localizer,
+     *     head frame, the Skull Anchor Key, an MR localizer, a CT Localizer,
      *     X-ray reticles, a mechanical microdrive, and DBS lead implantation
      *     accessories". That sentence is used in the page copy.
      *   · a "System Components" list of nine KITS, below. This is the bill of
@@ -259,7 +243,6 @@ export const products = [
      */
     metrics: [
       { label: 'Models specified', value: '5', unit: 'one to six motions' },
-      { label: 'Load capacity', value: '230', unit: 'kg, every model' },
       { label: 'Table top', value: 'Carbon fiber', unit: 'always in the beam' },
     ],
     intro:

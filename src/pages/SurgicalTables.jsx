@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getProduct } from '../data/products.js';
 import { art, getModel, lineup, models, motionsOf, strengths } from '../data/orTables.js';
@@ -39,7 +38,7 @@ export default function SurgicalTables() {
     title: 'Carbon Fiber Surgical Tables',
     description:
       'Carbon-fiber operating tables for imaging-guided procedures — a range from one to six '
-      + 'motions, built so the table stays out of the picture.',
+      + 'motions, built so the imaging sees the anatomy and not the table.',
   });
 
   return (
@@ -68,7 +67,7 @@ export default function SurgicalTables() {
         ground="light"
         tone="ephys"
         eyebrow="Radiolucency"
-        title={'Stay out of\nthe picture.'}
+        title={'Clear of\nthe image.'}
         lead="Everything between the source and the detector is in the image, whether you wanted it
           there or not. Carbon fiber is far less absorbing than the steel or aluminium a table
           would otherwise be built from, so the structure holding the patient up contributes very
@@ -213,9 +212,8 @@ export default function SurgicalTables() {
             about its own catalogue. Same restraint, stated as an offer. */}
         <SectionHead
           eyebrow="Also in the line-up"
-          title="Also in the range."
-          lead="Five models are specified in full above. These are the rest of the range — ask us
-            and we will send the specification for any of them."
+          title="The rest of the range."
+          lead="Five models are specified in full above. Ask us for the specification on any of these."
         />
         <div className="mt-10 grid gap-8 md:grid-cols-2">
           {lineup.map((g) => (
@@ -270,15 +268,8 @@ export default function SurgicalTables() {
               Where they come from
             </Button>
           </div>
-          <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-            {/* "our Korean subsidiary — see NaviNetics Asia" both came off at
-                the company's request. CBH is named directly instead. */}
-            Built by CBH in South Korea — see{' '}
-            <Link to="/company/partners" className="text-action underline-offset-4 hover:underline">
-              our partners
-            </Link>
-            .
-          </p>
+          {/* Footer line removed on instruction. It also named "NaviNetics
+              Asia", which is now presented as CBH — see data/partners.js. */}
         </Reveal>
       </Section>
     </>
@@ -291,7 +282,6 @@ function Specs({ model }) {
     ['Table top', `${model.top.w} × ${model.top.d} mm`],
     ...motionsOf(model).map((m) => [m.label, m.value]),
     ['Table weight', `${model.weight} kg`],
-    ['Load capacity', `${model.load} kg`],
     ['Mattress', model.mattress],
     ['Control', model.control],
   ];

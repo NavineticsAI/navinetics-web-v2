@@ -113,7 +113,7 @@ export const domains = [
     tone: 'ephys',
     a0: 18,
     a1: 76,
-    line: 'The electrical activity recorded alongside it.',
+    line: 'What the same tip hears in the tissue.',
   },
   {
     id: 'soft',
@@ -144,29 +144,15 @@ export const channels = [
   { id: 'da', domain: 'chem', deg: -8, short: 'Dopamine', name: 'Dopamine', sub: 'DA' },
   { id: '5ht', domain: 'chem', deg: -33.5, short: 'Serotonin', name: 'Serotonin', sub: '5-HT' },
   { id: 'ado', domain: 'chem', deg: -59, short: 'Adenosine', name: 'Adenosine', sub: null },
-  /* Glutamate and acetylcholine were named individually and are not any more.
-     Dopamine, serotonin and adenosine are what the published work covers; the
-     rest belong behind one honest label rather than a list that implies a
-     validated channel for each.
-     One entry replaces the two. Each channel carries its own explicit `deg`, so
-     dropping a slot leaves the remaining angles exactly where they were rather
-     than respacing the ring — and -97 is the midpoint of the two it replaces,
-     which keeps the gap even. */
-  { id: 'oth', domain: 'chem', deg: -97, short: 'Other', name: 'Other neurochemicals', sub: null },
-  // `sub` was also 'LFP', so the ring rendered "LFP LFP" — the short label and
-  // the abbreviation are the same word here, unlike Dopamine/DA.
-  { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: null },
+  /* Glutamate and acetylcholine were named individually and are now folded
+     into one "Other" channel on NaviNetics' instruction. Two slots become one,
+     so this takes the midpoint of the angles they used to hold. */
+  { id: 'other', domain: 'chem', deg: -97, short: 'Other', name: 'Other neurochemicals', sub: null },
+  { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: 'LFP' },
   { id: 'unit', domain: 'ephys', deg: 62, short: 'Single-unit', name: 'Single-unit activity', sub: null },
-  { id: 'dsp', domain: 'soft', deg: 108, short: 'Signal processing', name: 'Ephys & signal processing', sub: null },
+  { id: 'gui', domain: 'soft', deg: 108, short: 'Intuitive GUI', name: 'One interface for every channel', sub: null },
   { id: 'adv', domain: 'soft', deg: 138, short: 'Advanced analysis', name: 'Advanced analysis', sub: null },
-  /* "Electrical stimulation", not DBS. MAVEN is a pre-clinical research
-     instrument and DBS is a named clinical therapy — the broader term is both
-     what the review asked for and the accurate one for what this channel does.
-     Deliberately changed HERE and nowhere else: the phrase also appears in Dr
-     Lee's biography, in published paper titles on /resources/publications, and
-     on the two teaching pages, where it is the correct name of the procedure
-     and not product positioning. */
-  { id: 'stim', domain: 'stim', deg: 195, short: 'Stimulation', name: 'Electrical stimulation', sub: null },
+  { id: 'stim', domain: 'stim', deg: 195, short: 'Electrical stimulation', name: 'Electrical stimulation', sub: null },
 ];
 
 /** The three techniques, which are modes rather than channels. */
@@ -244,8 +230,8 @@ export const bands = [
       { label: 'Single-unit activity.', body: 'Individual neurons, resolved as spikes.' },
       {
         label: 'Independent, but synchronized.',
-        body: 'The two run as separate channels of one instrument, so what the chemistry did can '
-          + 'be lined up against what the electrophysiology was doing when it did it.',
+        body: 'The two run as separate channels of one instrument, so the chemistry and the '
+          + 'electrophysiology line up on one timeline.',
       },
     ],
     meta: [
@@ -266,14 +252,14 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Neuromodulation',
     title: 'The response\nto stimulation.',
-    lead: 'Deep brain stimulation goes in on one channel while the other two keep recording. That '
+    lead: 'Electrical stimulation goes in on one channel while the other two keep recording. That '
       + 'is the point of the instrument — deliver something, then see what the tissue does about '
       + 'it, without the stimulation swamping the measurement of its own effect.',
     points: [
       {
         label: 'Synchronized with the measurement.',
-        body: 'Independent but synchronized neurochemical and electrophysiological recording '
-          + 'alongside stimulation.',
+        body: 'The stimulus sits on the same timeline as both signals, so what follows can be '
+          + 'read against it.',
       },
       {
         label: 'Artifact minimized at the integration.',
@@ -287,7 +273,7 @@ export const bands = [
       },
     ],
     meta: [
-      { label: 'Delivered', value: 'DBS' },
+      { label: 'Delivered', value: 'Electrical stimulation' },
       { label: 'Observed', value: 'Chemical + electrical' },
     ],
     figure: {
@@ -315,8 +301,8 @@ export const bands = [
       },
       {
         label: 'Background subtracted.',
-        body: 'What the electrode was doing before the event is taken off it, which is what '
-          + 'leaves the signal visible at all.',
+        body: 'The steady current the electrode draws before the event is taken off, so the '
+          + 'release itself is the signal.',
       },
       {
         label: 'Read as a trace.',

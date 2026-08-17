@@ -74,60 +74,23 @@ export const bands = [
     scene: 'anchor',
     ground: 'bay',
     tone: 'chem',
-    eyebrow: 'Fixation',
+    eyebrow: 'New mechanism',
     title: 'Anchored to\nthe skull.',
-    /* The screw passage came out at the company's request. The sentence still
-       has to say what the key does, so it says it is fixed to the skull and
-       carries everything else — which is the mechanism, without the detail. */
-    /* THE SECOND SENTENCE IS THE DIFFERENTIATOR, AND IT WAS BURIED.
-       It sat about 800 words into the education material, where a surgeon
-       evaluating this page would never reach it: "Historically the frame was a
-       large ring encircling the head; the NaviNetics system fixes near the top
-       of the skull instead, leaving the face clear."
-
-       It is also the model for how to differentiate WITHOUT a competitive
-       claim — it compares against a historical category rather than a company,
-       the same move the tables page makes against "the steel or aluminium a
-       table would otherwise be built from". Nothing here names a competitor or
-       asserts anything about one. */
-    lead: 'The Skull Anchor Key is fixed to the skull, and everything else attaches to that. '
+    /* Fitting detail out, on NaviNetics' instruction. The second sentence is the
+       differentiator, promoted from ~800 words into the teaching material where
+       a surgeon evaluating this page would never reach it — and it is the model
+       for differentiating without a competitive claim, comparing against a
+       historical category rather than a company. */
+    lead: 'A small Skull Anchor Key is affixed to the skull, and everything else attaches to that. '
       + 'Historically a stereotactic frame was a ring encircling the head; this one fixes near the '
       + 'top of the skull, leaving the face clear.',
-    points: [
-      {
-        label: 'The face stays clear.',
-        /* The body used to open "Nothing crosses the facial area", which both
-           restates the label and states it as an absence. The label already
-           carries the fact; the body's job is why it matters. */
-        body: 'It matters most in awake procedures, where the patient has to be spoken with and '
-          + 'watched throughout.',
-      },
-      {
-        /* Was: "The existing product record puts patient experience first among
-           its improvements, and this is the part that delivers it." That is a
-           sentence about one of our own documents — it cites the product record
-           to a reader who has never seen it, and says nothing about what the
-           patient experiences. Replaced with the thing itself: what is on the
-           patient, and for how long. */
-        label: 'Designed around comfort.',
-        /* Also rewritten away from comparison. "A key at the skull rather than
-           a frame around the head" measures the patient's experience against
-           the thing we do not make. What they actually experience is one small
-           part, in one place, for a known length of time — which is a stronger
-           sentence and needs no alternative to stand next to. */
-        body: 'The patient wears one small key at the skull, for as long as the procedure takes.',
-      },
-    ],
-    /* "Percutaneous screws" came off with the rest of the screw passage. This
-       row was missed in that pass because it is a meta value rather than prose. */
-    meta: [{ label: 'Fixation', value: 'Anchor key' }, { label: 'Fitting', value: 'To the skull' }],
     figure: {
       src: headArt,
       w: 444, h: 1042,
       bare: true,
-      alt: 'The D1 frame fitted to an anatomical head model, held clear of the face, with a probe '
-        + 'on its trajectory.',
-      caption: 'The frame on a head model',
+      alt: 'The NRSS fitted to an anatomical head model, clear of the face, with a probe on its '
+        + 'trajectory.',
+      caption: '',
     },
   },
   {
@@ -136,9 +99,9 @@ export const bands = [
     tone: 'ephys',
     eyebrow: 'Targeting',
     title: 'Arc-centered.',
-    lead: 'Classified as an arc-centered stereotactic device: three linear degrees of freedom set '
-      + 'the target, and two angles of rotation set how you get to it. Every approach the arc '
-      + 'allows meets the same point.',
+    lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, '
+      + 'and two angles of rotation set how you reach it. Every approach the arc allows meets '
+      + 'the same point.',
     points: [
       {
         label: 'Three linear, two angular.',
@@ -198,25 +161,25 @@ export const bands = [
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
     lead: 'Once the arc has chosen the approach, a mechanical microdrive advances along it — '
-      + 'down the line the frame has already set, rather than beside it.',
+      + 'down the same line the frame has already set.',
     points: [
       {
         label: 'Coaxial with the approach.',
-        body: 'The drive is coaxial with the approach, so advancing does not disturb what the '
-          + 'frame has already set.',
+        body: 'The drive runs on the axis the arc chose, so advancing stays on the line the '
+          + 'frame has set.',
       },
       {
-        label: 'Part of the kit.',
-        body: 'Supplied with the frame, along with the DBS lead implantation accessories and the '
-          + 'accuracy verification accessories.',
+        label: 'A manual microdrive.',
+        body: 'Advanced by hand, supplied with the frame alongside the DBS lead implantation and '
+          + 'accuracy verification accessories. It also accepts Alpha Omega drives.',
       },
     ],
     meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
       w: 1024, h: 797,
-      alt: 'The NaviNetics mechanical microdrive.',
-      caption: 'The mechanical microdrive',
+      alt: 'The NaviNetics manual microdrive.',
+      caption: 'The manual microdrive',
     },
   },
   {
