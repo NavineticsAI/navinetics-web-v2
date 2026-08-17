@@ -14,7 +14,7 @@ import { Button, Field, Hero, Reveal, Section, Switch } from '../ui/index.js';
  *
  * When it is unset the form does NOT pretend to send. It hands the message to
  * the visitor's mail client with everything they typed already in it, so the
- * words they wrote survive. The previous behaviour — validate, show a success
+ * words they wrote survive. The previous behavior — validate, show a success
  * panel, then admit nothing was transmitted — lost every enquiry that arrived
  * through the only conversion point on the site.
  */
@@ -27,8 +27,8 @@ const INBOX = 'info@navinetics.com';
  * it cannot be missed and cannot be mistaken for one.
  */
 const REASONS = [
-  'D1 Frame System enquiry',
-  'Surgical tables enquiry',
+  'NRSS inquiry',
+  'Surgical tables inquiry',
   'Neuromodulation research',
   'Distribution and partnerships',
   'Product complaint or device issue',
@@ -49,7 +49,8 @@ export default function Contact() {
   usePageMeta({
     title: 'Contact',
     description:
-      'Get in touch with NaviNetics about the D1 Frame System, surgical tables, neuromodulation '
+      'Get in touch with NaviNetics about the NaviNetics Reusable Stereotactic System (NRSS), '
+      + 'surgical tables, neuromodulation '
       + 'research, distribution, careers, or to report a product issue.',
   });
 
@@ -59,7 +60,7 @@ export default function Contact() {
   const [params] = useSearchParams();
   const PRESET = { d1: REASONS[0], tables: REASONS[1], maven: REASONS[2], complaint: COMPLAINT };
   const [form, setForm] = useState({
-    name: '', email: '', organisation: '',
+    name: '', email: '', organization: '',
     reason: PRESET[params.get('reason')] ?? REASONS[0],
     message: '',
   });
@@ -87,7 +88,7 @@ export default function Contact() {
     const body = [
       `Name: ${form.name}`,
       `Email: ${form.email}`,
-      form.organisation.trim() ? `Organisation: ${form.organisation}` : null,
+      form.organization.trim() ? `Organization: ${form.organization}` : null,
       `Reason: ${form.reason}`,
       updates ? 'Research updates: yes, please subscribe me' : null,
       '',
@@ -169,7 +170,7 @@ export default function Contact() {
                 “{COMPLAINT}” in the form, or email{' '}
                 <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>{' '}
                 with the device, the date, and what happened. If a patient or user has been
-                harmed, contact us by phone as well so we reach it the same day.
+                harmed, contact us by phone as well so we see it the same day.
               </p>
             </div>
           </Reveal>
@@ -230,10 +231,10 @@ export default function Contact() {
                     autoComplete="email"
                   />
                   <Field
-                    label="Hospital or organisation"
+                    label="Hospital or organization"
                     hint="Optional"
-                    value={form.organisation}
-                    onChange={set('organisation')}
+                    value={form.organization}
+                    onChange={set('organization')}
                     placeholder="Mayo Clinic, Department of Neurosurgery"
                     autoComplete="organization"
                   />

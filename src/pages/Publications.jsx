@@ -16,10 +16,14 @@ import { Badge, Hero, Reveal, Section } from '../ui/index.js';
  * That machinery exists for a list nobody can read in one sitting; on a list
  * this size it is furniture between the reader and the work.
  *
- * The structure is the data's own. These are two threads — getting a probe to
- * a target, and measuring what happens once it is there — and one paper names
- * the NaviNetics system in its title, which is why it carries the top of the
- * page.
+ * The three sections are the site's three technology lines, so the categories
+ * here are the same ones /technology uses. NaviNetics AI has no papers yet and
+ * still gets its heading — see `publicationLines` in data/publications.js.
+ *
+ * There is no featured paper. The 2025 Operative Neurosurgery paper, the only
+ * one whose title names the NaviNetics system, used to be lifted out into a
+ * card above these sections; it was removed on NaviNetics' instruction and now
+ * sits in Stereotactic Devices with the rest, in year order.
  */
 export default function Publications() {
   usePageMeta({
@@ -29,92 +33,50 @@ export default function Publications() {
       + 'stereotactic systems and intraoperative neurochemical sensing.',
   });
 
-  const featured = publications.find((p) => p.namesSystem);
+  const years = publications.map((p) => p.year);
+  const minYear = Math.min(...years);
+  const maxYear = Math.max(...years);
 
   return (
     <>
+      {/* The lead's years were hard-coded and went stale the moment a 2026 paper
+          was added — it said the list ran "to 2025" above a list opening on
+          2026. Derived from the records now, so it cannot disagree again. */}
       <Hero
         eyebrow="Resources — Publications"
         title="Highlighted research."
-        lead="Peer-reviewed work by our founders and their laboratory, from the first compact
-          stereotactic system in 2020 to a clinical evaluation of the NaviNetics system in 2025."
+        lead={`Peer-reviewed work by our founders and their laboratory, from ${minYear} to ${maxYear}.`}
       />
 
       <Section wide className="!pt-14 md:!pt-16">
-        {featured && <Featured p={featured} />}
-
-        {publicationLines.map((line) => (
-          <LineSection key={line} line={line} skip={featured} />
+        {publicationLines.map((line, i) => (
+          <LineSection key={line} line={line} first={i === 0} />
         ))}
 
         <p className="mt-16 max-w-[70ch] border-t border-hairline-soft pt-6 text-sm text-ink-3">
-          A selection, not the whole record. Every citation was taken from the published DOI
-          rather than transcribed, and each title links to the paper.
+          A selection from a longer record. Every citation comes from the published DOI, and
+          each title links to the paper.
         </p>
       </Section>
     </>
   );
 }
 
-/* ── one paper, given the top of the page ───────────────────────────────────
-   The only one whose title names the system. Its abstract also reports
-   figures; they are deliberately not quoted here — see the note in
-   data/publications.js.                                                    */
-function Featured({ p }) {
-  return (
-    <Reveal>
-      <a
-        href={doiLink(p)}
-        target="_blank"
-        rel="noreferrer"
-        className="group/feat block rounded-lg border border-hairline bg-surface p-8 transition-[border-color,box-shadow] duration-[420ms] ease-out hover:border-action hover:shadow-e2 md:p-10"
-      >
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <Badge>NaviNetics system</Badge>
-          <span className="font-data text-xs text-ink-3">
-            {p.year} · <Citation p={p} />
-          </span>
-        </div>
-
-        {/* 32ch, not 22: at 22 this title set five lines deep and the card
-            became a wall of display type. */}
-        <h2 className="mt-5 max-w-[32ch] text-d2 transition-colors group-hover/feat:text-action">
-          {p.title}
-        </h2>
-
-        {p.excerpt && (
-          <p className="mt-5 max-w-[66ch] leading-[1.7] text-ink-2">
-            &ldquo;{p.excerpt}&rdquo;
-          </p>
-        )}
-
-        <div className="mt-7 flex flex-wrap items-baseline gap-x-8 gap-y-4 border-t border-hairline-soft pt-6">
-          <p className="min-w-[18rem] flex-1 text-sm leading-relaxed text-ink-2">
-            <Authors names={p.authors} />
-          </p>
-          <span className="inline-flex items-center gap-2 text-sm font-medium text-action">
-            Read the paper
-            <ArrowUpRight size={16} aria-hidden="true" />
-          </span>
-        </div>
-        <span className="sr-only">(opens in a new tab)</span>
-      </a>
-    </Reveal>
-  );
-}
-
 /* ── a line of work ─────────────────────────────────────────────────────── */
-function LineSection({ line, skip }) {
-  const rows = publications.filter((p) => p.line === line && p !== skip);
-  if (!rows.length) return null;
+function LineSection({ line, first }) {
+  const rows = publications.filter((p) => p.line === line);
 
+  /* Rendered even with no rows. A line with nothing under it is a fact about
+     the record — NaviNetics AI has published none — and hiding the heading
+     would make the page disagree with /technology about how many lines exist. */
   return (
-    <div className="mt-20">
+    <div className={first ? '' : 'mt-20'}>
       <Reveal>
-        {/* No count on the rule. The featured paper is lifted out of its own
-            line, so any number here would be one short of the truth. */}
-        <div className="border-b border-ink pb-3.5">
+        <div className="flex items-baseline justify-between gap-4 border-b border-ink pb-3.5">
           <h2 className="text-xl tracking-[-0.025em]">{line}</h2>
+          <span className="font-data text-xs text-ink-3">
+            {rows.length === 1 ? '1 paper' : `${rows.length} papers`}
+          </span>
         </div>
         <p className="mt-3.5 max-w-[62ch] text-[0.9375rem] leading-relaxed text-ink-2">
           {publicationLineBlurbs[line]}

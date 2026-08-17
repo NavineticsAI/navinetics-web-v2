@@ -40,9 +40,17 @@ const TERRITORIES = [
     Argentina: 2, Chile: 2, Peru: 2, Colombia: 2, Venezuela: 2, Ecuador: 2,
     Bolivia: 2, Paraguay: 2, Uruguay: 2, Guyana: 2, Suriname: 2,
   } },
-  { id: 'cn', countries: { China: 1, Taiwan: 1, Singapore: 1 } },
+  { id: 'cn', countries: { China: 1 } },
   { id: 'au', countries: { Australia: 1, 'New Zealand': 2 } },
   { id: 'kr', countries: { 'South Korea': 1 } },
+  /* Singapore is its own territory, not part of a "Greater China" grouping.
+     It is smaller than one dot at this resolution, so it bakes to nothing and
+     the page draws it as a point marker — see `sites` in data/partners.js.
+     Listed anyway so this file and that one hold the same five... six ids. */
+  { id: 'sg', countries: { Singapore: 1 } },
+  /* Same again for Taiwan: about a dot wide at 1.5 degrees, so it bakes to
+     little or nothing and the page carries it as a point marker. */
+  { id: 'tw', countries: { Taiwan: 1 } },
 ];
 
 /* Antarctica is cut. It is land, it would ring the whole bottom of the globe,

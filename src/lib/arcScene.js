@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   Arc-centred targeting, in three dimensions.
+   Arc-centered targeting, in three dimensions.
 
    The focus sits at the origin. The collar angle rotates the arc's plane
    about the vertical axis; the arc angle slides the carrier along the arc.
@@ -8,7 +8,7 @@
      P = R · ( sinA·cosC , sinA·sinC , cosA )
 
    and the trajectory is the segment from P back to the origin. That is the
-   whole idea of an arc-centred frame: whatever the two angles are, the line
+   whole idea of an arc-centered frame: whatever the two angles are, the line
    ends in the same place. The demonstration is that the target marker never
    moves while the entry point travels all over the skull.
 
@@ -21,7 +21,7 @@ const TAU = Math.PI * 2;
 const rad = (d) => (d * Math.PI) / 180;
 
 export const ARC_R = 120;                 // arc radius, clear of the crown
-const HEAD_C = [0, -4, 18];               // head centre, focus below it
+const HEAD_C = [0, -4, 18];               // head center, focus below it
 const HEAD_R = [74, 92, 84];
 
 /** A point on the arc, in world space. */
@@ -82,7 +82,7 @@ function headWire(out, col) {
  * @param w,h      CSS pixels
  * @param cam      { az, el, dist, zoom } — az/el in radians
  * @param state    { arc, collar, ghosts } — angles in degrees
- * @param palette  { line, soft, action, ink, sub } as CSS colour strings
+ * @param palette  { line, soft, action, ink, sub } as CSS color strings
  */
 export function drawArc(ctx, w, h, cam, state, palette) {
   ctx.clearRect(0, 0, w, h);

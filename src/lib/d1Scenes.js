@@ -83,7 +83,7 @@ export function makeAnchor(light) {
 
    An arc swings through its rotations and a probe runs down it. Wherever the
    arc is, the probe's tip lands on the same place. That is the whole of what
-   arc-centred means, and it is the one thing worth drawing.
+   arc-centered means, and it is the one thing worth drawing.
    ═══════════════════════════════════════════════════════════════════════════ */
 export function makeArc(light) {
   const P = palette(light);
@@ -104,7 +104,7 @@ export function makeArc(light) {
       ctx.stroke();
 
       if (g === 0) {
-        // the probe, on the arc, pointed at the centre
+        // the probe, on the arc, pointed at the center
         const pa = Math.PI + a + Math.sin(t * 0.9) * 0.9;
         const px = cx + Math.cos(pa) * R;
         const py = cy + Math.sin(pa) * R;
@@ -138,7 +138,7 @@ export function makeArc(light) {
    Advancement — even steps against a still scale
 
    A column descends in discrete equal increments while its scale stays put.
-   The steps are deliberately quantised: a microdrive advances by turns, not
+   The steps are deliberately quantized: a microdrive advances by turns, not
    by sliding.
    ═══════════════════════════════════════════════════════════════════════════ */
 export function makeDrive(light) {
@@ -254,6 +254,99 @@ export function makeAccess(light) {
     ctx.fillStyle = rgba(P.deep, 0.8, P);
     ctx.beginPath();
     ctx.arc(cx, base + S * 0.018, 3.4, 0, 6.283);
+    ctx.fill();
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Rotation — two angles, one point
+
+   Replaces the "DEGREES OF FREEDOM 3 + 2" panel that used to float over the
+   NRSS plate on the home page. That panel stated the number; this draws what
+   the number means, which is the whole argument for an arc-centred frame:
+   the collar turns, the arc turns within it, and the probe reaches the target
+   from a different direction every time WITHOUT the target moving.
+
+   The geometry is real rather than decorative. A point on the arc sits at
+   angle θ from vertical in the arc's own plane; that plane is then rotated
+   about the vertical axis by the collar angle φ. The projection is a cheap
+   axonometric — y squashed, z pushed down-right — which is enough to read as
+   depth at this size and costs three multiplications.
+   ═══════════════════════════════════════════════════════════════════════════ */
+export function makeRotation(light) {
+  const P = palette(light);
+
+  /* Arc-local (θ) + collar (φ) -> screen. R is the arc radius in px. */
+  const project = (th, ph, R, cx, cy) => {
+    const x = Math.sin(th) * R * Math.cos(ph);
+    const z = Math.sin(th) * R * Math.sin(ph);
+    const y = -Math.cos(th) * R;
+    return [cx + x + z * 0.34, cy + y * 0.62 + z * 0.2];
+  };
+
+  return function draw(ctx, w, h, t) {
+    clear(ctx, w, h);
+    const cx = w * 0.5;
+    const cy = h * 0.54;
+    const R = Math.min(w * 0.34, h * 0.4);
+
+    const phi = t * 0.34;                          // the collar, turning
+    const theta = 1.15 + Math.sin(t * 0.62) * 0.85; // the probe, sweeping the arc
+
+    /* Ghosts of collar positions already visited — the point of the drawing is
+       that they all converge, so several have to be on screen at once. */
+    for (let g = 4; g >= 1; g--) {
+      const ph = phi - g * 0.42;
+      ctx.strokeStyle = rgba(P.rule, 0.10 + 0.035 * (5 - g), P);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let i = 0; i <= 40; i++) {
+        const [px, py] = project((i / 40) * Math.PI, ph, R, cx, cy);
+        if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+      }
+      ctx.stroke();
+    }
+
+    // the collar itself, seen edge-on as an ellipse
+    ctx.strokeStyle = rgba(P.rule, 0.34, P);
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.ellipse(cx, cy, R * 1.04, R * 1.04 * 0.32, 0, 0, 6.283);
+    ctx.stroke();
+
+    // the live arc
+    ctx.strokeStyle = rgba(P.blue, 0.62, P);
+    ctx.lineWidth = 2.1;
+    ctx.beginPath();
+    for (let i = 0; i <= 60; i++) {
+      const [px, py] = project((i / 60) * Math.PI, phi, R, cx, cy);
+      if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+    }
+    ctx.stroke();
+
+    // the probe on the arc, always aimed at the point
+    const [px, py] = project(theta, phi, R, cx, cy);
+    ctx.strokeStyle = rgba(P.blue, 0.7, P);
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(px, py);
+    ctx.lineTo(cx, cy);
+    ctx.stroke();
+    ctx.fillStyle = rgba(P.blue, 0.95, P);
+    ctx.beginPath();
+    ctx.arc(px, py, 3.6, 0, 6.283);
+    ctx.fill();
+
+    /* The point that never moves. Drawn last so nothing crosses it, and given
+       a settled ring rather than a pulse — it is the one still thing here. */
+    ctx.strokeStyle = rgba(P.rule, 0.3, P);
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 14, 0, 6.283);
+    ctx.stroke();
+    ctx.fillStyle = rgba(P.blue, 1, P);
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4.4, 0, 6.283);
     ctx.fill();
   };
 }

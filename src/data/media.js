@@ -20,7 +20,7 @@
  * carrying fake CE marks and invented model, serial and lot numbers; one bore
  * a competitor's trademark (Stryker) and one a fabricated Ø0.8 mm dimension
  * callout. surgical_probe.png was live here and in MAVEN's gallery, captioned
- * as a carbon-fibre microelectrode assembly, which it was not.
+ * as a carbon-fiber microelectrode assembly, which it was not.
  *
  * A fabricated specification or CE mark on a medical device company's site is
  * a regulatory problem, not a stock-photo problem. Use photography of actual
@@ -32,21 +32,21 @@ import { asset } from '../lib/asset.js';
 export const mediaItems = [
   {
     id: 'anchor-key-model',
-    title: 'Skull anchor key on anatomical model',
+    title: 'Skull Anchor Key on anatomical model',
     kind: 'image',
     category: 'Devices',
     src: asset('/model-head-clean-750x998-1-451x600.png'),
     fit: 'contain',
-    caption: 'The anchor key replaces the base head ring, leaving the face unobstructed.',
+    caption: 'The Skull Anchor Key keeps the face clear.',
   },
   {
     id: 'frame-assembly',
-    title: 'D1 stereotactic frame',
+    title: 'NRSS stereotactic frame',
     kind: 'image',
     category: 'Devices',
     src: asset('/DSC05397-1024x695.jpg'),
     fit: 'cover',
-    caption: 'Arc-centred frame assembly.',
+    caption: 'Arc-centered frame assembly.',
   },
   {
     id: 'microdrive',
@@ -55,7 +55,7 @@ export const mediaItems = [
     category: 'Devices',
     src: asset('/microdrive-image-1024x797.png'),
     fit: 'contain',
-    caption: 'Fine advancement of electrodes and leads along the planned trajectory.',
+    caption: 'Advances electrodes and leads along the planned trajectory.',
   },
   {
     id: 'wincs',
@@ -73,7 +73,7 @@ export const mediaItems = [
     category: 'Research',
     src: asset('/WINCS-Swine-Model-1024x668.png'),
     fit: 'cover',
-    caption: 'Preclinical application.',
+    caption: 'Recording in swine.',
   },
 ];
 

@@ -5,10 +5,15 @@
  * than transcribed, including the author lists — one of these papers has
  * thirty-six authors. Regenerating is preferable to editing by hand.
  *
- * `line` groups the work into the two threads the page is built around, and is
- * the one editorial field: it was assigned by reading the papers, not by
- * keyword. The 2023 Brain paper is a striatal dopamine study that happens to be
- * about DBS, so it sits with the sensing work.
+ * `line` groups the work under the site's three technology lines — the same
+ * names as data/technology.js — on NaviNetics' instruction, so a reader moves
+ * between /technology and this page without the categories changing under them.
+ * It is the one editorial field: assigned by reading the papers, not by keyword.
+ * The 2023 Brain paper is a striatal dopamine study that happens to be about
+ * DBS, so it sits with the sensing work under Neuromodulation.
+ *
+ * NaviNetics AI carries no papers yet, and the page renders the heading anyway
+ * rather than hiding it — see `publicationLines` below.
  *
  * `excerpt` is carried only by the featured paper, and quotes its aim and its
  * conclusion. The abstract also reports figures — sub-0.1 mm agreement between
@@ -31,7 +36,7 @@ export const publications = [
     year: 2026,
     volume: '23',
     pages: '046031',
-    line: 'Stereotaxy',
+    line: 'Stereotactic Devices',
     doi: '10.1088/1741-2552/ae87cf',
     nnAffiliation: true,
   },
@@ -48,7 +53,7 @@ export const publications = [
     year: 2025,
     volume: '18',
     pages: '1441-1443',
-    line: 'Stereotaxy',
+    line: 'Stereotactic Devices',
     doi: '10.1016/j.brs.2025.07.007',
   },
   {
@@ -64,7 +69,7 @@ export const publications = [
     year: 2025,
     volume: '29',
     pages: '93-101',
-    line: 'Stereotaxy',
+    line: 'Stereotactic Devices',
     doi: '10.1227/ons.0000000000001427',
     namesSystem: true,
     nnAffiliation: true,
@@ -85,7 +90,7 @@ export const publications = [
     year: 2024,
     volume: '141',
     pages: '406-411',
-    line: 'Stereotaxy',
+    line: 'Stereotactic Devices',
     doi: '10.3171/2024.1.JNS232563',
     nnAffiliation: true,
   },
@@ -100,7 +105,7 @@ export const publications = [
     year: 2020,
     volume: '17',
     pages: '066014',
-    line: 'Stereotaxy',
+    line: 'Stereotactic Devices',
     doi: '10.1088/1741-2552/abc743',
   },
   {
@@ -120,7 +125,7 @@ export const publications = [
     year: 2026,
     volume: '293',
     pages: '118151',
-    line: 'Neurochemistry',
+    line: 'Neuromodulation',
     doi: '10.1016/j.bios.2025.118151',
   },
   {
@@ -135,7 +140,7 @@ export const publications = [
     year: 2024,
     volume: '29',
     pages: '3076-3085',
-    line: 'Neurochemistry',
+    line: 'Neuromodulation',
     doi: '10.1038/s41380-024-02537-1',
   },
   {
@@ -150,7 +155,7 @@ export const publications = [
     year: 2023,
     volume: '146',
     pages: '4174-4190',
-    line: 'Neurochemistry',
+    line: 'Neuromodulation',
     doi: '10.1093/brain/awad142',
   },
   {
@@ -165,24 +170,34 @@ export const publications = [
     year: 2018,
     volume: '121',
     pages: '174-182',
-    line: 'Neurochemistry',
+    line: 'Neuromodulation',
     doi: '10.1016/j.bios.2018.08.034',
   },
 ];
 
 /** Bolded wherever they appear in an author list. */
-export const founders = ['K.H. Lee', 'K.E. Bennet', 'S.J. Goerss'];
+export const founders = ['K.H. Lee', 'K.E. Bennet', 'S.J. Goerss', 'Y. Oh'];
 
-/** Section order on the page. Derived, so a new `line` appears on its own. */
-export const publicationLines = [...new Set(publications.map((p) => p.line))];
+/**
+ * Section order on the page.
+ *
+ * Fixed rather than derived from the records. Deriving it meant a line with no
+ * papers did not exist, and NaviNetics AI has none yet — the instruction is
+ * that all three technology lines show, so the third has to come from a list
+ * that does not depend on the data. Keep in step with data/technology.js.
+ */
+export const publicationLines = ['Stereotactic Devices', 'Neuromodulation', 'NaviNetics AI'];
 
 export const publicationLineBlurbs = {
-  Stereotaxy:
+  'Stereotactic Devices':
     'Getting a probe to a target: frame geometry, image guidance, and what happened '
     + 'when the system was taken from the bench into an operating room.',
-  Neurochemistry:
+  Neuromodulation:
     'Measuring what the brain is doing chemically while it is being stimulated — the '
     + 'sensing work the founders’ laboratory has run since 2018.',
+  'NaviNetics AI':
+    'Planning and targeting software. No peer-reviewed work has been published under '
+    + 'this line yet.',
 };
 
 /** doi.org rather than the publisher’s own URL: it outlives site redesigns. */

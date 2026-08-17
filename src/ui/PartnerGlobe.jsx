@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePrefersReducedMotion } from '../lib/motion.js';
+import { isScrolling } from '../lib/scrollState.js';
 import { worldDots } from '../data/worldDots.js';
 import { HOME } from '../data/partners.js';
 import { decodeDots, drawGlobe, drawRoute, project, unit } from '../lib/globeScene.js';
+import { Logo } from './Logo.jsx';
 
 /**
  * The partners globe.
@@ -25,7 +27,7 @@ const SPIN = 3.1;          // degrees per second, ~two minutes for a full turn
 const BEAD_PERIOD = 2600;  // ms for one pass of the route marker
 
 /**
- * The globe's colours.
+ * The globe's colors.
  *
  * Every token read here is theme-independent — the globe is a lit sphere in
  * both themes — so `--terr-*-lit` rather than `--terr-*`, which stays
@@ -35,7 +37,7 @@ const BEAD_PERIOD = 2600;  // ms for one pass of the route marker
  * attribute rather than the value from useTheme(): ThemeProvider writes that
  * attribute from an effect of its own, and a parent's effect runs AFTER its
  * children's, so reading on the context change samples the OUTGOING theme's
- * colours — and because the dependency never fires again, keeps them for good.
+ * colors — and because the dependency never fires again, keeps them for good.
  * Measured when this component had that bug: one toggle later the tokens read
  * #03121b and the canvas was still painting #d2e1ea. Nothing here is
  * theme-dependent today, so the observer is currently a no-op; it is four
@@ -116,7 +118,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
     cv.width = Math.round(r.width * dpr);
     cv.height = Math.round(r.height * dpr);
     cv.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-    /* Wide screens put the globe left of centre so the detail panel has room
+    /* Wide screens put the globe left of center so the detail panel has room
        to open beside it. Narrow ones have no such room: the panel becomes a
        sheet and the globe slides up out from under it — see `bias` below. */
     const wide = r.width >= 900;
@@ -171,11 +173,11 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
       for (const t of territories) {
         const p = project(anchors[t.id], r, view);
         const front = p.z > 0.02;
-        const colour = pal.terr[t.id];
+        const color = pal.terr[t.id];
 
         const pin = pins.current.get(t.id);
         if (pin) {
-          pin.style.setProperty('--pc', colour);
+          pin.style.setProperty('--pc', color);
           pin.style.left = `${p.x}px`;
           pin.style.top = `${p.y}px`;
           pin.style.opacity = front ? 1 : 0;
@@ -185,14 +187,14 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           if (!el) return;
           const q = project(siteVecs[t.id][i], r, view);
           const vis = q.z > 0.02;
-          el.style.setProperty('--pc', colour);
+          el.style.setProperty('--pc', color);
           el.style.left = `${q.x}px`;
           el.style.top = `${q.y}px`;
           el.style.opacity = vis ? 0.9 : 0;
           el.style.pointerEvents = vis ? 'auto' : 'none';
         });
 
-        /* The chip is pushed radially outward from the globe's centre, then
+        /* The chip is pushed radially outward from the globe's center, then
            nudged off anything already placed. Anchoring it to the pin's own
            direction is what keeps five chips from stacking on one side. */
         let dx = p.x - view.cx;
@@ -221,7 +223,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           ctx.beginPath();
           ctx.moveTo(cxp, cyp);
           ctx.lineTo(p.x, p.y);
-          ctx.strokeStyle = sel === t.id ? colour : pal.land;
+          ctx.strokeStyle = sel === t.id ? color : pal.land;
           ctx.globalAlpha = sel === t.id ? 0.85 : 0.4;
           ctx.lineWidth = 1;
           ctx.stroke();
@@ -245,15 +247,41 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
     );
     io.observe(cv);
 
-    const MIN_DT = 1000 / 30;
+    /* TWO RATES, because the globe has two jobs.
+       ─────────────────────────────────────────────────────────────────────
+       Interaction — a drag, a fling, the tween that swings a territory round
+       — is followed by the eye and gets 30fps. The idle drift is not: it turns
+       at 4°/s, so at 30fps each frame moves it 0.13° and at 12fps 0.33°, and
+       nothing resolves either. It is the same drift for 40% of the work.
+
+       This is the whole of BUG-128. Isolated with tools/check-busy-cause.mjs,
+       hiding the canvas took /company/partners from 95.5% of a throttled CPU
+       to 0% — the scene is the entire cost, and a full-globe re-projection
+       thirty times a second, forever, is what a phone cannot absorb. */
+    const MIN_DT_ACTIVE = 1000 / 30;
+    const MIN_DT_IDLE = 1000 / 12;
     let lastDraw = 0;
 
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
       if (!onScreen || document.hidden) return;
-      if (now - lastDraw < MIN_DT) return;
-      lastDraw = now;
       const s = sc.current;
+      const busy = s.drag || s.tween || Math.abs(s.vel) > 0.02 || selRef.current;
+      if (now - lastDraw < (busy ? MIN_DT_ACTIVE : MIN_DT_IDLE)) return;
+
+      /* Stand aside while the reader is scrolling.
+         ───────────────────────────────────────────────────────────────────
+         This is the most expensive scene on the site and it runs on its own
+         clock, so it was still re-projecting the world while the reader was
+         trying to get past it. Every block below enters through an observer
+         callback and a run of animation frames, and they queue behind this.
+
+         Only the idle drift yields. A drag, a fling, or the tween that swings
+         a territory round after a selection are direct answers to something
+         the reader just did, and stalling those would trade one unresponsive
+         feeling for a worse one. */
+      if (isScrolling() && !s.drag && !s.tween && Math.abs(s.vel) <= 0.02) return;
+      lastDraw = now;
       /* Nothing to draw until the canvas has been measured. Without this, a
          zero-size or not-yet-laid-out box feeds NaN straight into
          createRadialGradient, which throws once per frame forever. */
@@ -370,7 +398,9 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           className="nn-pin nn-pin-site"
         >
           <i />
-          <span className="sr-only">{`${s[2]} — covered by ${t.orgs[0].name}`}</span>
+          <span className="sr-only">
+            {t.orgs[0] ? `${s[2]} — covered by ${t.orgs[0].name}` : s[2]}
+          </span>
         </button>
       )))}
 
@@ -383,11 +413,11 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           type="button"
           ref={(el) => { chips.current.set(t.id, el); }}
           onClick={() => pick(t.id)}
-          aria-label={`${t.label} — ${t.orgs[0].name}`}
+          aria-label={t.orgs[0] ? `${t.label} — ${t.orgs[0].name}` : t.label}
           className={`nn-chip hidden items-center gap-2 rounded-sm border bg-surface px-2.5 py-2
             shadow-e2 lg:flex ${selected === t.id ? 'border-action' : 'border-hairline'}`}
         >
-          <Mark org={t.orgs[0]} h={18} />
+          <Mark org={leadOrg(t)} h={18} />
           {t.orgs.length > 1 && (
             <span className="font-data text-[0.6875rem] tracking-[0.1em] text-ink-3">
               {`+${t.orgs.length - 1}`}
@@ -408,13 +438,13 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
             className={`flex flex-none items-center rounded-sm border bg-surface px-2 py-1.5 shadow-e1
               ${selected === t.id ? 'border-action' : 'border-hairline'}`}
           >
-            <Mark org={t.orgs[0]} h={15} />
+            <Mark org={leadOrg(t)} h={15} />
           </button>
         ))}
       </div>
 
-      {/* No colour key. The chips already name each territory and sit in its
-          colour, so a legend restated what the globe was showing rather than
+      {/* No color key. The chips already name each territory and sit in its
+          color, so a legend restated what the globe was showing rather than
           explaining it. */}
       <span className="eyebrow absolute bottom-5 right-5 z-[5] hidden text-ink-3 opacity-75 lg:block">
         Drag to turn · click a mark
@@ -423,8 +453,32 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
   );
 }
 
+/**
+ * The mark a territory leads with.
+ *
+ * A territory whose organization has not been named yet — see `note` in
+ * data/partners.js — has no orgs at all, and every caller here used to index
+ * orgs[0] blindly. Falling back to the territory's own label puts its name on
+ * the plate in mono, which is the same treatment any organization without
+ * artwork already gets, so nothing looks like a hole.
+ */
+export const leadOrg = (t) => t.orgs[0] ?? { name: t.label };
+
 /** A partner's mark on a white plate, or its name set in mono if it has none. */
 export function Mark({ org, h = 18 }) {
+  /* NaviNetics' own tile draws the lockup through the same component the navbar
+     and footer use, so one file is the mark everywhere. The plate is white in
+     both themes, so it takes the master artwork rather than the reversed one. */
+  if (org.self) {
+    return (
+      <span
+        className="nn-mark flex items-center justify-center rounded-[5px] px-1.5"
+        style={{ height: h + 8 }}
+      >
+        <Logo height={h} />
+      </span>
+    );
+  }
   if (!org.logo) {
     return (
       <span

@@ -53,7 +53,7 @@ import figField from '../assets/maven/fig-field.webp';
  *
  *   · /WINC-Harmoni-Device.png is a four-panel journal figure — device
  *     dimensions, a software block diagram, a chip die and a calibration curve
- *     — and it was standing in as product photography on the catalogue card,
+ *     — and it was standing in as product photography on the catalog card,
  *     the neuromodulation technology page and in this product's gallery. All
  *     three now use the unit's own artwork. The file is still in public/ and
  *     still listed in data/media.js; whether it should be is a permissions
@@ -113,7 +113,7 @@ export const domains = [
     tone: 'ephys',
     a0: 18,
     a1: 76,
-    line: 'The electrical activity recorded alongside it.',
+    line: 'What the same tip hears in the tissue.',
   },
   {
     id: 'soft',
@@ -144,13 +144,15 @@ export const channels = [
   { id: 'da', domain: 'chem', deg: -8, short: 'Dopamine', name: 'Dopamine', sub: 'DA' },
   { id: '5ht', domain: 'chem', deg: -33.5, short: 'Serotonin', name: 'Serotonin', sub: '5-HT' },
   { id: 'ado', domain: 'chem', deg: -59, short: 'Adenosine', name: 'Adenosine', sub: null },
-  { id: 'glu', domain: 'chem', deg: -84.5, short: 'Glutamate', name: 'Glutamate', sub: null },
-  { id: 'ach', domain: 'chem', deg: -110, short: 'Acetylcholine', name: 'Acetylcholine', sub: 'ACh' },
+  /* Glutamate and acetylcholine were named individually and are now folded
+     into one "Other" channel on NaviNetics' instruction. Two slots become one,
+     so this takes the midpoint of the angles they used to hold. */
+  { id: 'other', domain: 'chem', deg: -97, short: 'Other', name: 'Other neurochemicals', sub: null },
   { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: 'LFP' },
   { id: 'unit', domain: 'ephys', deg: 62, short: 'Single-unit', name: 'Single-unit activity', sub: null },
-  { id: 'dsp', domain: 'soft', deg: 108, short: 'Signal processing', name: 'Ephys & signal processing', sub: null },
+  { id: 'gui', domain: 'soft', deg: 108, short: 'Intuitive GUI', name: 'One interface for every channel', sub: null },
   { id: 'adv', domain: 'soft', deg: 138, short: 'Advanced analysis', name: 'Advanced analysis', sub: null },
-  { id: 'dbs', domain: 'stim', deg: 195, short: 'DBS', name: 'Deep brain stimulation', sub: 'DBS' },
+  { id: 'stim', domain: 'stim', deg: 195, short: 'Electrical stimulation', name: 'Electrical stimulation', sub: null },
 ];
 
 /** The three techniques, which are modes rather than channels. */
@@ -162,13 +164,13 @@ export const modes = ['FSCV', 'MCSWV', 'Amperometry'];
  *
  * `ground` alternates. Four bays in a row is a tunnel, and the two light bands
  * are where the page comes up for air — they follow the site theme, and their
- * scenes are redrawn in ink rather than the same colours turned down. Which
+ * scenes are redrawn in ink rather than the same colors turned down. Which
  * two is not arbitrary: electrophysiology is a line on paper and the analysis
  * is a plot, and both are things you would print.
  *
  * Each figure illustrates its own band rather than being the nearest available
  * picture. The FSCV plate sits under Neuromodulation because the stimulus mark
- * is drawn beneath its colour plot — it is a picture of stimulate-then-measure,
+ * is drawn beneath its color plot — it is a picture of stimulate-then-measure,
  * which is what that band is about.
  */
 export const bands = [
@@ -182,7 +184,7 @@ export const bands = [
        so the animation has somewhere to be seen, and left to wrap, every one
        of these strands a word on its own line. */
     title: 'The chemistry,\nas it happens.',
-    lead: 'Apply a changing potential to a carbon-fibre or diamond sensor and electrochemically '
+    lead: 'Apply a changing potential to a carbon-fiber or diamond sensor and electrochemically '
       + 'active substances give up or take back electrons at its surface. Subtract the applied '
       + 'waveform from what comes back, and what is left is the current the chemistry drew.',
     points: [
@@ -203,7 +205,7 @@ export const bands = [
       },
     ],
     meta: [
-      { label: 'Sensor', value: 'Carbon fibre · diamond' },
+      { label: 'Sensor', value: 'Carbon fiber · diamond' },
       { label: 'Reports', value: 'Relative · absolute' },
     ],
     figure: {
@@ -227,20 +229,20 @@ export const bands = [
       { label: 'Local field potential.', body: 'The summed activity of the population around the tip.' },
       { label: 'Single-unit activity.', body: 'Individual neurons, resolved as spikes.' },
       {
-        label: 'Independent, but synchronised.',
-        body: 'The two run as separate channels of one instrument, so what the chemistry did can '
-          + 'be lined up against what the electrophysiology was doing when it did it.',
+        label: 'Independent, but synchronized.',
+        body: 'The two run as separate channels of one instrument, so the chemistry and the '
+          + 'electrophysiology line up on one timeline.',
       },
     ],
     meta: [
       { label: 'Channels', value: 'Chemical · electrical' },
-      { label: 'Probe', value: 'Carbon fibre in cannula' },
+      { label: 'Probe', value: 'Carbon fiber in cannula' },
     ],
     figure: {
       src: figSensor, w: 1308, h: 1026,
-      alt: 'A carbon-fibre microelectrode: the fibre, silica and polyamide tubing, and the inner '
+      alt: 'A carbon-fiber microelectrode: the fiber, silica and polyamide tubing, and the inner '
         + 'and outer cannula, photographed against a scale and drawn in section.',
-      caption: 'The carbon-fibre microelectrode',
+      caption: 'The carbon-fiber microelectrode',
     },
   },
   {
@@ -250,18 +252,18 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Neuromodulation',
     title: 'The response\nto stimulation.',
-    lead: 'Deep brain stimulation goes in on one channel while the other two keep recording. That '
+    lead: 'Electrical stimulation goes in on one channel while the other two keep recording. That '
       + 'is the point of the instrument — deliver something, then see what the tissue does about '
       + 'it, without the stimulation swamping the measurement of its own effect.',
     points: [
       {
-        label: 'Synchronised with the measurement.',
-        body: 'Independent but synchronised neurochemical and electrophysiological recording '
-          + 'alongside stimulation.',
+        label: 'Synchronized with the measurement.',
+        body: 'The stimulus sits on the same timeline as both signals, so what follows can be '
+          + 'read against it.',
       },
       {
-        label: 'Artefact minimised at the integration.',
-        body: 'The stimulation artefact is dealt with where the channels meet, so the recording '
+        label: 'Artifact minimized at the integration.',
+        body: 'The stimulation artifact is dealt with where the channels meet, so the recording '
           + 'stays usable through the stimulus rather than around it.',
       },
       {
@@ -271,12 +273,12 @@ export const bands = [
       },
     ],
     meta: [
-      { label: 'Delivered', value: 'DBS' },
+      { label: 'Delivered', value: 'Electrical stimulation' },
       { label: 'Observed', value: 'Chemical + electrical' },
     ],
     figure: {
       src: figFscv, w: 717, h: 848,
-      alt: 'A voltammetric colour plot with the extracted concentration trace above it and the '
+      alt: 'A voltammetric color plot with the extracted concentration trace above it and the '
         + 'cyclic voltammogram inset; the stimulus is marked beneath the plot.',
       caption: 'A release event, with the stimulus marked beneath',
     },
@@ -299,8 +301,8 @@ export const bands = [
       },
       {
         label: 'Background subtracted.',
-        body: 'What the electrode was doing before the event is taken off it, which is what '
-          + 'leaves the signal visible at all.',
+        body: 'The steady current the electrode draws before the event is taken off, so the '
+          + 'release itself is the signal.',
       },
       {
         label: 'Read as a trace.',
@@ -314,7 +316,7 @@ export const bands = [
     ],
     figure: {
       src: figField, w: 577, h: 513,
-      alt: 'A square-wave voltammogram as the software renders it: current in colour across '
+      alt: 'A square-wave voltammogram as the software renders it: current in color across '
         + 'potential and scan number.',
       caption: 'The field as the software draws it',
     },

@@ -42,7 +42,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const ROUTES = [
   '/', '/products/d1-stereotactic-frame', '/products/maven-neuromodulation',
-  '/technology/navinetics-ai', '/resources/education', '/company/partners', '/contact',
+  '/technology/navinetics-ai', '/company/partners', '/contact',
 ];
 
 spawn(CHROME, ['--headless=new', '--disable-gpu', '--use-gl=swiftshader',
@@ -177,7 +177,7 @@ for (const r of ROUTES) {
 console.log(`\n═══ STEADY STATE — 5s after settle, ${CPU}x CPU, median of ${REPEATS} ═══`);
 console.log('    busy% = share of wall-clock spent in long tasks with the page idle.\n');
 
-for (const path of ['/', '/company/partners', '/products/maven-neuromodulation', '/resources/education']) {
+for (const path of ['/', '/company/partners', '/products/maven-neuromodulation']) {
   const runs = [];
   for (let i = 0; i < REPEATS; i++) {
     await send('Page.navigate', { url: BASE + path });

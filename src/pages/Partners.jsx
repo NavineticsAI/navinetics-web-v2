@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePageMeta } from '../lib/meta.js';
-import { territories } from '../data/partners.js';
-import { Card, Reveal, Section, TickLine } from '../ui/index.js';
-import { Mark, PartnerGlobe } from '../ui/PartnerGlobe.jsx';
+import { collaborators, territories } from '../data/partners.js';
+import { Button, Card, Reveal, Section, SectionHead, TickLine } from '../ui/index.js';
+import { Mark, PartnerGlobe, leadOrg } from '../ui/PartnerGlobe.jsx';
 
 /**
  * Partners.
@@ -50,10 +50,10 @@ export default function Partners() {
         <div className="nn-frame mx-auto">
           <TickLine className="max-w-[120px]" />
           <span className="eyebrow mt-3.5 block text-action">Company — Partners</span>
+          {/* No lead paragraph. It read "The organizations we work with, and
+              the territories they cover", which is what the globe and the cards
+              directly beneath it already show. */}
           <h1 className="mt-3.5 text-[clamp(2.35rem,5vw,3.9rem)]">Our global presence.</h1>
-          <p className="mt-4 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-ink-2">
-            The organisations we work with, and the territories they cover.
-          </p>
         </div>
       </section>
 
@@ -61,7 +61,7 @@ export default function Partners() {
         <div className="nn-frame mx-auto">
           {/* The container is dark in both themes, like the globe inside it.
               A lit sphere needs a room to be lit in, and the pale version put
-              five territory colours against a near-white ocean where the
+              five territory colors against a near-white ocean where the
               weakest pair fell to 3.6 contrast. */}
           <div className="overflow-hidden rounded-lg border border-[rgb(130_186_217/0.14)]
             bg-[radial-gradient(120%_90%_at_50%_8%,#0a2c40,var(--globe-bay)_70%)]">
@@ -83,7 +83,13 @@ export default function Partners() {
       {/* No section head. The cards say what they are, and a heading over them
           only restated the globe above. */}
       <Section wide className="pt-12 lg:pt-14">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* An h2 before the cards. They carry h3s, so without this the page
+            went h1 → h3 and a screen reader announcing the outline told the
+            listener they had skipped a section. It also gives the grid the
+            label it was missing — "the cards say what they are" was true of an
+            individual card and not of the set. */}
+        <SectionHead eyebrow="Distribution" title="Where we are." tick={false} />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {territories.map((t, i) => (
             <Reveal key={t.id} delay={i * 0.05}>
               <Card
@@ -94,8 +100,8 @@ export default function Partners() {
                   ${selected === t.id ? '!border-action' : ''}`}
               >
                 <div className="flex items-center justify-between gap-3">
-                  <Mark org={t.orgs[0]} h={20} />
-                  <span className="eyebrow text-ink-3">{t.orgs[0].role}</span>
+                  <Mark org={leadOrg(t)} h={20} />
+                  <span className="eyebrow text-ink-3">{t.orgs[0]?.role ?? 'Market'}</span>
                 </div>
                 <h3 className="text-lg tracking-[-0.03em]">{t.label}</h3>
                 <p className="text-sm leading-relaxed text-ink-2">{t.summary}</p>
@@ -104,6 +110,57 @@ export default function Partners() {
             </Reveal>
           ))}
         </div>
+      </Section>
+
+      {/* Research relationships, not distribution — hence a plain list rather
+          than more pins on the globe. Every name sits on the same plate at the
+          same height, which is what keeps them a consistent size whether they
+          are set in type or, later, carry real artwork. */}
+      <Section wide band>
+        <SectionHead eyebrow="Research" title="Scientific collaborators." />
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {collaborators.map((c, i) => (
+            <Reveal key={c.name} delay={Math.min(i, 7) * 0.04}>
+              <div className="flex h-full min-h-[5.25rem] items-center justify-center rounded-lg
+                border border-hairline-soft bg-surface p-5 text-center">
+                {c.logo
+                  ? <Mark org={c} h={22} />
+                  : <span className="text-sm leading-snug text-ink-2">{c.name}</span>}
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* THE PAGE HAD NO WAY OUT.
+          ──────────────────────────────────────────────────────────────────
+          It ended on a list of ten universities. This is the one page a
+          distributor or a prospective partner comes to on purpose, and every
+          other page on the site offers a next step where this one offered
+          none — so the reader most likely to be worth hearing from had nothing
+          to press.
+
+          The reason for the second line is that three territories currently
+          read "the organization behind it is still to be named", which a
+          reader cannot tell apart from "taken, and we are not saying". Inviting
+          the question is better than leaving them to guess the answer. */}
+      <Section>
+        <Reveal className="flex flex-col items-center gap-6 text-center">
+          <span className="eyebrow text-action">Distribution</span>
+          <h2 className="text-d2">Talk to us about a territory.</h2>
+          <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
+            We work with distributors who know their market and their surgeons. If yours is not on
+            the map above, or you would like to know what is open, we would like to hear from you.
+          </p>
+          <div className="mt-2 flex flex-wrap justify-center gap-3">
+            <Button to="/contact?reason=distribution" size="lg" arrow>
+              Enquire about distribution
+            </Button>
+            <Button to="/company/who-we-are" size="lg" variant="secondary">
+              Who we are
+            </Button>
+          </div>
+        </Reveal>
       </Section>
     </>
   );
@@ -170,6 +227,10 @@ function Panel({ territory, onClose }) {
           </div>
 
           <div className="flex flex-col gap-5 overflow-auto px-5 pb-6 pt-4">
+            {territory.orgs.length === 0 && territory.note && (
+              <p className="text-[0.8125rem] leading-relaxed text-ink-2">{territory.note}</p>
+            )}
+
             {territory.orgs.map((org, i) => (
               <div key={org.name} className="flex flex-col gap-2.5">
                 {i > 0 && <div className="-mt-2.5 mb-1 h-px bg-hairline-soft" />}

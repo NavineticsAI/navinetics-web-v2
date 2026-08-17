@@ -25,7 +25,7 @@ export default function NaviNeticsAI() {
   usePageMeta({
     title: 'NaviNetics AI',
     description:
-      'Stereotactic navigation software in development. Try a simulation of the planning workspace, running on a generated head.',
+      'Stereotactic navigation software. Try a simulation of the planning workspace, running on a generated head.',
   });
 
   return (
@@ -36,9 +36,13 @@ export default function NaviNeticsAI() {
           panel's own fields are X/Y/Z in 0.1 mm steps and Collar/Arc in 1°
           steps, and each plan carries Stereo and AC-PC tabs, which is where
           "one target, two coordinate systems" comes from. */}
+      {/* The title was "Stereotaxis, revolutionized. / Precision, made easier."
+          — the most marketing sentence on the site, on the least-validated
+          product, four sections above "no submission has been made, and no
+          clearance is claimed". Replaced with what the software does. */}
       <BrainHero
         eyebrow="Technology — Software"
-        title={'Stereotaxis, revolutionised.\nPrecision, made easier.'}
+        title={'Plan the trajectory.\nIn one workspace.'}
         lead="A desktop workstation for stereotactic neurosurgical planning."
         facts={[
           // Together these are a complete stereotactic setting: three to
@@ -157,7 +161,7 @@ export default function NaviNeticsAI() {
         title="A glimpse of the workspace."
         lead="Not the application — a small demonstration of it, rebuilt to run in a browser on
           generated anatomy. It covers one thing: setting a trajectory against the geometry an
-          arc-centred frame imposes."
+          arc-centered frame imposes."
         note="Synthetic head — generated, not patient data"
         actions={[
           { label: 'Ask us about it', href: 'mailto:info@navinetics.com', arrow: true },
@@ -173,8 +177,8 @@ export default function NaviNeticsAI() {
       <NextSection
         eyebrow="What comes next"
         title={'The future of stereotaxis\nis being developed here.'}
-        lead="The next change is to how a patient is brought into the frame’s coordinates. It is
-          in development, and there will be more to share as the work takes shape."
+        lead="The next change is to how a patient is brought into the frame’s coordinates, and
+          there will be more to share as the work takes shape."
       />
     </>
   );
@@ -211,7 +215,7 @@ const SOFTWARE = [
     head: 'Portable by design',
     body: 'It runs on an ordinary Windows machine, with no cloud service and no upload — the '
       + 'study stays where it is. A GPU is used when one is present and never required, and the '
-      + 'result is the same either way. The localiser’s geometry is configuration rather than '
+      + 'result is the same either way. The localizer’s geometry is configuration rather than '
       + 'code, so a different frame is a change to its data rather than to its software.',
   },
 ];
@@ -234,7 +238,7 @@ function AboutThisDemo() {
         <h2 className="text-d2">The anatomy is synthetic.</h2>
         <p className="text-lead leading-[1.55] text-ink-2">
           The workspace is a real reconstruction running in your browser, driven by the same
-          arc-centred geometry the frame imposes. The anatomy is not.
+          arc-centered geometry the frame imposes. The anatomy is not.
         </p>
       </div>
 

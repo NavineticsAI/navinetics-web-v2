@@ -37,7 +37,7 @@ const ROUTES = [
   '/products/d1-stereotactic-frame', '/products/carbon-fiber-surgical-tables',
   '/products/maven-neuromodulation',
   '/technology/stereotactic-devices', '/technology/neuromodulation', '/technology/navinetics-ai',
-  '/resources/media', '/resources/careers', '/resources/education', '/resources/publications',
+  '/resources/media', '/resources/careers', '/resources/publications',
   '/contact',
 ];
 

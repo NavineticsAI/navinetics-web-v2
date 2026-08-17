@@ -26,7 +26,7 @@ export const VIEWS = {
   axial: { h: [-1, 0, 0], v: [0, 1, 0], labels: ['R', 'L', 'A', 'P'] },
 };
 
-/** The orthogonal panes are centred on the CURSOR, not the target. */
+/** The orthogonal panes are centered on the CURSOR, not the target. */
 export function planeBasis(view, geo) {
   if (view === 'probe') return { h: geo.v1, v: geo.v2, o: geo.tip, fov: FOV_PROBE };
   const b = VIEWS[view];
@@ -81,7 +81,7 @@ export function renderSlice(cv, view, geo, tis, draft = false) {
  * the head is never cropped in a narrow pane, and shared by the render and
  * the overlay so the trajectory lands on the anatomy.
  */
-/* Wide enough for the localiser, not just the head: the frame is 203 mm
+/* Wide enough for the localizer, not just the head: the frame is 203 mm
    across and 208 deep, so a three-quarter view needs about 300 mm of field
    before the corners start clipping. */
 export const mm3d = (cssW, cssH) => Math.max(300 / cssW, 370 / cssH);
@@ -110,7 +110,7 @@ function camUnrot(p, cam) {
    replacement is a DEFACED render of a real volume, so adding a face here
    would be building the wrong thing.
 
-   `shape` is a radius multiplier over the unit sphere in normalised head
+   `shape` is a radius multiplier over the unit sphere in normalized head
    space. It never exceeds 1, so the deformed surface lies inside the base
    ellipsoid and the analytic hit is a safe place to start marching from. */
 function shape(ux, uy, uz) {
@@ -175,7 +175,7 @@ function hitHead(o, d) {
   }
 
   /* Sphere-trace rather than march at a fixed pitch. The field is the
-     normalised radius minus the shape multiplier, so scaling it by the
+     normalized radius minus the shape multiplier, so scaling it by the
      smallest head radius gives a step that cannot overshoot the surface. It
      matters: a fixed 2 mm march spent ~84 evaluations crossing the middle of
      the head, where this converges in one or two — the deformation is zero at
@@ -216,7 +216,7 @@ function headNormal(p) {
   ]);
 }
 
-/* ── the localiser ─────────────────────────────────────────────────────────
+/* ── the localizer ─────────────────────────────────────────────────────────
    Slab test for the rails, capsule test for the rods. Both report the normal
    so they can be lit by the same light as the head. */
 function hitBox(o, d, lo, hi) {
@@ -282,7 +282,7 @@ function hitCapsule(o, d, a, b, r) {
 const LIGHT = unit([-0.45, -0.72, 0.52]);
 
 /**
- * Skin surface inside the localiser.
+ * Skin surface inside the localizer.
  *
  * A 3D pane in the application shows the surface reconstruction WITH the
  * frame around it, because that is the thing being registered — so the head
@@ -296,14 +296,14 @@ const LIGHT = unit([-0.45, -0.72, 0.52]);
 /**
  * One ray. Writes RGBA 0..255 into `out` (alpha 0 for a miss) and returns
  * what was hit — 0 nothing, 1 rail, 2 rod, 3 head, 4 the cut face. The kind
- * is what the edge pass compares; two neighbouring pixels of the same kind
+ * is what the edge pass compares; two neighboring pixels of the same kind
  * are flat shading and gain nothing from more samples.
  */
 function traceScene(o, dir, tis, out) {
   let best = Infinity;
   let hitN = null, hitKind = 0;              // 1 rail, 2 rod
 
-  // One slab test rejects the whole localiser for a background pixel, which
+  // One slab test rejects the whole localizer for a background pixel, which
   // most of a tall pane is.
   if (hitBox(o, dir, FRAME_LO, FRAME_HI)) {
     for (let k = 0; k < RAILS.length; k++) {
@@ -444,7 +444,7 @@ export function render3D(cv, cssW, cssH, cam, tis, draft = false) {
 }
 
 /* ── overlays ──────────────────────────────────────────────────────────────
-   Colours sampled from the application, not chosen.                      */
+   Colors sampled from the application, not chosen.                      */
 export const C_TRACK = '#03a1bd';
 export const C_TARGET = '#c62d2d';
 export const C_ENTRY = '#73e519';
@@ -594,15 +594,15 @@ export function drawOverlay(cv, view, geo, cssW, cssH, active = null, preview = 
   /* Entry and target are draggable, so they are drawn as handles: a soft
      ring under the pointer says "this one moves", which a bare dot does not.
      The radius matches the hit test, so what lights up is what you get. */
-  const halo = (p, colour) => {
+  const halo = (p, color) => {
     ctx.beginPath();
     ctx.arc(p[0], p[1], 13, 0, Math.PI * 2);
-    ctx.fillStyle = colour;
+    ctx.fillStyle = color;
     ctx.globalAlpha = 0.16;
     ctx.fill();
     ctx.globalAlpha = 0.7;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = colour;
+    ctx.strokeStyle = color;
     ctx.stroke();
     ctx.globalAlpha = 1;
   };
@@ -617,7 +617,7 @@ export function drawOverlay(cv, view, geo, cssW, cssH, active = null, preview = 
   ctx.lineWidth = 1.4;
   ctx.beginPath(); ctx.arc(pT[0], pT[1], 5.4, 0, Math.PI * 2); ctx.stroke();
 
-  // The cursor. Always at pane centre, because the slice follows it.
+  // The cursor. Always at pane center, because the slice follows it.
   ctx.fillStyle = C_TARGET;
   ctx.beginPath(); ctx.arc(cssW / 2, cssH / 2, 3.2, 0, Math.PI * 2); ctx.fill();
 

@@ -9,7 +9,7 @@
 
    The view is LOCKED. No orbit, no pointer-driven rotation: the pointer has a
    better job, swinging the entry point around the arc while the target stays
-   put. That is the whole idea of an arc-centred frame, and it is far more
+   put. That is the whole idea of an arc-centered frame, and it is far more
    legible when the anatomy holds still.
 
    Because the orientation never changes, every rotation is done once at build
@@ -29,12 +29,12 @@ const smooth = (v) => v * v * (3 - 2 * v);
 const AZ = 0.58;
 const EL = 0.13;
 
-/* The entry point is confined to a quarter-turn centred on straight up, which
+/* The entry point is confined to a quarter-turn centered on straight up, which
    is roughly the usable span of a real arc over a burr hole. Every angle in
    it lands on the same target. */
 const SPAN = Math.PI / 4;
 
-/** Decode the packed cloud once, into centred coordinates in [-0.5, 0.5]. */
+/** Decode the packed cloud once, into centered coordinates in [-0.5, 0.5]. */
 function decodeCloud(b64) {
   const bin = atob(b64);
   const n = (bin.length / 3) | 0;
@@ -47,7 +47,7 @@ export function makeBrainHero() {
   const CA = Math.cos(AZ), SA = Math.sin(AZ);
   const CE = Math.cos(EL), SE = Math.sin(EL);
 
-  /* The one projection, in unit space. Screen is `centre + unit * scale`, so
+  /* The one projection, in unit space. Screen is `center + unit * scale`, so
      scale and position can change per frame without redoing any of this. */
   const proj = (x, y, z) => {
     const x1 = x * CA - z * SA;
@@ -131,7 +131,7 @@ export function makeBrainHero() {
      u/v/z drop straight into the projection above with no fitting. Fewer and
      shorter than the band's: here they read through a surface, and the band
      is the place to look at them properly. */
-  /* Dense, because it costs nothing at run time — this is rasterised once
+  /* Dense, because it costs nothing at run time — this is rasterized once
      into the tile below and never touched again, so the only price is a few
      milliseconds at construction. */
   const tracts = buildTracts({
@@ -152,7 +152,7 @@ export function makeBrainHero() {
   });
 
   /* Tract geometry never changes, so it is built once into paths keyed by
-     quantised direction colour and depth. A frame strokes ~60 pre-built paths
+     quantized direction color and depth. A frame strokes ~60 pre-built paths
      instead of walking fifteen thousand segments. */
   const QC = 4, QD = 3;
   const tractPaths = new Map();
@@ -161,7 +161,7 @@ export function makeBrainHero() {
     let lastPath = null;
     for (let k = 1; k < tr.pts.length; k++) {
       const a = tr.pts[k - 1], b = tr.pts[k];
-      // Directionally-encoded colour, straight off the field: red left-right,
+      // Directionally-encoded color, straight off the field: red left-right,
       // green front-back, blue up-down.
       const mx = Math.max(b[2], b[3], b[4]) || 1;
       const p0 = proj(a[0], a[1], a[5]);
@@ -181,7 +181,7 @@ export function makeBrainHero() {
     }
   }
 
-  /* Rasterised once, into an offscreen tile.
+  /* Rasterized once, into an offscreen tile.
      Tracking through the real field produces far more distinct directions
      than a handful of hand-authored families did, so the same bucketing that
      used to yield ~50 paths now yields ~300 — and 300 additive strokes over a
@@ -283,7 +283,7 @@ export function makeBrainHero() {
     ctx.globalCompositeOperation = 'source-over';
 
     /* ── the track ─────────────────────────────────────────────────────────
-       The entry rides a circle centred on the target and is confined to a
+       The entry rides a circle centered on the target and is confined to a
        quarter-turn about vertical. Wherever it is, the track ends on the same
        point — which is the property the whole frame exists to provide. With
        no pointer it sweeps the span on its own, so this is never a dead

@@ -10,7 +10,7 @@ import { publications } from './publications.js';
  * This page has a different job from the two either side of it, and the three
  * only work if none of them does another's:
  *
- *   /resources/education        how the method works, from first principles
+ *   this page, further down     how the method works, from first principles
  *   /technology/neuromodulation what the work has established, and when — here
  *   /products/maven…            the instrument you can put on a bench
  *
@@ -50,12 +50,17 @@ import { publications } from './publications.js';
 
 /** The papers this page is built on, oldest first — the order it tells them in. */
 export const evidence = publications
-  .filter((p) => p.line === 'Neurochemistry')
+  /* Must match a `line` value in data/publications.js. That file's lines were
+     renamed to the three technology lines and this filter was left on the old
+     'Neurochemistry', which matched nothing — `paperFor` then threw on the
+     first chapter and took the whole page to a blank screen. A filter that
+     silently returns [] is the failure mode to watch for here. */
+  .filter((p) => p.line === 'Neuromodulation')
   .slice()
   .sort((a, b) => a.year - b.year);
 
 /**
- * The question the whole programme is an answer to. Deliberately the plainest
+ * The question the whole program is an answer to. Deliberately the plainest
  * paragraph on the page: everything after it is a step toward this.
  */
 export const gap = {
@@ -92,7 +97,7 @@ export const chapters = [
     title: 'Reporting an\namount.',
     lead: 'Fast-scan voltammetry subtracts its own background, and the baseline goes with it — so '
       + 'it reports change beautifully and cannot report an amount. Multiple cyclic square wave '
-      + 'voltammetry models the capacitive current instead of subtracting a neighbouring sweep, '
+      + 'voltammetry models the capacitive current instead of subtracting a neighboring sweep, '
       + 'which is what leaves the standing level intact underneath.',
     points: [
       {
@@ -117,7 +122,52 @@ export const chapters = [
         + 'the current it produces shown beneath.',
       caption: 'The cyclic square waveform',
     },
-    readMore: { label: 'Absolute concentration recording, explained', to: '/resources/education#absolute' },
+    readMore: { label: 'Absolute concentration recording, explained', to: '/technology/neuromodulation#absolute' },
+  },
+  /* CHRONOLOGICAL, and it was not.
+     The page opens on "four papers, over eight years, each one a step toward
+     it" and then ran 2018 -> 2024 -> 2023 -> 2026, while the evidence list at
+     the foot of the same page ran correctly. A page arguing a progression
+     contradicted its own order within one scroll, and the reader most likely
+     to notice is the one it is written for. `act` (Brain, 2023) now precedes
+     `resolve` (Molecular Psychiatry, 2024). */
+  {
+    id: 'act',
+    doi: '10.1093/brain/awad142',
+    ground: 'bay',
+    scene: 'stim',
+    tone: 'stim',
+    eyebrow: 'Watching stimulation act',
+    title: 'Asking what\nthe response\nmeans.',
+    lead: 'Deep brain stimulation is known to help before it is understood to. Measuring the '
+      + 'chemistry while the stimulation runs turns an outcome into a mechanism — which is the '
+      + 'difference between knowing that a setting works and knowing what to change when it '
+      + 'stops.',
+    points: [
+      {
+        label: 'One clock for both.',
+        body: 'The stimulus and the chemical response have to be on the same timebase, or the '
+          + 'delay between them — the thing you are actually measuring — is not recoverable.',
+      },
+      {
+        label: 'Reported in Brain, 2023.',
+        body: 'Deep brain stimulation alleviates tics in Tourette syndrome via striatal dopamine '
+          + 'transmission. The dopamine is the mechanism the title is naming.',
+      },
+      {
+        label: 'The case for closing the loop.',
+        body: 'A stimulator that can see what it changed is a stimulator that could eventually '
+          + 'be told to change it by a different amount.',
+      },
+    ],
+    meta: [{ label: 'Journal', value: 'Brain' }, { label: 'Reported', value: '2023' }],
+    figure: {
+      src: figFscv, w: 717, h: 848,
+      alt: 'A voltammetric color plot with the extracted concentration trace above it and the '
+        + 'cyclic voltammogram inset; the stimulus is marked beneath the plot.',
+      caption: 'A release event, with the stimulus marked beneath',
+    },
+    readMore: { label: 'Deep brain stimulation, explained', to: '/technology/neuromodulation#dbs' },
   },
   {
     id: 'resolve',
@@ -151,48 +201,10 @@ export const chapters = [
     meta: [{ label: 'Method', value: 'Voltammetry + learning' }, { label: 'Reported', value: '2024' }],
     figure: {
       src: figField, w: 577, h: 513,
-      alt: 'A square-wave voltammogram: current in colour across potential and scan number.',
+      alt: 'A square-wave voltammogram: current in color across potential and scan number.',
       caption: 'A square-wave voltammogram',
     },
-    readMore: { label: 'Neurochemical detection, explained', to: '/resources/education#neurochemical' },
-  },
-  {
-    id: 'act',
-    doi: '10.1093/brain/awad142',
-    ground: 'bay',
-    scene: 'stim',
-    tone: 'stim',
-    eyebrow: 'Watching stimulation act',
-    title: 'Asking what\nthe response\nmeans.',
-    lead: 'Deep brain stimulation is known to help before it is understood to. Measuring the '
-      + 'chemistry while the stimulation runs turns an outcome into a mechanism — which is the '
-      + 'difference between knowing that a setting works and knowing what to change when it '
-      + 'stops.',
-    points: [
-      {
-        label: 'One clock for both.',
-        body: 'The stimulus and the chemical response have to be on the same timebase, or the '
-          + 'delay between them — the thing you are actually measuring — is not recoverable.',
-      },
-      {
-        label: 'Reported in Brain, 2023.',
-        body: 'Deep brain stimulation alleviates tics in Tourette syndrome via striatal dopamine '
-          + 'transmission. The dopamine is the mechanism the title is naming.',
-      },
-      {
-        label: 'The case for closing the loop.',
-        body: 'A stimulator that can see what it changed is a stimulator that could eventually '
-          + 'be told to change it by a different amount.',
-      },
-    ],
-    meta: [{ label: 'Journal', value: 'Brain' }, { label: 'Reported', value: '2023' }],
-    figure: {
-      src: figFscv, w: 717, h: 848,
-      alt: 'A voltammetric colour plot with the extracted concentration trace above it and the '
-        + 'cyclic voltammogram inset; the stimulus is marked beneath the plot.',
-      caption: 'A release event, with the stimulus marked beneath',
-    },
-    readMore: { label: 'Deep brain stimulation, explained', to: '/resources/education#dbs' },
+    readMore: { label: 'Neurochemical detection, explained', to: '/technology/neuromodulation#neurochemical' },
   },
   {
     id: 'platform',
@@ -212,24 +224,27 @@ export const chapters = [
           + 'monitoring for intraoperative neurosurgical applications.',
       },
       {
-        label: 'A carbon-fibre microelectrode does both jobs.',
+        label: 'A carbon-fiber microelectrode does both jobs.',
         body: 'Finer than a human hair, carrying the sensing surface and the electrical channel '
           + 'in one assembly.',
       },
       {
         label: 'Thirty-six authors.',
-        body: 'Including both of NaviNetics’ scientific founders. It is the accumulation of the '
+        /* Bennet, Oh and Lee are all on this author list — it said "both" while
+           the founders page named two scientific founders, and Oh's addition
+           makes three. Check the byline in publications.js before editing. */
+        body: 'Three of them are NaviNetics founders. It is the accumulation of the '
           + 'three papers above, not a separate line of work.',
       },
     ],
     meta: [{ label: 'Signals', value: 'Chemical + electrical' }, { label: 'Reported', value: '2026' }],
     figure: {
       src: figSensor, w: 1308, h: 1026,
-      alt: 'A carbon-fibre microelectrode: the fibre, silica and polyamide tubing, and the inner '
+      alt: 'A carbon-fiber microelectrode: the fiber, silica and polyamide tubing, and the inner '
         + 'and outer cannula, photographed against a scale and drawn in section.',
-      caption: 'The carbon-fibre microelectrode',
+      caption: 'The carbon-fiber microelectrode',
     },
-    readMore: { label: 'Phasic concentration recording, explained', to: '/resources/education#phasic' },
+    readMore: { label: 'Phasic concentration recording, explained', to: '/technology/neuromodulation#phasic' },
   },
 ];
 

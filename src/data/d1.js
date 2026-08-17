@@ -44,9 +44,9 @@ import detailArt from '../assets/d1/detail.webp';
    black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
    band's own dark ground, like the traced images do. */
 import headArt from '../assets/d1/head.webp';
-/* The arc-centred band's figure is the existing video of the instrument
+/* The arc-centered band's figure is the existing video of the instrument
    turning on a head model with a probe on its trajectory — which is precisely
-   what arc-centred means, and no still can show it. Same encode the education
+   what arc-centered means, and no still can show it. Same encode the education
    page uses; there is no second copy. */
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
@@ -74,30 +74,23 @@ export const bands = [
     scene: 'anchor',
     ground: 'bay',
     tone: 'chem',
-    eyebrow: 'Fixation',
+    eyebrow: 'New mechanism',
     title: 'Anchored to\nthe skull.',
-    lead: 'In place of the head ring that frame-based systems are built around, a small anchor key '
-      + 'is affixed to the skull with percutaneous screws. Everything else attaches to that.',
-    points: [
-      {
-        label: 'The face stays clear.',
-        body: 'Nothing crosses the facial area, which matters most in awake procedures where the '
-          + 'patient has to be spoken with and watched.',
-      },
-      {
-        label: 'Designed around comfort.',
-        body: 'The existing product record puts patient experience first among its improvements, '
-          + 'and this is the part that delivers it.',
-      },
-    ],
-    meta: [{ label: 'Fixation', value: 'Anchor key' }, { label: 'Fitting', value: 'Percutaneous screws' }],
+    /* Fitting detail out, on NaviNetics' instruction. The second sentence is the
+       differentiator, promoted from ~800 words into the teaching material where
+       a surgeon evaluating this page would never reach it — and it is the model
+       for differentiating without a competitive claim, comparing against a
+       historical category rather than a company. */
+    lead: 'A small Skull Anchor Key is affixed to the skull, and everything else attaches to that. '
+      + 'Historically a stereotactic frame was a ring encircling the head; this one fixes near the '
+      + 'top of the skull, leaving the face clear.',
     figure: {
       src: headArt,
       w: 444, h: 1042,
       bare: true,
-      alt: 'The D1 frame fitted to an anatomical head model, held clear of the face, with a probe '
-        + 'on its trajectory.',
-      caption: 'The frame on a head model',
+      alt: 'The NRSS fitted to an anatomical head model, clear of the face, with a probe on its '
+        + 'trajectory.',
+      caption: '',
     },
   },
   {
@@ -105,23 +98,53 @@ export const bands = [
     ground: 'light',
     tone: 'ephys',
     eyebrow: 'Targeting',
-    title: 'Arc-centred.',
-    lead: 'Classified as an arc-centred stereotactic device: three linear degrees of freedom set '
-      + 'the target, and two angles of rotation set how you get to it. Every approach the arc '
-      + 'allows meets the same point.',
+    title: 'Arc-centered.',
+    lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, '
+      + 'and two angles of rotation set how you reach it. Every approach the arc allows meets '
+      + 'the same point.',
     points: [
       {
         label: 'Three linear, two angular.',
-        body: 'X, Y and Z position the target; the ring and the arc choose the trajectory to it '
+        body: 'X, Y and Z position the target; the collar and the arc choose the trajectory to it '
           + 'without moving the target.',
       },
       {
         label: 'Adjustments near the field.',
-        body: 'The compact design puts every adjustment close to where the work is, rather than '
-          + 'out at the rim of a ring.',
+        /* Was "... close to where the work is, rather than out at the rim of a
+           ring." Two problems. It defines the instrument against an unnamed
+           competitor instead of describing itself — the reader is told what we
+           are not, and has to already know the alternative for the sentence to
+           mean anything. And it put "ring" back on the page after the term was
+           removed everywhere else, which is how a retired word survives a sweep.
+           Stated on its own terms, the sentence needs no comparison. */
+        body: 'Every adjustment sits within reach of the surgical field, so the target is set '
+          + 'from where the surgeon is already standing.',
+      },
+      {
+        /* NO ACCURACY FIGURE ON THIS PAGE. Decided by NaviNetics, 2026-08-17.
+           ────────────────────────────────────────────────────────────────
+           A figure was added here and removed the same day. It is published and
+           it is good — Shin, Scheitler, Sharaf et al., Operative Neurosurgery
+           2025;29(1):93-101, already cited on /resources/publications, reports
+           mean radial error of 0.71 +/- 0.33 mm across 32 leads in 17 patients.
+
+           It comes off because the company does not want performance numbers on
+           the published site while the work is still developing, and because
+           navinetics.com states no accuracy figure either — putting one here
+           would make the two sites disagree about what NaviNetics claims.
+
+           The paper stays cited in full. A surgeon who wants the number can read
+           it in its own context, with its n and its conditions, which is where a
+           measured result belongs. What this page says instead is what the
+           instrument does, which needs no substantiation file.
+
+           DO NOT re-add a figure here without the company asking for it. */
+        label: 'One focus, every approach.',
+        body: 'Because the two rotations turn about the focus, changing the approach cannot move '
+          + 'the target.',
       },
     ],
-    meta: [{ label: 'Classification', value: 'Arc-centred' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
+    meta: [{ label: 'Classification', value: 'Arc-centered' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
     figure: {
       video: frameVideo,
       poster: framePoster,
@@ -138,25 +161,25 @@ export const bands = [
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
     lead: 'Once the arc has chosen the approach, a mechanical microdrive advances along it — '
-      + 'down the line the frame has already set, rather than beside it.',
+      + 'down the same line the frame has already set.',
     points: [
       {
         label: 'Coaxial with the approach.',
-        body: 'The drive is coaxial with the approach, so advancing does not disturb what the '
-          + 'frame has already set.',
+        body: 'The drive runs on the axis the arc chose, so advancing stays on the line the '
+          + 'frame has set.',
       },
       {
-        label: 'Part of the kit.',
-        body: 'Supplied with the frame, along with the DBS lead implantation accessories and the '
-          + 'accuracy verification accessories.',
+        label: 'A manual microdrive.',
+        body: 'Advanced by hand, supplied with the frame alongside the DBS lead implantation and '
+          + 'accuracy verification accessories. It also accepts Alpha Omega drives.',
       },
     ],
     meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
       w: 1024, h: 797,
-      alt: 'The NaviNetics mechanical microdrive.',
-      caption: 'The mechanical microdrive',
+      alt: 'The NaviNetics manual microdrive.',
+      caption: 'The manual microdrive',
     },
   },
   {
@@ -165,7 +188,7 @@ export const bands = [
     tone: 'soft',
     eyebrow: 'Access',
     title: 'Room\nto work.',
-    lead: 'Components attach to and detach from the anchor key as the procedure needs them, so '
+    lead: 'Components attach to and detach from the Skull Anchor Key as the procedure needs them, so '
       + 'the burr hole stays reachable and the sterile field stays intact from start to finish.',
     points: [
       {
@@ -179,7 +202,7 @@ export const bands = [
           + 'frameless one.',
       },
     ],
-    meta: [{ label: 'Localisers', value: 'MR · CT · X-ray' }, { label: 'Reusable', value: 'Yes' }],
+    meta: [{ label: 'Localizers', value: 'MR · CT · X-ray' }, { label: 'Reusable', value: 'Yes' }],
     figure: {
       src: detailArt,
       w: 759, h: 1134,

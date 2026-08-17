@@ -15,16 +15,26 @@ import { Timeline } from '../ui/Timeline.jsx';
  */
 const SHOW_TIMELINE = false;
 
+/* `focus` is the portrait's CSS object-position, and it is the same value the
+   full biography page uses — see the note above `founders` in
+   src/pages/Founders.jsx. It has no visible effect in this 4:3 card, which
+   crops these landscape frames vertically rather than horizontally, but the two
+   pages should not disagree about where a face is if either box changes shape. */
 const FOUNDERS = [
   { name: 'Kendall H. Lee', suffix: 'M.D., Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Neurosurgeon at Mayo Clinic. Deep brain stimulation for Parkinson’s, tremor, depression, OCD and epilepsy.',
-    image: asset('/kendall-lee-150-500x400-1.jpg') },
+    /* Recomputed with the crops on 2026-08-17 — see the note in
+       src/pages/Founders.jsx and the JOBS table in tools/founder-portraits.py. */
+    image: asset('/kendall-lee-150-500x400-1.jpg'), focus: '56% 0%' },
   { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Thirty years in technology development. Patents in neurosurgery, diamond, semiconductor and optical technology.',
-    image: asset('/kevin-bennet-150-500x400-1.jpg') },
+    image: asset('/kevin-bennet.jpg'), focus: '69% 0%' },
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
-    image: asset('/stephan-goerss-150.jpg') },
+    image: asset('/stephan-goerss-150.jpg'), focus: '60% 0%' },
+  { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'Co-Founder',
+    line: 'Associate Director of the Neural Engineering and Precision Surgery Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
+    image: asset('/yoonbae-oh.jpg'), focus: '65% 0%' },
 ];
 
 /**
@@ -42,7 +52,7 @@ export default function WhoWeAre() {
     description:
       'NaviNetics makes medical devices that change lives, by listening to patients and physicians '
       + 'and translating those conversations into safe, effective and high-quality device '
-      + 'offerings. Out of the Neural Engineering Laboratories at Mayo Clinic.',
+      + 'offerings. Out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic.',
   });
 
   const shipping = products.filter((p) => !isPlaceholder(p));
@@ -52,7 +62,7 @@ export default function WhoWeAre() {
       {/* "Safe, effective and high-quality" is NaviNetics' own established
           wording — it is on navinetics.com and has been since 2021. It was
           briefly removed here on the reasoning that "safe and effective" is
-          FDA's phrase for a device it has authorised. NaviNetics reviewed that
+          FDA's phrase for a device it has authorized. NaviNetics reviewed that
           and kept the wording, which is their call to make: it is their claim,
           on their products, and the D1 is in fact cleared. Restored verbatim so
           both sites say the same thing. */}
@@ -91,7 +101,7 @@ export default function WhoWeAre() {
         <Section wide band>
           <SectionHead
             eyebrow="Where this came from"
-            title="A neurosurgeon and an engineer, in the same building as the operating theatre."
+            title="A neurosurgeon and an engineer, in the same building as the operating theater."
             lead="NaviNetics did not start as a company. It started as instruments built inside a
               neurosurgery department, for the people using them down the corridor."
           />
@@ -107,7 +117,9 @@ export default function WhoWeAre() {
           eyebrow="The founders"
           title="Neurosurgery, engineering, and device design."
         />
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Four founders: 2×2 from sm, one row from xl. Three columns would
+            strand the fourth card alone on a second row. */}
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
           {FOUNDERS.map((f, i) => (
             <Reveal key={f.name} delay={i * 0.06}>
               <Link
@@ -123,6 +135,7 @@ export default function WhoWeAre() {
                     src={f.image}
                     alt={`Portrait of ${f.name}`}
                     loading="lazy"
+                    style={{ objectPosition: f.focus }}
                     className="h-full w-full scale-105 object-cover object-top transition-transform
                       duration-[1200ms] ease-out group-hover/f:scale-100"
                   />
@@ -186,7 +199,7 @@ export default function WhoWeAre() {
           <h2 className="text-d2">Come and find us.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
             We are in downtown Rochester, Minnesota — next door to one of the world's leading
-            medical centres, which is not incidental to how the work gets done.
+            medical centers, which is not incidental to how the work gets done.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button to="/company/community" size="lg" arrow>

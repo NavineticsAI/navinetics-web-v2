@@ -22,7 +22,7 @@ export function Rule({ className, ...props }) {
 }
 
 /**
- * Concentric arcs converging on a point — the iso-center of an arc-centred
+ * Concentric arcs converging on a point — the iso-center of an arc-centered
  * frame. A background watermark, never a foreground element. Keep opacity
  * between 15% and 25%.
  */

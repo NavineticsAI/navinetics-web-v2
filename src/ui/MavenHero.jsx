@@ -27,7 +27,7 @@ import { Eyebrow } from './Section.jsx';
  * human rate.
  *
  * THE BAY IS DARK IN BOTH THEMES. The unit's artwork is a white cutout and the
- * field is a full-luminance colour scale; on a pale ground the first vanishes
+ * field is a full-luminance color scale; on a pale ground the first vanishes
  * and the second shouts. This is a lit object on a bench, the same call the
  * workstation on /technology/navinetics-ai makes.
  */
@@ -75,6 +75,8 @@ export function MavenHero({ product }) {
     let t0 = null;
     let lastTheta = 0;
     let visible = true;
+    const MIN_DT = 1000 / 30;
+    let lastPaint = 0;
 
     const size = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -159,7 +161,7 @@ export function MavenHero({ product }) {
          applies — and the copy fade in particular MUST NOT run: at p = 1 it
          resolves to opacity 0, which would hide the headline outright. */
       if (stageRef.current && !reduced) {
-        /* The centring is Tailwind's `translate: -50% -50%`, a separate
+        /* The centering is Tailwind's `translate: -50% -50%`, a separate
            property from `transform`, so writing transform here composes with
            it instead of destroying it. The shift right is what keeps the ring
            clear of the headline while the headline is still there. */
@@ -201,10 +203,29 @@ export function MavenHero({ product }) {
     };
 
     const frame = (now) => {
+      raf = requestAnimationFrame(frame);
       if (t0 === null) t0 = now;
+
+      /* Do nothing while the opening is off screen.
+         ───────────────────────────────────────────────────────────────────
+         `visible` used to guard only the canvas, one line inside paint().
+         Everything above it — ten style writes across five elements — ran
+         every frame for as long as the page was open, including the whole way
+         down a long page where none of it can be seen. Each write dirties
+         style and layout, and that cost lands on the same thread the blocks
+         below need in order to appear. */
+      if (!visible || document.hidden) return;
+
+      /* Capped at 30fps. This loop was uncapped, so on a 120Hz phone it
+         repainted the voltammogram field and rewrote ten style properties a
+         hundred and twenty times a second. The field is a slow diffusion and
+         the ring is a slow unwind; neither resolves above 30. Measured at
+         98.7% of a throttled CPU before this cap. */
+      if (now - lastPaint < MIN_DT) return;
+      lastPaint = now;
+
       const p = clamp01((window.scrollY - hostTop) / travel);
       paint(p, (now - t0) / 1000);
-      raf = requestAnimationFrame(frame);
     };
 
     size();
@@ -215,7 +236,11 @@ export function MavenHero({ product }) {
       raf = requestAnimationFrame(frame);
     }
 
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    /* A margin, because the loop now stops entirely when this goes false. With
+       no margin the observer flips exactly as the edge crosses, and scrolling
+       back up can show one stale frame before the next lands. */
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; },
+      { rootMargin: '150px' });
     io.observe(host);
     const onResize = () => { size(); if (reduced) paint(1, 4); };
     window.addEventListener('resize', onResize);
@@ -263,6 +288,31 @@ export function MavenHero({ product }) {
               + 'rgb(3 16 26/.06) 52%, rgb(3 16 26/.4) 100%)',
           }}
         />
+
+        {/* PRE-CLINICAL RESEARCH, on the ring itself.
+            ─────────────────────────────────────────────────────────────
+            NaviNetics asked for a stamp here. It earns its place beyond the
+            instruction: this hero looks like a cleared clinical instrument,
+            and a screenshot of it passed on without context could be taken
+            for one. The page states the status in prose further down, but a
+            reader who only sees the ring never gets there.
+
+            Set as a typographic stamp rather than a badge or seal — the same
+            reasoning as the regulatory line on the NRSS page: a seal implies
+            an approval that has not been granted. This one carries no
+            regulatory meaning at all, which is exactly the point. */}
+        <div
+          /* Under the ring, not above it — at the top of the section it sat
+             behind the fixed navbar and was unreadable. Here it reads as a
+             label on the instrument, which is what it is. */
+          className="pointer-events-none absolute left-1/2 top-[78%] z-[3] -translate-x-1/2
+            rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
+            sm:top-[80%]"
+        >
+          <span className="font-data text-[0.625rem] uppercase tracking-[0.16em] text-sg-300">
+            Pre-clinical research
+          </span>
+        </div>
 
         {/* ── the assembly ─────────────────────────────────────────────── */}
         <div
@@ -367,7 +417,7 @@ export function MavenHero({ product }) {
           </svg>
 
           {/* The unit. A DOM image rather than an SVG one so it can take a real
-              perspective transform, and so it is never rasterised at the
+              perspective transform, and so it is never rasterized at the
               viewBox's scale. */}
           <img
             ref={deviceRef}
@@ -441,7 +491,7 @@ export function MavenHero({ product }) {
               <Eyebrow className="!text-sg-300">{`Products — ${product.shortName}`}</Eyebrow>
               <h1 className="mt-5 whitespace-pre-line text-d1 !tracking-[-0.045em]">{product.tagline}</h1>
               {/* The name is an acronym and the deck expands it, so the page
-                  does too — the initial of each word set in the brand colour,
+                  does too — the initial of each word set in the brand color,
                   which is the only place on the site type is coloured mid-word
                   and is worth it here because the word IS the product. */}
               <p className="mt-6 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-nn-200">

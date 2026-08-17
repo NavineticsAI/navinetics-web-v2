@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getProduct } from '../data/products.js';
 import { art, getModel, lineup, models, motionsOf, strengths } from '../data/orTables.js';
@@ -19,7 +18,7 @@ const BUILDERS = { beam: TABLE_SCENES.makeBeam, envelope: TABLE_SCENES.makeEnvel
  * the page is built and the fifth is still stated as missing rather than
  * quietly dropped.
  *
- * The centre of it is the motion explorer: pick one of the five specified
+ * The center of it is the motion explorer: pick one of the five specified
  * models and the drawing performs the motions that model's own specification
  * gives it, through the ranges it gives them. A CXR-701 offers three buttons
  * and a CXR-70S Tr offers five, because that is what the two tables say — the
@@ -38,8 +37,8 @@ export default function SurgicalTables() {
   usePageMeta({
     title: 'Carbon Fiber Surgical Tables',
     description:
-      'Carbon-fibre operating tables for imaging-guided procedures — a range from one to six '
-      + 'motions, built so the table stays out of the picture.',
+      'Carbon-fiber operating tables for imaging-guided procedures — a range from one to six '
+      + 'motions, built so the imaging sees the anatomy and not the table.',
   });
 
   return (
@@ -54,7 +53,7 @@ export default function SurgicalTables() {
       >
         <img
           src={art.table}
-          alt="A carbon-fibre operating table, seen from the side"
+          alt="A carbon-fiber operating table, seen from the side"
           width={1500}
           height={571}
           className="mt-10 block h-auto w-full max-w-2xl"
@@ -68,9 +67,9 @@ export default function SurgicalTables() {
         ground="light"
         tone="ephys"
         eyebrow="Radiolucency"
-        title={'Stay out of\nthe picture.'}
+        title={'Clear of\nthe image.'}
         lead="Everything between the source and the detector is in the image, whether you wanted it
-          there or not. Carbon fibre is far less absorbing than the steel or aluminium a table
+          there or not. Carbon fiber is far less absorbing than the steel or aluminium a table
           would otherwise be built from, so the structure holding the patient up contributes very
           little to what comes back."
         points={[
@@ -81,7 +80,7 @@ export default function SurgicalTables() {
           },
           {
             label: 'Lightweight, for the same reason.',
-            body: 'The property that makes carbon fibre transparent to X-rays is the same one '
+            body: 'The property that makes carbon fiber transparent to X-rays is the same one '
               + 'that makes it light: there is not much there to absorb anything.',
           },
           /* The absent radiolucency figure is no longer explained to the
@@ -90,14 +89,61 @@ export default function SurgicalTables() {
              narrate its own restraint. */
         ]}
         meta={[
-          { label: 'Top', value: 'Carbon fibre' },
+          { label: 'Top', value: 'Carbon fiber' },
           { label: 'In the beam', value: 'Always' },
         ]}
         figure={{
           src: art.tableSide, w: 1400, h: 672,
-          alt: 'A carbon-fibre table in side elevation, its top cantilevered clear of the column '
+          alt: 'A carbon-fiber table in side elevation, its top cantilevered clear of the column '
             + 'so nothing but carbon sits over the base.',
           caption: 'The top, cantilevered clear of the column',
+        }}
+      />
+
+      {/* MOTION IS EXPLAINED BEFORE THE MODELS ARE OFFERED.
+          ─────────────────────────────────────────────────────────────────
+          These two sections used to run the other way round, so the reader was
+          asked to choose between FLOAT 3-MOTION and FLOAT + TRENDELENBURG one
+          section before float and Trendelenburg were defined, and before the
+          page said the range runs from one motion to six. It was the clearest
+          case on the site of information arriving after the decision it was
+          needed for. */}
+      <ScienceBand
+        builders={BUILDERS}
+        scene="envelope"
+        ground="light"
+        tone="soft"
+        eyebrow="Motion"
+        title={'Bring the\nanatomy to\nthe beam.'}
+        lead="A C-arm is heavy, sterile-draped and awkward to reposition mid-procedure. A table that
+          floats, slides and tilts lets the anatomy be brought to the beam instead — which is why
+          the range runs from one motion up to six."
+        points={[
+          {
+            label: 'Height, on every model.',
+            body: 'The one motion every table in the range has, and the one the imaging chain is '
+              + 'set up around.',
+          },
+          {
+            label: 'Float is two travels at once.',
+            body: 'The top moves in X and Y over the column, so a target can be centered without '
+              + 'moving the patient or the arm.',
+          },
+          {
+            label: 'Trendelenburg and lateral tilt.',
+            body: 'Where a model has them, the specification states the angle each way, and the '
+              + 'drawing above is limited to exactly that.',
+          },
+        ]}
+        meta={[
+          { label: 'Range', value: '1 to 6 motions' },
+          { label: 'Specified here', value: '5 models' },
+        ]}
+        figure={{
+          src: art.tableMotion, w: 1400, h: 856,
+          alt: 'The same table photographed with its tilt positions ghosted over one another, '
+            + 'showing the arc the top sweeps through.',
+          caption: 'The tilt positions, superimposed',
         }}
       />
 
@@ -152,52 +198,22 @@ export default function SurgicalTables() {
       </Section>
 
       {/* ── motion ─────────────────────────────────────────────────────────── */}
-      <ScienceBand
-        builders={BUILDERS}
-        scene="envelope"
-        ground="light"
-        tone="soft"
-        eyebrow="Motion"
-        title={'Bring the\nanatomy to\nthe beam.'}
-        lead="A C-arm is heavy, sterile-draped and awkward to reposition mid-procedure. A table that
-          floats, slides and tilts lets the anatomy be brought to the beam instead — which is why
-          the range runs from one motion up to six."
-        points={[
-          {
-            label: 'Height, on every model.',
-            body: 'The one motion every table in the range has, and the one the imaging chain is '
-              + 'set up around.',
-          },
-          {
-            label: 'Float is two travels at once.',
-            body: 'The top moves in X and Y over the column, so a target can be centred without '
-              + 'moving the patient or the arm.',
-          },
-          {
-            label: 'Trendelenburg and lateral tilt.',
-            body: 'Where a model has them, the specification states the angle each way, and the '
-              + 'drawing above is limited to exactly that.',
-          },
-        ]}
-        meta={[
-          { label: 'Range', value: '1 to 6 motions' },
-          { label: 'Specified here', value: '5 models' },
-        ]}
-        figure={{
-          src: art.tableMotion, w: 1400, h: 856,
-          alt: 'The same table photographed with its tilt positions ghosted over one another, '
-            + 'showing the arc the top sweeps through.',
-          caption: 'The tilt positions, superimposed',
-        }}
-      />
-
       {/* ── the rest of the range ──────────────────────────────────────────── */}
       <Section wide band>
+        {/* Title was "Premium, and made to order." Both words were positioning
+            rather than fact, and neither is substantiated anywhere.
+
+            The lead was: "Named in the range sheet without a specification
+            behind them, so they are named here the same way — and nothing is
+            claimed about any of them." Two faults in one sentence. It cites the
+            range sheet, which the reader has never seen and cannot consult. And
+            "nothing is claimed about any of them" is our editorial process,
+            published — honest internally, but it reads as a company hedging
+            about its own catalogue. Same restraint, stated as an offer. */}
         <SectionHead
           eyebrow="Also in the line-up"
-          title="Premium, and made to order."
-          lead="Named in the range sheet without a specification behind them, so they are named here
-            the same way — and nothing is claimed about any of them."
+          title="The rest of the range."
+          lead="Five models are specified in full above. Ask us for the specification on any of these."
         />
         <div className="mt-10 grid gap-8 md:grid-cols-2">
           {lineup.map((g) => (
@@ -252,13 +268,8 @@ export default function SurgicalTables() {
               Where they come from
             </Button>
           </div>
-          <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-            Built by our Korean subsidiary — see{' '}
-            <Link to="/company/partners" className="text-action underline-offset-4 hover:underline">
-              NaviNetics Asia
-            </Link>
-            .
-          </p>
+          {/* Footer line removed on instruction. It also named "NaviNetics
+              Asia", which is now presented as CBH — see data/partners.js. */}
         </Reveal>
       </Section>
     </>
@@ -271,7 +282,6 @@ function Specs({ model }) {
     ['Table top', `${model.top.w} × ${model.top.d} mm`],
     ...motionsOf(model).map((m) => [m.label, m.value]),
     ['Table weight', `${model.weight} kg`],
-    ['Load capacity', `${model.load} kg`],
     ['Mattress', model.mattress],
     ['Control', model.control],
   ];

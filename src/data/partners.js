@@ -1,8 +1,5 @@
-import abbott from '../assets/partners/abbott.webp';
 import paragon from '../assets/partners/paragon-care.webp';
-import lituo from '../assets/partners/lituo-medical.webp';
-import naviAsia from '../assets/partners/navinetics-asia.webp';
-import elim from '../assets/partners/elim-dmp.webp';
+import cbh from '../assets/partners/cbh.webp';
 import delta from '../assets/partners/delta-medical.webp';
 import naviLogo from '../assets/logo.png';
 
@@ -24,26 +21,26 @@ import naviLogo from '../assets/logo.png';
  *   · The export-growth narrative. It is an investor argument, and this page
  *     answers a different question: who can supply a system where.
  *
- * Both of the open questions have since been answered by NaviNetics:
+ * WHAT NAVINETICS REMOVED, 2026-08-12. Abbott, Lituo Medical and ELIM DMP all
+ * came off this page on instruction. Their artwork is still in
+ * src/assets/partners/ and tools/partner-logos.mjs still knows how to build it,
+ * so putting any of them back is a data change here and nothing else.
  *
- *   · ELIM DMP is the manufacturing partner for NaviNetics Asia. The deck had
- *     it as "Partner company" and nothing more, which is how it was listed
- *     until the relationship was confirmed.
- *   · Delta Medical and NaviNetics Asia both have real artwork now — neither
- *     is a drawn placeholder any longer. Every mark on this page is the
- *     organisation's own.
+ * The name/logo mismatch flagged here previously is resolved: South Korea is
+ * presented as CBH, which is what the supplied mark has always shown. The
+ * subsidiary traded as CBH until March 2026 and the company's instruction is to
+ * keep that name, so the name now follows the logo rather than the reverse.
  *
- * ONE THING TO BE SURE OF. The NaviNetics Asia slot currently shows the CBH
- * mark, supplied at 1485×944 — not a NaviNetics Asia mark. That reads as
- * deliberate, since the subsidiary was CBH until March 2026 and may still
- * trade under it. But this page introduces the organisation as "NaviNetics
- * Asia", so it is a name and a logo that do not match. If the intent is that
- * South Korea is presented as CBH, the name should follow the logo; if a
- * NaviNetics Asia mark exists, it should replace the file. Either is one
- * change. See tools/partner-logos.mjs.
+ * China, Taiwan and Singapore are separate territories with no organization named
+ * yet — see `note` on each. "Greater China & Singapore" grouped all three under
+ * one distributor; with that distributor gone the grouping had nothing holding
+ * it together, so each stands on its own.
  *
  * The `id` of each territory must match the order in tools/world-dots.mjs —
- * that is what ties a record to the dots the globe tints for it.
+ * that is what ties a record to the dots the globe tints for it. Both files
+ * were changed together and the dot field was rebaked; Singapore is smaller
+ * than one dot at 1.5° and bakes to zero, which is why it carries a `sites`
+ * marker instead.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -56,25 +53,24 @@ export const territories = [
     label: 'United States',
     anchor: [39.5, -98.5],
     home: true,
-    summary: 'Direct from Rochester, with Abbott carrying distribution.',
+    /* Was "Direct from Rochester, with Abbott carrying distribution." Abbott
+       came off the list and what was left read as a shipping origin rather than
+       a sales model. This says the thing the row is actually for: who sells
+       into this territory. */
+    summary: 'Sold direct by NaviNetics.',
     orgs: [
       {
-        /* Served from public/ rather than imported: it is the same file the
-           navbar uses, and one copy cannot drift from the other. */
+        /* `self` makes the tile draw the <Logo> lockup — the same component the
+           navbar and the footer use — instead of the flat PNG. `logo` stays as
+           the fallback for anything that renders a mark without going through
+           <Mark>. */
+        self: true,
         logo: naviLogo,
         name: 'NaviNetics, Inc.',
         role: 'Headquarters',
         body:
           '206 S Broadway, Suite 700, Rochester, Minnesota — the company itself, and where the '
           + 'systems are designed.',
-      },
-      {
-        logo: abbott,
-        name: 'Abbott',
-        role: 'Distribution',
-        body:
-          'Distribution across the United States through Abbott’s established network and sales '
-          + 'infrastructure.',
       },
     ],
     cover: [['United States', 1]],
@@ -83,15 +79,15 @@ export const territories = [
     id: 'sa',
     label: 'South America',
     anchor: [-10.5, -52],
-    summary: 'Brazil as the primary market, the rest of the continent behind it.',
+    summary: 'Brazil first, then the rest of the continent.',
     orgs: [
       {
         logo: delta,
         name: 'Delta Medical',
         role: 'Distribution',
         body:
-          'Distribution across South America, with Brazil as the primary market and the remaining '
-          + 'countries served secondarily.',
+          'Distribution across South America, led by Brazil and reaching the rest of the '
+          + 'continent.',
       },
     ],
     cover: [
@@ -101,24 +97,13 @@ export const territories = [
   },
   {
     id: 'cn',
-    label: 'Greater China & Singapore',
+    label: 'China',
     anchor: [34, 104],
-    summary: 'Lituo Medical’s local network across three markets.',
-    orgs: [
-      {
-        logo: lituo,
-        name: 'Lituo Medical 丽拓生物',
-        role: 'Distribution',
-        body:
-          'Distribution through Lituo Medical’s local network in China, extending to Taiwan and '
-          + 'Singapore.',
-      },
-    ],
-    cover: [['China', 1], ['Taiwan', 1], ['Singapore', 1]],
-    /* Both are smaller than one dot at globe scale, so they carry a point
-       marker rather than a tinted region. Drawing them as areas would mean
-       drawing area that is not there. */
-    sites: [[23.7, 121, 'Taiwan'], [1.35, 103.8, 'Singapore']],
+    summary: 'A market we cover. The partner is being confirmed.',
+    orgs: [],
+    note: 'NaviNetics is naming the partner or collaborator for this market. '
+      + 'It will be listed here once it is confirmed.',
+    cover: [['China', 1]],
   },
   {
     id: 'au',
@@ -130,7 +115,7 @@ export const territories = [
         logo: paragon,
         name: 'Paragon Care',
         role: 'Distribution',
-        body: 'Distribution in Australia, and the route into neighbouring markets in the region.',
+        body: 'Distribution in Australia, and the route into neighboring markets.',
       },
     ],
     cover: [['Australia', 1]],
@@ -139,27 +124,87 @@ export const territories = [
     id: 'kr',
     label: 'South Korea',
     anchor: [36.5, 127.9],
-    summary: 'A subsidiary, not a distributor — manufacturing and R&D as well as sales.',
+    /* "Subsidiary" came out at the company's request, here and in the tile
+       below. What the row needs to convey is unchanged and is a fact rather
+       than a corporate structure: this territory does more than sell. */
+    summary: 'Manufacturing and R&D as well as sales.',
     orgs: [
       {
-        logo: naviAsia,
-        name: 'NaviNetics Asia',
-        role: 'Subsidiary',
-        body:
-          'Integrated as a subsidiary in March 2026, formerly CBH. Carries manufacturing, R&D, and '
-          + 'the Asia and Europe sales network.',
-      },
-      {
-        logo: elim,
-        name: 'ELIM DMP',
-        role: 'Manufacturing partner',
-        body: 'Manufacturing partner for NaviNetics Asia. The deck listed it only as a partner '
-          + 'company; NaviNetics confirmed what the relationship is.',
+        logo: cbh,
+        /* Named here, because the carbon tables page says "Built by CBH in South
+           Korea — see our partners" and this page did not contain the letters
+           CBH anywhere. A cross-reference that does not resolve is worse than no
+           cross-reference. */
+        name: 'CBH',
+        role: 'Manufacturing, R&D and sales',
+        body: 'CBH carries manufacturing, R&D, and the Asia and Europe sales network. The carbon '
+          + 'fiber operating tables are built here.',
       },
     ],
     cover: [['South Korea', 1]],
   },
+  {
+    /* Its own territory, no longer folded into a "Greater China" grouping.
+       Smaller than one dot at globe scale, so it carries a point marker rather
+       than a tinted region — drawing it as an area would mean drawing area that
+       is not there. Baked to 0 dots by tools/world-dots.mjs, as expected. */
+    id: 'sg',
+    label: 'Singapore',
+    anchor: [1.35, 103.8],
+    summary: 'A market we cover. The partner is being confirmed.',
+    orgs: [],
+    note: 'NaviNetics is naming the partner or collaborator for this market. '
+      + 'It will be listed here once it is confirmed.',
+    cover: [['Singapore', 1]],
+    sites: [[1.35, 103.8, 'Singapore']],
+  },
+  {
+    /* Taiwan, listed separately for the same reason as Singapore. It bakes to a
+       single dot at 1.5 degrees, so it also carries a point marker rather than
+       relying on a tinted region a reader would struggle to see. */
+    id: 'tw',
+    label: 'Taiwan',
+    anchor: [23.7, 121],
+    summary: 'A market we cover. The partner is being confirmed.',
+    orgs: [],
+    note: 'NaviNetics is naming the partner or collaborator for this market. '
+      + 'It will be listed here once it is confirmed.',
+    cover: [['Taiwan', 1]],
+    sites: [[23.7, 121, 'Taiwan']],
+  },
 ];
 
-/** CSS custom property holding a territory's colour. See :root in index.css. */
+/** CSS custom property holding a territory's color. See :root in index.css. */
 export const territoryVar = (id) => `--terr-${id}`;
+
+/**
+ * Scientific collaborators.
+ *
+ * Supplied by NaviNetics on 2026-08-12, in this order. These are research
+ * relationships, not distribution — which is why they are a separate section
+ * rather than more pins on the globe.
+ *
+ * NO ARTWORK, DELIBERATELY. Each name is set in type on the same plate the
+ * partner marks use, which is what makes them a consistent size: the plate
+ * fixes the height, so nothing depends on ten institutions' logos happening to
+ * have compatible proportions. Adding a real mark later is one `logo` field
+ * here and nothing else — <Mark> already prefers artwork when a record has it.
+ *
+ * Worth knowing before that happens: these are third-party trademarks, and
+ * several of these institutions (Mayo Clinic and Stanford especially) restrict
+ * use of their marks by companies precisely because a logo on a commercial site
+ * reads as endorsement. Written permission is the institution's to give, not
+ * ours to assume.
+ */
+export const collaborators = [
+  { name: 'Mayo Clinic' },
+  { name: 'University of Toronto' },
+  { name: 'University of Texas at El Paso' },
+  { name: 'University of Melbourne' },
+  { name: 'Deakin University' },
+  { name: 'Korea University' },
+  { name: 'Hanyang University' },
+  { name: 'University of Queensland' },
+  { name: 'Stanford University' },
+  { name: 'Samsung Medical Center' },
+];

@@ -28,7 +28,7 @@ import { asset } from '../lib/asset.js';
  * Technology explains HOW things work; Products is WHAT you can buy. They are
  * deliberately different jobs, so these pages stay at platform level and hand
  * off rather than restating:
- *   · deep science      → /resources/education
+ *   · deep science      → rendered into this page, see `teaches`
  *   · evidence          → /resources/publications
  *   · the actual device → the linked product
  *
@@ -57,7 +57,7 @@ export const technologies = [
     eyebrow: 'Technology — Stereotaxy',
     tagline: 'Reaching one point\nfrom any angle.',
     summary:
-      'Arc-centred targeting: three linear degrees of freedom place a target at the focus of an arc, and two rotations set the trajectory to it.',
+      'Arc-centered targeting: three linear degrees of freedom place a target at the focus of an arc, and two rotations set the trajectory to it.',
     hero: asset('/DSC05397-1024x695.jpg'),
     // An arc and the one point every approach along it reaches.
     mark: 'stereotaxy',
@@ -65,20 +65,34 @@ export const technologies = [
     principles: [
       {
         title: 'A coordinate system fixed to the patient',
-        body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy. Without that link there is no way to translate a point on a scan into a point in a person.',
+        body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy. That link is what turns a point on a scan into a point in a person.',
       },
       {
         title: 'Three linear axes, two rotations',
-        body: 'X, Y and Z place the target at the focus — the iso-centre — of the arc. Ring and arc angles then set the approach trajectory to it. Because every trajectory passes through the same focus, the target can be approached from many directions without recomputing it.',
+        // "Collar", not "ring" — the review retired ring terminology, and the
+        // education and software pages already say collar. A surgeon dialling
+        // coordinates needs one word for the axis across the whole site.
+        body: 'X, Y and Z place the target at the focus — the iso-center — of the arc. Collar and arc angles then set the approach trajectory to it. Because every trajectory passes through the same focus, one set of coordinates serves every approach to the target.',
       },
       {
-        title: 'Localisers tie it to the image',
-        body: 'MR and CT localisers, and X-ray reticles, register the imaging volume to the frame so that a planned coordinate and a delivered coordinate are the same thing.',
+        title: 'Localizers tie it to the image',
+        body: 'MR and CT localizers, and X-ray reticles, register the imaging volume to the frame so that a planned coordinate and a delivered coordinate are the same thing.',
       },
     ],
-    appliedIn: ['d1-stereotactic-frame', 'carbon-fiber-surgical-tables'],
+    /* The tables came off this list. It renders as "the devices this technology
+       is built into", and arc-centered stereotactic targeting is not built into
+       a table — the tables are radiolucent, which is a different technology
+       serving the same procedure. A stereotactic surgeon reads the claim as
+       either sloppiness or overreach, and it is the one factual error a
+       specialist is guaranteed to catch. */
+    appliedIn: ['d1-stereotactic-frame'],
+    /* Education topics rendered INTO this page — see pages/Technology.jsx.
+       `stereotaxy` covers localization, the arc-centered principle and the six
+       numbers, which is exactly what this platform is, and it did it better
+       than the three principles above ever did. The other four topics are
+       neurochemistry and belong to /technology/neuromodulation. */
+    teaches: ['stereotaxy'],
     readMore: [
-      { label: 'Stereotactic neurosurgery, explained', to: '/resources/education#stereotaxy' },
       { label: 'Published accuracy and validation work', to: '/resources/publications' },
     ],
   },
@@ -119,13 +133,18 @@ export const technologies = [
         body: 'Multiple cyclic square wave voltammetry measures absolute concentration in the extracellular space rather than only phasic change — which matters if you want to compare across sessions or subjects.',
       },
       {
-        title: 'Synchronised with stimulation',
-        body: 'Measurement and stimulation channels are independent but synchronised, so stimulation artefact is minimised at the point of integration instead of being filtered out afterwards.',
+        title: 'Synchronized with stimulation',
+        body: 'Measurement and stimulation channels are independent but synchronized, so stimulation artifact is minimized at the point of integration instead of being filtered out afterwards.',
       },
     ],
     appliedIn: ['maven-neuromodulation'],
+    /* Four of the five education topics land here: what deep brain stimulation
+       is, how a neurochemical is detected at all, and the two recording methods
+       — phasic and absolute — that the papers on this page introduced. Rendered
+       by pages/Neuromodulation.jsx, which has its own layout rather than the
+       template. */
+    teaches: ['dbs', 'neurochemical', 'phasic', 'absolute'],
     readMore: [
-      { label: 'Neurochemical detection, explained', to: '/resources/education#neurochemical' },
       { label: 'Voltammetry method papers', to: '/resources/publications' },
     ],
   },
@@ -137,7 +156,7 @@ export const technologies = [
     eyebrow: 'Technology — Software',
     tagline: 'Software for\nplanning and targeting.',
     summary:
-      'Software work applying machine learning to neuronavigation — including automated landmark localisation, a method the team has already published.',
+      'Software work applying machine learning to neuronavigation — including automated landmark localization, a method the team has already published.',
     hero: asset('/microdrive-image-1024x797.png'),
     /* Alt text is read aloud by a screen reader and shown if the image fails.
        It was "Placeholder image — NaviNetics AI visuals pending", which
@@ -155,7 +174,7 @@ export const technologies = [
      * simulation of the planning workspace, running on a generated head.
      *
      * The one concrete statement here — published work on automated landmark
-     * localisation for neuronavigation — is verifiable. Nothing is claimed
+     * localization for neuronavigation — is verifiable. Nothing is claimed
      * about availability, regulatory status, or performance.
      */
     status: 'in-development',

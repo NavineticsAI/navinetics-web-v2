@@ -87,7 +87,7 @@ export function Timeline({ entries }) {
               data-i={i}
               className="relative grid grid-cols-[4.25rem_1fr] gap-x-6 sm:grid-cols-[5.5rem_1fr] sm:gap-x-9"
             >
-              {/* pr-3.5 keeps the year clear of the node, which is centred on
+              {/* pr-3.5 keeps the year clear of the node, which is centered on
                   this column's right edge — without it the dot sits on the
                   last digit. */}
               <div className="pr-3.5 pt-0.5 text-right">
@@ -99,7 +99,7 @@ export function Timeline({ entries }) {
                 </span>
               </div>
 
-              {/* the node, centred on the rail */}
+              {/* the node, centered on the rail */}
               <span
                 aria-hidden="true"
                 className={`absolute left-[4.25rem] top-[0.55rem] h-2.5 w-2.5 -translate-x-1/2

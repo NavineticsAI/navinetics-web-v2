@@ -41,11 +41,11 @@ function Figure({ title, hint, children, caption }) {
  * Watches the `data-theme` attribute rather than the value from useTheme().
  * ThemeProvider writes that attribute from an effect of its own, and a parent's
  * effect runs AFTER its children's — so reading on the context change samples
- * the OUTGOING theme's colours, and because the dependency never fires again it
+ * the OUTGOING theme's colors, and because the dependency never fires again it
  * keeps them for good. Measured: toggling to dark left two of these canvases
  * byte-for-byte identical, still carrying light-theme ink on a dark page.
  *
- * The attribute is what decides the colours, so the attribute is what to watch.
+ * The attribute is what decides the colors, so the attribute is what to watch.
  */
 function usePalette() {
   const [pal, setPal] = useState(null);
@@ -76,7 +76,7 @@ function usePalette() {
 /**
  * Canvas sized to its box in CSS pixels, redrawn on resize and on palette.
  *
- * Takes an already-memoised painter rather than a function plus a dependency
+ * Takes an already-memoized painter rather than a function plus a dependency
  * array: a hook that forwards someone else's deps cannot be checked, and the
  * checker is right to complain about it.
  */
@@ -157,7 +157,7 @@ function Segmented({ options, value, onChange }) {
   );
 }
 
-/* ══ 02 · arc-centred targeting, in three dimensions ═════════════════════ */
+/* ══ 02 · arc-centered targeting, in three dimensions ═════════════════════ */
 function ArcFigure() {
   const pal = usePalette();
   const reduced = usePrefersReducedMotion();
@@ -219,7 +219,7 @@ function ArcFigure() {
 
   return (
     <Figure
-      title="Arc-centred targeting"
+      title="Arc-centered targeting"
       hint="Drag to turn · move the angles"
       caption="Schematic, and interactive. Whatever the two angles are, the trajectory ends at the same
         point — which is the property the whole instrument is built around."
@@ -230,7 +230,7 @@ function ArcFigure() {
         className="cursor-grab touch-none rounded active:cursor-grabbing focus:outline-none focus-visible:ring-[3px] focus-visible:ring-action-soft"
         role="img"
         tabIndex={0}
-        aria-label="Three-dimensional diagram of an arc-centred stereotactic frame. Every trajectory passes through one focus."
+        aria-label="Three-dimensional diagram of an arc-centered stereotactic frame. Every trajectory passes through one focus."
         onPointerDown={onDown}
         onPointerMove={onMove}
         onPointerUp={onUp}
@@ -273,7 +273,7 @@ function DbsFigure() {
     /* `pointer-events: all` rather than relying on a transparent fill being
        treated as painted. Under the default `visiblePainted`, WebKit does not
        hit-test a fully transparent fill — probed on this figure, the topmost
-       element at the generator's own centre was the <svg>, not the <rect>
+       element at the generator's own center was the <svg>, not the <rect>
        inside it. `all` hit-tests the geometry regardless of paint, which is
        what an invisible hit area needs. */
     style: { pointerEvents: 'all' },
@@ -461,7 +461,7 @@ function RedoxFigure() {
     const ex = w * 0.30, ey = h * 0.52;
     const REACH = 128;
 
-    // the electrode, tapering to the tip the way a pulled fibre does
+    // the electrode, tapering to the tip the way a pulled fiber does
     ctx.strokeStyle = pal.sub; ctx.lineWidth = 4;
     ctx.beginPath(); ctx.moveTo(ex, 8); ctx.lineTo(ex, ey - 26); ctx.stroke();
     ctx.lineWidth = 2.2;
@@ -715,10 +715,10 @@ function CompareFigure() {
   );
 }
 
-/* ══ 02 · the localiser, and the slice it produces ══════════════════════ */
+/* ══ 02 · the localizer, and the slice it produces ══════════════════════ */
 
-/* The localiser ring is horizontal in the world, so it projects to an ellipse.
-   Measured off the render: centre (700, 343), rx 533, ry 147, in its own
+/* The localizer ring is horizontal in the world, so it projects to an ellipse.
+   Measured off the render: center (700, 343), rx 533, ry 147, in its own
    1399×1124 frame. Parallel planes project to the same ellipse translated, so
    sweeping one down the screen sweeps a real axial plane through the head. */
 const RING = { cx: 700, rx: 533, ry: 147 };
@@ -771,7 +771,7 @@ function LocaliserFigure() {
 
   return (
     <Figure
-      title="The localiser, and the slice it produces"
+      title="The localizer, and the slice it produces"
       hint="Scroll"
       caption="The rods cross every axial plane at nine points. Where those nine points land in the
         image is what ties the picture to the frame — which is how a target seen on a scan becomes
@@ -785,7 +785,7 @@ function LocaliserFigure() {
         <div className="relative aspect-[1399/1124] overflow-hidden rounded-md bg-nn-950">
           <img
             src={localiserSrc}
-            alt="A stereotactic localiser mounted around a head phantom, its rods carrying detected fiducial points."
+            alt="A stereotactic localizer mounted around a head phantom, its rods carrying detected fiducial points."
             loading="lazy" width="1399" height="1124"
             className="block h-full w-full object-cover"
           />
@@ -809,7 +809,7 @@ function LocaliserFigure() {
         <div className="aspect-[1399/1124] overflow-hidden rounded-md bg-nn-950">
           <img
             src={sliceSrc}
-            alt="The axial CT slice at that plane, with the nine localiser fiducials around the skull."
+            alt="The axial CT slice at that plane, with the nine localizer fiducials around the skull."
             loading="lazy" width="1280" height="1260"
             className="block h-full w-full object-contain"
             style={{ opacity: 0.12 + land * 0.88, filter: `blur(${(1 - land) * 7}px)` }}
@@ -894,7 +894,7 @@ const FIGURES = {
   dbs: DbsFigure,
   frame: FrameVideo,
   arc: ArcFigure,
-  localiser: LocaliserFigure,
+  localizer: LocaliserFigure,
   redox: RedoxFigure,
   fscv: FscvFigure,
   compare: CompareFigure,

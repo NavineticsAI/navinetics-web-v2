@@ -3,7 +3,7 @@
  *
  * Run with:  node tools/locator-map.mjs
  *
- * Writes src/data/locatorMap.js — Minnesota's border plus its neighbours as
+ * Writes src/data/locatorMap.js — Minnesota's border against the lower 48 as
  * context, simplified and quantised, in plain latitude/longitude.
  *
  * This exists because the page used to hotlink a stock photograph of downtown
@@ -20,9 +20,22 @@ import { dir } from './lib/paths.mjs';
 const ROOT = dir('../', import.meta.url);
 const SRC = 'https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_1_states_provinces.geojson';
 
-/** Minnesota is the subject; the rest are there so it is not a blob in space. */
+/** Minnesota is the subject; the rest of the country is the context. */
 const HOME = 'Minnesota';
-const CONTEXT = ['Wisconsin', 'Iowa', 'South Dakota', 'North Dakota', 'Illinois', 'Michigan', 'Nebraska', 'Missouri'];
+/* The whole lower 48, on NaviNetics' instruction — the map was Minnesota and
+   eight neighbours, which told a reader where Rochester sits in the upper
+   Midwest but not where it sits in the country. Alaska and Hawaii are left out
+   deliberately: at this scale they can only be shown as insets, and an inset
+   costs more than it explains on a locator this size. */
+const CONTEXT = [
+  'Alabama', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware',
+  'District of Columbia', 'Florida', 'Georgia', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+  'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+  'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon',
+  'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas',
+  'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming',
+];
 
 /**
  * Ramer–Douglas–Peucker on an OPEN polyline. A state border at 1:50m carries
@@ -92,7 +105,7 @@ const ringsFor = (name, eps) => {
 };
 
 const home = ringsFor(HOME, 0.02);
-const context = CONTEXT.map((n) => ({ name: n, rings: ringsFor(n, 0.06) }));
+const context = CONTEXT.map((n) => ({ name: n, rings: ringsFor(n, 0.12) }));
 
 const count = (rs) => rs.reduce((a, r) => a + r.length, 0);
 const body = `/**

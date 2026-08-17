@@ -4,7 +4,7 @@ import { getProduct } from '../data/products.js';
 /**
  * The D1 opening: the instrument, and what it is.
  *
- * No scroll behaviour at all. This page went through a rasterised turntable,
+ * No scroll behavior at all. This page went through a rasterized turntable,
  * a traced turntable, and a translate-and-scale arrival, and every one of them
  * put something between the reader and the picture. What is left is the
  * picture: correct at first paint, sharp before anyone touches the wheel, and
@@ -17,10 +17,10 @@ import { getProduct } from '../data/products.js';
  * WHAT IS BEING DRAWN. Not a model — a picture of one. tools/d1-frame.mjs
  * tessellates the assembly CAD to 1.7M triangles and ray traces it: real
  * occlusion from a cosine-weighted hemisphere per pixel, GGX reflections, and
- * an anodised blue measured off NaviNetics' own photographs. No geometry goes
+ * an anodized blue measured off NaviNetics' own photographs. No geometry goes
  * over the wire and no WebGL is needed.
  *
- * NOTHING IS LABELLED, deliberately — see the notice in data/d1.js.
+ * NOTHING IS LABELED, deliberately — see the notice in data/d1.js.
  */
 export function D1Hero() {
   const reg = getProduct('d1-stereotactic-frame')?.regulatory;
@@ -43,9 +43,8 @@ export function D1Hero() {
                and nothing about it should be deferred. */
             fetchPriority="high"
             decoding="async"
-            alt="The D1 stereotactic frame: an anodised blue arc-centred head frame with two curved
-              rails, a targeting stage, and a bare-steel mechanical microdrive rising from its
-              centre."
+            alt="The NRSS: an anodized blue arc-centered head frame with two curved rails, a
+              targeting stage, and a bare-steel mechanical microdrive rising from its center."
             /* Sized by HEIGHT once there is a column to stand in. The render is
                tall and narrow, so capping its width instead puts the wheels
                through the bottom of a laptop viewport. */
@@ -55,13 +54,15 @@ export function D1Hero() {
         </div>
 
         <div className="flex flex-col gap-4">
-          <span className="eyebrow text-sg-300">Products — NaviNetics D1 Stereotactic Frame System</span>
+          <span className="eyebrow text-sg-300">
+            Products — NaviNetics Reusable Stereotactic System (NRSS)
+          </span>
           <h1 className="whitespace-pre-line text-d1">
-            {'Robust. Low complexity.\nRadically comfortable.'}
+            {'Robust. Low complexity.\nComfortable.'}
           </h1>
           <p className="max-w-prose text-lead leading-[1.55] text-nn-200">
-            Arc-centred targeting with a skull anchor key in place of a base ring. Three linear
-            degrees of freedom, two angles of rotation.
+            Arc-centered targeting from a Skull Anchor Key. Three linear degrees of freedom, two
+            angles of rotation.
           </p>
 
           {/*
@@ -89,7 +90,7 @@ export function D1Hero() {
             confirms it. A number is materially stronger than a bare claim: it
             is checkable in the FDA database.
           */}
-          {reg?.status && (
+          {reg?.published && reg.status && (
             /* Not uppercase-transformed, unlike the rest of the site's data
                idiom: 510(k) takes a lowercase k, and rendering it 510(K) is
                the kind of detail a regulatory reader reads as carelessness. */

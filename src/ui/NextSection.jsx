@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { D, EASE_OUT, usePrefersReducedMotion } from '../lib/motion.js';
+import { D, EASE_OUT, revealProps, usePrefersReducedMotion } from '../lib/motion.js';
 import { Eyebrow } from './Section.jsx';
 import { makeNext } from '../lib/nextScene.js';
 
@@ -79,7 +79,11 @@ export function NextSection({ eyebrow, title, lead }) {
   const step = (i) => ({
     initial: reduced ? { opacity: 0 } : { opacity: 0, y: 16 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-80px' },
+    /* Borrowed, not restated. This block needs its own transition for the
+       per-step delay, but the trigger point is not its business — hand-writing
+       -80px here is how this one stayed late-firing after the shared bundle was
+       fixed. */
+    viewport: revealProps.viewport,
     transition: { duration: D.d3, delay: reduced ? 0 : i * 0.08, ease: EASE_OUT },
   });
 

@@ -115,17 +115,20 @@
   --ok: #0f8a72;
   --warn: #b0730c;
   --crit: #c33c40;
-  /* Explicit soft tints rather than /opacity modifiers on var-based colours,
+  /* Explicit soft tints rather than /opacity modifiers on var-based colors,
      so they never depend on the color-mix path resolving. */
   --ok-soft: rgb(15 138 114 / 0.12);
   --warn-soft: rgb(176 115 12 / 0.15);
   --crit-soft: rgb(195 60 64 / 0.12);
   --action-glow: rgb(31 104 144 / 0.1);
+  /* Midpoint of the ambient glow, so `.nn-glow` can draw the falloff as a
+     gradient instead of blurring a disc. See `.nn-glow` for why that matters. */
+  --action-glow-mid: rgb(31 104 144 / 0.055);
 
   /* The light ScienceBand scrim, as three explicit stops.
      ───────────────────────────────────────────────────────────────────────
      These were written inline as rgb(from var(--canvas) r g b / .88) and so
-     on. Relative colour syntax is Safari 16.4+ and Chrome 119+; on iOS 16.3
+     on. Relative color syntax is Safari 16.4+ and Chrome 119+; on iOS 16.3
      and below the whole linear-gradient declaration fails to parse, and the
      band loses its scrim entirely — leaving the copy sitting on the raw
      animation with nothing holding it readable.
@@ -153,22 +156,13 @@
      a blue would read as brand emphasis rather than as a species. */
   --edu-target: #1f9d55;
 
-  /* Logo. The artwork is a mask, so `--logo-ink` is the whole colour of the
-     mark and the wordmark — one flat value, not a gradient. `--logo-lit` is
-     how hard the travelling light hits it, which has to come down on the dark
-     theme because it is lightening a pale fill rather than a deep one.    */
-  /* Imported rather than served from public/: a root-absolute url() is not
-     rewritten for the deployed sub-path, so the mark 404'd everywhere the
-     logo mask is used. A relative url() from src/ Vite resolves and hashes. */
-  --logo-src: url("./assets/logo.png");
-  --logo-ink: #185273;
-  --logo-lit: 0.5;
-  --logo-tint: 0.51;
+  /* No logo tokens. The lockup is an image now, so there is no ink to set —
+     the artwork carries its own two blues, its gradient and its folds.    */
 
   /* The partners globe.
      ─────────────────────────────────────────────────────────────────────────
-     Five territory colours, picked by measuring CIE ΔE rather than by eye.
-     Which pairs need separating is a geography question, not a colour one:
+     Five territory colors, picked by measuring CIE ΔE rather than by eye.
+     Which pairs need separating is a geography question, not a color one:
      the globe shows at most a hemisphere, so China with South Korea and China
      with Australia are the pairs a reader actually has to tell apart, while
      Brazil and China are never on screen together. A first set that looked
@@ -183,6 +177,11 @@
   --terr-cn: #b05c34;
   --terr-au: #2b8560;
   --terr-kr: #74589e;
+  /* Singapore, added when it was split out of the old Greater China grouping.
+     Placed by the same rule as the five above: furthest CIE ΔE from its
+     co-visible neighbours, which in this region is cn (#b05c34) and kr. */
+  --terr-sg: #2f6f77;
+  --terr-tw: #8a5a86;
 
 
   color-scheme: light;
@@ -204,6 +203,7 @@
   --on-action: #04141d;
   --action-soft: rgb(78 154 196 / 0.14);
   --action-glow: rgb(78 154 196 / 0.16);
+  --action-glow-mid: rgb(78 154 196 / 0.088);
 
   /* Status ramp, restated for the dark ground.
      ─────────────────────────────────────────────────────────────────────────
@@ -234,10 +234,6 @@
 
   --edu-target: #43c47e;
 
-  --logo-ink: #82bad9;
-  --logo-lit: 0.3;
-  --logo-tint: 0.43;
-
   /* Same five hues, lifted for a dark ground. The light values sit at 3.6–5.7
      contrast against #f4f7f9; these sit at 6.0–8.2 against #04141d, and the
      worst co-visible separation holds at ΔE 65. */
@@ -246,6 +242,8 @@
   --terr-cn: #d4835a;
   --terr-au: #4bb287;
   --terr-kr: #a48ccb;
+  --terr-sg: #5aa8b2;
+  --terr-tw: #c294bd;
 
 
   color-scheme: dark;
@@ -274,7 +272,7 @@
   --ws-plan-rim: #506fb8; /* the plan card border is blue, not amber */
   --ws-entry-rim: #65a2dd;
   --ws-target-rim: #c7863a;
-  /* Axis colours. Arc and Collar carry the colour of the axis they rotate
+  /* Axis colors. Arc and Collar carry the color of the axis they rotate
      about, which is why Arc reads red like X and Collar green like Y. */
   --ws-ax-x: #d0553f;
   --ws-ax-y: #38a36f;
@@ -290,13 +288,13 @@
 /* ── Partners globe · THEME-INDEPENDENT ────────────────────────────────────
    The globe is a lit sphere on a stand, not a piece of page, so it stays dark
    in both themes — the same call the workstation and the MAVEN bay make. It
-   is also the honest one: the territory colours have to hold five categories
+   is also the honest one: the territory colors have to hold five categories
    apart against the ocean behind them, and the pale sky gave the weakest pair
    3.6 where this one gives 6.0.
 
-   `--terr-*-lit` is the on-dark variant of each territory colour, for the
+   `--terr-*-lit` is the on-dark variant of each territory color, for the
    canvas and the pins. `--terr-*` stays theme-aware because the ledger below
-   the globe is ordinary page, and a colour lifted for a dark sphere falls to
+   the globe is ordinary page, and a color lifted for a dark sphere falls to
    about 2.5 against a pale card. Same five hues either way, so a reader moving
    from the globe to the ledger is still following the same five threads. */
 :root {
@@ -313,6 +311,8 @@
   --terr-cn-lit: #d4835a;
   --terr-au-lit: #4bb287;
   --terr-kr-lit: #a48ccb;
+  --terr-sg-lit: #5aa8b2;
+  --terr-tw-lit: #c294bd;
 }
 
 /* ── MAVEN · THEME-INDEPENDENT ─────────────────────────────────────────────
@@ -325,11 +325,11 @@
    from codes them in the Office 2007 theme accents, whose two greens sit at
    ΔE 29 from each other and whose lightest two fall to 2.0 and 2.4 contrast on
    a pale ground — a palette inherited from a template, not chosen. This set
-   holds the worst pair at ΔE 38 and every colour at 6.0 or better on #04141d.
+   holds the worst pair at ΔE 38 and every color at 6.0 or better on #04141d.
 
    Electrophysiology is deliberately the house blue rather than a fifth hue.
    It is the one domain that is already NaviNetics' own subject, and spending a
-   new colour on it would have pushed one of the other three into the
+   new color on it would have pushed one of the other three into the
    status ramp, where --ok/--warn/--crit have to stay legible. */
 :root {
   --mv-chem: #42bd74;
@@ -348,7 +348,7 @@
   /* The same four on a pale ground. Two of the four bands stand on the page's
      own canvas rather than in the bay, and the values above are lifted for a
      dark room — chem lands at 2.4 on #f4f7f9. These sit at 3.7 to 5.7, which
-     is where a categorical colour used as a graphic has to be. Same hues, so
+     is where a categorical color used as a graphic has to be. Same hues, so
      a reader crossing from a bay band to a light one is still following the
      same four threads. */
   --mv-chem-ink: #1c8a4e;
@@ -462,7 +462,7 @@
   /**
    * THE FRAME. One measure for the whole site, in one place.
    *
-   * Everything that centres content uses this: Section, Hero, the navbar pill,
+   * Everything that centers content uses this: Section, Hero, the navbar pill,
    * the footer, and both scene bands. Replacing a scattered mix of max-w-5xl,
    * max-w-7xl, max-w-4xl and max-w-[96rem] with a single class is what stopped
    * the left edge stepping in and out as you scrolled.
@@ -537,7 +537,7 @@
      frame, not shapes hit-tested inside it — that is the difference between
      something a keyboard can reach and something it cannot. Only the parts
      utilities cannot express live here: the ring pseudo-element, and the
-     `--pc` custom property that carries each territory's colour down from
+     `--pc` custom property that carries each territory's color down from
      the component.                                                        */
   .nn-pin {
     position: absolute;
@@ -561,7 +561,7 @@
     transition: transform 250ms var(--ease-out);
   }
   /* Rochester is the one place on the map that is us rather than a partner,
-     so it gets a second ring instead of a second colour. */
+     so it gets a second ring instead of a second color. */
   .nn-pin-home::after {
     content: "";
     position: absolute;
@@ -589,8 +589,8 @@
       box-shadow 250ms var(--ease-out),
       border-color 250ms var(--ease-out);
   }
-  /* Marks sit on a white plate at their supplied colours. Recolouring another
-     organisation's mark so it survives the dark theme is usually a breach of
+  /* Marks sit on a white plate at their supplied colors. Recolouring another
+     organization's mark so it survives the dark theme is usually a breach of
      their brand guidelines, and Abbott's wordmark is black — it would vanish.
      NOT `.nn-plate`: that one is the product-shot plate further down, and it
      puts mix-blend-multiply on its images, which would eat the white out of
@@ -604,7 +604,7 @@
      The channel nodes are real buttons over the SVG rather than circles
      inside it, the same call as the partners globe: a keyboard can reach a
      button. Only the halo pseudo-element and the `--nc` custom property that
-     carries each domain's colour down from the component are here — the rest
+     carries each domain's color down from the component are here — the rest
      of the node is utilities.
 
      `left`/`top` are set from the ring geometry and are allowed to land
@@ -649,6 +649,36 @@
   .nn-mv-node:hover i,
   .nn-mv-node[aria-pressed="true"] i {
     transform: scale(1.3);
+  }
+
+  /* ── Ambient glow ─────────────────────────────────────────────────────────
+     The soft wash in the corners of every hero, drawn as a gradient rather
+     than as a blurred disc.
+
+     IT WAS `blur-[90px]` ON A SOLID CIRCLE, and it was the most expensive
+     thing on the site. Two of them sit in <Hero>, which nearly every route
+     uses, and a large-radius blur has to be RASTERISED — it is not a cheap
+     compositor effect like opacity or transform.
+
+     Measured in real WebKit with the page idle: 3fps on /, 4.3 on the
+     education topics and 4.3 on /contact. Removing the filter took / to 36fps.
+     At 3fps a frame lands every 400ms and every interaction on the page
+     inherits that wait — which is why a menu button whose handler runs in 1ms
+     still felt frozen, and why blocks appeared late when scrolling.
+
+     A radial gradient paints straight into the layer with no filter step, so
+     it costs nothing to re-composite. The falloff is a three-stop
+     approximation of a Gaussian; on a wash this faint — 0.1 alpha — the
+     difference is not visible, and the boxes in ui/Hero.jsx are sized to match
+     the spread the blur produced. */
+  .nn-glow {
+    border-radius: 50%;
+    background-image: radial-gradient(
+      closest-side,
+      var(--action-glow),
+      var(--action-glow-mid) 48%,
+      transparent 100%
+    );
   }
 
   /* ── Glass ────────────────────────────────────────────────────────────────
@@ -921,208 +951,18 @@
   }
 
   /* ── Logo ─────────────────────────────────────────────────────────────────
-     The artwork is `/logo-378x75-1.png` used as a mask rather than as a
-     picture, so every letterform, weight and space is the file's own and what
-     fills them is one flat colour. Nothing here redraws the logo.
+     Nothing here any more. The lockup used to be this artwork used as a CSS
+     mask, filled with one flat `--logo-ink` and lit by a traveling
+     highlight — about 200 lines, plus four theme tokens. All removed.
 
-     Two pieces — the mark (x 0-95) and the word (x 101-374) — only so the
-     light can run the mark while the word answers separately. Both reach into
-     the five empty columns between them, so neither edge can land part-way
-     across a letter and shave it.
+     A mask reads only the alpha channel, so it discarded the gradient across
+     the ribbon, the fold shading, and the fact that the mark (#196184) and
+     the wordmark (#164f6a) are two different blues. Every placement rendered
+     one flat color that matched neither, and in light mode the footer did
+     not match the navbar.
 
-     Everything is authored against a fixed 375x74 stage that is then scaled,
-     which is what lets the ribbon paths below be written in the file's own
-     pixels instead of being re-derived at every size.                    */
-  .nn-logo {
-    display: block;
-    position: relative;
-    height: calc(var(--h) * 1px);
-    width: calc(var(--h) * 375 / 74 * 1px);
-  }
-  .nn-logo-stage {
-    position: absolute;
-    inset: 0;
-    width: 375px;
-    height: 74px;
-    transform: scale(calc(var(--h) / 74));
-    transform-origin: 0 0;
-  }
-  .nn-logo-piece {
-    position: absolute;
-    top: 0;
-    height: 74px;
-    overflow: hidden;
-    isolation: isolate; /* keeps every blend below inside the logo */
-    background-color: var(--logo-ink);
-    -webkit-mask-image: var(--logo-src);
-    mask-image: var(--logo-src);
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    -webkit-mask-size: 375px 74px;
-    mask-size: 375px 74px;
-    -webkit-mask-position: calc(-1 * var(--ox)) 0;
-    mask-position: calc(-1 * var(--ox)) 0;
-  }
-  .nn-logo-mark {
-    --ox: 0px;
-    left: 0;
-    width: 99px;
-  }
-  .nn-logo-word {
-    --ox: 97px;
-    left: 97px;
-    width: 278px;
-  }
-  /* No mask on the layers: the piece masks its whole subtree. The blend goes
-     on the layer rather than on its child, because a mask makes its own
-     stacking context and a blend inside one has nothing left to blend with. */
-  .nn-logo-lay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    mix-blend-mode: screen;
-  }
-  .nn-logo-lay-hue {
-    mix-blend-mode: hue; /* hue only — never the fill's lightness or saturation */
-  }
-  .nn-logo-fx {
-    position: absolute;
-    top: 0;
-    left: calc(-1 * var(--ox));
-    width: 375px;
-    height: 74px;
-  }
-
-  /* The mark is two ribbon strokes, not one. Each path runs down the middle of
-     its own band — traced off the file, not guessed — so the light holds the
-     band through both folds, and each fades out exactly where its ribbon
-     tapers to a point.                                                   */
-  .nn-logo-run {
-    width: 0;
-    height: 0;
-    left: 0;
-    opacity: 0;
-    offset-rotate: 0deg;
-  }
-  .nn-logo-run::before {
-    content: "";
-    position: absolute;
-    left: -33px;
-    top: -33px;
-    width: 66px;
-    height: 66px;
-    border-radius: 50%;
-    background: radial-gradient(
-      closest-side,
-      rgb(255 255 255 / calc(var(--logo-lit) * 1.7)),
-      rgb(196 234 255 / calc(var(--logo-lit) * 0.8)) 42%,
-      transparent 72%
-    );
-  }
-  .nn-logo-run-1 {
-    offset-path: path(
-      "M2,54C3,52.7 6,48.7 8,46C10,43.3 12,40.8 14,38C16,35.2 18.3,31.7 20,29C21.7,26.3 22.7,24.3 24,22C25.3,19.7 26.5,17 28,15C29.5,13 31.5,11.7 33,10C34.5,8.3 35.5,5.8 37,5C38.5,4.2 40.7,4.2 42,5C43.3,5.8 43.8,8.2 45,10C46.2,11.8 47.5,14 49,16C50.5,18 52.3,20.3 54,22C55.7,23.7 58.2,25.3 59,26"
-    );
-    animation: nn-logo-run-1 8s linear infinite;
-  }
-  .nn-logo-run-2 {
-    offset-path: path(
-      "M32,49C32.7,49.8 34.5,52.2 36,54C37.5,55.8 39.3,58.3 41,60C42.7,61.7 44.3,62.7 46,64C47.7,65.3 49.2,67 51,68C52.8,69 55.2,70.3 57,70C58.8,69.7 60.3,67.5 62,66C63.7,64.5 65.2,63.3 67,61C68.8,58.7 71,55.3 73,52C75,48.7 77.3,44 79,41C80.7,38 81.7,36.2 83,34C84.3,31.8 85.5,29.8 87,28C88.5,26.2 91.2,23.8 92,23"
-    );
-    animation: nn-logo-run-2 8s linear infinite;
-  }
-  .nn-logo-wave {
-    background: linear-gradient(
-      96deg,
-      transparent 33%,
-      rgb(230 247 255 / calc(var(--logo-lit) * 0.85)) 50%,
-      transparent 67%
-    );
-    animation: nn-logo-wave 8s cubic-bezier(0.3, 0, 0.3, 1) infinite;
-  }
-  /* The whole word shifts together. A gradient that merely travels across the
-     letters averages out to no change at all — measured, two degrees. This is
-     seventeen, and it moves hue alone.                                   */
-  .nn-logo-hue {
-    opacity: var(--logo-tint);
-    animation: nn-logo-hue 19s ease-in-out infinite alternate;
-  }
-  @keyframes nn-logo-run-1 {
-    0% {
-      offset-distance: 0%;
-      opacity: 0;
-    }
-    3%,
-    18% {
-      opacity: 1;
-    }
-    22% {
-      offset-distance: 100%;
-      opacity: 0;
-    }
-    100% {
-      offset-distance: 100%;
-      opacity: 0;
-    }
-  }
-  @keyframes nn-logo-run-2 {
-    0%,
-    15% {
-      offset-distance: 0%;
-      opacity: 0;
-    }
-    19%,
-    33% {
-      opacity: 1;
-    }
-    37% {
-      offset-distance: 100%;
-      opacity: 0;
-    }
-    100% {
-      offset-distance: 100%;
-      opacity: 0;
-    }
-  }
-  @keyframes nn-logo-wave {
-    0%,
-    30% {
-      transform: translate3d(-430px, 0, 0);
-    }
-    52%,
-    100% {
-      transform: translate3d(430px, 0, 0);
-    }
-  }
-  @keyframes nn-logo-hue {
-    from {
-      background-color: #37a6ae;
-    }
-    to {
-      background-color: #3767ae;
-    }
-  }
-  /* Explicit rather than relying on the global rule below zeroing the
-     durations and leaving the layers wherever their last keyframe put them. */
-  @media (prefers-reduced-motion: reduce) {
-    .nn-logo-lay {
-      display: none;
-    }
-  }
-  /* Without mask support there is no flat logo to fall back to, so the
-     artwork comes back rather than an empty box.                         */
-  @supports not (mask-image: url("#x")) {
-    .nn-logo-lay {
-      display: none;
-    }
-    .nn-logo-piece {
-      background-color: transparent;
-      background-image: var(--logo-src);
-      background-repeat: no-repeat;
-      background-size: 375px 74px;
-      background-position: calc(-1 * var(--ox)) 0;
-    }
-  }
+     It is an <img> now — src/ui/Logo.jsx — so the color cannot drift from
+     the master. Dark grounds take assets/logo-reversed.png via `reversed`. */
 }
 
 /* ── Reduced motion ──────────────────────────────────────────────────────── */

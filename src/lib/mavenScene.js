@@ -9,7 +9,7 @@
    THE RING
 
    Authored around the origin, so the assembly rotates about (0,0) and nothing
-   has to carry a centre through the maths. The page places it with a viewBox.
+   has to carry a center through the maths. The page places it with a viewBox.
 
    Angles are degrees from twelve o'clock, clockwise, which is how the layout
    was reasoned about on paper — not the atan2 convention. Converting once,
@@ -30,7 +30,7 @@
  * below its own 362px, so there is nothing to gain by going larger.
  */
 export const R = {
-  deviceH: 356, // height of the unit at the centre
+  deviceH: 356, // height of the unit at the center
   bezel: 206, // the hairline immediately outside it
   engrave: 222, // where the domain names are set, inside the band
   arc: 244, // the four domain arcs
@@ -99,21 +99,21 @@ export const sideOf = (deg) => (pt(1, deg)[0] > -0.02 ? 'right' : 'left');
    THE FIELD
 
    A voltammogram, near enough to read as one and no nearer. It carries no
-   axis, no unit and no number, because a labelled plot on a product page is a
+   axis, no unit and no number, because a labeled plot on a product page is a
    claim about what the instrument measured and this one measured nothing —
    see the claims notice in src/data/maven.js.
 
    What it does carry is the shape of the thing: a potential sweep across, scan
-   number down, current in colour, and the vertical striations that a real
+   number down, current in color, and the vertical striations that a real
    sweep leaves behind. As the page settles, the striations fall away and the
    peaks resolve, which is the only editorial idea in it.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /**
- * The colour bar out of src/assets/maven/graph.png, resampled at seventeen
+ * The color bar out of src/assets/maven/graph.png, resampled at seventeen
  * stops. It is the ordinary jet ramp that acquisition software has used for
  * thirty years, and it is here because it is the ramp the customer already
- * reads their own data in — not because a rainbow is a good colour scale.
+ * reads their own data in — not because a rainbow is a good color scale.
  * Low current first.
  */
 const RAMP = [
@@ -156,7 +156,7 @@ const LOBES = [
 const FW = 232;
 const FH = 132;
 
-/** The bay, as the colour everything is pulled toward when the field is a ground. */
+/** The bay, as the color everything is pulled toward when the field is a ground. */
 const BAY = [3, 16, 26];
 
 /**
@@ -190,7 +190,7 @@ const BAY = [3, 16, 26];
  * as emission rather than as a pale sheet laid on top, and it means the
  * curtains brighten where they cross without any ordering to get right.
  *
- * The colours are the ramp's own cool end and one warm, so the aurora belongs
+ * The colors are the ramp's own cool end and one warm, so the aurora belongs
  * to the same plot it is drifting over.
  */
 const CURTAINS = [
@@ -229,9 +229,60 @@ function aurora(ctx, w, h, t, gain) {
   ctx.restore();
 }
 
+/* THE FIELD IS 232 x 132 AND IT USED TO BE REBUILT ENTIRELY, EVERY FRAME.
+   ───────────────────────────────────────────────────────────────────────────
+   30,624 pixels, and for each one an inner loop over the lobes calling
+   Math.exp twice — roughly a quarter of a million exponentials per frame, at
+   up to display rate. On /products/maven-neuromodulation that measured 97% of
+   a throttled CPU with the page sitting still, and isolating it with
+   tools/check-busy-cause.mjs showed the canvas was the entire cost.
+
+   Three of the four terms never needed to be there:
+
+     · THE LOBES depend only on where the pixel is. They are the same on every
+       frame of every session, and they are the expensive part. Computed once,
+       into a Float32Array, at the cost of one field's worth of work.
+     · THE DIVIDER depends only on the row.
+     · THE STRIATION depends on x and t but NOT on y — so it was being
+       recomputed 132 times per frame for the same 232 values.
+
+   What is left per frame is a multiply and an add per pixel, which is what an
+   animated field should have cost in the first place. The output is
+   arithmetically identical; this is not a visual change. */
+const LOBE_FIELD = (() => {
+  const f = new Float32Array(FW * FH);
+  for (let y = 0; y < FH; y++) {
+    const v = y / (FH - 1);
+    for (let x = 0; x < FW; x++) {
+      const u = x / (FW - 1);
+      let s = 0;
+      for (const L of LOBES) {
+        const du = (u - L.u) / L.su;
+        const dv = (v - L.v) / L.sv;
+        s += L.a * Math.exp(-0.5 * (du * du + dv * dv));
+      }
+      f[y * FW + x] = s;
+    }
+  }
+  return f;
+})();
+
+/* The divider. A real run of this plot is two panels with a hairline between
+   them; reproducing it is what stops the field reading as a generic gradient
+   mesh. Row-only, so it is a table of 132. */
+const GAP_ROW = (() => {
+  const g = new Float32Array(FH);
+  for (let y = 0; y < FH; y++) {
+    const v = y / (FH - 1);
+    g[y] = Math.exp(-((v - 0.5) ** 2) / 0.00035);
+  }
+  return g;
+})();
+
 export function makeField({ bias = 0.5, dim = 0, glow = 0 } = {}) {
   const buf = new Uint8ClampedArray(FW * FH * 4);
   const img = new ImageData(buf, FW, FH);
+  const striRow = new Float32Array(FW);
   let tile = null;
 
   return function draw(ctx, w, h, t, p) {
@@ -239,22 +290,18 @@ export function makeField({ bias = 0.5, dim = 0, glow = 0 } = {}) {
     const gain = 0.42 + p * 0.58; // and the peaks come up
     const drift = t * 0.16;
 
+    // Once per frame, not once per row: striation is independent of y.
+    for (let x = 0; x < FW; x++) striRow[x] = striation(x, t) - 0.5;
+
     for (let y = 0; y < FH; y++) {
       const v = y / (FH - 1);
-      /* The divider. A real run of this plot is two panels with a hairline
-         between them; reproducing it is what stops the field reading as a
-         generic gradient mesh. */
-      const gap = Math.exp(-((v - 0.5) ** 2) / 0.00035);
+      const gap = GAP_ROW[y];
+      // Also row-only, and it was inside the x loop.
+      const wob = noise * (0.62 + 0.5 * Math.abs(Math.sin(v * 5 + drift)));
+      const row = y * FW;
       for (let x = 0; x < FW; x++) {
-        const u = x / (FW - 1);
-        let s = 0;
-        for (const L of LOBES) {
-          const du = (u - L.u) / L.su;
-          const dv = (v - L.v) / L.sv;
-          s += L.a * Math.exp(-0.5 * (du * du + dv * dv));
-        }
-        s *= gain;
-        s += (striation(x, t) - 0.5) * noise * (0.62 + 0.5 * Math.abs(Math.sin(v * 5 + drift)));
+        let s = LOBE_FIELD[row + x] * gain;
+        s += striRow[x] * wob;
         s *= 1 - gap * 0.9;
 
         // −1..1 → ramp index
@@ -263,7 +310,7 @@ export function makeField({ bias = 0.5, dim = 0, glow = 0 } = {}) {
         const k = q - i0;
         const a = RAMP[i0];
         const b = RAMP[i0 + 1] || a;
-        const o = (y * FW + x) * 4;
+        const o = (row + x) * 4;
         for (let c = 0; c < 3; c++) {
           const val = a[c] + (b[c] - a[c]) * k;
           buf[o + c] = val + (BAY[c] - val) * dim;

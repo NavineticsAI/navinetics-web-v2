@@ -80,10 +80,10 @@ export default function Careers() {
             <SectionHead
               eyebrow="Open roles"
               level="h1"
-              title="Nothing posted right now."
+              title="No open postings today."
               lead={
-                'Which is not the same as "don\'t write." We hire against the trajectories below ' +
-                'whenever the right person appears — so tell us which one is yours.'
+                'We hire against the six disciplines below whenever the right person appears — ' +
+                'so tell us which one is yours.'
               }
             />
 
@@ -91,9 +91,13 @@ export default function Careers() {
               <div className="overflow-hidden rounded-lg border border-hairline-soft bg-surface">
                 <Rule />
                 <div className="px-8 py-11 text-center">
-                  <h3 className="text-[clamp(1.4rem,2.6vw,1.9rem)]">
+                  {/* h2, not h3. The h1 above is the page's only other heading,
+                      so this jumped a level — and a screen reader announcing the
+                      outline tells the listener they have missed a section.
+                      Size is unchanged; only the tag is. */}
+                  <h2 className="text-[clamp(1.4rem,2.6vw,1.9rem)]">
                     Tell us which angle you'd come in from.
-                  </h3>
+                  </h2>
                   <p className="mx-auto mt-3 max-w-[52ch] leading-relaxed text-ink-2">
                     One paragraph on what you'd want to own here, and something you've built or
                     published. No cover letter. It goes to the founders, not a portal.
@@ -127,7 +131,7 @@ export default function Careers() {
       </Section>
 
       {/* ── 2 · Careers at NaviNetics ──────────────────────────────────────
-          Arc-centred stereotaxy reaches one point from many angles. So does the
+          Arc-centered stereotaxy reaches one point from many angles. So does the
           team. The diagram is the company's own geometry, used as an org chart.
           Currently hidden — see SHOW_DISCIPLINE_DIAGRAM above. */}
       {SHOW_DISCIPLINE_DIAGRAM && (

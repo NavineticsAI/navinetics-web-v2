@@ -49,7 +49,21 @@ export const stagger = (gap = 0.06, delay = 0) => ({
 export const revealProps = {
   initial: 'hidden',
   whileInView: 'show',
-  viewport: { once: true, margin: '-80px' },
+  /* A PRE-TRIGGER, AND IT USED TO BE THE OPPOSITE.
+     It was `-80px`, which SHRINKS the observer root: a block had to travel 80px
+     past the edge of the screen before it was allowed to start fading, and then
+     took another 420ms to arrive. Reported from a phone as the header loading
+     but "the rest of the content once we scroll takes a bit to load" — which is
+     exactly what it was, since a thumb-flick covers a screen height in a few
+     hundred milliseconds and the reader outruns the animation.
+
+     A positive margin GROWS the root, so the reveal starts while the block is
+     still a screen below the fold and has finished by the time it is looked at.
+     Same variants, same duration, same easing; only the moment it begins moves.
+
+     Asymmetric on purpose, and nothing horizontal — a wide inline margin would
+     arm carousels and side-scrollers nowhere near the screen. */
+  viewport: { once: true, margin: '20% 0px 60% 0px' },
 };
 
 /** Pick the right variant set for the user's motion preference. */

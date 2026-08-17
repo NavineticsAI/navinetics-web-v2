@@ -26,7 +26,7 @@ import lead from '../assets/education/01.2.webp';
  *     rather than about how well they landed.
  *
  * Each entry in `shots` carries either an image or a brief. A brief renders as
- * a labelled placeholder, so the page says what the slot is for rather than
+ * a labeled placeholder, so the page says what the slot is for rather than
  * showing a stand-in that looks like a decision already made.
  * ─────────────────────────────────────────────────────────────────────────────
  */
@@ -102,25 +102,25 @@ export const topics = [
     parts: [
       {
         key: 'A',
-        title: 'Localisation, and why it is needed',
+        title: 'Localization, and why it is needed',
         body:
           'A surgeon cannot see the target. It is centimetres inside the brain, it looks like the tissue '
           + 'around it, and it has to be reached without disturbing what is on the way. So the target is '
           + 'found on a scan instead, and the problem becomes one of transfer: the point is known in the '
           + 'image, and it has to be known in the patient.\n\n'
-          + 'A frame fixed to the skull is what carries that across. A localiser attached to it appears in '
+          + 'A frame fixed to the skull is what carries that across. A localizer attached to it appears in '
           + 'the scan itself — its rods cross every slice at a set of points whose spacing says where in '
           + 'the frame that slice was taken. Find those points in the image and the whole scan is placed in '
           + 'the frame’s coordinates. Historically the frame was a large ring encircling the head; the '
           + 'NaviNetics system fixes near the top of the skull instead, leaving the face clear.',
-        figures: ['localiser'],
+        figures: ['localizer'],
       },
       {
         key: 'B',
-        title: 'The arc-centred principle',
+        title: 'The arc-centered principle',
         body:
-          'Knowing where the target is does not yet say how to reach it. An arc-centred instrument answers '
-          + 'that by putting the target at the centre of a circle: the arc swings around a single fixed '
+          'Knowing where the target is does not yet say how to reach it. An arc-centered instrument answers '
+          + 'that by putting the target at the center of a circle: the arc swings around a single fixed '
           + 'point, and anything carried on the arc points at that point from wherever it sits.\n\n'
           + 'The consequence is the useful part. The approach can be moved — around a vessel, around '
           + 'eloquent cortex, away from a sulcus — and the target does not move with it. One target, many '
@@ -147,7 +147,7 @@ export const topics = [
       },
     ],
     deep: {
-      label: 'How the localiser fixes a slice in space',
+      label: 'How the localizer fixes a slice in space',
       body:
         'The rods are arranged so that each panel presents two uprights and one diagonal. A plane cuts the '
         + 'uprights at a fixed separation and the diagonal somewhere between them, and where it cuts the '
@@ -156,7 +156,7 @@ export const topics = [
         + 'carries enough information to place itself in the frame without any assumption about how the '
         + 'patient was lying.',
     },
-    /* No image slots. Between the localiser pair, the interactive arc and the
+    /* No image slots. Between the localizer pair, the interactive arc and the
        video of the instrument turning, this topic is the best illustrated on
        the page already. */
   },
@@ -202,7 +202,7 @@ export const topics = [
     definition: 'Catching the fast release — how much the concentration changed, in fractions of a second.',
     body:
       'In fast-scan cyclic voltammetry the electrode’s potential is swept up and back down again in a '
-      + 'triangle, repeatedly, many times a second. On the way up, dopamine at the surface is oxidised; on '
+      + 'triangle, repeatedly, many times a second. On the way up, dopamine at the surface is oxidized; on '
       + 'the way down, the product is reduced back. Plot the current against the potential rather than '
       + 'against time and you get a cyclic voltammogram, whose shape identifies the molecule and whose '
       + 'height tracks how much of it arrived.',
@@ -238,7 +238,7 @@ export const topics = [
       'Multiple cyclic square wave voltammetry measures the absolute concentration of a neurochemical in '
       + 'the extracellular space. Instead of a smooth triangle it applies square waveforms, together with a '
       + 'delayed holding period that controls how much analyte gathers on the electrode surface before each '
-      + 'measurement. Modelling the capacitive current, rather than subtracting a neighbouring sweep, is '
+      + 'measurement. Modeling the capacitive current, rather than subtracting a neighboring sweep, is '
       + 'what leaves the baseline intact.',
     figures: ['compare'],
     keys: [
@@ -255,7 +255,7 @@ export const topics = [
     deep: {
       label: 'How the baseline survives',
       body:
-        'Dynamic background subtraction together with capacitive current modelling removes the large '
+        'Dynamic background subtraction together with capacitive current modeling removes the large '
         + 'capacitive background without removing the signal that sits underneath it, which is what allows '
         + 'basal neurotransmitter concentrations to be measured rather than only deviations from them.',
     },

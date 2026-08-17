@@ -1,13 +1,12 @@
 import { Link } from 'react-router-dom';
-import { cn } from '../lib/cn.js';
 import { usePageMeta } from '../lib/meta.js';
+import { RotationInset } from '../ui/RotationInset.jsx';
 import { isPlaceholder, products } from '../data/products.js';
 import { publications } from '../data/publications.js';
 import {
   Button,
   Card,
   Hero,
-  Lens,
   LinkAction,
   ProductPlate,
   Reveal,
@@ -20,7 +19,7 @@ export default function Home() {
   usePageMeta({
     title: 'Precision stereotactic and neuromodulation devices',
     description:
-      'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering Laboratories at Mayo Clinic.',
+      'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic.',
   });
 
   return (
@@ -37,12 +36,28 @@ export default function Home() {
         size="lg"
         targeting
         eyebrow="NaviNetics"
-        title={'Innovate.\nElevate.'}
-        lead="Stereotactic frames, neuromodulation instruments and carbon-fibre operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic."
+        /* The company slogan, which is what navinetics.com leads with. It
+           replaced "Innovate. Elevate.", which was the rebuild's own line and
+           said less. Set in sentence case rather than the live site's caps: at
+           display size this is the same face every other page heading uses, and
+           caps here would read as a different typographic system. */
+        title={'Targeting the future.\nImproving today.'}
+        /* THE SECOND SENTENCE IS THE THING THAT JOINS THE PRODUCTS.
+           It already existed, at the bottom of the third product page, under
+           the heading "Placed by the same route." — that everything NaviNetics
+           makes serves one act: getting an instrument to a point inside the
+           brain, seeing while you do it, and knowing what happened there.
+           Without it the site tells three separate stories and never says why
+           one company makes a frame, a table and a recording instrument.
+           It claims nothing new: every clause is already true on its own page. */
+        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic. One route to a target: plan it, see through the table, reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
+          {/* "Discover the NRSS" used an acronym that is first defined further
+              down this same page, so the primary call to action named a thing
+              the visitor had not been told about yet. */}
           <Button to={products[0].path} size="lg" arrow>
-            Discover the Frame System
+            Discover the frame
           </Button>
           <Button to="/company/who-we-are" size="lg" variant="secondary">
             Who we are
@@ -50,10 +65,10 @@ export default function Home() {
         </div>
       </Hero>
 
-      {/* Product features — alternating, one Lens panel each (budget: 3 max).
-          Products still in development are excluded: they have no metrics to
-          show, and a half-empty feature section reads worse than absence. They
-          still appear in the nav, the footer and product cross-sell. */}
+      {/* Product features — alternating plate and copy. Products still in
+          development are excluded: a half-empty feature section reads worse
+          than absence. They still appear in the nav, the footer and product
+          cross-sell. */}
       {products.filter((p) => !isPlaceholder(p)).map((product, i) => (
         <Section key={product.slug} wide band={i % 2 === 1}>
           <div
@@ -83,43 +98,18 @@ export default function Home() {
                   tone={product.heroTone}
                   className="aspect-square w-full"
                 />
-                {/* One lens panel floating over the plate — the showcase
-                    moment. Guarded because `metrics` is optional on a product
-                    record, and indexing it blindly took the whole home page
-                    down when a record shipped without one: a missing optional
-                    field should cost its own panel, not the site.
+                {/* The floating lens panel that used to sit over each plate is
+                    gone, at NaviNetics' request — "DEGREES OF FREEDOM 3 + 2" on
+                    the NRSS plate and the equivalent first metric on the other
+                    two. The figures are not lost: `metrics` still feeds the
+                    spec table on each product page.
 
-                    The bay plate is dark in BOTH themes, so its lens cannot
-                    use the theme's ink tokens — in light mode they resolve to
-                    near-black on near-black. Hence the fixed pale set. */}
-                {product.metrics?.[0] && (
-                  /* BELOW the plate on a phone, over it from md up.
-                     Overlaid at every size it spanned the full width of a
-                     square plate and covered the bottom third of it — on the
-                     D1 card that is the frame's legs and the head model, i.e.
-                     the product. The floating panel is a desktop showcase
-                     move; on a 375px screen the honest thing is to put the
-                     figure under the picture and let the picture be seen. */
-                  <Lens className="mt-3 rounded-md p-4 md:absolute md:bottom-6 md:left-6 md:right-auto md:mt-0 md:max-w-[18rem] md:p-5">
-                    <span className={cn(
-                      'font-data text-[0.6875rem] uppercase tracking-[0.14em]',
-                      product.heroTone === 'bay' ? 'text-sg-300' : 'text-action',
-                    )}>
-                      {product.metrics[0].label}
-                    </span>
-                    <div className={cn(
-                      'mt-1 text-xl font-semibold tracking-[-0.03em]',
-                      product.heroTone === 'bay' && 'text-nn-50',
-                    )}>
-                      {product.metrics[0].value}
-                    </div>
-                    <div className={cn(
-                      'text-xs',
-                      product.heroTone === 'bay' ? 'text-nn-200' : 'text-ink-3',
-                    )}>
-                      {product.metrics[0].unit}
-                    </div>
-                  </Lens>
+                    In its place, on the NRSS plate only, a drawing of what that
+                    number means — the collar and the arc turning while the
+                    target holds still. Only this product is arc-centred, so
+                    only this plate gets it. */}
+                {product.slug === 'd1-stereotactic-frame' && (
+                  <RotationInset className="hidden md:block" />
                 )}
               </div>
             </Reveal>
@@ -129,23 +119,40 @@ export default function Home() {
 
       {/* Bento */}
       <Section wide>
+        {/* "exceptional accuracy" came out of the lead. It is an adjective
+            standing where a figure belongs, on the one attribute a surgeon
+            checks first, and this site's own rule is that claims which cannot
+            be cited do not appear on it. The accuracy work IS published — two
+            validation papers on /resources/publications — but until a figure
+            from them is stated here, an adjective is the weakest possible
+            stand-in. Workflow and comfort stay: the pages behind them show the
+            mechanism. */}
         <SectionHead
           align="center"
-          eyebrow="Designed for the future"
-          title="Built to improve the whole workflow."
-          lead="Surgical workflow, patient comfort, and exceptional accuracy — from a team that has spent decades in the operating room and the laboratory."
+          eyebrow="How we build"
+          title="Targeting, measurement and access."
+          /* Was "Surgical workflow, patient comfort, and exceptional accuracy".
+             "Exceptional accuracy" is the same comparative claim the note at the
+             top of this file records removing from the hero, and no accuracy
+             figure exists anywhere on the site to support it — data/products.js
+             withholds those on purpose. The eyebrow was "Designed for the
+             future", which said nothing above a section about present work. */
+          lead="Surgical workflow and patient comfort, from a team that has spent decades in the operating room and the laboratory."
         />
 
         <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Reveal className="sm:col-span-2">
             <Card lift className="nn-retic relative h-full min-h-56 overflow-hidden">
-              <span className="eyebrow text-action">Unprecedented access</span>
+              {/* Was "Unprecedented access" — a superlative with no comparator,
+                  removed on instruction. The eyebrow now names the mechanism,
+                  which is the term NaviNetics wants carried. */}
+              <span className="eyebrow text-action">Skull Anchor Key</span>
               <h3 className="mt-3 text-2xl tracking-[-0.03em]">
-                The anchor key replaces the head ring
+                The frame anchors to a key on the skull
               </h3>
               <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                Leaving the patient's face completely unobstructed and giving the surgical team full
-                access to the field.
+                The patient's face stays clear, and the surgical team keeps full access to the
+                field.
               </p>
             </Card>
           </Reveal>
@@ -161,7 +168,7 @@ export default function Home() {
                 </span>
                 <h3 className="mt-3 text-2xl tracking-[-0.03em]">Mayo Clinic roots</h3>
                 <p className="mt-2.5 text-sm leading-relaxed opacity-85">
-                  Born from the Neural Engineering Laboratories, on decades of clinical experience.
+                  Born from the Neural Engineering and Precision Surgery Laboratories, on decades of clinical experience.
                 </p>
               </div>
               <Link
@@ -178,15 +185,21 @@ export default function Home() {
               <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-ink-3">
                 Research
               </span>
+              {/* The number is the one we can stand behind. "100+" was uncited
+                  anywhere on the site and sat directly above a link reading
+                  "Browse 9 selected" — putting an unsupported figure next to a
+                  much smaller supported one, which invites the reader to notice
+                  the gap rather than the record. The nine are cited to their
+                  DOIs, so they are the stronger claim. */}
               <div>
                 <div className="text-5xl font-semibold leading-none tracking-[-0.045em] tabular-nums">
-                  100+
+                  {publications.length}
                 </div>
                 <p className="mt-2 text-sm text-ink-2">
-                  peer-reviewed publications spanning decades
+                  peer-reviewed papers by our founders and their laboratory, each one cited
                 </p>
                 <LinkAction to="/resources/publications" className="mt-4 !text-sm">
-                  Browse {publications.length} selected
+                  Browse {publications.length} papers
                 </LinkAction>
               </div>
             </Card>
@@ -196,14 +209,22 @@ export default function Home() {
             <Card lift className="flex h-full min-h-56 flex-col justify-between">
               <div>
                 <Badge>Neuromodulation</Badge>
-                <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">Closed-loop, one day</h3>
+                {/* "Closed-loop, one day" left a reader unable to tell product
+                    from roadmap, above a link that reads as availability. And the
+                    body claimed artifact "never contaminates the recording" where
+                    data/products.js says "engineered to minimize" it — the home
+                    page was escalating a hedged engineering statement into an
+                    absolute, for a preclinical instrument. */}
+                <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">
+                  Stimulation for pre-clinical research
+                </h3>
                 <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                  Synchronised neurochemical and electrophysiological measurement, engineered so
-                  stimulation artefact never contaminates the recording.
+                  Synchronized neurochemical and electrophysiological measurement, engineered to
+                  minimize stimulation artifact.
                 </p>
               </div>
               <LinkAction to="/products/maven-neuromodulation" className="mt-5">
-                Discover neuromodulation
+                See how MAVEN measures
               </LinkAction>
             </Card>
           </Reveal>
@@ -214,8 +235,7 @@ export default function Home() {
         <Reveal className="flex flex-col items-center gap-6 text-center">
           <h2 className="text-d2">Let's talk.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            Whether you're a surgeon, a researcher, or a prospective colleague — we'd like to hear
-            from you.
+            We would like to hear from you.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button to="/contact" size="lg" arrow>

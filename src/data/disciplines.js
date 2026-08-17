@@ -7,7 +7,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  * Every "problem" line traces to work NaviNetics has published or shipped —
- * the skull anchor key, automated landmark localisation for neuronavigation,
+ * the Skull Anchor Key, automated landmark localization for neuronavigation,
  * ultra-high-field MRI guidance, the compact stereotactic system. Nothing was
  * invented, and no accuracy figures or setup times appear anywhere, since
  * those are regulated marketing claims.
@@ -25,9 +25,14 @@ export const disciplines = [
     group: 'Clinical',
     role: 'Clinical — Neurosurgery',
     title: 'They don’t advise. They operate.',
-    body: 'Our co-founder is a practising neurosurgeon at Mayo Clinic. Clinical input here is not a quarterly advisory call — it is someone who will be holding the device at 7am, telling you the base ring is in the way of their hands. The skull anchor key exists because of exactly that complaint.',
+    /* "the hardware is in the way" was collateral from the base-ring sweep: the
+       original said "the base ring is in the way", and replacing a specific
+       object with a generic one turned a surgeon's concrete complaint into a
+       vague one. The ring cannot come back, so the specificity is restored the
+       other way — by naming what is in the way in that moment, the hands. */
+    body: 'Our co-founder is a practicing neurosurgeon at Mayo Clinic. Clinical input here is not a quarterly advisory call — it is someone who will be holding the device at 7am, telling you there is metal where their hands need to be. The Skull Anchor Key exists because of exactly that complaint.',
     problem:
-      '“The frame is blocking the patient’s face during an awake case. Give me the coordinate system without the head ring.”',
+      '“The frame is blocking the patient’s face during an awake case. Give me the coordinate system without it.”',
     owns: ['Clinical requirements', 'Surgical workflow', 'Cadaver & OR validation', 'Trajectory planning'],
     with: [
       ['MECH', 'Whether a bracket can physically be reached with gloved hands mid-procedure.'],
@@ -41,7 +46,7 @@ export const disciplines = [
     group: 'Clinical',
     role: 'Clinical — Neurology',
     title: 'Deciding what “better” means.',
-    body: 'Movement disorders, target selection, and what happens to the patient afterwards. Neurology sets the outcome everything upstream is optimising for — and it is not millimetres on a bench, it is whether a person can hold a cup of coffee.',
+    body: 'Movement disorders, target selection, and what happens to the patient afterwards. Neurology sets the outcome everything upstream is optimizing for — and it is not millimetres on a bench, it is whether a person can hold a cup of coffee.',
     problem: '“Which target, in which patient — and how would we know afterwards whether we were right?”',
     owns: ['Indications & selection', 'Target planning', 'Outcome measures', 'Clinical follow-up'],
     with: [
@@ -56,10 +61,10 @@ export const disciplines = [
     group: 'Engineering',
     role: 'Engineering — Mechanical',
     title: 'Kinematics you can trust with a skull.',
-    body: 'Arc-centred geometry: three linear degrees of freedom plus ring and arc rotation, all landing on one focus. Every tolerance in that stack is an error at the target. Then it has to survive autoclave cycles and still read true.',
+    body: 'Arc-centered geometry: three linear degrees of freedom plus collar and arc rotation, all landing on one focus. Every tolerance in that stack is an error at the target. Then it has to survive autoclave cycles and still read true.',
     problem:
-      '“Hold the iso-centre through a full reprocessing life, in a device small enough to sit at the surgical field.”',
-    owns: ['Arc-centred kinematics', 'Tolerance stack-up', 'Materials & reprocessing', 'Microdrive & carriers'],
+      '“Hold the iso-center through a full reprocessing life, in a device small enough to sit at the surgical field.”',
+    owns: ['Arc-centered kinematics', 'Tolerance stack-up', 'Materials & reprocessing', 'Microdrive & carriers'],
     with: [
       ['NSX', 'Whether the adjustment is reachable where the surgeon actually stands.'],
       ['SW', 'Where a readout or encoder has to physically live on the mechanism.'],
@@ -72,13 +77,13 @@ export const disciplines = [
     group: 'Engineering',
     role: 'Engineering — Software',
     title: 'Turning images into coordinates.',
-    body: 'Localiser fiducial detection, image registration, trajectory planning, and the interface a surgeon reads while a patient is on the table. Automated landmark localisation for neuronavigation is already published work here — the job is making it reliable enough to trust in an operating room.',
+    body: 'Localizer fiducial detection, image registration, trajectory planning, and the interface a surgeon reads while a patient is on the table. Automated landmark localization for neuronavigation is already published work here — the job is making it reliable enough to trust in an operating room.',
     problem:
-      '“Find the localiser fiducials in an MR series and return a coordinate system a surgeon will stake a trajectory on.”',
+      '“Find the localizer fiducials in an MR series and return a coordinate system a surgeon will stake a trajectory on.”',
     owns: ['Image registration', 'Fiducial & landmark detection', 'Planning & targeting UI', 'Accuracy tooling'],
     with: [
       ['MECH', 'What the instrument can physically deliver to the target.'],
-      ['RES', 'Turning a published method into something that runs in theatre.'],
+      ['RES', 'Turning a published method into something that runs in theater.'],
       ['NEURO', 'An interface that is legible to someone who is not an engineer.'],
     ],
   },
@@ -93,14 +98,14 @@ export const disciplines = [
       '“Show the delivered trajectory lands where the plan said it would — and quantify the error honestly.”',
     owns: ['Accuracy validation', 'Imaging guidance methods', 'Preclinical studies', 'Publication'],
     with: [
-      ['SW', 'Software that can actually run the method in theatre.'],
+      ['SW', 'Software that can actually run the method in theater.'],
       ['REG', 'Evidence recorded so it still stands up years later.'],
       ['NEURO', 'Framing a question a clinician would care about the answer to.'],
     ],
   },
   {
     id: 'reg',
-    short: 'Medical & Reg.',
+    short: 'Regulatory',
     group: 'Regulatory',
     role: 'Medical, Regulatory & Quality',
     title: 'The part that makes it legal to help someone.',
@@ -128,7 +133,7 @@ export const expectations = [
     tone: 'no',
     label: 'Not this',
     title: 'Stay in your lane',
-    body: 'The team is small. A mechanical engineer will end up reading registration error plots; a software engineer will end up in a sterilisation discussion. Narrow specialists get bored.',
+    body: 'The team is small. A mechanical engineer will end up reading registration error plots; a software engineer will end up in a sterilization discussion. Narrow specialists get bored.',
   },
   {
     tone: 'yes',

@@ -59,7 +59,7 @@ export function ProductPlate({ src, alt = '', fit = 'contain', tone = 'plate', c
   );
 }
 
-/** Catalogue card. Driven by a record from data/products.js. */
+/** Catalog card. Driven by a record from data/products.js. */
 export function ProductCard({ product, className }) {
   return (
     <Link

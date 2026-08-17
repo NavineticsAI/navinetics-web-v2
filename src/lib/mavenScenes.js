@@ -27,7 +27,7 @@ const clear = (ctx, w, h) => { ctx.clearRect(0, 0, w, h); };
 /**
  * Two palettes, because two of the four bands stand on a light ground.
  *
- * Not the same colours at a different opacity: ink on paper and light in a
+ * Not the same colors at a different opacity: ink on paper and light in a
  * dark room are different problems. The light set is darker, less saturated
  * and drawn at lower alpha, because a hairline that reads as a whisper on
  * black reads as a scratch on white at the same strength.
@@ -48,7 +48,7 @@ const rgba = (c, a, P) => `rgb(${c} / ${(a * P.k).toFixed(3)})`;
 /* ═══════════════════════════════════════════════════════════════════════════
    Neurochemistry — the sweep
 
-   A triangular potential ramp travelling left to right, leaving behind the
+   A triangular potential ramp traveling left to right, leaving behind the
    response it drew out of the electrode. The waveform is the real shape: hold,
    ramp up, ramp down, hold. What trails it is the current, which peaks where
    the analyte turns over and again, smaller and inverted, on the way back.
@@ -76,7 +76,7 @@ export function makeSweep(light) {
       ctx.stroke();
 
       /* The response. Two peaks, the reverse one smaller and the other way up
-         — which is what a cyclic voltammogram of an oxidising species looks
+         — which is what a cyclic voltammogram of an oxidizing species looks
          like, and the reason the technique can tell species apart at all. */
       ctx.strokeStyle = rgba(P.a, 0.5, P);
       ctx.beginPath();
@@ -235,7 +235,7 @@ export function makeStim(light) {
       ctx.stroke();
     }
 
-    // the electrode, at the centre of it
+    // the electrode, at the center of it
     ctx.fillStyle = rgba(P.c, 0.7, P);
     ctx.beginPath();
     ctx.arc(cx, cy, 2.5, 0, 6.283);

@@ -1,5 +1,5 @@
 /**
- * Arc-centred stereotactic geometry.
+ * Arc-centered stereotactic geometry.
  *
  * The target sits at the focus of the arc; two rotations set the approach to
  * it. Angles are DERIVED from entry and target — that is how the application
@@ -46,7 +46,7 @@ export function anglesFromDir(u) {
 
 /* ── frame coordinates ─────────────────────────────────────────────────────
    Origin at the top posterior superior corner of the frame space, with
-   +X to the patient's LEFT, +Y ANTERIOR, +Z INFERIOR. World is centred on the
+   +X to the patient's LEFT, +Y ANTERIOR, +Z INFERIOR. World is centered on the
    head, so the two differ by a sign and an offset.                        */
 export const FRAME_MID = 100;
 export const toFrame = (p) => [FRAME_MID - p[0], FRAME_MID + p[1], FRAME_MID - p[2]];

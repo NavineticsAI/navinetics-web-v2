@@ -5,9 +5,9 @@ import tableShot from '../assets/or-tables/table.webp';
 import { asset } from '../lib/asset.js';
 
 /**
- * The product catalogue.
+ * The product catalog.
  *
- * One record yields: a card in the catalogue grid, a detail page at
+ * One record yields: a card in the catalog grid, a detail page at
  * /products/:slug, an entry in the Products nav mega-panel, and a column in the
  * comparison grid. Adding a product means adding a record here — no new
  * components, no new routes.
@@ -17,7 +17,7 @@ import { asset } from '../lib/asset.js';
  * without duplicating each other.
  *
  * `status: 'in-development'` renders the ComingSoon treatment instead of the
- * full detail template, so an unfinished product can appear in the catalogue
+ * full detail template, so an unfinished product can appear in the catalog
  * without fabricating specifications for it.
  *
  * ─────────────────────────────────────────────────────────────────────────────
@@ -47,15 +47,18 @@ export const products = [
      * is redundant, and an aka footnote on a product page reads as though the
      * product were renamed to get away from something.
      */
-    name: 'NaviNetics D1 Stereotactic Frame System',
-    shortName: 'D1',
-    family: 'NaviNetics D1 Stereotactic Frame System',
-    /* No `aka`: the full name above carries the old one. Note that Goerss's
-       biography also calls this the "NaviNetics Reusable Stereotactic System",
-       which is deliberately NOT used anywhere — the bio describes a "prototype
-       version", and after the WINCS/MAVEN mix-up below, a name that might
-       belong to an earlier generation does not go on the site without
-       NaviNetics confirming it. */
+    name: 'NaviNetics Reusable Stereotactic System (NRSS)',
+    shortName: 'NRSS',
+    family: 'NaviNetics Reusable Stereotactic System (NRSS)',
+    /* NRSS is the name, confirmed by NaviNetics — the open question recorded
+       here is now closed. It used to read "NaviNetics D1 Stereotactic Frame
+       System", and the note said the NRSS name from Goerss's biography was
+       deliberately not used because the bio describes a "prototype version"
+       and the name might have belonged to an earlier generation.
+
+       "D1" survives as the slug, the route, the page component and the asset
+       folder, so no link or import moves; it is simply not what the product is
+       called on screen any more. Still no `aka` — the full name is the name. */
     /**
      * REGULATORY STATUS.
      *
@@ -73,55 +76,74 @@ export const products = [
      * anywhere by the company, so nothing else is stated here.
      */
     regulatory: {
-      /* "FDA 510(k) cleared", not "FDA cleared · United States".
-         ─────────────────────────────────────────────────────────────────
-         The market tag was redundant: FDA already means the United States,
-         so it added a word without adding information. Naming the pathway
-         instead does add some — 510(k) clearance is a different thing from
-         PMA approval, and a clinical reader knows the difference.
-
-         `market` is kept in the shape, null for now. It earns its place the
-         moment there is a second market to distinguish from, at which point
-         the chip becomes one per market: "US · FDA 510(k) cleared",
-         "EU · CE marked".
-
-         Lowercase k in 510(k) is the standard form; the chip does not
-         uppercase-transform for that reason. */
+      /**
+       * WITHHELD FROM THE SITE ON NAVINETICS' INSTRUCTION, 2026-08-13.
+       *
+       * `published: false` is what hides it. The record is kept intact rather
+       * than deleted because this is the second time it has moved, and the
+       * history matters:
+       *
+       *   · The rebuild originally stated nothing. documentation/.../01-audit
+       *     logged that as a high-severity gap.
+       *   · PR #3 RESTORED it, on the reasoning that navinetics.com publishes
+       *     "an FDA cleared system" today and matching an existing public
+       *     statement is not inventing one. See PR-TICKET.md.
+       *   · NaviNetics has now asked for it off the site again.
+       *
+       * So the live company site and this site currently disagree, and that is
+       * a deliberate company decision rather than an oversight. Flipping
+       * `published` back to true restores the chip, the spec row and the meta
+       * description in one edit — nothing else has to change.
+       *
+       * The statement below is navinetics.com's own wording, kept verbatim so
+       * that restoring it does not mean rewriting it.
+       */
+      published: false,
       status: 'FDA 510(k) cleared',
       market: null,
       number: null,
+      /* Two things came out of this sentence. "FDA cleared" is withheld by
+         decision, and it survived here because this field feeds the generic
+         product template, which no route currently reaches — so the rendered-copy
+         audit could not see it. A withheld claim sitting in data is still a
+         withheld claim; the moment that template gets a route it publishes
+         itself. And "reduce the burden" framed the product by what is wrong
+         with the alternative rather than by what it does. */
       statement:
-        'NaviNetics has developed an FDA cleared system to reduce the burden of establishing '
-        + 'the stereotactic coordinate system for both the surgeon and the patient.',
+        'The coordinate system is set at the surgical field, from a single key fixed to the skull.',
     },
     tag: { label: 'Flagship', tone: 'action' },
     technology: 'stereotactic-devices',
-    tagline: 'Robust. Low complexity.\nRadically comfortable.',
+    tagline: 'Robust. Low complexity.\nComfortable.',
     summary:
-      'Arc-centred targeting with a skull anchor key in place of a base ring. Three linear degrees of freedom, two angles of rotation.',
+      'Arc-centered targeting from a Skull Anchor Key. Three axes to set the target, two rotations to reach it.',
     intro:
-      'Stereotactic neurosurgical procedures are constrained by the costs and limitations of commercially available stereotactic devices. Our challenge was to develop a robust, low complexity stereotactic device that could be used for multiple stereotactic and functional neurosurgical applications including deep brain stimulation (DBS).',
+      'The brief was a device robust enough for daily use and simple enough to trust, working '
+      + 'across stereotactic and functional procedures — deep brain stimulation among them. It was '
+      + 'written with the surgeons who would use it, and around the patient who would wear it.',
     hero: d1Head,
-    heroAlt: 'The D1 frame fitted to an anatomical head model, held clear of the face',
+    heroAlt: 'The NRSS fitted to an anatomical head model, held clear of the face',
     heroTone: 'bay',
     metrics: [
       { label: 'Degrees of freedom', value: '3 + 2', unit: 'linear + rotational' },
-      { label: 'Localisers', value: 'MR · CT', unit: 'plus X-ray reticles' },
-      { label: 'Fixation', value: 'Anchor key', unit: 'percutaneous screws' },
+      { label: 'Localizers', value: 'MR · CT', unit: 'plus X-ray reticles' },
+      { label: 'Fixation', value: 'Skull Anchor Key', unit: 'no frame across the face' },
     ],
     /** Scroll-pinned narrative. Capped at three steps by the template. */
     sequence: [
       {
-        title: 'Anchor Key',
-        body: "In place of the typical head ring of frame-based systems, a small anchor key is affixed to the patient's skull with percutaneous screws.",
+        title: 'Skull Anchor Key',
+        body: "A small Skull Anchor Key is affixed to the patient's skull, and the frame attaches to that.",
       },
       {
         title: 'Patient Comfort',
-        body: 'Designed to be more comfortable for the patient and keeps the facial area completely free from obstruction during awake procedures.',
+        // "more comfortable" is a comparative without a comparator. What the
+        // patient actually experiences is stated instead.
+        body: 'The face stays open, so an awake patient can be spoken with and watched throughout the procedure.',
       },
       {
         title: 'Total Flexibility',
-        body: 'Components can be seamlessly attached and removed from the anchor key, giving the surgical team unprecedented space to work.',
+        body: 'Components attach to and come away from the Skull Anchor Key, so the surgical team keeps the space it needs.',
       },
     ],
     detail: {
@@ -131,21 +153,23 @@ export const products = [
       fit: 'cover',
       paragraphs: [
         'Classified as an arc centered stereotactic device, it provides three linear degrees of freedom (X, Y and Z axes) for target positioning, with two angles of rotation to optimize approach trajectory.',
-        'The compact design places all adjustments in close proximity to the surgical field, improving surgeon experience and reducing the burden of establishing the coordinate system.',
+        'The compact design places all adjustments in close proximity to the surgical field, so the coordinate system is established from where the surgeon is already standing.',
       ],
     },
     specs: [
-      { k: 'Classification', v: 'Arc-centred' },
+      { k: 'Classification', v: 'Arc-centered' },
       { k: 'Linear degrees of freedom', v: '3 — X, Y, Z' },
-      { k: 'Angular rotations', v: '2 — ring, arc' },
-      { k: 'Patient fixation', v: 'Skull anchor key' },
-      { k: 'Imaging localisers', v: 'MR · CT · X-ray' },
+      { k: 'Angular rotations', v: '2 — collar, arc' },
+      { k: 'Patient fixation', v: 'Skull Anchor Key' },
+      { k: 'Imaging localizers', v: 'MR · CT · X-ray' },
       { k: 'Reusable', v: 'Yes' },
-      { k: 'Regulatory status', v: 'FDA 510(k) cleared' },
+      /* No regulatory row — withheld on instruction, see `regulatory` above. */
     ],
     /** Enumerated set the reader traverses completely — numbering is meaningful. */
     highlights: [
-      'Improved patient experience with Skull Anchor Key in place of a base frame.',
+      // "in place of a base frame" was both a comparison and the retired frame
+      // terminology, surviving inside a highlight nobody re-read.
+      'Improved patient experience: the Skull Anchor Key is all the patient wears.',
       'Surgeon ease-of-use & workflow of frame-based systems with compact frameless size.',
       'Intuitive, accessible targeting adjustment of device.',
       'Device size and range optimized for accelerating DBS workflow.',
@@ -158,7 +182,7 @@ export const products = [
      * That page carries TWO lists and they are not the same thing:
      *
      *   · a prose sentence naming seven FUNCTIONAL parts — "a stereotactic
-     *     head frame, the skull anchor key, an MR localizer, a CT Localizer,
+     *     head frame, the Skull Anchor Key, an MR localizer, a CT Localizer,
      *     X-ray reticles, a mechanical microdrive, and DBS lead implantation
      *     accessories". That sentence is used in the page copy.
      *   · a "System Components" list of nine KITS, below. This is the bill of
@@ -186,7 +210,7 @@ export const products = [
       'Screw Kits',
     ],
     gallery: [
-      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The anchor key on a head model', fit: 'contain' },
+      { src: asset('/model-head-clean-750x998-1-451x600.png'), caption: 'The Skull Anchor Key on a head model', fit: 'contain' },
       { src: asset('/DSC05397-1024x695.jpg'), caption: 'The stereotactic frame', fit: 'cover' },
       { src: asset('/microdrive-image-1024x797.png'), caption: 'The mechanical microdrive', fit: 'contain' },
     ],
@@ -210,7 +234,7 @@ export const products = [
      */
     tagline: 'Radiolucent by design.',
     summary:
-      'Carbon fibre tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
+      'Carbon fiber tabletops and supports for imaging-guided procedures, where the table itself must stay out of the image.',
     /**
      * PLACEHOLDER — content pending from NaviNetics.
      * Deliberately no dimensions, load ratings, radiolucency figures or
@@ -219,13 +243,12 @@ export const products = [
      */
     metrics: [
       { label: 'Models specified', value: '5', unit: 'one to six motions' },
-      { label: 'Load capacity', value: '230', unit: 'kg, every model' },
-      { label: 'Table top', value: 'Carbon fibre', unit: 'always in the beam' },
+      { label: 'Table top', value: 'Carbon fiber', unit: 'always in the beam' },
     ],
     intro:
-      'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fibre construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
+      'Imaging-guided procedures are only as good as what the imaging can see through. Carbon fiber construction keeps the support structure radiolucent, so the anatomy and the instrument stay visible rather than the table.',
     hero: tableShot,
-    heroAlt: 'A carbon-fibre operating table',
+    heroAlt: 'A carbon-fiber operating table',
     heroTone: 'bay',
     /* Four of the five gaps were closed by the brochure — photography,
        dimensions, load ratings and the range itself. These two are still not
@@ -241,9 +264,12 @@ export const products = [
   {
     slug: 'maven-neuromodulation',
     path: '/products/maven-neuromodulation',
-    name: 'Maven Neuromodulation',
-    shortName: 'Maven',
-    family: 'Maven Neuromodulation',
+    /* MAVEN, not "Maven" — see the note below on the product name. These three
+       fields are the ones the catalog, the nav and the page heading read, and
+       they were the last place on the site still setting it in title case. */
+    name: 'MAVEN Neuromodulation',
+    shortName: 'MAVEN',
+    family: 'MAVEN Neuromodulation',
     /**
      * NO `aka` HERE, deliberately.
      *
@@ -279,15 +305,26 @@ export const products = [
      * human recordings", which may contradict it outright.
      *
      * OPEN QUESTION FOR NAVINETICS: is MAVEN used in human recordings, and
-     * under what authorisation — IDE, IRB, research use only? The answer
+     * under what authorization — IDE, IRB, research use only? The answer
      * decides what belongs on this page, and until it arrives the page says
      * only what the company already says: that this is preclinical research.
      */
     tag: { label: 'Research', tone: 'line' },
     technology: 'neuromodulation',
     tagline: 'Measuring the living brain,\nwhile you stimulate it.',
+    /* "A pre-clinical research device" leads, and it has to.
+       ────────────────────────────────────────────────────────────────────
+       This one string is the MAVEN card on the home page, the MAVEN entry in
+       Three Lines of Work on /company/who-we-are, and the catalogue tile. On
+       all three it sat beside the NRSS and the operating tables with nothing
+       to distinguish it, so a surgeon met MAVEN as a fourth thing they could
+       buy for theatre. The qualifier existed — but only in the last section of
+       MAVEN's own page, which is three clicks and eight screens too late.
+
+       Stated first rather than appended, because a reader who stops after one
+       clause should still have the important half. */
     summary:
-      'Synchronised neurochemical and electrophysiological recording with stimulation, engineered to minimise stimulation artefact.',
+      'A pre-clinical research device: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact.',
     /**
      * MAVEN is the product name — confirmed by NaviNetics. The copy below used
      * to be written around "the WINCS Harmoni Device" throughout; it now names
@@ -296,7 +333,7 @@ export const products = [
      * that is a sentence NaviNetics should supply rather than one to infer.
      *
      * The bespoke page at /products/maven-neuromodulation reads only `name`,
-     * `shortName`, `tagline` and the catalogue fields from this record. The
+     * `shortName`, `tagline` and the catalog fields from this record. The
      * rest — sequence, detail, specs, highlights, components, gallery — is not
      * rendered anywhere at the moment. It is kept because it describes a real
      * product and may come back, not because something is using it.
@@ -313,22 +350,22 @@ export const products = [
     heroAlt: 'The MAVEN system',
     heroTone: 'bay',
     metrics: [
-      { label: 'Measures', value: 'Chem + Ephys', unit: 'synchronised' },
+      { label: 'Measures', value: 'Chem + Ephys', unit: 'synchronized' },
       { label: 'Telemetry', value: 'Wireless', unit: 'real-time' },
       { label: 'Targets', value: 'DA · 5-HT', unit: 'and adenosine' },
     ],
     sequence: [
       {
-        title: 'Synchronised',
-        body: 'Independent but synchronised neurochemical and electrophysiological measurements alongside stimulation.',
+        title: 'Synchronized',
+        body: 'Independent but synchronized neurochemical and electrophysiological measurements alongside stimulation.',
       },
       {
-        title: 'Artefact-Free',
-        body: 'The integration minimises the impact of stimulation artefact on the measurement, ensuring pure, uncompromised recorded data.',
+        title: 'Artifact-Free',
+        body: 'The integration minimizes the impact of stimulation artifact on the measurement, ensuring pure, uncompromised recorded data.',
       },
       {
         title: 'Wireless',
-        body: 'Wireless control and telemetry provide a seamless real-time platform for identifying and characterising potential biomarkers.',
+        body: 'Wireless control and telemetry provide a seamless real-time platform for identifying and characterizing potential biomarkers.',
       },
     ],
     detail: {
@@ -345,13 +382,13 @@ export const products = [
       { k: 'Modality', v: 'Neurochemical + electrophysiological' },
       { k: 'Technique', v: 'FSCV · MCSWV' },
       { k: 'Telemetry', v: 'Wireless' },
-      { k: 'Stimulation', v: 'Synchronised, artefact-minimised' },
+      { k: 'Stimulation', v: 'Synchronized, artifact-minimized' },
       { k: 'Analytes', v: 'Dopamine, serotonin, adenosine' },
       { k: 'Use', v: 'Preclinical research' },
     ],
     highlights: [
-      'Independent but synchronised measurement and stimulation channels.',
-      'Stimulation artefact minimised at the point of integration.',
+      'Independent but synchronized measurement and stimulation channels.',
+      'Stimulation artifact minimized at the point of integration.',
       'Quantifies neuronal electrical activity alongside neurochemical levels.',
       'Wireless control and telemetry for real-time preclinical work.',
       'Supports both fast-scan cyclic and multiple cyclic square wave voltammetry.',
@@ -359,7 +396,7 @@ export const products = [
     ],
     components: [
       'MAVEN Base Unit',
-      'Carbon-Fibre Microelectrodes',
+      'Carbon-Fiber Microelectrodes',
       'Reference Electrode',
       'Wireless Telemetry Module',
       'Stimulation Channel',
@@ -388,11 +425,11 @@ export const otherProducts = (slug) => products.filter((p) => p.slug !== slug);
 export const comparison = {
   published: false,
   needsReview: true,
-  columns: ['NaviNetics Frame System', 'Traditional frame-based', 'Frameless'],
+  columns: ['NRSS', 'Traditional frame-based', 'Frameless'],
   rows: [
-    { k: 'Patient fixation', v: ['Skull anchor key', 'Full base head ring', 'Bone fiducials / mask'] },
+    { k: 'Patient fixation', v: ['Skull Anchor Key', 'Rigid head fixation', 'Bone fiducials / mask'] },
     { k: 'Facial obstruction', v: ['None', 'Significant', 'Minimal'] },
-    { k: 'Targeting principle', v: ['Arc-centred', 'Arc-centred', 'Trajectory guide'] },
-    { k: 'Adjustment location', v: ['At surgical field', 'At base ring', 'Varies'] },
+    { k: 'Targeting principle', v: ['Arc-centered', 'Arc-centered', 'Trajectory guide'] },
+    { k: 'Adjustment location', v: ['At surgical field', 'At the frame', 'Varies'] },
   ],
 };
