@@ -10,7 +10,7 @@ import { publications } from './publications.js';
  * This page has a different job from the two either side of it, and the three
  * only work if none of them does another's:
  *
- *   /resources/education        how the method works, from first principles
+ *   this page, further down     how the method works, from first principles
  *   /technology/neuromodulation what the work has established, and when — here
  *   /products/maven…            the instrument you can put on a bench
  *
@@ -122,45 +122,15 @@ export const chapters = [
         + 'the current it produces shown beneath.',
       caption: 'The cyclic square waveform',
     },
-    readMore: { label: 'Absolute concentration recording, explained', to: '/resources/education#absolute' },
+    readMore: { label: 'Absolute concentration recording, explained', to: '/technology/neuromodulation#absolute' },
   },
-  {
-    id: 'resolve',
-    doi: '10.1038/s41380-024-02537-1',
-    ground: 'light',
-    scene: 'stack',
-    tone: 'soft',
-    eyebrow: 'Telling them apart',
-    title: 'Almost the\nsame answer.',
-    lead: 'Dopamine and norepinephrine differ by one hydroxyl group, and a sweep asks them both '
-      + 'much the same question. Where the waveform alone cannot separate two species, what is '
-      + 'left is in the shape of the response — and a model trained on that shape can do the '
-      + 'separating the chemistry will not.',
-    points: [
-      {
-        label: 'The waveform does part of the work.',
-        body: 'Each species turns over at its own potential, which is what makes voltammetry '
-          + 'selective at all.',
-      },
-      {
-        label: 'A model does the rest.',
-        body: 'The paper resolves tonic concentrations of highly similar neurotransmitters by '
-          + 'combining voltammetry with deep learning.',
-      },
-      {
-        label: 'Which widens what can be asked.',
-        body: 'A technique that can only report one analyte confidently answers one question '
-          + 'about a system that runs on several.',
-      },
-    ],
-    meta: [{ label: 'Method', value: 'Voltammetry + learning' }, { label: 'Reported', value: '2024' }],
-    figure: {
-      src: figField, w: 577, h: 513,
-      alt: 'A square-wave voltammogram: current in color across potential and scan number.',
-      caption: 'A square-wave voltammogram',
-    },
-    readMore: { label: 'Neurochemical detection, explained', to: '/resources/education#neurochemical' },
-  },
+  /* CHRONOLOGICAL, and it was not.
+     The page opens on "four papers, over eight years, each one a step toward
+     it" and then ran 2018 -> 2024 -> 2023 -> 2026, while the evidence list at
+     the foot of the same page ran correctly. A page arguing a progression
+     contradicted its own order within one scroll, and the reader most likely
+     to notice is the one it is written for. `act` (Brain, 2023) now precedes
+     `resolve` (Molecular Psychiatry, 2024). */
   {
     id: 'act',
     doi: '10.1093/brain/awad142',
@@ -197,7 +167,44 @@ export const chapters = [
         + 'cyclic voltammogram inset; the stimulus is marked beneath the plot.',
       caption: 'A release event, with the stimulus marked beneath',
     },
-    readMore: { label: 'Deep brain stimulation, explained', to: '/resources/education#dbs' },
+    readMore: { label: 'Deep brain stimulation, explained', to: '/technology/neuromodulation#dbs' },
+  },
+  {
+    id: 'resolve',
+    doi: '10.1038/s41380-024-02537-1',
+    ground: 'light',
+    scene: 'stack',
+    tone: 'soft',
+    eyebrow: 'Telling them apart',
+    title: 'Almost the\nsame answer.',
+    lead: 'Dopamine and norepinephrine differ by one hydroxyl group, and a sweep asks them both '
+      + 'much the same question. Where the waveform alone cannot separate two species, what is '
+      + 'left is in the shape of the response — and a model trained on that shape can do the '
+      + 'separating the chemistry will not.',
+    points: [
+      {
+        label: 'The waveform does part of the work.',
+        body: 'Each species turns over at its own potential, which is what makes voltammetry '
+          + 'selective at all.',
+      },
+      {
+        label: 'A model does the rest.',
+        body: 'The paper resolves tonic concentrations of highly similar neurotransmitters by '
+          + 'combining voltammetry with deep learning.',
+      },
+      {
+        label: 'Which widens what can be asked.',
+        body: 'A technique that can only report one analyte confidently answers one question '
+          + 'about a system that runs on several.',
+      },
+    ],
+    meta: [{ label: 'Method', value: 'Voltammetry + learning' }, { label: 'Reported', value: '2024' }],
+    figure: {
+      src: figField, w: 577, h: 513,
+      alt: 'A square-wave voltammogram: current in color across potential and scan number.',
+      caption: 'A square-wave voltammogram',
+    },
+    readMore: { label: 'Neurochemical detection, explained', to: '/technology/neuromodulation#neurochemical' },
   },
   {
     id: 'platform',
@@ -237,7 +244,7 @@ export const chapters = [
         + 'and outer cannula, photographed against a scale and drawn in section.',
       caption: 'The carbon-fiber microelectrode',
     },
-    readMore: { label: 'Phasic concentration recording, explained', to: '/resources/education#phasic' },
+    readMore: { label: 'Phasic concentration recording, explained', to: '/technology/neuromodulation#phasic' },
   },
 ];
 

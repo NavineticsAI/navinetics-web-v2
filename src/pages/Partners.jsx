@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePageMeta } from '../lib/meta.js';
 import { collaborators, territories } from '../data/partners.js';
-import { Card, Reveal, Section, SectionHead, TickLine } from '../ui/index.js';
+import { Button, Card, Reveal, Section, SectionHead, TickLine } from '../ui/index.js';
 import { Mark, PartnerGlobe, leadOrg } from '../ui/PartnerGlobe.jsx';
 
 /**
@@ -83,7 +83,13 @@ export default function Partners() {
       {/* No section head. The cards say what they are, and a heading over them
           only restated the globe above. */}
       <Section wide className="pt-12 lg:pt-14">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* An h2 before the cards. They carry h3s, so without this the page
+            went h1 → h3 and a screen reader announcing the outline told the
+            listener they had skipped a section. It also gives the grid the
+            label it was missing — "the cards say what they are" was true of an
+            individual card and not of the set. */}
+        <SectionHead eyebrow="Distribution" title="Where we are." tick={false} />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {territories.map((t, i) => (
             <Reveal key={t.id} delay={i * 0.05}>
               <Card
@@ -124,6 +130,37 @@ export default function Partners() {
             </Reveal>
           ))}
         </div>
+      </Section>
+
+      {/* THE PAGE HAD NO WAY OUT.
+          ──────────────────────────────────────────────────────────────────
+          It ended on a list of ten universities. This is the one page a
+          distributor or a prospective partner comes to on purpose, and every
+          other page on the site offers a next step where this one offered
+          none — so the reader most likely to be worth hearing from had nothing
+          to press.
+
+          The reason for the second line is that three territories currently
+          read "the organization behind it is still to be named", which a
+          reader cannot tell apart from "taken, and we are not saying". Inviting
+          the question is better than leaving them to guess the answer. */}
+      <Section>
+        <Reveal className="flex flex-col items-center gap-6 text-center">
+          <span className="eyebrow text-action">Distribution</span>
+          <h2 className="text-d2">Talk to us about a territory.</h2>
+          <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
+            We work with distributors who know their market and their surgeons. If yours is not on
+            the map above, or you would like to know what is open, we would like to hear from you.
+          </p>
+          <div className="mt-2 flex flex-wrap justify-center gap-3">
+            <Button to="/contact?reason=distribution" size="lg" arrow>
+              Enquire about distribution
+            </Button>
+            <Button to="/company/who-we-are" size="lg" variant="secondary">
+              Who we are
+            </Button>
+          </div>
+        </Reveal>
       </Section>
     </>
   );
