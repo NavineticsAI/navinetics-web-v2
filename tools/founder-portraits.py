@@ -61,8 +61,21 @@ def reframe(im, eye, facex):
     l=int(np.clip(facex*w-facex*nw,0,w-nw))
     return im.crop((l,0,l+nw,im.size[1]))
 
-def solve(im, facebox):
-    """Match brightness and face colour to the set (as used for Oh)."""
+def solve(im, facebox, gl=None, grb=None, ggb=None):
+    """Match brightness and face colour to the set (as used for Oh).
+
+    The three targets are arguments rather than the module constants they used
+    to read directly. Those constants are section 6's - 114 luminance, R/B 1.40 -
+    and they belong to Bennet and Oh. Section 7 gives Lee and Goerss different
+    ones and says plainly not to grade them toward the other two, but with the
+    targets baked into this function the only way to run the exposure solver on
+    Lee was to run it with Bennet's numbers. That was done, and it took his face
+    28 luminance points down and his R/B from 1.52 to 1.36 - measurably the
+    "dull, dark and blue" it looked.
+    """
+    gl  = FACE_LUM if gl  is None else gl
+    grb = WB_RB    if grb is None else grb
+    ggb = WB_GB    if ggb is None else ggb
     a0=np.asarray(im,dtype=np.float32)/255.
     Hh,W,_=a0.shape
     FB=(slice(int(facebox[0]*Hh),int(facebox[1]*Hh)),slice(int(facebox[2]*W),int(facebox[3]*W)))
@@ -76,7 +89,7 @@ def solve(im, facebox):
         lin=lin*(1+SHADOW_LIFT*np.clip((0.34-Ll)/0.34,0,1)**1.6)[...,None]
         fr=lin[FB[0],FB[1]]; m=(lum(fr)>.02)&(lum(fr)<.75)
         Rc,Gc,Bc=[fr[...,i][m].mean() for i in range(3)]
-        tr,tg,tb=GRB,GGB,1.0
+        tr,tg,tb=grb,ggb,1.0
         s=(0.2126*Rc+0.7152*Gc+0.0722*Bc)/(0.2126*tr+0.7152*tg+0.0722*tb)
         for i,(cur,tgt) in enumerate(((Rc,tr*s),(Gc,tg*s),(Bc,tb*s))):
             lin[...,i]*=float(np.clip(tgt/max(cur,1e-6),.80,1.30))
@@ -86,11 +99,11 @@ def solve(im, facebox):
     def face(x):
         a=np.asarray(x,dtype=np.float32)
         return lum(a[FB[0],FB[1]])[(lum(a[FB[0],FB[1]])>25)&(lum(a[FB[0],FB[1]])<215)].mean()
-    t=GL
+    t=gl
     for _ in range(7):
         out=render(t); m=face(out)
-        if abs(m-GL)<1.2: break
-        t*=(GL/m)**0.85
+        if abs(m-gl)<1.2: break
+        t*=(gl/m)**0.85
     return out
 
 
@@ -141,6 +154,21 @@ def chroma_to(im,fx,ta=SKIN_A,tb=SKIN_B,cap=1.35):
     lab[...,2]*=1+m*(np.clip(tb/max(cb,1e-3),1/cap,cap)-1)
     return Image.fromarray(lab2srgb(lab))
 
+def desat(im,k):
+    """Scale chroma evenly, hues held. For a source that arrives over-saturated.
+
+    Used for Lee only. `chroma_to` was tried first and is the wrong instrument
+    here: it pushes skin toward a target through a feathered mask, which on a
+    file this far out meant a large gain on the face and none on the background,
+    and the white balance then over-corrected trying to follow — the background
+    came out cyan at a* -13.9 against +2.2 for Oh. Scaling a* and b* together
+    moves everything by the same factor, so nothing shifts hue relative to
+    anything else and the ground stays where it was."""
+    lab=srgb2lab(np.asarray(im,dtype=np.float32))
+    lab[...,1]*=k; lab[...,2]*=k
+    return Image.fromarray(lab2srgb(lab))
+
+
 def deblue(im,da=DEBLUE_A,db=DEBLUE_B):
     """Shift neutrals only - weighted by low chroma, so skin and tie stay put."""
     lab=srgb2lab(np.asarray(im,dtype=np.float32))
@@ -151,29 +179,99 @@ def deblue(im,da=DEBLUE_A,db=DEBLUE_B):
 # ── the four ──────────────────────────────────────────────────────────────────
 # name, source, pre-crop, eye line now, face x, output size, full grade, quality
 JOBS=[
-  ('kendall-lee-150-500x400-1.jpg', ('src','lee-graded.jpg'),    None,              .20, .62, None,      False, 86),
-  ('stephan-goerss-150.jpg',        ('src','goerss-graded.jpg'), None,              .19, .60, None,      False, 86),
-  ('kevin-bennet.jpg', ('orig','dr_benett_final.JPG'), (0,0,5200,4160),              .315,.62, (1200,960), True, 88),
-  ('yoonbae-oh.jpg',   ('orig','dr_oh_tie_final.jpg'), (12,0,4274,3410),             .30, .639,(1200,960), True, 88),
+  # ── ALL FOUR ARE RETOUCHED SOURCES, AND NONE OF THEM IS GRADED HERE. ────────
+  # Every portrait now arrives from the same retouching pass at 1402x1122, which
+  # is already 5:4. They are internally consistent — same window, same light,
+  # and Goerss is no longer the flash-lit odd one out — so the colour work this
+  # file was built to do has nothing left to correct. Grading them would
+  # overwrite decisions someone made deliberately.
+  #
+  # `False` in the grade column means: crop, reframe, resize, encode. Nothing
+  # else. See s6/s7 of the spec for what is being skipped and why it no longer
+  # applies.
+  #
+  # THE CROPS ARE SOLVED FOR ONE THING: EQUAL HEAD SIZE. Measured in the sources,
+  # heads run 384px (Lee), 520 (Bennet), 523 (Oh) and 468 (Goerss) — Lee sits
+  # noticeably further from the camera. Each box is sized so the head lands at
+  # ~49.5% of the output, which is the largest common value the four can reach.
+  #
+  # Headroom cannot also be equalised, and that is a property of the sources:
+  # Lee's crown is 29px from the top edge and Goerss's is 19px, while Bennet has
+  # 174px and Oh 145px. There is nothing above the first two to crop to, so they
+  # keep a tighter top. Head size is the difference a reader sees on a row of
+  # four cards; headroom is not.
+  #
+  # name, source, pre-crop, eye (0.25 = passthrough), face x in the crop,
+  # output size, grade, jpeg quality
+  ('kendall-lee-150-500x400-1.jpg', ('orig','dr_lee_enhanced_final.png'), (327,0,1297,776),   .25,.520,(1200,960), False, 92),
+  # Bennet and Oh are cropped from the top, not from the frame edge like the
+  # other two. Their sources leave 174px and 140px above the crown where Lee has
+  # 29 and Goerss 19, so a crop starting at y=0 sat them visibly LOWER in the
+  # card than the other two — the top of the head reads as the thing that is
+  # out of line, more than head size does. Taking the difference off the top
+  # brings all four crowns to roughly 3.5%.
+  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (174,140,1402,1122),.25,.570,(1200,960), False, 92),
+  ('yoonbae-oh.jpg',                ('orig','oh_enhanced_gpt.png'),       (278,108,1403,1008),.25,.553,(1200,960), False, 92),
+  ('stephan-goerss-150.jpg',        ('orig','steve_enhanced_gpt.png'),    (221,0,1402,945),   .25,.535,(1200,960), False, 92),
 ]
 
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--originals',default=ORIGINALS,help='where the 2026 camera files live')
     ap.add_argument('--check',action='store_true',help='report only, write nothing')
+    ap.add_argument('--only',default=None,
+                    help='rebuild just the portraits whose filename contains this')
     a=ap.parse_args()
-    missing=[n for _,(k,n),*_ in JOBS if k=='orig' and not os.path.exists(os.path.join(a.originals,n))]
+
+    jobs=[j for j in JOBS if not a.only or a.only.lower() in j[0].lower()]
+    if not jobs:
+        print(f'--only {a.only!r} matched none of: '
+              + ', '.join(j[0] for j in JOBS),file=sys.stderr); return 1
+
+    # The originals check applies to the SELECTED jobs only. It used to run
+    # across all four and abort if any was absent, which meant re-cropping one
+    # portrait required every founder's camera original on the machine. Those
+    # are large files that stay on whichever laptop imported the shoot, so in
+    # practice the script refused to run at all on a second machine.
+    missing=[n for _,(k,n),*_ in jobs if k=='orig' and not os.path.exists(os.path.join(a.originals,n))]
     if missing:
         print(f'missing originals in {a.originals}: {", ".join(missing)}',file=sys.stderr)
-        print('pass --originals /path/to/them',file=sys.stderr); return 1
-    for name,(kind,fn),pre,eye,fx,size,full,q in JOBS:
+        print('pass --originals /path/to/them, or --only <name> to rebuild one',file=sys.stderr); return 1
+    for name,(kind,fn),pre,eye,fx,size,full,q in jobs:
         im=Image.open(os.path.join(a.originals if kind=='orig' else SRCDIR,fn)).convert('RGB')
         if pre: im=im.crop(pre)
         im=reframe(im,eye,fx)
         if size: im=im.resize(size,Image.LANCZOS)
         if full:
-            im=solve(im,(0.06,0.42,fx-.09,fx+.09))     # exposure + white balance
-            im=midtone(deglow(im))                      # veiling glare, then modelling
+            # `full` is either True, meaning section 6's targets, or a dict of
+            # per-subject ones. Lee needs the second: he is graded to the pair
+            # he was photographed with, not to the constants at the top of this
+            # file, which are Bennet's and Oh's.
+            g = full if isinstance(full, dict) else {}
+            im=solve(im,(0.06,0.42,fx-.09,fx+.09),
+                     g.get('lum'), g.get('rb'), g.get('gb'))   # exposure + white balance
+            # De-glow is OPTIONAL, and for Lee it is off. It models the bloom a
+            # blown window throws onto the face and subtracts it, which is right
+            # for Bennet and Oh. On Lee's frame the window is smaller and the
+            # Plummer Building fills the space instead, so the filter read a
+            # correctly-exposed building as glare and took the background from
+            # L* 85.9 to 58.8 - the "weirdly dark" in the report, and 30 points
+            # below Oh's 89. His ungraded crop already sits at the set's
+            # luminance; it only ever needed its colour bringing in.
+            if g.get('deglow', True): im=deglow(im)
+            if g.get('midtone', True): im=midtone(im)
+            if g.get('desat'):                          # even chroma scale, hues held
+                im=desat(im,g['desat'])
+            if g.get('skin'):                           # bring skin chroma to the
+                im=chroma_to(im,fx)                     # s6.7 mean, without the de-blue
+            if g.get('neutral'):
+                # Same mechanism as s6.8's de-blue, opposite direction. Matching
+                # Lee's face pulled his background to a* -9.9, the greenest in
+                # the set against -4.9 to +2.2, and it shows as a green cast on
+                # the Plummer Building and the sky. Shifting neutrals only, by
+                # low chroma weight, moves the building and leaves his face and
+                # the red tie where the steps above put them.
+                im=deblue(im,*g['neutral'])
             if name.startswith('kevin'):                # Bennet was the desaturated,
                 im=deblue(chroma_to(im,fx))             # cyan one - see s6.7 / s6.8
         print(f'  {name:<34} -> {im.size[0]}x{im.size[1]}' + ('' if not a.check else '  (check only)'))

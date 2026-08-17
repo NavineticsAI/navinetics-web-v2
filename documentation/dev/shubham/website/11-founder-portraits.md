@@ -34,9 +34,45 @@ because it is better.
 
 ## 2 · Sources
 
+> **Superseded for Lee, 2026-08-17.** His source is `dr_lee_enhanced_final.png`,
+> retouched outside the repository. Geometry-only was tried first, on the
+> principle that a hand-retouched file should not be second-guessed — and
+> **measurement did not support it**:
+>
+> | | Lee, ungraded | Bennet | Oh | Goerss |
+> |---|---|---|---|---|
+> | Face luminance | **143.6** | 103.5 | 116.9 | 113.0 |
+> | R/B | **1.81** | 1.44 | 1.45 | 1.31 |
+> | Skin chroma | **31.4** | 15.3 | 17.4 | 13.0 |
+>
+> Twice the saturation and thirty luminance points brighter reads as a different
+> photographic treatment rather than a different sitting; on a row of four cards
+> it was visibly the retouched one. So exposure, white balance and an **even
+> chroma scale** are applied — and nothing else. De-glow and the midtone S-curve
+> stay off: both model things the retoucher has already handled. The expression,
+> the cleanup and the detail are untouched; only the colour moves.
+>
+> **`desat`, not `chroma_to`.** The targeted skin push was tried and is the wrong
+> instrument for a source this far out: it applies a large gain inside a
+> feathered face mask and none outside it, the white balance then over-corrects
+> trying to follow, and the background came back cyan at `a* −13.9` against Oh's
+> `+2.2`. Scaling `a*` and `b*` together moves everything by one factor, so
+> nothing shifts hue relative to anything else and the ground stays put. At
+> `k = 0.62` his chroma lands at **17.8** against Oh's 17.4.
+>
+> Two consequences worth knowing. His 2.34× upscale is gone — the source is
+> larger than the output. And his `focus` moved from `83% 0%` to `50% 0%`,
+> because the recrop centres him where the old export had his face at 62% of the
+> frame; §5's formula still holds, the input to it changed.
+>
+> **Headroom is the one thing that cannot be matched.** His crown sits 2.4% down
+> the source frame, so the crop starts at y=0 and still lands at 3.0% against
+> Oh's 7.7% and Goerss's 9.9%. Putting it at 7.7% would need a crop shorter than
+> his own head. There is nothing above him to crop to.
+
 | output | source | pre-crop |
 |---|---|---|
-| `public/kendall-lee-150-500x400-1.jpg` | the existing web export | — |
+| `public/kendall-lee-150-500x400-1.jpg` | `dr_lee_enhanced_final.png` — retouched, **not graded here** | `(343, 0, 1368, 820)` |
 | `public/stephan-goerss-150.jpg` | the existing web export | — |
 | `public/kevin-bennet.jpg` | `dr_benett_final.JPG` | `(0, 0, 5200, 4160)` — already exactly 5:4 |
 | `public/yoonbae-oh.jpg` | `dr_oh_tie_final.jpg` | `(12, 0, 4274, 3410)` → 4262×3410, trimmed to exactly 5:4 |

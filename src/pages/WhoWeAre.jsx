@@ -23,16 +23,18 @@ const SHOW_TIMELINE = false;
 const FOUNDERS = [
   { name: 'Kendall H. Lee', suffix: 'M.D., Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Neurosurgeon at Mayo Clinic. Deep brain stimulation for Parkinson’s, tremor, depression, OCD and epilepsy.',
-    image: asset('/kendall-lee-150-500x400-1.jpg'), focus: '83% 0%' },
+    /* Recomputed with the crops on 2026-08-17 — see the note in
+       src/pages/Founders.jsx and the JOBS table in tools/founder-portraits.py. */
+    image: asset('/kendall-lee-150-500x400-1.jpg'), focus: '56% 0%' },
   { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Thirty years in technology development. Patents in neurosurgery, diamond, semiconductor and optical technology.',
-    image: asset('/kevin-bennet.jpg'), focus: '83% 0%' },
+    image: asset('/kevin-bennet.jpg'), focus: '69% 0%' },
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
-    image: asset('/stephan-goerss-150.jpg'), focus: '78% 0%' },
+    image: asset('/stephan-goerss-150.jpg'), focus: '60% 0%' },
   { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'Co-Founder',
     line: 'Associate Director of the Neural Engineering and Precision Surgery Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
-    image: asset('/yoonbae-oh.jpg'), focus: '89% 0%' },
+    image: asset('/yoonbae-oh.jpg'), focus: '65% 0%' },
 ];
 
 /**
