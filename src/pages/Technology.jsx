@@ -13,6 +13,8 @@ import {
   SectionHead,
 } from '../ui/index.js';
 import NotFound from './NotFound.jsx';
+import { EducationTopics } from './Education.jsx';
+import { topics } from '../data/education.js';
 
 /**
  * The technology template — HOW it works.
@@ -86,6 +88,15 @@ export default function Technology() {
               </Reveal>
             </div>
           </Section>
+
+          {/* The teaching topics that belong to this platform, embedded rather
+              than linked. This page ran to 261 words and pointed at an
+              Education page that explained the same principle far better and
+              interactively — a hand-off that asked the reader to leave in order
+              to understand what they had just been told. The topic named on the
+              record is now rendered here, in place, between the principle and
+              the products it is built into. */}
+          <EducationTopics topics={topics.filter((t) => (tech.teaches ?? []).includes(t.id))} />
 
           {products.length > 0 && (
             <Section band wide>

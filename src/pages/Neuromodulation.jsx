@@ -6,6 +6,8 @@ import { chapters, evidence, gap, paperFor } from '../data/neuromodulation.js';
 import { doiLink, founders } from '../data/publications.js';
 import { Hero, LinkAction, ProductCard, Reveal, Section, SectionHead } from '../ui/index.js';
 import { ScienceBand } from '../ui/ScienceBand.jsx';
+import { EducationTopics } from './Education.jsx';
+import { topics } from '../data/education.js';
 
 /**
  * Neuromodulation — the research behind it.
@@ -121,11 +123,15 @@ export default function Neuromodulation() {
             </div>
           </div>
           <div>
-            <SectionHead eyebrow="Go deeper" title="The method itself." tick={false} />
+            <SectionHead eyebrow="Go deeper" title="The evidence." tick={false} />
+            {/* Was "The method itself", pointing at the education page for the
+                redox chemistry and the sweep. That material is now further down
+                this same page, so the hand-off would send a reader away to read
+                something they are already on. What is left here is the evidence
+                hand-off, which is a different page and still worth making. */}
             <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-2">
-              This page is what the work established. How the measurement actually works — the
-              redox chemistry, the sweep, the background problem — is written out from first
-              principles on the education pages.
+              This page is what the work established. The papers themselves, and the rest of the
+              laboratory’s published record, are listed in full.
             </p>
             <div className="mt-6 flex flex-col gap-4">
               {(tech.readMore ?? []).map((r) => (
@@ -138,6 +144,14 @@ export default function Neuromodulation() {
           </div>
         </div>
       </Section>
+
+      {/* The method, from first principles — moved onto this page rather than
+          linked from it. What deep brain stimulation is, how a neurochemical is
+          detected at all, and the two recording methods the papers above
+          introduced. It used to live on /resources/education, three levels down
+          the nav behind Media and Careers, which meant the reader most likely to
+          want it was the least likely to find it. */}
+      <EducationTopics topics={topics.filter((t) => (tech.teaches ?? []).includes(t.id))} />
     </>
   );
 }

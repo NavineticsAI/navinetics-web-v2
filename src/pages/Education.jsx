@@ -27,27 +27,60 @@ export default function Education() {
       + 'neurochemical recording, explained with working diagrams.',
   });
 
-  const { active, progress } = useScrollSpy(topics);
-
   return (
     <>
       <Hero
-        eyebrow="Resources — Education"
+        eyebrow="Technology — Education"
         title="The science behind the devices."
         lead="Five topics, in the order they build on each other: what deep brain stimulation is, how a
           target is reached, and how what happens at that target is measured. Written for a curious
           reader first, with the technical detail one click away."
       />
+      <EducationTopics topics={topics} />
+    </>
+  );
+}
 
+/**
+ * The teaching sections, for embedding into a technology page.
+ *
+ * WHY THIS IS EXPORTED. These five topics are the most substantial technical
+ * writing on the site, and they sat on their own page under Resources — third
+ * level nav, behind Media and Careers. A surgeon evaluating the frame read the
+ * product page and never reached them. Meanwhile
+ * /technology/stereotactic-devices ran to 261 words and duplicated topic 02
+ * badly enough that the education version was plainly the better one.
+ *
+ * So each technology page now carries the topics that belong to it: stereotaxy
+ * goes to the stereotactic page, and DBS plus the three neurochemistry topics
+ * go to neuromodulation. Passing the list in, rather than filtering in here,
+ * keeps the ownership where a reader would look for it — in the page.
+ *
+ * The rail and the scroll-spy take the same list, so a page carrying one topic
+ * gets no rail and a page carrying four gets a four-stop one. Both were
+ * previously hard-wired to the module-level array of five, which is why they
+ * are parameters now.
+ */
+export function EducationTopics({ topics: list }) {
+  const { active, progress } = useScrollSpy(list);
+  if (!list?.length) return null;
+
+  return (
+    <>
       <Section wide className="!pt-10 md:!pt-12">
         {/* The rail is horizontal below lg, where a 250px column would eat the
             reading measure. Same five stops either way. */}
+        {/* Hidden when a page carries a single topic: a one-stop rail is not
+            navigation, it is a label repeating the heading below it. */}
         <nav
           aria-label="Topics"
-          className="sticky top-[4.5rem] z-30 -mx-6 mb-8 overflow-x-auto border-b border-hairline-soft bg-canvas px-6 py-2.5 lg:hidden"
+          className={cn(
+            'sticky top-[4.5rem] z-30 -mx-6 mb-8 overflow-x-auto border-b border-hairline-soft bg-canvas px-6 py-2.5 lg:hidden',
+            list.length < 2 && 'hidden',
+          )}
         >
           <ol className="flex gap-2">
-            {topics.map((t) => (
+            {list.map((t) => (
               <li key={t.id}>
                 <a
                   href={`#${t.id}`}
@@ -67,10 +100,15 @@ export default function Education() {
           </ol>
         </nav>
 
-        <div className="grid items-start gap-x-16 lg:grid-cols-[15rem_minmax(0,1fr)]">
-          <Rail active={active} progress={progress} />
+        <div
+          className={cn(
+            'grid items-start gap-x-16',
+            list.length > 1 && 'lg:grid-cols-[15rem_minmax(0,1fr)]',
+          )}
+        >
+          {list.length > 1 && <Rail topics={list} active={active} progress={progress} />}
           <div>
-            {topics.map((t) => (
+            {list.map((t) => (
               <Topic key={t.id} t={t} />
             ))}
           </div>
@@ -81,8 +119,8 @@ export default function Education() {
 }
 
 /* ── the rail ───────────────────────────────────────────────────────────── */
-function Rail({ active, progress }) {
-  const idx = topics.findIndex((t) => t.id === active);
+function Rail({ topics: list, active, progress }) {
+  const idx = list.findIndex((t) => t.id === active);
   return (
     <aside className="sticky top-28 hidden pb-16 lg:block">
       <p className="eyebrow mb-4 text-ink-3">Topics</p>
@@ -97,7 +135,7 @@ function Rail({ active, progress }) {
             style={{ height: `calc(${progress}% - 0.75rem)` }}
             aria-hidden="true"
           />
-          {topics.map((t, i) => {
+          {list.map((t, i) => {
             const on = t.id === active;
             return (
               <li key={t.id}>
