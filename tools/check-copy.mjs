@@ -30,7 +30,7 @@ const ROUTES = [
   '/products/carbon-fiber-surgical-tables', '/products/maven-neuromodulation',
   '/technology/stereotactic-devices', '/technology/neuromodulation',
   '/technology/navinetics-ai', '/resources/media', '/resources/careers',
-  '/resources/education', '/resources/publications', '/contact', '/does-not-exist',
+  '/resources/publications', '/contact', '/does-not-exist',
 ];
 
 /* Phrases that betray a note to ourselves. Split by confidence so a reviewer
@@ -48,6 +48,21 @@ const SUSPECT = [
   'deliberately', 'is not stated', 'are not stated', 'no figure is published',
   'we have not', 'needs content', 'outstanding', 'awaiting', 'to be confirmed',
   'not yet documented', "isn't documented", "isn't specified", 'as it names them',
+
+  /* A SHAPE THIS CHECK USED TO MISS: a sentence that cites one of our own
+     internal artefacts. Two got through to the live page and neither used any
+     word above — "The existing product record puts patient experience first
+     among its improvements", and "Named in the range sheet without a
+     specification behind them". Both are true, both are useful in a comment,
+     and both are meaningless to a surgeon who has never seen the document being
+     referred to. It reads as a company quoting its own paperwork. */
+  'product record', 'range sheet', 'the brochure', 'the deck', 'existing site',
+  'our records', 'as supplied', 'source material',
+
+  /* And the other half of the same problem: our editorial restraint, published.
+     Being careful about claims is right; narrating that care to the reader is
+     not, and it reads as a company hedging about its own catalogue. */
+  'nothing is claimed', 'no claim is made', 'we do not claim',
 ];
 
 /* Words that are legitimate site copy and must not be flagged. Checked before

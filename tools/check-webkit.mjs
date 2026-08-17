@@ -39,7 +39,7 @@ const ROUTES = [
   '/products/carbon-fiber-surgical-tables', '/products/maven-neuromodulation',
   '/technology/stereotactic-devices', '/technology/neuromodulation',
   '/technology/navinetics-ai', '/resources/media', '/resources/careers',
-  '/resources/education', '/resources/publications', '/contact',
+  '/resources/publications', '/contact',
 ];
 
 /* The features this codebase leans on, and where. Support alone is not the

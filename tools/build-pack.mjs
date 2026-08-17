@@ -547,7 +547,7 @@ navinetics.com, and the performance record.
 2. Tab to **Company** in the nav, press ArrowDown; focus should enter the panel, Escape return it.
 3. Open an image on \`/resources/media\`, press Escape; focus should return to the tile.
 4. Switch to dark theme and submit the contact form empty; the error text should be legible.
-5. On a phone, open \`/resources/education\` and tap each part of the implanted-system figure.
+5. On a phone, open \`/technology/neuromodulation\` and tap each part of the implanted-system figure.
 6. Scroll \`/company/who-we-are\`; the left edge should not step in and out.
 7. Drag the window between a laptop panel and an ultrawide.
 `;

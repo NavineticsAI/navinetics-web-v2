@@ -23,7 +23,7 @@ const GOOD = 44;
 
 const browser = await webkit.launch();
 const page = await browser.newPage(devices['iPhone 15']);
-await page.goto(`${BASE}/resources/education`, { waitUntil: 'load', timeout: 30000 });
+await page.goto(`${BASE}/technology/neuromodulation`, { waitUntil: 'load', timeout: 30000 });
 await page.waitForTimeout(2500);
 
 /* Scroll it into view FIRST. The figure sits ~1950px down the page; the first
