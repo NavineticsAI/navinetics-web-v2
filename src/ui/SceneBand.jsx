@@ -60,7 +60,10 @@ export function SceneBand({ scene, tint, eyebrow, title, lead, points = [], meta
 
     const frame = (now) => {
       if (start === null) start = now;
-      if (visible && w > 4 && now - painted >= MIN_MS) {
+      // `document.hidden` as well as `visible`: an element can be inside the
+      // viewport of a tab nobody is looking at, and drawing into it costs the
+      // same as drawing into one they are.
+      if (visible && !document.hidden && w > 4 && now - painted >= MIN_MS) {
         painted = now;
         draw(ctx, w, h, (now - start) / 1000);
       }

@@ -1,4 +1,4 @@
-import { copyFileSync, writeFileSync } from 'node:fs'
+import { copyFileSync, existsSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
@@ -135,6 +135,15 @@ function spaFallback() {
     apply: 'build',
     closeBundle() {
       const dist = fileURLToPath(new URL('./dist/', import.meta.url))
+      // `closeBundle` fires even when the build FAILED, and index.html is then
+      // absent — so copying it unconditionally threw ENOENT, and that error
+      // replaced the real one in the output. A genuine failure in rendering
+      // chunks was reported as "cannot copy dist/index.html", which sends you
+      // looking at the deploy config instead of at the code that broke.
+      if (!existsSync(`${dist}index.html`)) {
+        console.warn('[spa-404-fallback] no dist/index.html — build failed; skipping 404.html')
+        return
+      }
       copyFileSync(`${dist}index.html`, `${dist}404.html`)
       // Jekyll would otherwise strip directories that begin with an underscore.
       writeFileSync(`${dist}.nojekyll`, '')

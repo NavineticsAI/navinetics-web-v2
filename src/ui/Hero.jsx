@@ -67,8 +67,14 @@ export function Hero({
     >
       {/* ambient field */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute -left-24 -top-32 h-96 w-96 rounded-full bg-action-glow blur-[90px]" />
-        <div className="absolute -bottom-40 right-[8%] h-80 w-80 rounded-full bg-action-glow blur-[100px]" />
+        {/* Sized and offset to land where the blurred discs used to: a 90px
+            blur on a 384px circle reads as a soft blob about 544px across, so
+            the box grows to that and the offsets shift by the difference to
+            keep each centre where it was. Same for the 100px one at 320px,
+            which becomes 512. See `.nn-glow` in index.css for the measurements
+            that made this worth doing. */}
+        <div className="nn-glow absolute -left-44 -top-52 h-[34rem] w-[34rem]" />
+        <div className="nn-glow absolute bottom-[-16rem] right-[calc(8%-6rem)] h-[32rem] w-[32rem]" />
         {isoMark && (
           <IsoMark
             className={cn(

@@ -13,6 +13,7 @@ import Contact from '../pages/Contact.jsx';
 import NotFound from '../pages/NotFound.jsx';
 import PageTransition from './PageTransition.jsx';
 import { redirects } from '../data/nav.js';
+import { RouteBoundary, RouteFallback } from '../ui/RouteBoundary.jsx';
 
 /**
  * The two split routes. Both carry drawing code no other page touches, and
@@ -20,11 +21,12 @@ import { redirects } from '../data/nav.js';
  *
  * NaviNetics AI has a volume renderer and a noise table; its fallback is the
  * dark workstation ground, so the split cannot flash white over the hero.
- * Education has five canvas figures and a small 3-D scene; its fallback is the
- * page ground, and it sits below a hero that renders immediately either way.
+ *
+ * Education is no longer among them: it is not a route any more. Its five
+ * topics are rendered into the two technology pages that own them, so the
+ * module now travels inside their chunks. See `teaches` in data/technology.js.
  */
 const NaviNeticsAI = lazy(() => import('../pages/NaviNeticsAI.jsx'));
-const Education = lazy(() => import('../pages/Education.jsx'));
 /* MAVEN carries the ring geometry and the voltammogram field, which no other
    route touches. Its fallback is the instrument bay, so the split cannot flash
    a pale panel over a dark hero. */
@@ -59,7 +61,7 @@ const routes = [
   {
     path: '/company/partners',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+      <Suspense fallback={<RouteFallback />}>
         <Partners />
       </Suspense>
     ),
@@ -76,7 +78,7 @@ const routes = [
   {
     path: '/products/maven-neuromodulation',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-[var(--mv-bay)]" />}>
+      <Suspense fallback={<RouteFallback tone="bay" />}>
         <Maven />
       </Suspense>
     ),
@@ -87,7 +89,7 @@ const routes = [
   {
     path: '/products/carbon-fiber-surgical-tables',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+      <Suspense fallback={<RouteFallback />}>
         <SurgicalTables />
       </Suspense>
     ),
@@ -97,7 +99,7 @@ const routes = [
   {
     path: '/products/d1-stereotactic-frame',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-[var(--mv-bay)]" />}>
+      <Suspense fallback={<RouteFallback tone="bay" />}>
         <D1 />
       </Suspense>
     ),
@@ -105,7 +107,7 @@ const routes = [
   {
     path: '/products/:slug',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+      <Suspense fallback={<RouteFallback />}>
         <Product />
       </Suspense>
     ),
@@ -118,7 +120,7 @@ const routes = [
   {
     path: '/technology/navinetics-ai',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-ws-bg" />}>
+      <Suspense fallback={<RouteFallback tone="ws" />}>
         <NaviNeticsAI />
       </Suspense>
     ),
@@ -129,7 +131,7 @@ const routes = [
   {
     path: '/technology/neuromodulation',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+      <Suspense fallback={<RouteFallback />}>
         <Neuromodulation />
       </Suspense>
     ),
@@ -137,7 +139,7 @@ const routes = [
   {
     path: '/technology/:slug',
     element: (
-      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
+      <Suspense fallback={<RouteFallback />}>
         <Technology />
       </Suspense>
     ),
@@ -146,14 +148,6 @@ const routes = [
   // Resources
   { path: '/resources/media', element: <Media /> },
   { path: '/resources/careers', element: <Careers /> },
-  {
-    path: '/resources/education',
-    element: (
-      <Suspense fallback={<div className="min-h-screen bg-canvas" />}>
-        <Education />
-      </Suspense>
-    ),
-  },
   { path: '/resources/publications', element: <Publications /> },
 
   { path: '/contact', element: <Contact /> },
@@ -167,8 +161,9 @@ export default function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+    <RouteBoundary routeKey={location.pathname}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
         {/* Pre-restructure URLs. Declared before the catch-all so previously
             published links redirect instead of 404ing. */}
         {redirects.map(([from, to]) => (
@@ -179,6 +174,7 @@ export default function AnimatedRoutes() {
           <Route key={path} path={path} element={<PageTransition>{element}</PageTransition>} />
         ))}
       </Routes>
-    </AnimatePresence>
+      </AnimatePresence>
+    </RouteBoundary>
   );
 }

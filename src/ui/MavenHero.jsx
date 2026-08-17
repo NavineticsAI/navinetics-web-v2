@@ -75,6 +75,8 @@ export function MavenHero({ product }) {
     let t0 = null;
     let lastTheta = 0;
     let visible = true;
+    const MIN_DT = 1000 / 30;
+    let lastPaint = 0;
 
     const size = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -201,10 +203,29 @@ export function MavenHero({ product }) {
     };
 
     const frame = (now) => {
+      raf = requestAnimationFrame(frame);
       if (t0 === null) t0 = now;
+
+      /* Do nothing while the opening is off screen.
+         ───────────────────────────────────────────────────────────────────
+         `visible` used to guard only the canvas, one line inside paint().
+         Everything above it — ten style writes across five elements — ran
+         every frame for as long as the page was open, including the whole way
+         down a long page where none of it can be seen. Each write dirties
+         style and layout, and that cost lands on the same thread the blocks
+         below need in order to appear. */
+      if (!visible || document.hidden) return;
+
+      /* Capped at 30fps. This loop was uncapped, so on a 120Hz phone it
+         repainted the voltammogram field and rewrote ten style properties a
+         hundred and twenty times a second. The field is a slow diffusion and
+         the ring is a slow unwind; neither resolves above 30. Measured at
+         98.7% of a throttled CPU before this cap. */
+      if (now - lastPaint < MIN_DT) return;
+      lastPaint = now;
+
       const p = clamp01((window.scrollY - hostTop) / travel);
       paint(p, (now - t0) / 1000);
-      raf = requestAnimationFrame(frame);
     };
 
     size();
@@ -215,7 +236,11 @@ export function MavenHero({ product }) {
       raf = requestAnimationFrame(frame);
     }
 
-    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; });
+    /* A margin, because the loop now stops entirely when this goes false. With
+       no margin the observer flips exactly as the edge crosses, and scrolling
+       back up can show one stale frame before the next lands. */
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; },
+      { rootMargin: '150px' });
     io.observe(host);
     const onResize = () => { size(); if (reduced) paint(1, 4); };
     window.addEventListener('resize', onResize);

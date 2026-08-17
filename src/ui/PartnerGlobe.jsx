@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePrefersReducedMotion } from '../lib/motion.js';
+import { isScrolling } from '../lib/scrollState.js';
 import { worldDots } from '../data/worldDots.js';
 import { HOME } from '../data/partners.js';
 import { decodeDots, drawGlobe, drawRoute, project, unit } from '../lib/globeScene.js';
@@ -246,15 +247,41 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
     );
     io.observe(cv);
 
-    const MIN_DT = 1000 / 30;
+    /* TWO RATES, because the globe has two jobs.
+       ─────────────────────────────────────────────────────────────────────
+       Interaction — a drag, a fling, the tween that swings a territory round
+       — is followed by the eye and gets 30fps. The idle drift is not: it turns
+       at 4°/s, so at 30fps each frame moves it 0.13° and at 12fps 0.33°, and
+       nothing resolves either. It is the same drift for 40% of the work.
+
+       This is the whole of BUG-128. Isolated with tools/check-busy-cause.mjs,
+       hiding the canvas took /company/partners from 95.5% of a throttled CPU
+       to 0% — the scene is the entire cost, and a full-globe re-projection
+       thirty times a second, forever, is what a phone cannot absorb. */
+    const MIN_DT_ACTIVE = 1000 / 30;
+    const MIN_DT_IDLE = 1000 / 12;
     let lastDraw = 0;
 
     const frame = (now) => {
       raf = requestAnimationFrame(frame);
       if (!onScreen || document.hidden) return;
-      if (now - lastDraw < MIN_DT) return;
-      lastDraw = now;
       const s = sc.current;
+      const busy = s.drag || s.tween || Math.abs(s.vel) > 0.02 || selRef.current;
+      if (now - lastDraw < (busy ? MIN_DT_ACTIVE : MIN_DT_IDLE)) return;
+
+      /* Stand aside while the reader is scrolling.
+         ───────────────────────────────────────────────────────────────────
+         This is the most expensive scene on the site and it runs on its own
+         clock, so it was still re-projecting the world while the reader was
+         trying to get past it. Every block below enters through an observer
+         callback and a run of animation frames, and they queue behind this.
+
+         Only the idle drift yields. A drag, a fling, or the tween that swings
+         a territory round after a selection are direct answers to something
+         the reader just did, and stalling those would trade one unresponsive
+         feeling for a worse one. */
+      if (isScrolling() && !s.drag && !s.tween && Math.abs(s.vel) <= 0.02) return;
+      lastDraw = now;
       /* Nothing to draw until the canvas has been measured. Without this, a
          zero-size or not-yet-laid-out box feeds NaN straight into
          createRadialGradient, which throws once per frame forever. */
