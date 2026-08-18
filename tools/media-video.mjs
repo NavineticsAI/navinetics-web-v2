@@ -1,11 +1,23 @@
 /**
- * Re-encode a supplied clip for the web, and cut a poster for it.
+ * Publish a supplied clip, and cut a poster for it.
  *
- *   node tools/media-video.mjs <source.mp4> <out-name> <poster-seconds> [width] [kbps]
+ *   node tools/media-video.mjs <source.mp4> <out-name> <poster-seconds>
+ *   node tools/media-video.mjs <source.mp4> <out-name> <poster-s> <width> <kbps>
  *
- * Writes <out-name>.web.mp4 and <out-name>.web.poster.webp beside the source.
- * The master is left alone and stays gitignored; only the encode is committed,
- * which is the same arrangement as the education render.
+ * With no width given it COPIES the master and only cuts a poster. With a
+ * width it re-encodes down to that size. Writes <out-name>.mp4 and
+ * <out-name>.poster.webp beside the source; the master keeps its own name and
+ * stays gitignored.
+ *
+ * COPY IS THE DEFAULT, AND USUALLY RIGHT. These masters are already what a
+ * browser wants: H.264 in MP4 at 720x1280. Running one through the canvas
+ * recorder below cannot improve on that and always costs something — the
+ * first pass on this page went out at 608x1080 and 900 kbps, which was
+ * visibly softer than the source and, less obviously, SILENT, because
+ * canvas.captureStream carries no audio track. A copy has none of those
+ * problems and is smaller than a re-encode of the same quality would be.
+ *
+ * Re-encode when the master is genuinely too big to serve, not by reflex.
  *
  * WHY NOT tools/education-video.mjs. That one seeks every frame, holds each as
  * a WebP, then plays them out on a strict timer — because its source is a 15
@@ -20,7 +32,7 @@
  * that means choosing a frame that shows the instrument rather than the field.
  */
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, statSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import { dir, fileUrl } from './lib/paths.mjs';
 
@@ -31,7 +43,9 @@ const PORT = 9750 + (process.pid % 200);
 const SRC = process.argv[2];
 const OUTNAME = process.argv[3];
 const POSTER_AT = Number(process.argv[4] ?? 1);
-const OUT_W = Number(process.argv[5] ?? 608);
+/* No width on the command line means copy the master through untouched. */
+const COPY = process.argv[5] === undefined;
+const OUT_W = Number(process.argv[5] ?? 0);
 const KBPS = Number(process.argv[6] ?? 900);
 
 if (!SRC || !existsSync(SRC) || !OUTNAME) {
@@ -105,13 +119,17 @@ const meta = await ev(`(async () => {
   window.__v = v;
   return { w: v.videoWidth, h: v.videoHeight, d: +v.duration.toFixed(2) };
 })()`);
-const outW = Math.round(OUT_W / 2) * 2;
-const outH = Math.round((outW * meta.h) / meta.w / 2) * 2;
+const outW = COPY ? meta.w : Math.round(OUT_W / 2) * 2;
+const outH = COPY ? meta.h : Math.round((outW * meta.h) / meta.w / 2) * 2;
 console.log(`\n  ${SRC.split(/[\\/]/).pop()}`);
-console.log(`  source ${meta.w}x${meta.h} ${meta.d}s  ->  ${outW}x${outH} @ ${KBPS} kbps, ${mime}`);
-console.log(`  recording in real time, so this takes about ${Math.ceil(meta.d)}s`);
+if (COPY) {
+  console.log(`  source ${meta.w}x${meta.h} ${meta.d}s  ->  copied as-is, poster only`);
+} else {
+  console.log(`  source ${meta.w}x${meta.h} ${meta.d}s  ->  ${outW}x${outH} @ ${KBPS} kbps, ${mime}`);
+  console.log(`  recording in real time, so this takes about ${Math.ceil(meta.d)}s`);
+}
 
-const b64 = await ev(`(async () => {
+const b64 = COPY ? null : await ev(`(async () => {
   const v = window.__v;
   const c = document.createElement('canvas');
   c.width = ${outW}; c.height = ${outH};
@@ -154,8 +172,9 @@ const b64 = await ev(`(async () => {
   return btoa(s);
 })()`);
 
-const outFile = `${OUTDIR}${OUTNAME}.web.${ext}`;
-writeFileSync(outFile, Buffer.from(b64, 'base64'));
+const outFile = `${OUTDIR}${OUTNAME}.${COPY ? SRC.split('.').pop() : ext}`;
+if (COPY) copyFileSync(SRC, outFile);
+else writeFileSync(outFile, Buffer.from(b64, 'base64'));
 
 const poster = await ev(`(async () => {
   const v = window.__v;
@@ -167,9 +186,9 @@ const poster = await ev(`(async () => {
   const cx = c.getContext('2d');
   cx.imageSmoothingQuality = 'high';
   cx.drawImage(v, 0, 0, c.width, c.height);
-  return c.toDataURL('image/webp', 0.82).split(',')[1];
+  return c.toDataURL('image/webp', 0.92).split(',')[1];
 })()`);
-const posterFile = `${OUTDIR}${OUTNAME}.web.poster.webp`;
+const posterFile = `${OUTDIR}${OUTNAME}.poster.webp`;
 writeFileSync(posterFile, Buffer.from(poster, 'base64'));
 
 const mb = (p) => (statSync(p).size / 1048576).toFixed(2);

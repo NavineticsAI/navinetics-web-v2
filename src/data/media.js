@@ -28,6 +28,11 @@
  *   · Surface scanning. The launch clip's slides at 44 s and 52 s name 3D
  *     surface scans, which this site is otherwise under standing instruction
  *     never to mention.
+ *   · Audio. Both clips are served as supplied and both carry a sound track,
+ *     which nobody has reviewed. An operating room is a room full of people
+ *     talking. The first published pass happened to be silent — the canvas
+ *     recorder that produced it drops audio — so this is new surface, not
+ *     pre-existing.
  *
  * Poster frames are chosen deliberately. The still a visitor sees before
  * deciding to play shows the instrument, not the surgical field.
@@ -63,10 +68,10 @@ import eduSlice from '../assets/education/02.3.b.webp';
 import eduAtlas from '../assets/education/01.2.webp';
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
-import orVideo from '../assets/media/or-footage.web.mp4';
-import orPoster from '../assets/media/or-footage.web.poster.webp';
-import launchVideo from '../assets/media/launch.web.mp4';
-import launchPoster from '../assets/media/launch.web.poster.webp';
+import orVideo from '../assets/media/or-footage.mp4';
+import orPoster from '../assets/media/or-footage.poster.webp';
+import launchVideo from '../assets/media/launch.mp4';
+import launchPoster from '../assets/media/launch.poster.webp';
 
 /** Where each asset is used. One place, so a route rename breaks once. */
 const P = {
@@ -86,8 +91,8 @@ export const videos = [
     title: 'In the operating room',
     src: orVideo,
     poster: orPoster,
-    w: 608,
-    h: 1080,
+    w: 720,
+    h: 1280,
     length: '0:53',
     note: 'Surgical footage',
     /* Describes what is on screen and no more. The instrument in this clip is
@@ -100,8 +105,8 @@ export const videos = [
     title: 'The system, shown',
     src: launchVideo,
     poster: launchPoster,
-    w: 608,
-    h: 1080,
+    w: 720,
+    h: 1280,
     length: '1:08',
     caption: 'A NaviNetics launch event: the instruments on the stand, the method presented, and '
       + 'the frame itself in hand.',
@@ -229,7 +234,7 @@ export const images = [
   {
     id: 'sw-dti1',
     title: 'Tractography',
-    src: swDti1, w: 2126, h: 1137, category: 'Software', page: P.ai,
+    src: swDti1, w: 1152, h: 1112, category: 'Software', page: P.ai,
     caption: 'Fiber tracts reconstructed from diffusion imaging.',
   },
   {
@@ -242,7 +247,7 @@ export const images = [
   {
     id: 'sw-target',
     title: 'Target and trajectory',
-    src: swTarget, w: 2400, h: 1316, category: 'Software', page: P.ai,
+    src: swTarget, w: 2400, h: 912, category: 'Software', page: P.ai,
     caption: 'A target set and the approach to it, in the workspace.',
   },
 
