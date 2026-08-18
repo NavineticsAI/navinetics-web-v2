@@ -79,3 +79,14 @@ tools/.routes/
 tools/.mobile/
 tools/.shots/
 tools/.webkit/
+
+# Scratch for tools/media-review.mjs: contact sheets and a Chrome profile.
+tools/.media/
+
+# The two clips supplied 2026-08-18. 26 MB between them, neither publishable
+# as it stands — one is live surgery with an identifiable patient, the other
+# carries surface-scan slides. tools/media-review.mjs has the full review.
+# Nothing in the build reads them, and git would keep them forever. Keep them
+# wherever the footage lives; remove these lines when a cleared, web-encoded
+# version exists to commit.
+src/assets/media/VIDEO-*.mp4

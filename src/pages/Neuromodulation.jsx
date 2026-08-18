@@ -6,7 +6,6 @@ import { chapters, evidence, gap, paperFor } from '../data/neuromodulation.js';
 import { doiLink, founders } from '../data/publications.js';
 import { Hero, LinkAction, ProductCard, Reveal, Section, SectionHead } from '../ui/index.js';
 import { ScienceBand } from '../ui/ScienceBand.jsx';
-import { EducationTopics } from './Education.jsx';
 import { topics } from '../data/education.js';
 
 /**
@@ -145,13 +144,51 @@ export default function Neuromodulation() {
         </div>
       </Section>
 
-      {/* The method, from first principles — moved onto this page rather than
-          linked from it. What deep brain stimulation is, how a neurochemical is
-          detected at all, and the two recording methods the papers above
-          introduced. It used to live on /resources/education, three levels down
-          the nav behind Media and Careers, which meant the reader most likely to
-          want it was the least likely to find it. */}
-      <EducationTopics topics={topics.filter((t) => (tech.teaches ?? []).includes(t.id))} />
+      {/* THE METHOD, INDEXED — not inlined.
+          ─────────────────────────────────────────────────────────────────
+          This used to render all four education topics in full, on the
+          grounds that /resources/education sits three levels down the nav and
+          the reader most likely to want the science was least likely to find
+          it. The discovery problem was real; the fix was not. Four complete
+          lessons ran to about 9,000px on a page whose four bands had already
+          explained the same science, so the page was 12,300px long and said
+          most things twice.
+
+          An index solves the discovery problem at a twentieth of the length:
+          the four topics are named here, with the definition each opens on,
+          one click from the page that teaches them. */}
+      <Section band>
+        <SectionHead
+          eyebrow="The method"
+          title="From first principles."
+          lead="What deep brain stimulation is, how a neurochemical is detected at all, and the
+            two recording methods these papers introduced."
+        />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          {topics
+            .filter((t) => (tech.teaches ?? []).includes(t.id))
+            .map((t) => (
+              <Reveal key={t.id}>
+                <Link
+                  to={`/resources/education#${t.id}`}
+                  className="group/t flex h-full flex-col gap-2 rounded-lg border border-hairline-soft
+                    bg-surface p-6 transition-[transform,box-shadow,border-color] duration-[420ms]
+                    ease-out hover:-translate-y-1 hover:border-hairline hover:shadow-e2"
+                >
+                  <span className="font-data text-[0.625rem] uppercase tracking-[0.14em] text-action">
+                    {t.n}
+                  </span>
+                  <h3 className="text-lg tracking-[-0.025em]">{t.title}</h3>
+                  <p className="text-sm leading-relaxed text-ink-2">{t.definition}</p>
+                  <span className="mt-auto pt-3 font-data text-[0.625rem] uppercase tracking-[0.12em]
+                    text-action underline-offset-4 group-hover/t:underline">
+                    Read it
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
+        </div>
+      </Section>
     </>
   );
 }

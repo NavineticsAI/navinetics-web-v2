@@ -1,80 +1,282 @@
 /**
- * Media gallery — video and image library.
+ * The media library.
  *
- * Items below reference existing site assets so the gallery is functional
- * today. Real photography, surgical footage and animations replace them as
- * they become available.
+ * Two collections: the videos, and every photograph, render and figure the
+ * site publishes. Each image carries the page it appears on, so the library is
+ * a way into the site rather than a dead end — a reader who finds a picture
+ * here can go and read what it illustrates.
  *
- * Shape:
- *   { id, title, kind, category, src, poster?, caption }
- *     kind:     'image' | 'video'
- *     category: drives the filter chips, derived automatically below
+ * WHERE THE ENTRIES COME FROM. Not a directory listing. The list was built by
+ * crawling the built site for every rendered image and then curating: marks,
+ * logos, icons and UI chrome are excluded because a gallery is the wrong place
+ * for a wordmark, and masters are excluded where an optimised sibling exists.
  *
- * NOTE ON SURGICAL FOOTAGE: any clinical video needs patient consent and,
- * depending on content, an interstitial warning. None is included here.
+ * ─────────────────────────────────────────────────────────────────────────────
+ * NOT HERE, deliberately
+ *
+ * SURGICAL FOOTAGE. Any clinical video needs patient consent and, depending on
+ * content, an interstitial warning. Two clips supplied on 2026-08-18 are NOT
+ * published here; tools/media-review.mjs records exactly what is in them and
+ * what has to be answered before either could be.
+ *
+ * TWO MAVEN FIGURES. fig-waveform and fig-fscv appear on the MAVEN and
+ * neuromodulation pages but not in this library. They look like journal
+ * figures and their permissions are unresolved. A library reads as "assets you
+ * may reuse", which is a stronger claim than an inline citation, so they go in
+ * when the permissions answer does.
+ * ─────────────────────────────────────────────────────────────────────────────
  */
-/**
- * ASSET NOTE — four fabricated device images were deleted from public/ on
- * 2026-08-03: stereotactic_halo.png, halo_ring.png, skull_anchor.png and
- * surgical_probe.png. All four were AI renders of devices that do not exist,
- * carrying fake CE marks and invented model, serial and lot numbers; one bore
- * a competitor's trademark (Stryker) and one a fabricated Ø0.8 mm dimension
- * callout. surgical_probe.png was live here and in MAVEN's gallery, captioned
- * as a carbon-fiber microelectrode assembly, which it was not.
- *
- * A fabricated specification or CE mark on a medical device company's site is
- * a regulatory problem, not a stock-photo problem. Use photography of actual
- * devices, or renders derived from our own CAD — see tools/d1-frame.mjs.
- */
-
 import { asset } from '../lib/asset.js';
 
-export const mediaItems = [
+import d1Hero from '../assets/d1/hero.webp';
+import d1Detail from '../assets/d1/detail.webp';
+import d1Head from '../assets/d1/head.webp';
+import mavenDevice from '../assets/maven/device.webp';
+import mavenDetail from '../assets/maven/detail.webp';
+import mavenSensor from '../assets/maven/fig-sensor.webp';
+import mavenField from '../assets/maven/fig-field.webp';
+import table from '../assets/or-tables/table.webp';
+import tableAlt from '../assets/or-tables/table-alt.webp';
+import tableSide from '../assets/or-tables/table-side.webp';
+import tableMotion from '../assets/or-tables/table-motion.webp';
+import swFusion from '../assets/software/fusion.webp';
+import swNbar from '../assets/software/nbar.webp';
+import swAcpc from '../assets/software/acpc.webp';
+import swDti1 from '../assets/software/dti1.webp';
+import swDti2 from '../assets/software/dti2.webp';
+import swTarget from '../assets/software/target.webp';
+import eduLocaliser from '../assets/education/02.3.a.webp';
+import eduSlice from '../assets/education/02.3.b.webp';
+import eduAtlas from '../assets/education/01.2.webp';
+import frameVideo from '../assets/education/02.1.web.mp4';
+import framePoster from '../assets/education/02.1.web.poster.webp';
+
+/** Where each asset is used. One place, so a route rename breaks once. */
+const P = {
+  d1: { to: '/products/d1-stereotactic-frame', label: 'NRSS' },
+  tables: { to: '/products/carbon-fiber-surgical-tables', label: 'Surgical Tables' },
+  maven: { to: '/products/maven-neuromodulation', label: 'MAVEN' },
+  ai: { to: '/technology/navinetics-ai', label: 'NaviNetics AI' },
+  neuro: { to: '/technology/neuromodulation', label: 'Neuromodulation' },
+  education: { to: '/resources/education', label: 'Education' },
+  founders: { to: '/company/our-founders', label: 'Our Founders' },
+};
+
+/** Videos. The first entry is the one the page leads with. */
+export const videos = [
   {
-    id: 'anchor-key-model',
-    title: 'Skull Anchor Key on anatomical model',
-    kind: 'image',
-    category: 'Devices',
-    src: asset('/model-head-clean-750x998-1-451x600.png'),
-    fit: 'contain',
-    caption: 'The Skull Anchor Key keeps the face clear.',
+    id: 'instrument-turned',
+    title: 'The instrument, turned',
+    src: frameVideo,
+    poster: framePoster,
+    w: 1280,
+    h: 720,
+    length: '0:16',
+    caption: 'The stereotactic frame on a head model, turning, with a probe held on its '
+      + 'trajectory as the arc moves around it. A render, not a photograph.',
+    page: P.education,
+  },
+];
+
+/**
+ * Every photograph, render and figure the site publishes.
+ *
+ * `page` is where the image is used, not where it came from.
+ */
+export const images = [
+  /* ── Devices ─────────────────────────────────────────────────────────── */
+  {
+    id: 'nrss-hero',
+    title: 'NRSS, three-quarter view',
+    src: d1Hero, w: 1027, h: 1565, category: 'Devices', page: P.d1,
+    caption: 'The frame ray traced from its own assembly CAD, in the anodized blue the '
+      + 'instrument is finished in.',
   },
   {
-    id: 'frame-assembly',
-    title: 'NRSS stereotactic frame',
-    kind: 'image',
-    category: 'Devices',
-    src: asset('/DSC05397-1024x695.jpg'),
-    fit: 'cover',
-    caption: 'Arc-centered frame assembly.',
+    id: 'nrss-detail',
+    title: 'NRSS from the opposite side',
+    src: d1Detail, w: 759, h: 1134, category: 'Devices', page: P.d1,
+    caption: 'The same model and the same studio, one camera further round.',
+  },
+  {
+    id: 'nrss-head',
+    title: 'NRSS on a head model',
+    src: d1Head, w: 444, h: 1042, category: 'Devices', page: P.d1,
+    caption: 'The frame fitted to an anatomical head model, with the face left clear.',
+  },
+  {
+    id: 'nrss-system',
+    title: 'The NRSS system, laid out',
+    src: asset('/DSC05397-1024x695.jpg'), w: 1024, h: 695, category: 'Devices', page: P.d1,
+    caption: 'Frame, localizers, microdrive and accessories in the case they ship in.',
+  },
+  {
+    id: 'anchor-key',
+    title: 'Skull Anchor Key on a head model',
+    src: asset('/model-head-clean-750x998-1-451x600.png'), w: 451, h: 600,
+    category: 'Devices', page: P.d1,
+    caption: 'The anchor key takes the place of a base ring, which is what keeps the face '
+      + 'unobstructed.',
   },
   {
     id: 'microdrive',
     title: 'Mechanical microdrive',
-    kind: 'image',
-    category: 'Devices',
-    src: asset('/microdrive-image-1024x797.png'),
-    fit: 'contain',
-    caption: 'Advances electrodes and leads along the planned trajectory.',
+    src: asset('/microdrive-image-1024x797.png'), w: 1024, h: 797, category: 'Devices', page: P.d1,
+    caption: 'Advances electrodes and leads along the trajectory the arc has set.',
+  },
+  {
+    id: 'maven-device',
+    title: 'MAVEN',
+    src: mavenDevice, w: 620, h: 869, category: 'Devices', page: P.maven,
+    caption: 'The neuromodulation instrument: neurochemical and electrophysiological recording '
+      + 'with stimulation, on one timebase.',
+  },
+  {
+    id: 'maven-panel',
+    title: 'MAVEN front panel',
+    src: mavenDetail, w: 1200, h: 800, category: 'Devices', page: P.maven,
+    caption: 'The channel inputs and controls, close up.',
+  },
+  {
+    id: 'table-hero',
+    title: 'Carbon fiber operating table',
+    src: table, w: 1500, h: 571, category: 'Devices', page: P.tables,
+    caption: 'A carbon-fiber tabletop for imaging-guided procedures.',
+  },
+  {
+    id: 'table-alt',
+    title: 'Operating table, three-quarter view',
+    src: tableAlt, w: 1500, h: 900, category: 'Devices', page: P.tables,
+    caption: 'The same table from the corner, showing the column and the base.',
+  },
+  {
+    id: 'table-side',
+    title: 'Operating table in side elevation',
+    src: tableSide, w: 1400, h: 672, category: 'Devices', page: P.tables,
+    caption: 'The top cantilevered clear of the column, so nothing but carbon sits over the base.',
+  },
+  {
+    id: 'table-motion',
+    title: 'Tilt positions, superimposed',
+    src: tableMotion, w: 1400, h: 856, category: 'Devices', page: P.tables,
+    caption: 'One table photographed in several tilt positions, one over another.',
+  },
+
+  /* ── Software ────────────────────────────────────────────────────────── */
+  {
+    id: 'sw-fusion',
+    title: 'CT and MR in one space',
+    src: swFusion, w: 2400, h: 1316, category: 'Software', page: P.ai,
+    caption: 'The stereotactic CT carries the frame and the MR carries the anatomy; fusion puts '
+      + 'them in the same coordinate space.',
+  },
+  {
+    id: 'sw-nbar',
+    title: 'N-Bar detection',
+    src: swNbar, w: 1399, h: 1124, category: 'Software', page: P.ai,
+    caption: 'The localizer rods found in the scan, three points per plate on every slice.',
+  },
+  {
+    id: 'sw-acpc',
+    title: 'AC-PC landmarks',
+    src: swAcpc, w: 2400, h: 907, category: 'Software', page: P.ai,
+    caption: 'The anterior and posterior commissures placed, which is what an indirect target is '
+      + 'measured from.',
+  },
+  {
+    id: 'sw-dti1',
+    title: 'Tractography',
+    src: swDti1, w: 2126, h: 1137, category: 'Software', page: P.ai,
+    caption: 'Fiber tracts reconstructed from diffusion imaging.',
+  },
+  {
+    id: 'sw-dti2',
+    title: 'Tractography in the surgical plan',
+    src: swDti2, w: 2126, h: 1137, category: 'Software', page: P.ai,
+    caption: 'The tracts shown against the planned trajectory, so an approach can be judged '
+      + 'against what it passes.',
+  },
+  {
+    id: 'sw-target',
+    title: 'Target and trajectory',
+    src: swTarget, w: 2400, h: 1316, category: 'Software', page: P.ai,
+    caption: 'A target set and the approach to it, in the workspace.',
+  },
+
+  /* ── Science ─────────────────────────────────────────────────────────── */
+  {
+    id: 'fig-sensor',
+    title: 'Carbon-fiber microelectrode',
+    src: mavenSensor, w: 1262, h: 639, category: 'Science', page: P.neuro,
+    caption: 'The probe that reads the chemistry and hears the tissue, in one insertion.',
+  },
+  {
+    id: 'fig-field',
+    title: 'The voltammetric field',
+    src: mavenField, w: 577, h: 513, category: 'Science', page: P.neuro,
+    caption: 'Current in color across potential and scan number, as the software draws it.',
+  },
+  {
+    id: 'edu-localiser',
+    title: 'The localizer and the slice it produces',
+    src: eduLocaliser, w: 1399, h: 1124, category: 'Science', page: P.education,
+    caption: 'Rods around the head, and the nine marks they leave in one axial image.',
+  },
+  {
+    id: 'edu-slice',
+    title: 'A slice, placed in the frame',
+    src: eduSlice, w: 1280, h: 1260, category: 'Science', page: P.education,
+    caption: 'How the spacing of three marks reports the height and the tilt of the plane they '
+      + 'came from.',
+  },
+  {
+    id: 'edu-atlas',
+    title: 'Atlas coordinates',
+    src: eduAtlas, w: 1400, h: 1128, category: 'Science', page: P.education,
+    caption: 'Where an indirect target sits relative to the commissures.',
   },
   {
     id: 'wincs',
-    title: 'WINCS Harmoni device',
-    kind: 'image',
-    category: 'Research',
-    src: asset('/WINC-Harmoni-Device.png'),
-    fit: 'contain',
-    caption: 'Wireless neurochemical and electrophysiological recording.',
+    title: 'WINCS Harmoni',
+    src: asset('/WINC-Harmoni-Device.png'), w: 624, h: 485, category: 'Science', page: P.neuro,
+    caption: 'Wireless neurochemical and electrophysiological recording, from the published '
+      + 'research the instrument grew out of.',
   },
   {
     id: 'wincs-preclinical',
     title: 'WINCS in a preclinical model',
-    kind: 'image',
-    category: 'Research',
-    src: asset('/WINCS-Swine-Model-1024x668.png'),
-    fit: 'cover',
+    src: asset('/WINCS-Swine-Model-1024x668.png'), w: 1024, h: 668,
+    category: 'Science', page: P.neuro,
     caption: 'Recording in swine.',
+  },
+
+  /* ── People ──────────────────────────────────────────────────────────── */
+  {
+    id: 'kendall-lee',
+    title: 'Kendall Lee',
+    src: asset('/kendall-lee-150-500x400-1.jpg'), w: 1200, h: 960,
+    category: 'People', page: P.founders,
+    caption: 'Co-founder. Neurosurgeon, Mayo Clinic.',
+  },
+  {
+    id: 'kevin-bennet',
+    title: 'Kevin Bennet',
+    src: asset('/kevin-bennet.jpg'), w: 1200, h: 960, category: 'People', page: P.founders,
+    caption: 'Co-founder. Division of Engineering, Mayo Clinic.',
+  },
+  {
+    id: 'stephan-goerss',
+    title: 'Stephan Goerss',
+    src: asset('/stephan-goerss-150.jpg'), w: 1200, h: 960, category: 'People', page: P.founders,
+    caption: 'Co-founder. Stereotactic instrument design.',
+  },
+  {
+    id: 'yoonbae-oh',
+    title: 'Yoonbae Oh',
+    src: asset('/yoonbae-oh.jpg'), w: 1200, h: 960, category: 'People', page: P.founders,
+    caption: 'Co-founder. Neurochemical sensing.',
   },
 ];
 
-export const mediaCategories = [...new Set(mediaItems.map((m) => m.category))].sort();
+/** Filter chips, in the order the page shows them. */
+export const imageCategories = ['Devices', 'Software', 'Science', 'People'];
