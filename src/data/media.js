@@ -14,10 +14,23 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * NOT HERE, deliberately
  *
- * SURGICAL FOOTAGE. Any clinical video needs patient consent and, depending on
- * content, an interstitial warning. Two clips supplied on 2026-08-18 are NOT
- * published here; tools/media-review.mjs records exactly what is in them and
- * what has to be answered before either could be.
+ * SURGICAL FOOTAGE IS PUBLISHED HERE, on NaviNetics' instruction of
+ * 2026-08-18, after both clips were reviewed frame by frame and what is in
+ * them was reported. tools/media-review.mjs holds that review in full. Three
+ * things about it remain open and are NaviNetics' to close:
+ *
+ *   · Consent. The operating-room clip shows an identifiable patient and
+ *     identifiable staff, and at 22 s a fluoroscopy monitor carries
+ *     handwritten annotation that may identify a patient.
+ *   · Whose device it is. The frame in that clip is black with a "COLLAR ANG"
+ *     arc, where the NRSS is anodized blue. Its caption therefore describes
+ *     what is on screen and stops short of calling the instrument ours.
+ *   · Surface scanning. The launch clip's slides at 44 s and 52 s name 3D
+ *     surface scans, which this site is otherwise under standing instruction
+ *     never to mention.
+ *
+ * Poster frames are chosen deliberately. The still a visitor sees before
+ * deciding to play shows the instrument, not the surgical field.
  *
  * TWO MAVEN FIGURES. fig-waveform and fig-fscv appear on the MAVEN and
  * neuromodulation pages but not in this library. They look like journal
@@ -50,6 +63,10 @@ import eduSlice from '../assets/education/02.3.b.webp';
 import eduAtlas from '../assets/education/01.2.webp';
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
+import orVideo from '../assets/media/or-footage.web.mp4';
+import orPoster from '../assets/media/or-footage.web.poster.webp';
+import launchVideo from '../assets/media/launch.web.mp4';
+import launchPoster from '../assets/media/launch.web.poster.webp';
 
 /** Where each asset is used. One place, so a route rename breaks once. */
 const P = {
@@ -64,6 +81,32 @@ const P = {
 
 /** Videos. The first entry is the one the page leads with. */
 export const videos = [
+  {
+    id: 'or-footage',
+    title: 'In the operating room',
+    src: orVideo,
+    poster: orPoster,
+    w: 608,
+    h: 1080,
+    length: '0:53',
+    note: 'Surgical footage',
+    /* Describes what is on screen and no more. The instrument in this clip is
+       not the one the rest of the site shows — see the notice above. */
+    caption: 'A stereotactic frame in use: the arc set on its collar, instruments laid out, and '
+      + 'the trajectory taken down to target under fluoroscopy.',
+  },
+  {
+    id: 'launch',
+    title: 'The system, shown',
+    src: launchVideo,
+    poster: launchPoster,
+    w: 608,
+    h: 1080,
+    length: '1:08',
+    caption: 'A NaviNetics launch event: the instruments on the stand, the method presented, and '
+      + 'the frame itself in hand.',
+    page: P.d1,
+  },
   {
     id: 'instrument-turned',
     title: 'The instrument, turned',

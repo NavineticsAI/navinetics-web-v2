@@ -62,7 +62,12 @@ export default function Media() {
           </Reveal>
 
           <Reveal className="mt-9 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-            <figure className="m-0 overflow-hidden rounded-xl border border-[var(--mv-rule-2)] bg-black">
+            {/* Capped by height and centred. These clips are vertical, and a
+                608 x 1080 video stretched to the width of this column is over
+                1,400px tall — the caption beside it would be off screen before
+                the video finished. */}
+            <figure className="m-0 flex justify-center overflow-hidden rounded-xl
+              border border-[var(--mv-rule-2)] bg-black">
               <video
                 src={featured.src}
                 poster={featured.poster}
@@ -72,10 +77,16 @@ export default function Media() {
                 playsInline
                 preload="none"
                 aria-label={featured.caption}
-                className="block h-auto w-full"
+                className="block h-auto max-h-[70svh] w-auto max-w-full"
               />
             </figure>
             <figcaption className="flex flex-col gap-4">
+              {featured.note && (
+                <span className="w-fit rounded-sm border border-sg-300/35 bg-sg-300/10 px-2.5 py-1
+                  font-data text-[0.625rem] uppercase tracking-[0.12em] text-sg-300">
+                  {featured.note}
+                </span>
+              )}
               <p className="text-[0.9375rem] leading-relaxed text-nn-200">{featured.caption}</p>
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-data text-[0.625rem]
                 uppercase tracking-[0.12em] text-ink-3">
@@ -98,7 +109,8 @@ export default function Media() {
               {rest.map((v) => (
                 <Reveal key={v.id}>
                   <figure className="m-0 flex flex-col gap-3">
-                    <div className="overflow-hidden rounded-lg border border-[var(--mv-rule-2)] bg-black">
+                    <div className="flex justify-center overflow-hidden rounded-lg
+                      border border-[var(--mv-rule-2)] bg-black">
                       <video
                         src={v.src}
                         poster={v.poster}
@@ -108,11 +120,17 @@ export default function Media() {
                         playsInline
                         preload="none"
                         aria-label={v.caption}
-                        className="block h-auto w-full"
+                        className="block h-auto max-h-[46svh] w-auto max-w-full"
                       />
                     </div>
                     <figcaption className="flex flex-col gap-1.5">
                       <h3 className="text-[1.0625rem] tracking-[-0.025em] text-nn-50">{v.title}</h3>
+                      {v.note && (
+                        <span className="w-fit font-data text-[0.625rem] uppercase
+                          tracking-[0.12em] text-sg-300">
+                          {v.note}
+                        </span>
+                      )}
                       <p className="text-sm leading-relaxed text-nn-200">{v.caption}</p>
                       {v.page && (
                         <Link
