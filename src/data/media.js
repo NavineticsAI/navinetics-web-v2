@@ -14,10 +14,9 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * NOT HERE, deliberately
  *
- * SURGICAL FOOTAGE IS PUBLISHED HERE, on NaviNetics' instruction of
- * 2026-08-18, after both clips were reviewed frame by frame and what is in
- * them was reported. tools/media-review.mjs holds that review in full. Three
- * things about it remain open and are NaviNetics' to close:
+ * THE SUPPLIED CLIPS ARE NOT PUBLISHED HERE. tools/media-review.mjs holds the
+ * frame-by-frame review in full. Four things about them remain open and are
+ * NaviNetics' to close:
  *
  *   · Consent. The operating-room clip shows an identifiable patient and
  *     identifiable staff, and at 22 s a fluoroscopy monitor carries
@@ -28,11 +27,8 @@
  *   · Surface scanning. The launch clip's slides at 44 s and 52 s name 3D
  *     surface scans, which this site is otherwise under standing instruction
  *     never to mention.
- *   · Audio. Both clips are served as supplied and both carry a sound track,
- *     which nobody has reviewed. An operating room is a room full of people
- *     talking. The first published pass happened to be silent — the canvas
- *     recorder that produced it drops audio — so this is new surface, not
- *     pre-existing.
+ *   · Audio. Both clips carry a sound track, which nobody has reviewed. An
+ *     operating room is a room full of people talking.
  *
  * Poster frames are chosen deliberately. The still a visitor sees before
  * deciding to play shows the instrument, not the surgical field.
@@ -68,11 +64,6 @@ import eduSlice from '../assets/education/02.3.b.webp';
 import eduAtlas from '../assets/education/01.2.webp';
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
-import orVideo from '../assets/media/or-footage.mp4';
-import orPoster from '../assets/media/or-footage.poster.webp';
-import launchVideo from '../assets/media/launch.mp4';
-import launchPoster from '../assets/media/launch.poster.webp';
-
 /** Where each asset is used. One place, so a route rename breaks once. */
 const P = {
   d1: { to: '/products/d1-stereotactic-frame', label: 'NRSS' },
@@ -86,32 +77,6 @@ const P = {
 
 /** Videos. The first entry is the one the page leads with. */
 export const videos = [
-  {
-    id: 'or-footage',
-    title: 'In the operating room',
-    src: orVideo,
-    poster: orPoster,
-    w: 720,
-    h: 1280,
-    length: '0:53',
-    note: 'Surgical footage',
-    /* Describes what is on screen and no more. The instrument in this clip is
-       not the one the rest of the site shows — see the notice above. */
-    caption: 'A stereotactic frame in use: the arc set on its collar, instruments laid out, and '
-      + 'the trajectory taken down to target under fluoroscopy.',
-  },
-  {
-    id: 'launch',
-    title: 'The system, shown',
-    src: launchVideo,
-    poster: launchPoster,
-    w: 720,
-    h: 1280,
-    length: '1:08',
-    caption: 'A NaviNetics launch event: the instruments on the stand, the method presented, and '
-      + 'the frame itself in hand.',
-    page: P.d1,
-  },
   {
     id: 'instrument-turned',
     title: 'The instrument, turned',
