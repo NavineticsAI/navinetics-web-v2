@@ -98,27 +98,62 @@ export default function Technology() {
               the products it is built into. */}
           <EducationTopics topics={topics.filter((t) => (tech.teaches ?? []).includes(t.id))} />
 
-          {products.length > 0 && (
+          {/* PRODUCTS AND HAND-OFFS IN ONE SECTION.
+              ─────────────────────────────────────────────────────────────
+              These were two consecutive sections, and both were nearly empty:
+              a three-column grid holding a single product card, then a whole
+              section wrapped around a single link. Two thin sections back to
+              back read as a page running out of things to say. Side by side
+              they read as a close — and it matches how the neuromodulation
+              page ends, which is the same job. */}
+          {(products.length > 0 || tech.readMore?.length > 0) && (
             <Section band wide>
-              <SectionHead
-                eyebrow="Applied in"
-                title="Where you'll find it."
-                lead="The devices this technology is built into."
-              />
-              <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                {products.map((p) => (
-                  <Reveal key={p.slug}>
-                    <ProductCard product={p} />
-                  </Reveal>
-                ))}
+              <div className="grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-16">
+                {products.length > 0 && (
+                  <div>
+                    <SectionHead
+                      eyebrow="Applied in"
+                      title="Where you'll find it."
+                      lead="The devices this technology is built into."
+                    />
+                    {/* Capped at two columns: `appliedIn` is one product today
+                        and a single card stretched across a three-column grid
+                        looked like two had failed to load. */}
+                    <div className="mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
+                      {products.map((p) => (
+                        <Reveal key={p.slug}>
+                          <ProductCard product={p} />
+                        </Reveal>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {tech.readMore?.length > 0 && (
+                  <div>
+                    <SectionHead eyebrow="Go deeper" title="The science, and the evidence." tick={false} />
+                    <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-2">
+                      This page stays at platform level on purpose. The detail lives where it
+                      belongs.
+                    </p>
+                    <div className="mt-6 flex flex-col gap-4">
+                      {tech.readMore.map((r) => (
+                        <Reveal key={r.to}>
+                          <LinkAction to={r.to}>{r.label}</LinkAction>
+                        </Reveal>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </Section>
           )}
         </>
       )}
 
-      {tech.readMore?.length > 0 && (
-        <Section band={isTechPlaceholder(tech)}>
+      {/* A placeholder technology has no products section to sit beside, so
+          the hand-offs keep a section of their own on that branch only. */}
+      {isTechPlaceholder(tech) && tech.readMore?.length > 0 && (
+        <Section band>
           <SectionHead
             eyebrow="Go deeper"
             title="The science, and the evidence."

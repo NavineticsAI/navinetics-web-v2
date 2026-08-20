@@ -1,10 +1,9 @@
 import { usePageMeta } from '../lib/meta.js';
 import { getTechnology } from '../data/technology.js';
-import { Badge, Reveal, Section, SectionHead } from '../ui/index.js';
+import { Button, Reveal, Section, SectionHead } from '../ui/index.js';
 // Not from the barrel — see the note there. These imports are what keep the
 // volume renderer and the scene generators out of the main bundle.
 import { BrainHero } from '../ui/BrainHero.jsx';
-import { DemoLauncher } from '../ui/DemoLauncher.jsx';
 import { NextSection } from '../ui/NextSection.jsx';
 import { FEATURE_BANDS, SceneBand } from '../ui/SceneBand.jsx';
 
@@ -24,8 +23,14 @@ export default function NaviNeticsAI() {
 
   usePageMeta({
     title: 'NaviNetics AI',
+    /* Was "Try a simulation of the planning workspace, running on a generated
+       head" — which advertised a demo this page no longer carries. It now says
+       what the software is and what it does, which is also what a search
+       result should say about a planning workstation. */
     description:
-      'Stereotactic navigation software. Try a simulation of the planning workspace, running on a generated head.',
+      'Desktop software for stereotactic neurosurgical planning: CT and MR fusion, automatic '
+      + 'frame registration, AC-PC targeting and diffusion tractography in one workspace, on '
+      + 'the machine in front of you.',
   });
 
   return (
@@ -73,6 +78,31 @@ export default function NaviNeticsAI() {
             <Reveal key={s.head}>
               <h3 className="text-lg tracking-[-0.025em]">{s.head}</h3>
               <p className="mt-2.5 text-[0.9375rem] leading-[1.7] text-ink-2">{s.body}</p>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {/* AT A GLANCE, before the long-form bands.
+          ─────────────────────────────────────────────────────────────────
+          The three paragraphs above are the argument; the four bands below
+          are the demonstration. Between them a reader had no way to see the
+          scope of the thing in one screen, which is the first question a
+          department asks. This is that list — short lines, scannable, no
+          claim that is not already made and evidenced further down. */}
+      <Section band wide>
+        <SectionHead
+          eyebrow="At a glance"
+          title="What it does."
+          lead="Every line here is expanded on further down the page."
+        />
+        <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+          {CAPABILITIES.map((c) => (
+            <Reveal key={c.head}>
+              <div className="flex flex-col gap-1.5 border-t border-hairline pt-4">
+                <h3 className="text-[0.9375rem] font-semibold tracking-[-0.015em]">{c.head}</h3>
+                <p className="text-sm leading-relaxed text-ink-2">{c.body}</p>
+              </div>
             </Reveal>
           ))}
         </div>
@@ -156,19 +186,38 @@ export default function NaviNeticsAI() {
           screenshot of it, passed on without context, could be taken for a
           cleared product running on a patient. Saying plainly that the head is
           generated is the one line that prevents that. */}
-      <DemoLauncher
-        eyebrow="Try it yourself"
-        title="A glimpse of the workspace."
-        lead="Not the application — a small demonstration of it, rebuilt to run in a browser on
-          generated anatomy. It covers one thing: setting a trajectory against the geometry an
-          arc-centered frame imposes."
-        note="Synthetic head — generated, not patient data"
-        actions={[
-          { label: 'Ask us about it', href: 'mailto:info@navinetics.com', arrow: true },
-          ...(tech?.readMore ?? []).map((r) => ({ label: r.label, to: r.to, arrow: true })),
-        ]}
-        about={<AboutThisDemo />}
-      />
+      {/* THE DEMO IS NOT RENDERED.
+          ─────────────────────────────────────────────────────────────────
+          What stood here was a DemoLauncher: a browser rebuild of the
+          planning workspace on generated anatomy, with a "Synthetic head"
+          note and a long disclosure panel explaining exactly what it was and
+          was not. It is out at NaviNetics' request; the two ways forward it
+          carried are what is left.
+
+          Putting it back is one JSX block — ui/DemoLauncher.jsx is untouched
+          and the removed markup, including the disclosure copy, is in this
+          file's history. Do restore the note and the disclosure with it: the
+          demo looks like a working clinical workstation, and a screenshot of
+          it passed on without context could be taken for a cleared product
+          running on a patient. */}
+      <Section>
+        <SectionHead
+          eyebrow="Next"
+          title="Talk to us about it."
+          lead="The software is in development and not cleared for clinical use. If it is relevant
+            to your department, the fastest route is a conversation."
+        />
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Button href="mailto:info@navinetics.com" size="lg" arrow>
+            Ask us about it
+          </Button>
+          {(tech?.readMore ?? []).map((r) => (
+            <Button key={r.to} to={r.to} size="lg" variant="secondary">
+              {r.label}
+            </Button>
+          ))}
+        </div>
+      </Section>
 
       {/* Closes the page the way the hero opened it. Says only that there is a
           next step and roughly where it sits — no method, no date, no
@@ -196,6 +245,61 @@ export default function NaviNeticsAI() {
    placement tolerance against ASTM F2554-18, and the OR benchmark below is a
    comparative claim. Both are regulated marketing claims and need NaviNetics
    sign-off before they appear as specifications.                          */
+/* ── what it does, in one screen ───────────────────────────────────────────
+   Nine lines, and not one of them is a new claim: each is the short form of
+   something SOFTWARE above or FEATURE_BANDS below already states and evidences
+   against the application source. If a line here cannot be traced to one of
+   those, it should not be here.
+
+   No accuracy figure, no comparison, no timing. Those are regulated marketing
+   claims and are absent from this page on purpose — see the note above
+   SOFTWARE and the status ladder in the page body.                        */
+const CAPABILITIES = [
+  {
+    head: 'One workspace',
+    body: 'Fusion, registration, targeting and tractography are stages of one application, not '
+      + 'separate tools passing files between them.',
+  },
+  {
+    head: 'Runs on the machine in front of you',
+    body: 'An ordinary Windows desktop. No cloud service and no upload — the study stays where '
+      + 'it is.',
+  },
+  {
+    head: 'Cases reopen as they were left',
+    body: 'A case is a single bundle. Plans leave as PDF or CSV.',
+  },
+  {
+    head: 'Staged fusion',
+    body: 'Alignment runs in stages, prepared differently for CT and for MR rather than one '
+      + 'recipe for both.',
+  },
+  {
+    head: 'Alignment is scored',
+    body: 'Four independent checks. A result that fails is rejected rather than quietly drawn '
+      + 'on the anatomy.',
+  },
+  {
+    head: 'The frame found automatically',
+    body: 'Three localizer points per plate on every slice — hundreds of fiducials across the '
+      + 'stack, detected rather than picked.',
+  },
+  {
+    head: 'AC-PC coordinates',
+    body: 'The coordinate frame rotates onto the commissural line, so an offset means the same '
+      + 'thing between patients.',
+  },
+  {
+    head: 'More than one trajectory',
+    body: 'Multiple plans per case, compared side by side, with clearance checked along each.',
+  },
+  {
+    head: 'Diffusion tractography',
+    body: 'Tracts reconstructed and shown against the planned approach, so it can be judged '
+      + 'against what it passes.',
+  },
+];
+
 const SOFTWARE = [
   {
     head: 'A unified, intuitive interface',
@@ -219,49 +323,6 @@ const SOFTWARE = [
       + 'code, so a different frame is a change to its data rather than to its software.',
   },
 ];
-
-/**
- * Shown on request, from the button beside "Try it out".
- *
- * The always-visible disclosure is elsewhere: the "Synthetic dataset" chip in
- * the workstation's own title bar, and the word "simulation" in the hero lead.
- * This is the long form for anyone who wants to know exactly what they are
- * looking at.
- */
-function AboutThisDemo() {
-  return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3">
-        <Badge tone="warn" dot>
-          Simulated interface · synthetic dataset
-        </Badge>
-        <h2 className="text-d2">The anatomy is synthetic.</h2>
-        <p className="text-lead leading-[1.55] text-ink-2">
-          The workspace is a real reconstruction running in your browser, driven by the same
-          arc-centered geometry the frame imposes. The anatomy is not.
-        </p>
-      </div>
-
-      <div className="grid gap-6 border-t border-hairline-soft pt-6 sm:grid-cols-2">
-        <div>
-          <h3 className="text-base tracking-[-0.025em]">What is real</h3>
-          <p className="mt-2 text-sm leading-relaxed text-ink-2">
-            Coronal, sagittal and axial planes are re-sliced live as you move the crosshair,
-            and the probe&rsquo;s-eye view is reconstructed perpendicular to the current track.
-            Entry, target, collar and arc are related the way a stereotactic frame relates
-            them: every trajectory passes through one focus.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-base tracking-[-0.025em]">What is generated</h3>
-          <p className="mt-2 text-sm leading-relaxed text-ink-2">
-            The head is synthetic — ellipsoids and noise, given two tissue palettes so it can
-            be shown as MR or CT. It is nobody&rsquo;s anatomy, so there is no scan to
-            de-identify. The interface is a simplified stand-in for the application, and makes
-            no claim about performance, accuracy or regulatory status.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
+/* AboutThisDemo stood here: the disclosure panel the demo opened, stating in
+   full what the workspace was and was not. It comes back with the
+   DemoLauncher, and both are one commit back in this file's history. */

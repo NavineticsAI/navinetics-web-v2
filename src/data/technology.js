@@ -155,8 +155,13 @@ export const technologies = [
     name: 'NaviNetics AI',
     eyebrow: 'Technology — Software',
     tagline: 'Software for\nplanning and targeting.',
+    /* This described the research programme rather than the thing you can
+       look at. It is the subtitle in the Technology nav panel and the hero
+       lead on the page, so it should say what the software does; the
+       published landmark-localization work is still cited on the page. */
     summary:
-      'Software work applying machine learning to neuronavigation — including automated landmark localization, a method the team has already published.',
+      'A desktop workstation for stereotactic planning: CT and MR fusion, automatic frame '
+      + 'registration, targeting and tractography in one application.',
     hero: asset('/microdrive-image-1024x797.png'),
     /* Alt text is read aloud by a screen reader and shown if the image fails.
        It was "Placeholder image — NaviNetics AI visuals pending", which
