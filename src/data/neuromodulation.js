@@ -1,5 +1,4 @@
 import figWaveform from '../assets/maven/fig-waveform.webp';
-import figSensor from '../assets/maven/fig-sensor.webp';
 import figFscv from '../assets/maven/fig-fscv.webp';
 import figField from '../assets/maven/fig-field.webp';
 import { publications } from './publications.js';
@@ -205,46 +204,6 @@ export const chapters = [
       caption: 'A square-wave voltammogram',
     },
     readMore: { label: 'Neurochemical detection, explained', to: '/technology/neuromodulation#neurochemical' },
-  },
-  {
-    id: 'platform',
-    doi: '10.1016/j.bios.2025.118151',
-    ground: 'light',
-    scene: 'spikes',
-    tone: 'ephys',
-    eyebrow: 'Both signals at once',
-    title: 'On one\ntimebase.',
-    lead: 'The chemistry and the electrophysiology had been separate instruments answering '
-      + 'separate questions. A multimodal platform records both in real time, through one probe, '
-      + 'on one timebase — which is what lets what was released be lined up against what fired.',
-    points: [
-      {
-        label: 'Real time, and intraoperative.',
-        body: 'The paper is titled for it: real-time neurochemical and electrophysiologic '
-          + 'monitoring for intraoperative neurosurgical applications.',
-      },
-      {
-        label: 'A carbon-fiber microelectrode does both jobs.',
-        body: 'Finer than a human hair, carrying the sensing surface and the electrical channel '
-          + 'in one assembly.',
-      },
-      {
-        label: 'Thirty-six authors.',
-        /* Bennet, Oh and Lee are all on this author list — it said "both" while
-           the founders page named two scientific founders, and Oh's addition
-           makes three. Check the byline in publications.js before editing. */
-        body: 'Three of them are NaviNetics founders. It is the accumulation of the '
-          + 'three papers above, not a separate line of work.',
-      },
-    ],
-    meta: [{ label: 'Signals', value: 'Chemical + electrical' }, { label: 'Reported', value: '2026' }],
-    figure: {
-      src: figSensor, w: 1308, h: 1026,
-      alt: 'A carbon-fiber microelectrode: the fiber, silica and polyamide tubing, and the inner '
-        + 'and outer cannula, photographed against a scale and drawn in section.',
-      caption: 'The carbon-fiber microelectrode',
-    },
-    readMore: { label: 'Phasic concentration recording, explained', to: '/technology/neuromodulation#phasic' },
   },
 ];
 

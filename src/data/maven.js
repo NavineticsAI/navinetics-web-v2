@@ -1,7 +1,6 @@
 import device from '../assets/maven/device.webp';
 import detail from '../assets/maven/detail.webp';
 import figWaveform from '../assets/maven/fig-waveform.webp';
-import figSensor from '../assets/maven/fig-sensor.webp';
 import figFscv from '../assets/maven/fig-fscv.webp';
 import figField from '../assets/maven/fig-field.webp';
 
@@ -213,36 +212,6 @@ export const bands = [
       alt: 'A staircase potential added to a square wave, giving the cyclic square waveform, '
         + 'with the current it produces shown beneath.',
       caption: 'Building the cyclic square waveform',
-    },
-  },
-  {
-    id: 'ephys',
-    ground: 'light',
-    scene: 'spikes',
-    tone: 'ephys',
-    eyebrow: 'Electrophysiology',
-    title: 'The same tip\nhears the\ntissue.',
-    lead: 'The electrode that reads the chemistry also hears the tissue’s electrical activity. '
-      + 'Local field potentials and single-unit firing are recorded on their own channel, at the '
-      + 'same instant, through the same piece of hardware.',
-    points: [
-      { label: 'Local field potential.', body: 'The summed activity of the population around the tip.' },
-      { label: 'Single-unit activity.', body: 'Individual neurons, resolved as spikes.' },
-      {
-        label: 'Independent, but synchronized.',
-        body: 'The two run as separate channels of one instrument, so the chemistry and the '
-          + 'electrophysiology line up on one timeline.',
-      },
-    ],
-    meta: [
-      { label: 'Channels', value: 'Chemical · electrical' },
-      { label: 'Probe', value: 'Carbon fiber in cannula' },
-    ],
-    figure: {
-      src: figSensor, w: 1308, h: 1026,
-      alt: 'A carbon-fiber microelectrode: the fiber, silica and polyamide tubing, and the inner '
-        + 'and outer cannula, photographed against a scale and drawn in section.',
-      caption: 'The carbon-fiber microelectrode',
     },
   },
   {

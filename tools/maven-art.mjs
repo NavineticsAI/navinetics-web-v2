@@ -163,13 +163,6 @@ const FIGURES = [
     note: 'FSCV: the colour plot, the concentration trace above it, the voltammogram inset',
   },
   {
-    id: 'fig-sensor',
-    from: 'image91.png',
-    w: 1400,
-    check: null,
-    note: 'the carbon-fibre microelectrode, drawn and photographed in the deck',
-  },
-  {
     id: 'fig-field',
     from: 'image60.PNG',
     w: 1000,

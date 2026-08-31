@@ -51,7 +51,6 @@ import d1Detail from '../assets/d1/detail.webp';
 import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
 import mavenDetail from '../assets/maven/detail.webp';
-import mavenSensor from '../assets/maven/fig-sensor.webp';
 import mavenField from '../assets/maven/fig-field.webp';
 import table from '../assets/or-tables/table.webp';
 import tableAlt from '../assets/or-tables/table-alt.webp';
@@ -252,12 +251,6 @@ export const images = [
   },
 
   /* ── Science ─────────────────────────────────────────────────────────── */
-  {
-    id: 'fig-sensor',
-    title: 'Carbon-fiber microelectrode',
-    src: mavenSensor, w: 1262, h: 639, category: 'Science', page: P.neuro,
-    caption: 'The probe that reads the chemistry and hears the tissue, in one insertion.',
-  },
   {
     id: 'fig-field',
     title: 'The voltammetric field',

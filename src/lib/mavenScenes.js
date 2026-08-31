@@ -105,8 +105,12 @@ export function makeSweep(light) {
    Electrophysiology — the field, and what fires in it
 
    A slow local field potential with single units riding on it, and the same
-   units struck below as a raster. Two views of one recording, which is the
-   band's whole point.
+   units struck below as a raster. Two views of one recording.
+
+   NOTHING DRAWS THIS TODAY. It belonged to the electrophysiology band on the
+   MAVEN page and the "on one timebase" band on the neuromodulation page, both
+   removed at NaviNetics' request. It stays registered in ScienceBand's builder
+   map because it costs nothing there and is what either band would want back.
    ═══════════════════════════════════════════════════════════════════════════ */
 export function makeSpikes(light) {
   const P = palette(light);
