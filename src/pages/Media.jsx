@@ -23,7 +23,7 @@ export default function Media() {
   usePageMeta({
     title: 'Media',
     description:
-      'Image and video library — NaviNetics devices, software, research and the people behind them.',
+      'Image and video library — the NaviNetics instruments and the planning software, photographed and rendered.',
   });
 
   const [category, setCategory] = useState('all');
@@ -46,7 +46,7 @@ export default function Media() {
       <Hero
         eyebrow="Resources — Media"
         title="The library."
-        lead="Devices, software, research and the people behind them. For press inquiries or
+        lead="The instruments and the software, photographed and rendered. For press enquiries or
           higher-resolution files, get in touch."
       />
 
@@ -152,10 +152,16 @@ export default function Media() {
 
       {/* ── all images ───────────────────────────────────────────────────── */}
       <Section wide>
+        {/* Was: "Every picture on the site. / Each one says where it is used,
+            so a picture is a way in rather than a dead end." The second sentence
+            explained our own design reasoning to the reader, which is a note for
+            a maintainer rather than page copy — the same fault as citing the
+            range sheet on the tables page. The links are visible; they do not
+            need announcing. */}
         <SectionHead
-          eyebrow="All images"
-          title="Every picture on the site."
-          lead="Each one says where it is used, so a picture is a way in rather than a dead end."
+          eyebrow="Images"
+          title="The instruments, and the software."
+          lead="Every picture links to the page it appears on."
         />
 
         <div className="mt-8 flex flex-wrap items-center gap-2">

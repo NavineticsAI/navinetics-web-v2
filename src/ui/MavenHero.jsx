@@ -148,6 +148,9 @@ export function MavenHero({ product }) {
           node.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
           node.style.opacity = String(drawn > 0.85 ? 1 : 0);
           node.style.pointerEvents = drawn > 0.85 ? 'auto' : 'none';
+          // Same reason as the globe pins: pointer-events does not remove a
+          // button from the tab order, and these are buttons at opacity 0.
+          node.style.visibility = drawn > 0.85 ? 'visible' : 'hidden';
         }
         const label = labelRefs.current[i];
         if (label) {

@@ -169,7 +169,9 @@ export function motionsOf(m) {
  */
 export const lineup = [
   {
-    group: 'Made to order',
+    // "Made to order" was removed from the page heading on instruction; it
+    // survived here as a group label.
+    group: 'Built to request',
     blurb: 'Advanced multi-motion tables for full clinical versatility.',
     items: [
       { name: 'CST-705', note: 'Float 5-motion' },

@@ -199,7 +199,7 @@ export const bands = [
       },
       {
         label: 'The waveform does the discriminating.',
-        body: 'Dopamine, serotonin, adenosine, acetylcholine, norepinephrine, histamine and '
+        body: 'Dopamine, serotonin, adenosine, norepinephrine, histamine and '
           + 'others each answer a sweep differently, and the shape of the answer tells them apart.',
       },
     ],

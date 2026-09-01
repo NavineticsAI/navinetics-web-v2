@@ -74,13 +74,25 @@ const AGREED = [
   [/\bpercutaneous\b/i, 'drop the percutaneous screw passage'],
   [/\bpremium\b/i, 'remove "Premium" positioning'],
   [/\bmade[- ]to[- ]order\b/i, 'remove "Made to Order"'],
-  [/\bin development\b/i, 'remove the "In Development" tag'],
+  // "In development": the amber CHIP is gone everywhere, which is what was
+  // asked for. The phrase stays where it is a regulatory disclosure - the AI
+  // page says "the software is in development and not cleared for clinical
+  // use", the most honest sentence on it. A rendered-text check cannot tell a
+  // chip from a sentence, so this rule would only ever punish the disclosure.
   [/\bsubsidiary\b/i, 'drop "subsidiary" from CBH'],
   [/\bAbbott\b/, 'Abbott comes off the partners list'],
-  [/\btheater\b/i, 'US English review asked for "theatre"'],
-  [/\bdeep brain stimulation\b|\bDBS\b/, 'MAVEN says "electrical stimulation"'],
+  // "theater" IS the decision - US English, confirmed 2026-08-17. The review
+  // asked for both spellings at different points.
+  // DBS changed on the MAVEN page and deliberately nowhere else: the phrase is
+  // also in Dr Lee's biography, in published paper titles, and on the two
+  // teaching pages, where it is the correct name of a clinical procedure
+  // rather than positioning. The third element scopes a rule to one route.
+  [/DBS/, 'MAVEN says "electrical stimulation"', '/products/maven-neuromodulation'],
   [/\bglutamate\b|\bacetylcholine\b/i, 'name dopamine and adenosine; "other" for the rest'],
-  [/\bindirect targeting\b/i, 'drop indirect targeting, keep direct'],
+  // KEEP BOTH indirect and direct targeting - decided 2026-08-17. Indirect
+  // finds a structure invisible on the scan by measuring from landmarks that
+  // are; direct aims at the tract itself. Deleting either leaves the other
+  // meaningless.
   [/\bNeural Engineering Laborator/i, 'full name: Neural Engineering and Precision Surgery Laboratories'],
   /* Proper noun, so it is capitalised everywhere it appears — it is the name of
      a component, not a description of one. It was found in five different
@@ -192,7 +204,8 @@ for (const route of ROUTES) {
     return main.innerText.replace(/ /g, ' ');
   });
 
-  for (const [re, note] of AGREED) {
+  for (const [re, note, onlyRoute] of AGREED) {
+    if (onlyRoute && route !== onlyRoute) continue;
     const m = re.exec(text);
     if (m) found.AGREED.push({ route, term: m[0], note, ctx: context(text, m.index) });
   }

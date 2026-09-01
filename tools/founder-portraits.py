@@ -210,7 +210,12 @@ JOBS=[
   # card than the other two — the top of the head reads as the thing that is
   # out of line, more than head size does. Taking the difference off the top
   # brings all four crowns to roughly 3.5%.
-  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (174,140,1402,1122),.25,.570,(1200,960), False, 92),
+  # New source, 2026-09-01. Its crown sits at y=174 of 1122 - 15.5% headroom,
+  # where Lee's is 3.6% and Goerss's 2.2% - so it is cropped DOWN to meet
+  # them rather than taken at the frame edge. Solved for crown 3.0%: the box
+  # can be at most 977 tall before it runs past the bottom of the file, which
+  # puts his head at 53% against Lee's 51% and Goerss's 50%.
+  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (129,145,1350,1122),.25,.550,(1200,960), False, 92),
   ('yoonbae-oh.jpg',                ('orig','oh_enhanced_gpt.png'),       (278,108,1403,1008),.25,.553,(1200,960), False, 92),
   ('stephan-goerss-150.jpg',        ('orig','steve_enhanced_gpt.png'),    (221,0,1402,945),   .25,.535,(1200,960), False, 92),
 ]

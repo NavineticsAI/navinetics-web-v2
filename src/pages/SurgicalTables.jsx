@@ -156,8 +156,8 @@ export default function SurgicalTables() {
             <h2 className="text-d2">Five tables, and what each one can do.</h2>
             <p className="max-w-prose text-sm leading-relaxed text-nn-200">
               Pick a model and the drawing performs the motions its specification gives it, through
-              the ranges it gives them. The buttons change with the table, because a one-motion
-              table has one thing to show.
+              the ranges it gives them. The buttons change with the table, because a two-motion
+              table has less to show than a four.
             </p>
           </div>
         </Reveal>
@@ -190,7 +190,13 @@ export default function SurgicalTables() {
             {/* The explorer keeps the page's light-on-dark register by sitting
                 on its own pale plate — a technical drawing is ink on paper. */}
             <div className="rounded-md bg-surface p-5 text-ink sm:p-7">
-              <TableMotion model={model} />
+              {/* `key` is the model id so a model change REMOUNTS this rather
+                  than re-rendering it with the previous model's selected motion.
+                  Without it, picking "Float" on a table that has float and then
+                  switching to one that does not rendered `model.float.x` on an
+                  undefined float and threw — the reconciling effect inside
+                  TableMotion runs after commit, which is one render too late. */}
+              <TableMotion key={model.id} model={model} />
             </div>
             <Specs model={model} />
           </div>

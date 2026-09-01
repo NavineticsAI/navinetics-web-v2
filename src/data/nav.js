@@ -99,6 +99,6 @@ export const redirects = [
      click away on the neuromodulation page. Anchors that used to resolve here
      are now on whichever page owns the topic — every internal link has been
      repointed, and this redirect exists for anything already shared. */
-  ['/resources/education', '/technology/stereotactic-devices'],
-  ['/technology/education', '/technology/stereotactic-devices'],
+  ['/resources/education', '/technology/education'],
+
 ];

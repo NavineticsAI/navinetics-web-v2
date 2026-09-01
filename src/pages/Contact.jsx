@@ -58,7 +58,21 @@ export default function Contact() {
      right enquiry — "Request a quote" on the D1 page should not land a visitor
      on a generic form they have to re-classify themselves. */
   const [params] = useSearchParams();
-  const PRESET = { d1: REASONS[0], tables: REASONS[1], maven: REASONS[2], complaint: COMPLAINT };
+  /* Every ?reason= value used anywhere on the site must appear here. A key that
+     is missing does not fail loudly — it silently falls through to REASONS[0],
+     so the partners page's "Enquire about distribution" landed a distributor on
+     an NRSS enquiry form. Keys map to the REASONS list by name, not index, so
+     reordering that list cannot quietly re-point them. */
+  const PRESET = {
+    d1: 'NRSS inquiry',
+    nrss: 'NRSS inquiry',
+    tables: 'Surgical tables inquiry',
+    maven: 'Neuromodulation research',
+    distribution: 'Distribution and partnerships',
+    press: 'Press and media',
+    careers: 'Careers',
+    complaint: COMPLAINT,
+  };
   const [form, setForm] = useState({
     name: '', email: '', organization: '',
     reason: PRESET[params.get('reason')] ?? REASONS[0],
@@ -195,9 +209,15 @@ export default function Contact() {
                   <p className="font-semibold text-ok">Your email client is opening.</p>
                   <p className="mt-2 text-sm text-ink-2">
                     Everything you wrote is in the draft — press send there. If nothing
-                    opened, email{' '}
-                    <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>{' '}
-                    or copy your message from the form below.
+                    opened,{' '}
+                    {/* mailtoHref(), not a bare mailto: — the bare form opens an
+                        EMPTY draft, so the one visitor whose mail client failed
+                        to launch would lose everything they typed at exactly the
+                        moment they are trying to recover it. */}
+                    <a href={mailtoHref()} className="font-semibold text-action">try again</a>{' '}
+                    or write to{' '}
+                    <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>.
+                    Your message is still in the form — press Back to the form below to copy it.
                   </p>
                   <Button variant="secondary" className="mt-5" onClick={() => setStatus('idle')}>
                     Back to the form

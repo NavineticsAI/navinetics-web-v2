@@ -22,11 +22,18 @@ import { RouteBoundary, RouteFallback } from '../ui/RouteBoundary.jsx';
  * NaviNetics AI has a volume renderer and a noise table; its fallback is the
  * dark workstation ground, so the split cannot flash white over the hero.
  *
- * Education is no longer among them: it is not a route any more. Its five
+ * Education is a route again. Neuromodulation indexes its four topics rather
+ * than rendering them inline — four full lessons ran to ~9,000px on a page whose
+ * bands had already explained the same science — and an index needs somewhere to
+ * point. Declared before the dynamic /technology/:slug below, which would
+ * otherwise treat "education" as a technology slug and render the 404.
+ *
+ * The five
  * topics are rendered into the two technology pages that own them, so the
  * module now travels inside their chunks. See `teaches` in data/technology.js.
  */
 const NaviNeticsAI = lazy(() => import('../pages/NaviNeticsAI.jsx'));
+const Education = lazy(() => import('../pages/Education.jsx'));
 /* MAVEN carries the ring geometry and the voltammogram field, which no other
    route touches. Its fallback is the instrument bay, so the split cannot flash
    a pale panel over a dark hero. */
@@ -133,6 +140,14 @@ const routes = [
     element: (
       <Suspense fallback={<RouteFallback />}>
         <Neuromodulation />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/technology/education',
+    element: (
+      <Suspense fallback={<RouteFallback />}>
+        <Education />
       </Suspense>
     ),
   },

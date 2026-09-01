@@ -147,7 +147,7 @@ export default function Neuromodulation() {
       {/* THE METHOD, INDEXED — not inlined.
           ─────────────────────────────────────────────────────────────────
           This used to render all four education topics in full, on the
-          grounds that /resources/education sits three levels down the nav and
+          grounds that the education page sat three levels down the nav and
           the reader most likely to want the science was least likely to find
           it. The discovery problem was real; the fix was not. Four complete
           lessons ran to about 9,000px on a page whose four bands had already
@@ -170,7 +170,7 @@ export default function Neuromodulation() {
             .map((t) => (
               <Reveal key={t.id}>
                 <Link
-                  to={`/resources/education#${t.id}`}
+                  to={`/technology/education#${t.id}`}
                   className="group/t flex h-full flex-col gap-2 rounded-lg border border-hairline-soft
                     bg-surface p-6 transition-[transform,box-shadow,border-color] duration-[420ms]
                     ease-out hover:-translate-y-1 hover:border-hairline hover:shadow-e2"

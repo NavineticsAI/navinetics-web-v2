@@ -17,8 +17,11 @@ export default function Partners() {
   usePageMeta({
     title: 'Partners',
     description:
-      'The distribution partners and subsidiaries that bring NaviNetics systems to operating '
-      + 'rooms in the United States, South America, Greater China, Australia and South Korea.',
+      // Was "subsidiaries" and "Greater China" — both retired terms, still in
+      // the meta description where no on-page check was looking.
+      'The partners who bring NaviNetics systems to operating rooms in the United States, South '
+      + 'America, China, Taiwan, Singapore, Australia and South Korea, and the institutions we '
+      + 'publish with.',
   });
 
   const [selected, setSelected] = useState(null);

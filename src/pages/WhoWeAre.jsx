@@ -28,7 +28,7 @@ const FOUNDERS = [
     image: asset('/kendall-lee-150-500x400-1.jpg'), focus: '56% 0%' },
   { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-CEO & Co-Founder',
     line: 'Thirty years in technology development. Patents in neurosurgery, diamond, semiconductor and optical technology.',
-    image: asset('/kevin-bennet.jpg'), focus: '69% 0%' },
+    image: asset('/kevin-bennet.jpg'), focus: '64% 0%' },
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
     image: asset('/stephan-goerss-150.jpg'), focus: '60% 0%' },

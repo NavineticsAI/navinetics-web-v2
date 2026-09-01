@@ -50,21 +50,13 @@ import d1Hero from '../assets/d1/hero.webp';
 import d1Detail from '../assets/d1/detail.webp';
 import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
-import mavenDetail from '../assets/maven/detail.webp';
-import mavenField from '../assets/maven/fig-field.webp';
 import table from '../assets/or-tables/table.webp';
-import tableAlt from '../assets/or-tables/table-alt.webp';
-import tableSide from '../assets/or-tables/table-side.webp';
-import tableMotion from '../assets/or-tables/table-motion.webp';
 import swFusion from '../assets/software/fusion.webp';
 import swNbar from '../assets/software/nbar.webp';
 import swAcpc from '../assets/software/acpc.webp';
 import swDti1 from '../assets/software/dti1.webp';
 import swDti2 from '../assets/software/dti2.webp';
 import swTarget from '../assets/software/target.webp';
-import eduLocaliser from '../assets/education/02.3.a.webp';
-import eduSlice from '../assets/education/02.3.b.webp';
-import eduAtlas from '../assets/education/01.2.webp';
 import frameVideo from '../assets/education/02.1.web.mp4';
 import framePoster from '../assets/education/02.1.web.poster.webp';
 import orVideo from '../assets/media/or-footage.mp4';
@@ -79,7 +71,7 @@ const P = {
   maven: { to: '/products/maven-neuromodulation', label: 'MAVEN' },
   ai: { to: '/technology/navinetics-ai', label: 'NaviNetics AI' },
   neuro: { to: '/technology/neuromodulation', label: 'Neuromodulation' },
-  education: { to: '/resources/education', label: 'Education' },
+  education: { to: '/technology/education', label: 'Education' },
   founders: { to: '/company/our-founders', label: 'Our Founders' },
 };
 
@@ -162,7 +154,7 @@ export const images = [
     title: 'Skull Anchor Key on a head model',
     src: asset('/model-head-clean-750x998-1-451x600.png'), w: 451, h: 600,
     category: 'Devices', page: P.d1,
-    caption: 'The anchor key takes the place of a base ring, which is what keeps the face '
+    caption: 'The Skull Anchor Key fixes near the top of the skull, which is what keeps the face '
       + 'unobstructed.',
   },
   {
@@ -179,34 +171,10 @@ export const images = [
       + 'with stimulation, on one timebase.',
   },
   {
-    id: 'maven-panel',
-    title: 'MAVEN front panel',
-    src: mavenDetail, w: 1200, h: 800, category: 'Devices', page: P.maven,
-    caption: 'The channel inputs and controls, close up.',
-  },
-  {
     id: 'table-hero',
     title: 'Carbon fiber operating table',
     src: table, w: 1500, h: 571, category: 'Devices', page: P.tables,
     caption: 'A carbon-fiber tabletop for imaging-guided procedures.',
-  },
-  {
-    id: 'table-alt',
-    title: 'Operating table, three-quarter view',
-    src: tableAlt, w: 1500, h: 900, category: 'Devices', page: P.tables,
-    caption: 'The same table from the corner, showing the column and the base.',
-  },
-  {
-    id: 'table-side',
-    title: 'Operating table in side elevation',
-    src: tableSide, w: 1400, h: 672, category: 'Devices', page: P.tables,
-    caption: 'The top cantilevered clear of the column, so nothing but carbon sits over the base.',
-  },
-  {
-    id: 'table-motion',
-    title: 'Tilt positions, superimposed',
-    src: tableMotion, w: 1400, h: 856, category: 'Devices', page: P.tables,
-    caption: 'One table photographed in several tilt positions, one over another.',
   },
 
   /* ── Software ────────────────────────────────────────────────────────── */
@@ -250,74 +218,8 @@ export const images = [
     caption: 'A target set and the approach to it, in the workspace.',
   },
 
-  /* ── Science ─────────────────────────────────────────────────────────── */
-  {
-    id: 'fig-field',
-    title: 'The voltammetric field',
-    src: mavenField, w: 577, h: 513, category: 'Science', page: P.neuro,
-    caption: 'Current in color across potential and scan number, as the software draws it.',
-  },
-  {
-    id: 'edu-localiser',
-    title: 'The localizer and the slice it produces',
-    src: eduLocaliser, w: 1399, h: 1124, category: 'Science', page: P.education,
-    caption: 'Rods around the head, and the nine marks they leave in one axial image.',
-  },
-  {
-    id: 'edu-slice',
-    title: 'A slice, placed in the frame',
-    src: eduSlice, w: 1280, h: 1260, category: 'Science', page: P.education,
-    caption: 'How the spacing of three marks reports the height and the tilt of the plane they '
-      + 'came from.',
-  },
-  {
-    id: 'edu-atlas',
-    title: 'Atlas coordinates',
-    src: eduAtlas, w: 1400, h: 1128, category: 'Science', page: P.education,
-    caption: 'Where an indirect target sits relative to the commissures.',
-  },
-  {
-    id: 'wincs',
-    title: 'WINCS Harmoni',
-    src: asset('/WINC-Harmoni-Device.png'), w: 624, h: 485, category: 'Science', page: P.neuro,
-    caption: 'Wireless neurochemical and electrophysiological recording, from the published '
-      + 'research the instrument grew out of.',
-  },
-  {
-    id: 'wincs-preclinical',
-    title: 'WINCS in a preclinical model',
-    src: asset('/WINCS-Swine-Model-1024x668.png'), w: 1024, h: 668,
-    category: 'Science', page: P.neuro,
-    caption: 'Recording in swine.',
-  },
 
-  /* ── People ──────────────────────────────────────────────────────────── */
-  {
-    id: 'kendall-lee',
-    title: 'Kendall Lee',
-    src: asset('/kendall-lee-150-500x400-1.jpg'), w: 1200, h: 960,
-    category: 'People', page: P.founders,
-    caption: 'Co-founder. Neurosurgeon, Mayo Clinic.',
-  },
-  {
-    id: 'kevin-bennet',
-    title: 'Kevin Bennet',
-    src: asset('/kevin-bennet.jpg'), w: 1200, h: 960, category: 'People', page: P.founders,
-    caption: 'Co-founder. Division of Engineering, Mayo Clinic.',
-  },
-  {
-    id: 'stephan-goerss',
-    title: 'Stephan Goerss',
-    src: asset('/stephan-goerss-150.jpg'), w: 1200, h: 960, category: 'People', page: P.founders,
-    caption: 'Co-founder. Stereotactic instrument design.',
-  },
-  {
-    id: 'yoonbae-oh',
-    title: 'Yoonbae Oh',
-    src: asset('/yoonbae-oh.jpg'), w: 1200, h: 960, category: 'People', page: P.founders,
-    caption: 'Co-founder. Neurochemical sensing.',
-  },
 ];
 
 /** Filter chips, in the order the page shows them. */
-export const imageCategories = ['Devices', 'Software', 'Science', 'People'];
+export const imageCategories = ['Devices', 'Software'];

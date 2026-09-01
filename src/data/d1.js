@@ -170,8 +170,12 @@ export const bands = [
       },
       {
         label: 'A manual microdrive.',
-        body: 'Advanced by hand, supplied with the frame alongside the DBS lead implantation and '
-          + 'accuracy verification accessories. It also accepts Alpha Omega drives.',
+        /* No longer says "supplied with the frame". data/products.js records it
+           as an open question that the microdrive and the X-ray reticles are not
+           in the nine-kit bill of materials, so the two files were asserting
+           different things about what is in the box. */
+        body: 'Advanced by hand, along the trajectory the arc has set. It also accepts Alpha '
+          + 'Omega drives.',
       },
     ],
     meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],

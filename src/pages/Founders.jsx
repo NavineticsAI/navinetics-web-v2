@@ -50,7 +50,7 @@ const founders = [
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kevin-bennet.jpg'),
-    focus: '69% 0%',
+    focus: '64% 0%',
     bio: [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',
       'He holds patents concerning neurosurgery, diamond, semiconductor and optical technology and has founded several technology-based companies. He received a degree in Chemical Engineering from the Massachusetts Institute of Technology, an MBA from Harvard and his doctorate from Deakin University.',

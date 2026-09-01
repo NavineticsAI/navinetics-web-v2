@@ -182,6 +182,12 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           pin.style.top = `${p.y}px`;
           pin.style.opacity = front ? 1 : 0;
           pin.style.pointerEvents = front ? 'auto' : 'none';
+          /* visibility, not just pointer-events. pointer-events stops the MOUSE;
+             a <button> at opacity 0 is still in the tab order, so a keyboard
+             user tabbed into the pins on the far side of the globe and the
+             focus ring vanished with nothing to see. visibility:hidden removes
+             it from the tab order and the accessibility tree. */
+          pin.style.visibility = front ? 'visible' : 'hidden';
         }
         (sites.current.get(t.id) ?? []).forEach((el, i) => {
           if (!el) return;
@@ -192,6 +198,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           el.style.top = `${q.y}px`;
           el.style.opacity = vis ? 0.9 : 0;
           el.style.pointerEvents = vis ? 'auto' : 'none';
+          el.style.visibility = vis ? 'visible' : 'hidden';
         });
 
         /* The chip is pushed radially outward from the globe's center, then
@@ -217,6 +224,7 @@ export function PartnerGlobe({ territories, selected, onSelect }) {
           // a selection quiets the other chips rather than hiding them
           chip.style.opacity = front ? (sel && sel !== t.id ? 0.45 : 1) : 0;
           chip.style.pointerEvents = front ? 'auto' : 'none';
+          chip.style.visibility = front ? 'visible' : 'hidden';
         }
 
         if (front) {

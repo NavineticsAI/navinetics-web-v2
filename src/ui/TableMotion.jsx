@@ -178,7 +178,12 @@ export function TableMotion({ model, className }) {
         {(active === 'slide' || active === 'float') && (
           <g stroke="var(--action)" strokeWidth="2" opacity="0.6">
             {[-1, 1].map((s) => {
-              const span = active === 'slide' ? model.slide / 2 : model.float.x / 2;
+              /* Guarded like its siblings on lines 72-73. `active` can name a
+                 motion the current model does not have for exactly one render;
+                 unguarded this threw, and the mirror case emitted x1="NaN". */
+              const travel = active === 'slide' ? model.slide : model.float?.x;
+              if (!travel) return null;
+              const span = travel / 2;
               return (
                 <line
                   key={s}
