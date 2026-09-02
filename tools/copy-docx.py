@@ -270,7 +270,7 @@ def main():
     # The filename is the first thing a reviewer sees, in an inbox next to
     # forty other attachments. It says what it is and which round it is, so
     # that a second review does not overwrite the first in someone's folder.
-    name = a.name or f'NaviNetics Website Copy - Review {a.date or "draft"}.docx'
+    name = a.name or f'NaviNetics Website Review {a.date or "draft"}.docx'
     out_path = os.path.join(a.out, name)
     live, dead = build(manifest, out_path, a.date or 'Generated today')
     print(f'\n  {live} pieces of text, {dead} in the appendix -> {out_path}\n')

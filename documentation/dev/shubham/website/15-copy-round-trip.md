@@ -10,7 +10,7 @@ Changes, and back into the source without anyone retyping anything.
   copy/copy-manifest.json                           1,552 strings + byte ranges
     │  python tools/copy-docx.py
     ▼
-  copy/NaviNetics-website-copy.docx        ─────►   stakeholders, Word, Track Changes
+  copy/NaviNetics Website Review <date>.docx        ─────►   stakeholders, Word, Track Changes
                                                               │
   copy/copy-changes.json                   ◄─────   python tools/copy-import.py <file.docx>
     │  node tools/copy-apply.mjs --apply
@@ -37,7 +37,7 @@ Needs `acorn` + `acorn-jsx` (devDependencies) and `python-docx` (`pip install py
 
 ```bash
 npm run copy:export                                   # build the document
-# … send copy/NaviNetics-website-copy.docx out for review, get it back …
+# … send copy/NaviNetics Website Review <date>.docx out for review, get it back …
 npm run copy:import -- ~/Downloads/reviewed.docx      # read it; writes nothing
 npm run copy:apply                                    # look at the patch
 npm run copy:apply -- --apply                         # write it
@@ -99,7 +99,7 @@ node tools/dump-copy.mjs copy/.rendered.json    # every line a browser renders
 npm run copy:check                              # prove each one is in the manifest
 ```
 
-Currently **95.6%** of rendered lines (810 of 847). The residual is text the
+Currently **95.9%** of rendered lines (931 of 971). The residual is text the
 browser composes as you look at it — `Browse 9 papers`, `2353 × 613 mm`,
 `vol 29 · pp 93-101`, a list joined with dots. Those are built from pieces that
 *are* in the document and are not separately editable. The cover page says so.

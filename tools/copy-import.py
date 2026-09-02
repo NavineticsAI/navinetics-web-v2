@@ -1,6 +1,6 @@
 """Read the returned review document and work out what changed.
 
-    python tools/copy-import.py copy/NaviNetics-website-copy.docx
+    python tools/copy-import.py copy/NaviNetics Website Review 2026-09-02.docx
     python tools/copy-import.py <file.docx> --json copy/copy-changes.json
 
 Writes nothing to the site. It produces a report and a changes file; applying
