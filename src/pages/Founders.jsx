@@ -23,7 +23,7 @@ const founders = [
   {
     name: 'Kendall H. Lee, M.D., Ph.D.',
     /* Their title at NaviNetics. The "Co-Director" further down each bio is a
-       different job — the Mayo Clinic Neural Engineering and Precision Surgery Laboratories — and is
+       different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kendall-lee-150-500x400-1.jpg'),
@@ -43,7 +43,7 @@ const founders = [
   {
     name: 'Kevin E. Bennet, MBA, Ph.D.',
     /* Their title at NaviNetics. The "Co-Director" further down each bio is a
-       different job — the Mayo Clinic Neural Engineering and Precision Surgery Laboratories — and is
+       different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kevin-bennet.jpg'),
@@ -117,7 +117,7 @@ export default function Founders() {
       <Hero
         eyebrow="Who we are — Our founders"
         title="The visionaries."
-        lead="Decades of expertise in neurosurgery, technology development and medical device innovation, brought out of the Mayo Clinic Neural Engineering and Precision Surgery Laboratories."
+        lead="Decades of expertise in neurosurgery, technology development and medical device innovation, brought out of the Mayo Clinic Neural Engineering Laboratories."
       />
 
       <Section wide>

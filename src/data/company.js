@@ -17,7 +17,7 @@ import { disciplines } from './disciplines.js';
  *
  * Two gaps NaviNetics needs to fill:
  *
- *   · The Neural Engineering and Precision Surgery Laboratories entry has no year. The founders'
+ *   · The Neural Engineering Laboratories entry has no year. The founders'
  *     biographies say Lee and Bennet founded the laboratories and co-direct
  *     them, but never say when. It is shown undated rather than guessed at.
  *
@@ -59,9 +59,9 @@ export const timeline = [
        in founding them, and never date it. Guessing would be the only way to
        fill this column, so it stays empty. */
     year: null,
-    title: 'The Neural Engineering and Precision Surgery Laboratories',
+    title: 'The Neural Engineering Laboratories',
     body:
-      'Kendall Lee and Kevin Bennet found the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic and '
+      'Kendall Lee and Kevin Bennet found the Neural Engineering Laboratories at Mayo Clinic and '
       + 'serve as co-directors. This is the room NaviNetics comes out of: a neurosurgeon and an '
       + 'engineer, in the same building as the operating theater.',
     source: 'Founder biographies — year not recorded',
@@ -76,7 +76,7 @@ export const timeline = [
     year: '2016',
     title: 'The prototype',
     body:
-      'Goerss joins the Neural Engineering and Precision Surgery Laboratories. There he designs a spinal stereotactic '
+      'Goerss joins the Neural Engineering Laboratories. There he designs a spinal stereotactic '
       + 'device, a relocatable porcine headframe, and the prototype of the reusable stereotactic '
       + 'system NaviNetics now commercializes.',
     source: 'Founder biography',

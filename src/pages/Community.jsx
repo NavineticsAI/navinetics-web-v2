@@ -43,7 +43,7 @@ const REASONS = [
          is a priority claim, and as written a reader takes it as first anywhere
          rather than first of ours — which is the reading we cannot support.
          Naming the system says the same true thing and claims nothing. */
-      'The Neural Engineering and Precision Surgery Laboratories, where the founders work and where '
+      'The Neural Engineering Laboratories, where the founders work and where '
       + 'the NRSS was prototyped, are in the same city.',
   },
 ];

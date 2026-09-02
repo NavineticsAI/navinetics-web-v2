@@ -238,7 +238,13 @@ export default function Contact() {
                     value={form.name}
                     onChange={set('name')}
                     error={errors.name}
-                    placeholder="Dr. Jane Okafor"
+                    /* Placeholders are formats, never examples of a person. The
+                       three here were "Dr. Jane Okafor", "jane.okafor@hospital.org"
+                       and "Mayo Clinic, Department of Neurosurgery" — an invented
+                       clinician with an invented address, and an affiliation this
+                       company licenses from rather than belongs to. On a medical
+                       device site both read as claims. */
+                    placeholder="First and last name"
                     autoComplete="name"
                   />
                   <Field
@@ -247,7 +253,7 @@ export default function Contact() {
                     value={form.email}
                     onChange={set('email')}
                     error={errors.email}
-                    placeholder="jane.okafor@hospital.org"
+                    placeholder="you@organization.org"
                     autoComplete="email"
                   />
                   <Field
@@ -255,7 +261,7 @@ export default function Contact() {
                     hint="Optional"
                     value={form.organization}
                     onChange={set('organization')}
-                    placeholder="Mayo Clinic, Department of Neurosurgery"
+                    placeholder="Hospital, clinic or company"
                     autoComplete="organization"
                   />
                   <Field as="select" label="I'm reaching out about" value={form.reason} onChange={set('reason')}>

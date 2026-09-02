@@ -19,7 +19,7 @@ export default function Home() {
   usePageMeta({
     title: 'Precision stereotactic and neuromodulation devices',
     description:
-      'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic.',
+      'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering Laboratories at Mayo Clinic.',
   });
 
   return (
@@ -50,7 +50,7 @@ export default function Home() {
            Without it the site tells three separate stories and never says why
            one company makes a frame, a table and a recording instrument.
            It claims nothing new: every clause is already true on its own page. */
-        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic. One route to a target: plan it, see through the table, reach it, and measure what changed."
+        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, see through the table, reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
           {/* "Discover the NRSS" used an acronym that is first defined further
@@ -168,7 +168,7 @@ export default function Home() {
                 </span>
                 <h3 className="mt-3 text-2xl tracking-[-0.03em]">Mayo Clinic roots</h3>
                 <p className="mt-2.5 text-sm leading-relaxed opacity-85">
-                  Born from the Neural Engineering and Precision Surgery Laboratories, on decades of clinical experience.
+                  Born from the Neural Engineering Laboratories, on decades of clinical experience.
                 </p>
               </div>
               <Link
