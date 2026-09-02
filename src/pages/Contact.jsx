@@ -28,7 +28,9 @@ const INBOX = 'info@navinetics.com';
  */
 const REASONS = [
   'NRSS inquiry',
-  'Surgical tables inquiry',
+  /* 'Surgical tables inquiry' removed with the range itself, pending FDA
+     registration — see data/products.js. Offering it as a reason to write
+     in is offering the product. */
   'Neuromodulation research',
   'Distribution and partnerships',
   'Product complaint or device issue',
@@ -50,8 +52,7 @@ export default function Contact() {
     title: 'Contact',
     description:
       'Get in touch with NaviNetics about the NaviNetics Reusable Stereotactic System (NRSS), '
-      + 'surgical tables, neuromodulation '
-      + 'research, distribution, careers, or to report a product issue.',
+      + 'neuromodulation research, distribution, careers, or to report a product issue.',
   });
 
   /* Product pages link here with ?reason=… so the form arrives set to the
@@ -66,7 +67,6 @@ export default function Contact() {
   const PRESET = {
     d1: 'NRSS inquiry',
     nrss: 'NRSS inquiry',
-    tables: 'Surgical tables inquiry',
     maven: 'Neuromodulation research',
     distribution: 'Distribution and partnerships',
     press: 'Press and media',

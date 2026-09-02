@@ -42,7 +42,9 @@ const Maven = lazy(() => import('../pages/Maven.jsx'));
    splits for the same reason and lands in the same neighbourhood. */
 const Neuromodulation = lazy(() => import('../pages/Neuromodulation.jsx'));
 /* The surgical tables carry the motion explorer and two more scene builders. */
-const SurgicalTables = lazy(() => import('../pages/SurgicalTables.jsx'));
+// Kept imported-but-unused would fail lint, so the lazy import goes with the
+// route above and comes back with it.
+// const SurgicalTables = lazy(() => import('../pages/SurgicalTables.jsx'));
 /* D1 carries a 36-frame turntable rendered from the assembly CAD — the heaviest
    asset on the site by some way, and the strongest argument for splitting it
    off its own route. Its fallback is the instrument bay, like MAVEN's. */
@@ -90,17 +92,24 @@ const routes = [
       </Suspense>
     ),
   },
-  // The carbon tables are the second product with their own page: the range is
-  // five specified models and the useful thing to do with that is let a reader
-  // put each one through its own motions, which the template cannot express.
-  {
-    path: '/products/carbon-fiber-surgical-tables',
-    element: (
-      <Suspense fallback={<RouteFallback />}>
-        <SurgicalTables />
-      </Suspense>
-    ),
-  },
+  // THE CARBON TABLES ROUTE IS WITHDRAWN, 2026-09-02, on regulatory advice.
+  // Registration with FDA is outstanding on two counts (see the note on the
+  // record in data/products.js), and while it is, the range must not be
+  // promoted. Taking it out of the menus is not enough: a page nobody links
+  // to is still a published page to anyone holding the URL, and that URL has
+  // been shared for review. So the route goes and /products/carbon-fiber-
+  // surgical-tables answers with the 404 page.
+  //
+  // pages/SurgicalTables.jsx is untouched and still builds. Restore by
+  // uncommenting this block and deleting `hidden` from the record.
+  // {
+  //   path: '/products/carbon-fiber-surgical-tables',
+  //   element: (
+  //     <Suspense fallback={<RouteFallback />}>
+  //       <SurgicalTables />
+  //     </Suspense>
+  //   ),
+  // },
   // D1 is the third: its opening is the assembly itself, turning. The template
   // has one hero image and no way to express that.
   {

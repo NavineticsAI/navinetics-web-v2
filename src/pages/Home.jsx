@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { RotationInset } from '../ui/RotationInset.jsx';
-import { isPlaceholder, products } from '../data/products.js';
+import { isPlaceholder, visibleProducts } from '../data/products.js';
 import { publications } from '../data/publications.js';
 import {
   Button,
@@ -50,13 +50,18 @@ export default function Home() {
            Without it the site tells three separate stories and never says why
            one company makes a frame, a table and a recording instrument.
            It claims nothing new: every clause is already true on its own page. */
-        lead="Stereotactic frames, neuromodulation instruments and carbon-fiber operating tables for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, see through the table, reach it, and measure what changed."
+        /* The carbon-fiber tables came out of this sentence when the range was
+           withdrawn pending FDA registration (see data/products.js). The
+           closing clause lost "see through the table" with them; what is left
+           is still the same one-route idea, and every clause is still true on
+           its own page. */
+        lead="Stereotactic frames and neuromodulation instruments for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
           {/* "Discover the NRSS" used an acronym that is first defined further
               down this same page, so the primary call to action named a thing
               the visitor had not been told about yet. */}
-          <Button to={products[0].path} size="lg" arrow>
+          <Button to={visibleProducts[0].path} size="lg" arrow>
             Discover the frame
           </Button>
           <Button to="/company/who-we-are" size="lg" variant="secondary">
@@ -69,7 +74,7 @@ export default function Home() {
           development are excluded: a half-empty feature section reads worse
           than absence. They still appear in the nav, the footer and product
           cross-sell. */}
-      {products.filter((p) => !isPlaceholder(p)).map((product, i) => (
+      {visibleProducts.filter((p) => !isPlaceholder(p)).map((product, i) => (
         <Section key={product.slug} wide band={i % 2 === 1}>
           <div
             className={`flex flex-col items-center gap-12 lg:gap-20 ${

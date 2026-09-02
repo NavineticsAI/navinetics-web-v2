@@ -137,8 +137,9 @@ export const territories = [
            cross-reference. */
         name: 'CBH',
         role: 'Manufacturing, R&D and sales',
-        body: 'CBH carries manufacturing, R&D, and the Asia and Europe sales network. The carbon '
-          + 'fiber operating tables are built here.',
+        /* The second sentence named the carbon-fiber tables, which are
+           withdrawn pending FDA registration — see data/products.js. */
+        body: 'CBH carries manufacturing, R&D, and the Asia and Europe sales network.',
       },
     ],
     cover: [['South Korea', 1]],

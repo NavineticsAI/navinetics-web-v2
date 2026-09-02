@@ -67,7 +67,6 @@ import launchPoster from '../assets/media/launch.poster.webp';
 /** Where each asset is used. One place, so a route rename breaks once. */
 const P = {
   d1: { to: '/products/d1-stereotactic-frame', label: 'NRSS' },
-  tables: { to: '/products/carbon-fiber-surgical-tables', label: 'Surgical Tables' },
   maven: { to: '/products/maven-neuromodulation', label: 'MAVEN' },
   ai: { to: '/technology/navinetics-ai', label: 'NaviNetics AI' },
   neuro: { to: '/technology/neuromodulation', label: 'Neuromodulation' },
@@ -170,12 +169,10 @@ export const images = [
     caption: 'The neuromodulation instrument: neurochemical and electrophysiological recording '
       + 'with stimulation, on one timebase.',
   },
-  {
-    id: 'table-hero',
-    title: 'Carbon fiber operating table',
-    src: table, w: 1500, h: 571, category: 'Devices', page: P.tables,
-    caption: 'A carbon-fiber tabletop for imaging-guided procedures.',
-  },
+  /* The carbon-fiber table image is withdrawn with the page it belongs to
+     — see the note in data/products.js. A photograph of the device in a
+     media library promotes it as surely as the page did, and its link
+     pointed at a route that no longer answers. */
 
   /* ── Software ────────────────────────────────────────────────────────── */
   {

@@ -31,7 +31,9 @@ export default function Technology() {
 
   if (!tech) return <NotFound />;
 
-  const products = (tech.appliedIn ?? []).map(getProduct).filter(Boolean);
+  // `.filter(!hidden)` as well as Boolean: appliedIn names products by slug,
+  // and getProduct finds a hidden one perfectly well.
+  const products = (tech.appliedIn ?? []).map(getProduct).filter(Boolean).filter((x) => !x.hidden);
 
   return (
     <>

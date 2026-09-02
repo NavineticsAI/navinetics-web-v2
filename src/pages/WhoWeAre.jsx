@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../lib/cn.js';
 import { usePageMeta } from '../lib/meta.js';
 import { numbers, principles, timeline } from '../data/company.js';
-import { isPlaceholder, products } from '../data/products.js';
+import { isPlaceholder, visibleProducts } from '../data/products.js';
 import { asset } from '../lib/asset.js';
 import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
 import { Timeline } from '../ui/Timeline.jsx';
@@ -58,7 +58,7 @@ export default function WhoWeAre() {
       + 'offerings. Out of the Neural Engineering Laboratories at Mayo Clinic.',
   });
 
-  const shipping = products.filter((p) => !isPlaceholder(p));
+  const shipping = visibleProducts.filter((p) => !isPlaceholder(p));
 
   return (
     <>

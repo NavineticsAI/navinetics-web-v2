@@ -18,7 +18,9 @@
     "copy:apply": "node tools/copy-apply.mjs",
     "copy:check": "node tools/copy-coverage.mjs",
     "copy:test": "python tools/copy-selftest.py",
-    "copy:watch": "node tools/copy-watch.mjs"
+    "copy:watch": "node tools/copy-watch.mjs",
+    "build:review": "vite build --mode review",
+    "preview:review": "vite build --mode review && vite preview"
   },
   "dependencies": {
     "clsx": "^2.1.1",

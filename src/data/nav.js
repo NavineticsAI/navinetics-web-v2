@@ -1,4 +1,4 @@
-import { products } from './products.js';
+import { visibleProducts } from './products.js';
 import { technologies } from './technology.js';
 
 /**
@@ -34,9 +34,9 @@ const ALL = [
   },
   {
     title: 'Products',
-    path: products[0].path,
+    path: visibleProducts[0].path,
     panel: 'rich',
-    items: products.map((p) => ({
+    items: visibleProducts.map((p) => ({
       title: p.shortName,
       subtitle: p.family,
       path: p.path,

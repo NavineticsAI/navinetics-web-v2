@@ -1,5 +1,5 @@
 import { publications } from './publications.js';
-import { products } from './products.js';
+import { visibleProducts } from './products.js';
 import { territories } from './partners.js';
 import { disciplines } from './disciplines.js';
 
@@ -115,8 +115,8 @@ export const numbers = () => {
   return [
     { value: String(publications.length), label: 'Selected papers',
       unit: `${Math.min(...years)}–${Math.max(...years)}`, to: '/resources/publications' },
-    { value: String(products.length), label: 'Product lines',
-      unit: 'frames, tables, sensing', to: '/products/d1-stereotactic-frame' },
+    { value: String(visibleProducts.length), label: 'Product lines',
+      unit: 'frames and sensing', to: '/products/d1-stereotactic-frame' },
     { value: String(territories.length), label: 'Territories',
       /* Was "covered by partners", and the arithmetic did not survive a look:
          the United States is sold direct, three territories have no named

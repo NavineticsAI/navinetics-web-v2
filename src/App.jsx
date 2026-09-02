@@ -4,6 +4,7 @@ import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import AnimatedRoutes from './components/AnimatedRoutes.jsx';
 import { ThemeProvider } from './lib/theme.jsx';
+import { ReviewStamp } from './ui/ReviewStamp.jsx';
 
 function App() {
   const { scrollYProgress } = useScroll();
@@ -39,6 +40,10 @@ function App() {
             <AnimatedRoutes />
           </main>
           <Footer />
+          {/* Only ever true under `npm run build:review` — see .env.review.
+              In every other build this folds to false and the component is
+              dropped from the bundle entirely. */}
+          {import.meta.env.VITE_REVIEW_STAMP === '1' && <ReviewStamp />}
         </div>
       </Router>
     </ThemeProvider>

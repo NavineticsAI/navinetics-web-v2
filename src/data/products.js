@@ -217,6 +217,19 @@ export const products = [
   },
 
   {
+    /* HIDDEN FROM THE PUBLIC SITE, 2026-09-02, on regulatory advice.
+       Rob McLain, Sr. Quality and Regulatory Affairs Consultant, reviewing
+       before launch: NaviNetics has to register with FDA as an IMPORTER of
+       these tables, and CBH does not appear to be registered as a foreign
+       manufacturer. Neither is a website problem and neither is fixed here,
+       but promoting the range while both are outstanding is, so the page
+       comes off the site until they are settled.
+
+       Nothing is deleted. The record, the page, the five models and the
+       motion study are all intact; `hidden` takes it out of the menu, the
+       product grids, the sitemap and the router. Remove this one word and
+       the range is back exactly as it was. */
+    hidden: true,
     slug: 'carbon-fiber-surgical-tables',
     path: '/products/carbon-fiber-surgical-tables',
     name: 'Carbon Fiber Surgical Tables',
@@ -411,7 +424,17 @@ export const products = [
 
 export const getProduct = (slug) => products.find((p) => p.slug === slug);
 export const isPlaceholder = (p) => p?.status === 'in-development';
-export const otherProducts = (slug) => products.filter((p) => p.slug !== slug);
+
+/**
+ * The products the public site lists.
+ *
+ * Every menu, grid and cross-link reads THIS, never `products`. A record
+ * carrying `hidden` is off the site but still whole: getProduct still finds
+ * it, so its own page and anything referring to it by slug keep working, and
+ * bringing it back is deleting one word rather than restoring a deletion.
+ */
+export const visibleProducts = products.filter((p) => !p.hidden);
+export const otherProducts = (slug) => visibleProducts.filter((p) => p.slug !== slug);
 
 /**
  * Comparison grid.

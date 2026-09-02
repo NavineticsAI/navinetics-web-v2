@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process'
 import { copyFileSync, existsSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
@@ -12,7 +13,25 @@ import react from '@vitejs/plugin-react'
 // place the deployment path is declared.
 //
 // Deploying to a custom domain instead? Set this to '/' and add public/CNAME.
+/* The stamp in the corner of a review build has to name the exact commit it
+   was made from, or a reviewer's marked-up printout cannot be tied back to
+   anything. Falls back to 'local' outside a git checkout rather than
+   failing the build. */
+const commit = (() => {
+  try {
+    const sha = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
+    const dirty = execSync('git status --porcelain', { encoding: 'utf8' }).trim()
+    return dirty ? `${sha}+edits` : sha
+  } catch {
+    return 'local'
+  }
+})()
+
 export default defineConfig({
+  define: {
+    __BUILD_VERSION__: JSON.stringify(commit),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'),
+  },
   server: {
     /* copy/ holds the website-copy review working files — a 800KB manifest,
        a Word document, and temp files the watcher rewrites on every save.
