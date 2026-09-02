@@ -1,0 +1,10 @@
+# The review documents are rebuilt from the manifest on demand and would
+# otherwise land in every diff as binary noise. The MANIFEST is committed: it
+# is what a returned document has to be matched against.
+*.docx
+.rendered.json
+.selftest*
+.watch*
+.rt.json
+.preview.html
+copy-changes.json

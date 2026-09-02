@@ -1,4 +1,8 @@
-@import "tailwindcss";
+/* `source()` confines Tailwind's class scanning to src/. Without it v4
+   scans the whole project, so any working file written next to the repo —
+   the copy-review manifest and its temp files, in copy/ — retriggers a CSS
+   rebuild, and a run of those reads as the page flickering. */
+@import "tailwindcss" source("../src");
 
 /* ═══════════════════════════════════════════════════════════════════════════
    NaviNetics Design Language v1

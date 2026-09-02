@@ -13,6 +13,13 @@ import react from '@vitejs/plugin-react'
 //
 // Deploying to a custom domain instead? Set this to '/' and add public/CNAME.
 export default defineConfig({
+  server: {
+    /* copy/ holds the website-copy review working files — a 800KB manifest,
+       a Word document, and temp files the watcher rewrites on every save.
+       None of it is imported by the site, but the dev server watches the
+       whole project by default, so a save there reloaded the page. */
+    watch: { ignored: ['**/copy/**'] },
+  },
   base: '/navinetics-web-v2/',
   plugins: [react(), spaFallback(), perfBeacon()],
 })

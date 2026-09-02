@@ -27,8 +27,9 @@ const ROUTES = [
   '/company/community', '/products/d1-stereotactic-frame',
   '/products/carbon-fiber-surgical-tables', '/products/maven-neuromodulation',
   '/technology/stereotactic-devices', '/technology/neuromodulation',
-  '/technology/navinetics-ai', '/resources/media', '/resources/careers',
-  '/resources/publications', '/contact',
+  '/technology/navinetics-ai', '/technology/education',
+  '/resources/media', '/resources/careers',
+  '/resources/publications', '/contact', '/no-such-page',
 ];
 
 const browser = await webkit.launch();
