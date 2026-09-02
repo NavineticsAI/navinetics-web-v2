@@ -102,32 +102,70 @@ JPEG: **quality 86** (Lee, Goerss), **88** (Bennet, Oh), `optimize=True`,
 
 ---
 
-## 4 · Framing — the eye line
+## 4 · Framing — one face size, one eye line
 
-All four eye lines sit at **25% of image height**.
+**Superseded 2026-09-02.** The set is now solved for two numbers, both measured
+in the finished 1200×960 file:
 
-25% is not arbitrary and cannot be moved far. Bennet's crown sits at 11% of his
-frame, so raising him onto Lee's original 20% line would have **cut the top of
-his head off**. Lee and Goerss had to come down to meet him. Anything below ~24%
-crops Bennet's skull; anything above ~26% costs Lee more resolution than he can
-spare.
+| target | value |
+|---|---|
+| interocular distance (pupil to pupil) | **170 px** |
+| eye line | **29% of image height** |
 
-Measured eye lines before reframing:
+**Why interocular and not head height.** Head height — crown to chin — was the
+previous target, and it is the wrong measurement. It counts Goerss's beard and
+Lee's hair as head, so equalising it left Goerss's *face* visibly the smallest
+of the four while the numbers reported a match. Pupils are the same landmark on
+every face, in a way that a hairline is not.
 
-| | before | after | action |
-|---|---|---|---|
-| Lee | 20% | 25% | crop from bottom |
-| Goerss | 19% | 25% | crop from bottom |
-| Bennet | 31.5% | 25% | crop from top |
-| Oh | 30% | 25% | crop from top |
+**Why it matters at all.** Four cards in a row are read against each other. A
+face that renders larger than its neighbours reads as the senior one — which is
+a claim the site should not be making with a crop. Equal face size and equal eye
+height is what removes it.
 
-```
-eye > 0.25 → crop T = (eye − 0.25) / (1 − 0.25) off the TOP
-eye < 0.25 → crop B = 1 − eye / 0.25       off the BOTTOM
-```
+Measured in the sources, interocular runs 110 px (Goerss), 134 (Bennet), 148
+(Oh) and 213 (Lee). Lee's is a different, much closer photograph, which is why
+his box is by far the largest.
 
-Then restore 5:4 by cropping width to `height × 1.25`, positioned so the face's
-horizontal fraction is unchanged — which is what keeps §5 valid.
+**170 px / 29% is the loosest setting all four sources can reach.** Goerss sets
+the ceiling: there are only ~200 px above his pupils in the whole file, so
+pushing the eye line lower forces a smaller crop on *everyone*. Anything looser
+than this needs a different source, not a different box.
+
+| | interocular in the card, before | after |
+|---|---|---|
+| Lee | 169 px | 170 px |
+| Oh | 158 px | 170 px |
+| Bennet | 132 px | 170 px |
+| Goerss | 117 px | 170 px |
+
+| | eye line, before | after |
+|---|---|---|
+| Lee | 35.0% | 29% |
+| Bennet | 26.8% | 29% |
+| Oh | 24.9% | 29% |
+| Goerss | 18.2% | 29% |
+
+Lee's face was **44% wider than Goerss's** in the shipped cards, and the eye
+lines spanned 17 points.
+
+### Edge padding
+
+Two boxes run slightly past a source edge and are filled by replicating the
+edge row — `crop_pad()` in the script. It is what buys the set a common face
+size. Both overhangs land on plain content:
+
+- **Lee** — 67 rows below his shoulder: out-of-focus corridor and dark suit.
+  The 4:3 card on `/who-we-are` trims the bottom 6.25% and never shows it.
+- **Oh** — 42 columns at the right edge, outside the 64% window the 4:5 card
+  shows.
+
+Replicate, not mirror: mirroring a shoulder puts a second, upside-down shoulder
+in the frame.
+
+The `reframe()` step is a pass-through now (`eye = .25`, `facex = .5`) — the
+boxes are already 5:4 and already centred on the face. It is kept because it
+still enforces the aspect ratio if a box is ever mistyped.
 
 ---
 
@@ -136,32 +174,22 @@ horizontal fraction is unchanged — which is what keeps §5 valid.
 Each portrait carries a `focus` value in `src/pages/Founders.jsx` and
 `src/pages/WhoWeAre.jsx`. It is the CSS `object-position`.
 
-| | face x | focus |
-|---|---|---|
-| Lee | 62.0% | `83% 0%` |
-| Bennet | 62.0% | `83% 0%` |
-| Goerss | 60.0% | `78% 0%` |
-| Oh | 63.9% | `89% 0%` |
+**All four are now `50% 0%`.** The crops are centred on the face in the file, so
+the card needs no correction. The old per-founder percentages — derived from
+`focus = (faceX − 0.32) / 0.36` — are gone, and with them the coupling that made
+every crop change require a matching edit in two JSX files.
 
-**Why these numbers.** A 5:4 image in the 4:5 founders card is scaled to match
-the box *height*, so the browser shows the full height and crops the sides —
-keeping 64% of the width. To land a face at the centre of that window:
+The field is kept rather than hard-coded because the two pages must not disagree
+about where a face is if either box changes shape.
 
-```
-focus = (faceX − 0.32) / 0.36
-```
+**What each card actually shows:**
 
-All four subjects sit right of centre in their originals. Without this, every
-face is jammed against the right edge of the card.
-
-**Two things that follow from the geometry:**
-
-- The **vertical** half is always `0%`. In the 4:5 card no vertical cropping
-  happens at all, so a vertical value would do nothing — head height is a
-  property of the file (§4), never of the CSS.
-- In the 4:3 card on `/who-we-are` the opposite is true: it crops vertically and
-  not horizontally, so `focus` has no visible effect there. It is set anyway so
-  the two pages never disagree about where a face is.
+- **`/company/our-founders`, 4:5.** A 5:4 file scaled to match the box *height*:
+  full height, centre 64% of the width. Vertical `focus` is always `0%`; it
+  would do nothing.
+- **`/who-we-are`, 4:3.** The opposite — full width, top 93.75% of the height.
+  Equal face size and equal eye height carry over unchanged, and it trims the
+  edge where Lee's crop is padded.
 
 ---
 
@@ -268,15 +296,25 @@ ever supported it.
 
 ## 9 · What this cannot fix
 
-- **Lighting direction.** Lee and Goerss are flash-lit: flat and shadowless.
-  Bennet and Oh are window-lit: directional, one side of the face in shadow.
-  Brightness, contrast, black point and colour are all matchable. Direction is
-  not. This is the largest remaining difference between the two pairs.
-- **Lee's resolution.** 500×400 to begin with, 400×320 after the alignment crop,
-  rendered around 600px wide — a 2.34× upscale. He is visibly the softest, and
-  §8 rules out the usual cosmetic fix.
-- **Bennet's sharpness.** His original is genuinely the least sharp of the four.
+**All four sources were replaced during 2026-08/09, so most of what this section
+used to list is gone.** Lee's 500×400 file and Goerss's flash-lit one are both
+retired. What is left:
 
-**The real fix is a reshoot of Lee and Goerss** — same seat, same window, same
-session as the other two. That resolves resolution, lighting direction, head
-height and colour in one go, and would let most of this document be deleted.
+- **Lee's background.** His is the only one not shot at the window. Bennet,
+  Goerss and Oh share a ground — the Plummer Building through the same glass, at
+  the same hour. Lee is in a corridor: darker, warmer, with green and amber
+  bokeh instead of a skyline. On a row of four cards this is the one difference
+  a reader still sees, and **no crop or grade can fix it** — the location is in
+  the file. Grading him toward the other three was tried on 2026-09-01 and
+  looked worse, not better (§7); it took his skin to a\* 7.0 and the ground to
+  L\* 58.8, and it read as blue and dull.
+- **Lee's framing.** He is photographed much closer than the other three
+  (interocular 213 px against 110–148). That is why he sets the size the whole
+  set has to match, and why the set cannot be framed any looser than §4 without
+  a different photograph of him.
+- **Lighting direction.** Still not matchable in software, though the gap is
+  much smaller now that Goerss is window-lit like Bennet and Oh.
+
+**The remaining fix is one photograph: Lee, at the same window as the other
+three.** It resolves background, lighting and framing at once, and would let §4
+be re-solved at a looser, more flattering crop for all four.

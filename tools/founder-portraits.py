@@ -50,6 +50,25 @@ GL,GRB,GGB=FACE_LUM,WB_RB,WB_GB
 
 def lum(x): return 0.2126*x[...,0]+0.7152*x[...,1]+0.0722*x[...,2]
 
+def crop_pad(im, box):
+    """`im.crop` for a box that may run past an edge, replicating the edge row
+    or column into the overhang instead of PIL's default black.
+
+    Two of the four boxes need it, by a few dozen pixels each, and both
+    overhangs land on plain content: Goerss's is 16 rows of window sky above
+    his head, Lee's is 67 rows of out-of-focus corridor and dark suit below
+    his shoulder. It is what buys the set a common face size — see the note
+    over JOBS. Replicate, not mirror: mirroring a shoulder puts a second,
+    upside-down shoulder in the frame."""
+    l,t,r,b=box
+    W,H=im.size
+    il,it,ir,ib=max(0,l),max(0,t),min(W,r),min(H,b)
+    inner=np.asarray(im.crop((il,it,ir,ib)))
+    pad=((it-t,b-ib),(il-l,r-ir),(0,0))
+    if not any(sum(x) for x in pad[:2]): return Image.fromarray(inner)
+    return Image.fromarray(np.pad(inner,pad,mode='edge'))
+
+
 def reframe(im, eye, facex):
     """Crop top (to raise) or bottom (to lower) so `eye` lands on EYE, keep 5:4."""
     w,h=im.size
@@ -180,44 +199,34 @@ def deblue(im,da=DEBLUE_A,db=DEBLUE_B):
 # name, source, pre-crop, eye line now, face x, output size, full grade, quality
 JOBS=[
   # ── ALL FOUR ARE RETOUCHED SOURCES, AND NONE OF THEM IS GRADED HERE. ────────
-  # Every portrait now arrives from the same retouching pass at 1402x1122, which
-  # is already 5:4. They are internally consistent — same window, same light,
-  # and Goerss is no longer the flash-lit odd one out — so the colour work this
-  # file was built to do has nothing left to correct. Grading them would
-  # overwrite decisions someone made deliberately.
+  # `False` in the grade column means: crop, resize, encode. Nothing else. See
+  # s6/s7 of the spec for what is being skipped and why it no longer applies.
   #
-  # `False` in the grade column means: crop, reframe, resize, encode. Nothing
-  # else. See s6/s7 of the spec for what is being skipped and why it no longer
-  # applies.
+  # THE CROPS ARE SOLVED FOR ONE THING, AND IT IS NOT HEAD HEIGHT ANY MORE:
+  # every box puts the INTEROCULAR DISTANCE at 170px of the 1200px output and
+  # the EYE LINE at 29% of its height. Four cards in a row are read against
+  # each other, and a face that renders larger than its neighbours reads as
+  # the senior one — which is a claim the site should not be making with a
+  # crop. Equal face size and equal eye height is what removes it.
   #
-  # THE CROPS ARE SOLVED FOR ONE THING: EQUAL HEAD SIZE. Measured in the sources,
-  # heads run 384px (Lee), 520 (Bennet), 523 (Oh) and 468 (Goerss) — Lee sits
-  # noticeably further from the camera. Each box is sized so the head lands at
-  # ~49.5% of the output, which is the largest common value the four can reach.
+  # Crown-to-chin was the previous target and is the wrong measurement: it
+  # counts Goerss's beard and Lee's hair as head, so equalising it left
+  # Goerss's FACE visibly the smallest of the four. Pupils are the same
+  # landmark on every face. Measured in the sources, interocular runs 115px
+  # (Goerss), 134 (Bennet), 148 (Oh), 213 (Lee) — Lee's is a different, much
+  # closer photograph, which is why his box is by far the largest.
   #
-  # Headroom cannot also be equalised, and that is a property of the sources:
-  # Lee's crown is 29px from the top edge and Goerss's is 19px, while Bennet has
-  # 174px and Oh 145px. There is nothing above the first two to crop to, so they
-  # keep a tighter top. Head size is the difference a reader sees on a row of
-  # four cards; headroom is not.
+  # 170px/29% is the LOOSEST setting all four sources can reach. Goerss sets
+  # the ceiling: there are only 172px above his pupils in the whole file, so
+  # a lower eye line forces a smaller crop on everyone. Two boxes run a little
+  # past an edge and are edge-replicated — see crop_pad.
   #
-  # name, source, pre-crop, eye (0.25 = passthrough), face x in the crop,
-  # output size, grade, jpeg quality
-  ('kendall-lee-150-500x400-1.jpg', ('orig','dr_lee_enhanced_final.png'), (327,0,1297,776),   .25,.520,(1200,960), False, 92),
-  # Bennet and Oh are cropped from the top, not from the frame edge like the
-  # other two. Their sources leave 174px and 140px above the crown where Lee has
-  # 29 and Goerss 19, so a crop starting at y=0 sat them visibly LOWER in the
-  # card than the other two — the top of the head reads as the thing that is
-  # out of line, more than head size does. Taking the difference off the top
-  # brings all four crowns to roughly 3.5%.
-  # New source, 2026-09-01. Its crown sits at y=174 of 1122 - 15.5% headroom,
-  # where Lee's is 3.6% and Goerss's 2.2% - so it is cropped DOWN to meet
-  # them rather than taken at the frame edge. Solved for crown 3.0%: the box
-  # can be at most 977 tall before it runs past the bottom of the file, which
-  # puts his head at 53% against Lee's 51% and Goerss's 50%.
-  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (129,145,1350,1122),.25,.550,(1200,960), False, 92),
-  ('yoonbae-oh.jpg',                ('orig','oh_enhanced_gpt.png'),       (278,108,1403,1008),.25,.553,(1200,960), False, 92),
-  ('stephan-goerss-150.jpg',        ('orig','steve_enhanced_gpt.png'),    (221,0,1402,945),   .25,.535,(1200,960), False, 92),
+  # name, source, pre-crop, eye (.25 = passthrough), face x (.5 = the box is
+  # already centred on the face), output size, grade, jpeg quality
+  ('kendall-lee-150-500x400-1.jpg', ('orig','dr_lee_enhanced_final.png'), (345,144,1849,1347), .25,.5,(1200,960), False, 92),
+  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (392,171,1338,928),  .25,.5,(1200,960), False, 92),
+  ('yoonbae-oh.jpg',                ('orig','oh_enhanced_gpt.png'),       (400,86,1445,922),   .25,.5,(1200,960), False, 92),
+  ('stephan-goerss-150.jpg',        ('orig','steve_enhanced_gpt.png'),    (442,19,1218,640),   .25,.5,(1200,960), False, 92),
 ]
 
 def main():
@@ -244,7 +253,7 @@ def main():
         print('pass --originals /path/to/them, or --only <name> to rebuild one',file=sys.stderr); return 1
     for name,(kind,fn),pre,eye,fx,size,full,q in jobs:
         im=Image.open(os.path.join(a.originals if kind=='orig' else SRCDIR,fn)).convert('RGB')
-        if pre: im=im.crop(pre)
+        if pre: im=crop_pad(im,pre)
         im=reframe(im,eye,fx)
         if size: im=im.resize(size,Image.LANCZOS)
         if full:

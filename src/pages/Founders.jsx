@@ -5,20 +5,19 @@ import { Button, Hero, Reveal, Section } from '../ui/index.js';
 /**
  * `focus` is the CSS object-position for the portrait.
  *
- * Every portrait is a landscape frame shown in a 4:5 box, so the browser keeps
- * the full height and crops the sides — and all four subjects sit right of
- * center in their originals, which without this puts each face against the
- * right edge of the card. Moving the crop window is what centers them.
+ * All four are 50% — the crops themselves are centred on the face now, so the
+ * card needs no correction. It stays a per-founder field because the two pages
+ * that show these portraits must not disagree about where a face is if either
+ * box changes shape.
  *
- * It is deliberately not done by cropping to centre each face. The four are
- * cropped for EQUAL HEAD SIZE — measured in the sources, heads ran 384px to
- * 523px, so a shared crop would have put one three-quarter portrait beside
- * three head-and-shoulders ones. Size is matched in the file; horizontal
- * centring happens here.
- *
- * The vertical half stays at 0% — see object-top on the <img>. Percentages are
- * (face − 32) / 36, which is where a 64%-wide window has to start to put the
- * face at its center.
+ * The crops are solved in tools/founder-portraits.py for ONE THING: the same
+ * interocular distance and the same eye height in every file. Four cards read
+ * in a row are read against each other, and a face rendered larger than its
+ * neighbours reads as the senior one — a claim a crop should not be making.
+ * Head height was the previous target and is the wrong measurement: it counts
+ * Goerss's beard and Lee's hair as head, which left Goerss's face the smallest
+ * of the four while the numbers said they matched. Change a box there and
+ * nothing here needs to follow, which is the point.
  */
 const founders = [
   {
@@ -28,13 +27,7 @@ const founders = [
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kendall-lee-150-500x400-1.jpg'),
-    /* All four `focus` values were recomputed on 2026-08-17, when every
-       portrait was replaced by a retouched source and re-cropped for equal head
-       size. Per s5 of the portrait spec, focus = (faceX - 0.32) / 0.36, and the
-       faceX each one is derived from is in the JOBS table of
-       tools/founder-portraits.py. Change a crop there and these must follow, or
-       the card's window slides off the face. */
-    focus: '56% 0%',
+    focus: '50% 0%',
     bio: [
       'Dr. Lee earned his B.A. in biology with a minor in philosophy (Summa Cum Laude) from the University of Colorado at Denver. He attended Yale University Graduate School, where he received his Master of Philosophy, M.D. (Cum Laude) and Ph.D. in neurobiology. He completed an internship in internal medicine at the Hospital of St. Raphael, Yale University School of Medicine and a residency in neurology at Harvard Medical School.',
       'He further trained at Dartmouth Hitchcock Medical Center, completing an internship in general surgery and a residency and chief residency in neurosurgery. In his clinical practice, Dr. Lee is an expert on neurological disorders, seeing patients with Parkinson’s disease, Tourette’s syndrome, dystonia, and other neurodegenerative diseases.',
@@ -50,7 +43,7 @@ const founders = [
        correct as written. */
     role: 'Co-CEO & Co-Founder',
     image: asset('/kevin-bennet.jpg'),
-    focus: '64% 0%',
+    focus: '50% 0%',
     bio: [
       'Dr. Bennet has over 30 years of experience in technology development with organizations including Mayo Clinic, W.R. Grace & Co., Exxon International and Amoco Chemicals. He has been a consultant to the National Institutes of Health and served on NIH site visit teams.',
       'He holds patents concerning neurosurgery, diamond, semiconductor and optical technology and has founded several technology-based companies. He received a degree in Chemical Engineering from the Massachusetts Institute of Technology, an MBA from Harvard and his doctorate from Deakin University.',
@@ -62,7 +55,7 @@ const founders = [
     name: 'Stephan J. Goerss',
     role: 'Co-Founder',
     image: asset('/stephan-goerss-150.jpg'),
-    focus: '60% 0%',
+    focus: '50% 0%',
     bio: [
       'Steve Goerss has 40 years of experience in designing and fabricating neurosurgical devices and stereotactic instrumentation. He has been awarded three patents with two more pending. He joined the Mayo Clinic in 1984 with the Department of Neurologic Surgery until 2016.',
       'During this time, he supported all computer-assisted neurosurgical procedures, trained neurosurgical residents in the use of this technology, and developed custom neurosurgical instruments and systems for the neurosurgical staff. He also became an Assistant Professor of the Mayo Medical School. He has authored and co-authored 51 peer reviewed papers and two book chapters.',
@@ -74,7 +67,7 @@ const founders = [
     name: 'Yoonbae Oh, Ph.D.',
     role: 'Co-Founder',
     image: asset('/yoonbae-oh.jpg'),
-    focus: '65% 0%',
+    focus: '50% 0%',
     /* Short by comparison because it is only what NaviNetics has supplied: the
        three appointments, plus the publication record that is already on this
        site (see src/data/publications.js — Dr. Oh is the senior author on the
@@ -124,7 +117,7 @@ export default function Founders() {
                     alt={`Portrait of ${f.name}`}
                     loading="lazy"
                     style={{ objectPosition: f.focus }}
-                    className="absolute inset-0 h-full w-full scale-105 object-cover object-top transition-transform duration-1000 ease-out hover:scale-100"
+                    className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-1000 ease-out hover:scale-105"
                   />
                 </div>
               </div>
