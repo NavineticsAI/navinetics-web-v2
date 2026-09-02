@@ -11,14 +11,24 @@ import { technologies } from './technology.js';
  * `panel: 'rich'` renders the mega-panel with thumbnails; plain groups render
  * a simple dropdown list.
  */
-export const nav = [
+/**
+ * The full menu, including what is currently hidden.
+ *
+ * `hidden: true` takes an entry out of every menu — the navbar's three
+ * renderers and the footer all read the filtered `nav` below — while leaving
+ * the route, the page and this record alone. It is not a deletion: the page
+ * still answers on its own URL and the entry comes back by removing one word.
+ */
+const ALL = [
   {
     title: 'Company',
     path: '/company/who-we-are',
     items: [
       { title: 'Who We Are', path: '/company/who-we-are' },
       { title: 'Our Founders', path: '/company/our-founders' },
-      { title: 'Partners', path: '/company/partners' },
+      /* Hidden on instruction. /company/partners still renders, and is still
+         in the sitemap; it is only unreachable by clicking. */
+      { title: 'Partners', path: '/company/partners', hidden: true },
       { title: 'Community', path: '/company/community' },
     ],
   },
@@ -76,6 +86,19 @@ export const nav = [
     ],
   },
 ];
+
+/**
+ * What the menus actually draw.
+ *
+ * Filtered here rather than at each call site: the navbar renders `items` in
+ * three places — the rich panel, the plain dropdown and the mobile list — and
+ * the footer in a fourth, and hiding an entry in three of the four is the same
+ * as not hiding it. A group whose every item is hidden drops out too, so this
+ * stays correct if a whole section is ever taken down.
+ */
+export const nav = ALL
+  .map((group) => ({ ...group, items: group.items.filter((i) => !i.hidden) }))
+  .filter((group) => group.items.length > 0);
 
 /**
  * Old → new paths. The IA changed; these keep every previously published URL

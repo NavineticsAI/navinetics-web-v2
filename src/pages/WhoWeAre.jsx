@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { cn } from '../lib/cn.js';
 import { usePageMeta } from '../lib/meta.js';
 import { numbers, principles, timeline } from '../data/company.js';
 import { isPlaceholder, products } from '../data/products.js';
@@ -78,21 +79,30 @@ export default function WhoWeAre() {
         <Reveal>
           <div className="grid gap-px overflow-hidden rounded-lg border border-hairline
             bg-hairline sm:grid-cols-2 lg:grid-cols-4">
-            {numbers().map((n) => (
-              <Link
-                key={n.label}
-                to={n.to}
-                className="group/n flex flex-col gap-1 bg-surface p-6 transition-colors
-                  hover:bg-surface-2"
-              >
-                <span className="text-4xl font-semibold leading-none tracking-[-0.045em] tabular-nums
-                  text-action">
-                  {n.value}
-                </span>
-                <span className="mt-1.5 text-sm font-semibold">{n.label}</span>
-                <span className="text-xs leading-relaxed text-ink-3">{n.unit}</span>
-              </Link>
-            ))}
+            {/* `to` is optional. A tile without one renders as a plain panel
+                rather than a Link, because <Link to={undefined}> throws — and
+                a tile that looks clickable and is not is worse than one that
+                never offered. */}
+            {numbers().map((n) => {
+              const Tile = n.to ? Link : 'div';
+              return (
+                <Tile
+                  key={n.label}
+                  {...(n.to ? { to: n.to } : {})}
+                  className={cn(
+                    'group/n flex flex-col gap-1 bg-surface p-6',
+                    n.to && 'transition-colors hover:bg-surface-2',
+                  )}
+                >
+                  <span className="text-4xl font-semibold leading-none tracking-[-0.045em] tabular-nums
+                    text-action">
+                    {n.value}
+                  </span>
+                  <span className="mt-1.5 text-sm font-semibold">{n.label}</span>
+                  <span className="text-xs leading-relaxed text-ink-3">{n.unit}</span>
+                </Tile>
+              );
+            })}
           </div>
         </Reveal>
       </Section>

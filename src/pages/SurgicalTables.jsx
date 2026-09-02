@@ -264,9 +264,6 @@ export default function SurgicalTables() {
             <Button to="/contact?reason=tables" size="lg" arrow>
               Request a quote
             </Button>
-            <Button to="/company/partners" size="lg" variant="secondary">
-              Where they come from
-            </Button>
           </div>
           {/* Footer line removed on instruction. It also named "NaviNetics
               Asia", which is now presented as CBH — see data/partners.js. */}

@@ -100,7 +100,6 @@ export const timeline = [
       'CBH is integrated in March, carrying manufacturing, R&D, and the Asia and Europe sales '
       + 'network.',
     source: 'Partner records',
-    to: '/company/partners',
   },
 ];
 
@@ -124,7 +123,11 @@ export const numbers = () => {
          organisation yet, and two partners are named anywhere on the site. The
          count of territories is right; what they are covered BY is mixed, and
          saying so is both accurate and unremarkable. */
-      unit: 'served, direct and through partners', to: '/company/partners' },
+      /* This tile has no destination on purpose. It used to open
+         /company/partners, which is now hidden from the menus, and a stat that
+         is the only remaining way into a hidden page defeats hiding it. The
+         number and the wording are unchanged. */
+      unit: 'served, direct and through partners' },
     { value: String(disciplines.length), label: 'Disciplines',
       /* The unit named three where the number says six — see disciplines.js,
          which runs surgery, product, mechanical, imaging, verification and
