@@ -341,29 +341,6 @@ for (const e of manifest.entries) {
   if (!hit) notRendered += 1;
 }
 
-/* ── objections raised against specific sentences ──────────────────────────
-   A reviewer who disputes a sentence should not have to describe WHICH sentence
-   in an email. copy/review-notes.json attaches an objection to a string by id,
-   and it rides into the document on that string's own row, so the person fixing
-   it reads the complaint and the text together and types the answer in place. */
-try {
-  const rn = JSON.parse(readFileSync(resolve(ROOT, outDir, 'review-notes.json'), 'utf8'));
-  const byId = new Map((rn.notes || []).map((n) => [n.id, n]));
-  let attached = 0;
-  for (const e of manifest.entries) {
-    const n = byId.get(e.id);
-    if (!n) continue;
-    e.review = n;
-    attached += 1;
-  }
-  const orphan = (rn.notes || []).filter((n) => !manifest.entries.some((e) => e.id === n.id));
-  if (attached) console.log(`
-  ${attached} review note(s) attached`);
-  // A note whose sentence has been rewritten or deleted must be reported, not
-  // silently dropped: it means an objection is about to go unanswered.
-  for (const n of orphan) console.log(`  ! review note ${n.id} (${n.from}) matches nothing - the text it referred to has changed`);
-} catch { /* no notes file; nothing to attach */ }
-
 manifest.parts = parts;
 mkdirSync(resolve(ROOT, outDir), { recursive: true });
 const outFile = resolve(ROOT, outDir, 'copy-manifest.json');

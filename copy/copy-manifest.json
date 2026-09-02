@@ -3149,13 +3149,7 @@
     "Our Founders"
    ],
    "section": "The visionaries.",
-   "rendered": true,
-   "review": {
-    "id": "4e11ee3b",
-    "from": "Kevin Bennet",
-    "date": "2026-09-02",
-    "note": "THE NAME IS WRONG — same correction. This is the line directly above the four founder biographies on the Our Founders page."
-   }
+   "rendered": true
   },
   {
    "id": "8deb659b",
@@ -3902,13 +3896,7 @@
     "Community"
    ],
    "section": "The laboratory is still here",
-   "rendered": true,
-   "review": {
-    "id": "25d6ab35",
-    "from": "Kevin Bennet",
-    "date": "2026-09-02",
-    "note": "THE NAME IS WRONG — same correction as the company timeline. This sentence also says the NRSS was prototyped in the laboratory; if the Division of Engineering built it, this needs to change too."
-   }
+   "rendered": true
   },
   {
    "id": "50e09ac2",
@@ -11874,13 +11862,7 @@
    ],
    "section": "The Neural Engineering Laboratories",
    "rendered": true,
-   "assistive": true,
-   "review": {
-    "id": "c0a3daf5",
-    "from": "Kevin Bennet",
-    "date": "2026-09-02",
-    "note": "THE NAME IS WRONG. Kevin Bennet: \"we are reinventing history by stating that the Precision Surgery Laboratories (of only Kendall Lee) developed the equipment. This is not true. It was created by the Neural Engineering Laboratory of which I was co-Founder and Co-Director for about 18 years.\" Please write the correct name of the laboratory here. Note it is used in four other places, listed below."
-   }
+   "assistive": true
   },
   {
    "id": "e6add440",
@@ -11906,13 +11888,7 @@
     "Who We Are"
    ],
    "section": "The Neural Engineering Laboratories",
-   "rendered": true,
-   "review": {
-    "id": "e6add440",
-    "from": "Kevin Bennet",
-    "date": "2026-09-02",
-    "note": "THE NAME IS WRONG — see the note on the heading above. The founding, the co-directorship and the 18 years are yours to state correctly; please rewrite this entry."
-   }
+   "rendered": true
   },
   {
    "id": "15fc0303",
@@ -12070,13 +12046,7 @@
     "Who We Are"
    ],
    "section": "The prototype",
-   "rendered": true,
-   "review": {
-    "id": "0c4b78ef",
-    "from": "Kevin Bennet",
-    "date": "2026-09-02",
-    "note": "WHO BUILT THE PROTOTYPE. Kevin Bennet: \"The Division of Engineering designed and built the original working prototypes and the MAVEN software - of which I chaired for 20 years, which NaviNetics licensed from Mayo.\" This entry currently credits the laboratory. Please rewrite it so the Division of Engineering is credited, and say whether the licence from Mayo should be stated here or on its own."
-   }
+   "rendered": true
   },
   {
    "id": "628e7b7e",

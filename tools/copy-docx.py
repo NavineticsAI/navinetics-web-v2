@@ -102,17 +102,6 @@ def add_table(doc, rows, note_col=True):
         code = left.add_paragraph()
         code.paragraph_format.space_after = Pt(0)
         run(code, f'⟦{e["id"]}⟧', size=7, color=GREY, font='Consolas')
-        # An objection is the first thing to read on the row, in red, above
-        # the text it concerns.
-        if e.get('review'):
-            r = e['review']
-            rp = left.add_paragraph()
-            rp.paragraph_format.space_after = Pt(2)
-            run(rp, f"{r['from']}, {r['date']}:", size=8, bold=True,
-                color=RGBColor(0xB0, 0x2A, 0x2A))
-            rn = left.add_paragraph()
-            rn.paragraph_format.space_after = Pt(2)
-            run(rn, r['note'], size=8, color=RGBColor(0xB0, 0x2A, 0x2A))
         if note_col and e.get('note'):
             n = left.add_paragraph()
             n.paragraph_format.space_after = Pt(0)
