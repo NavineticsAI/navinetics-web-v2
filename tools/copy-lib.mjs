@@ -322,9 +322,26 @@ export function extractFile(file) {
 
     // 4. Bare strings in an array — bio paragraphs, bullet lists.
     if (node.type === 'ArrayExpression') {
+      // An array of prose can hold DELIBERATELY EMPTY entries: a founder with
+      // material still to supply carries the same number of slots as the
+      // others, so nobody's biography reads as shorter than his neighbour's
+      // before anyone has had the chance to fill it in. Those slots have to
+      // reach the review document as blank rows - the whole point is that
+      // someone types into them - so they are collected here rather than
+      // skipped as empty.
+      const prose = node.elements.filter((el) => el?.type === 'Literal'
+        && typeof el.value === 'string' && looksLikeProse(el.value)).length;
       node.elements.forEach((el, i) => {
         const kp = `${path}[${i}]`;
         if (el?.type === 'Literal' && typeof el.value === 'string') {
+          if (!el.value.trim() && prose >= 2) {
+            out.push({
+              file, kind: 'placeholder', astPath: kp, section, key: '',
+              line: lineOf(el.start), start: el.start, end: el.end,
+              indent: '', raw: src.slice(el.start, el.end), text: '',
+            });
+            return;
+          }
           if (looksLikeProse(el.value)) push(el, el.value, 'array-item', kp);
         } else if (el?.type === 'TemplateLiteral' && el.expressions.length === 0) {
           const v = templateText(el.quasis.map((q) => q.value.cooked).join(''));

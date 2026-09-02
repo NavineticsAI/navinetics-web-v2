@@ -190,6 +190,9 @@ function shortLabel(e) {
 }
 
 const KIND_NOTE = {
+  placeholder: 'EMPTY ON PURPOSE. Every founder has five slots so that no '
+    + 'biography reads as shorter than the others. Type here if you have '
+    + 'more to add; leave it blank and nothing appears on the page.',
   'template-dyn': 'Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.',
   'jsx-expr': 'Shown only in a particular state (for example while a form is sending).',
   alt: 'Read aloud by screen readers; not shown on screen.',
