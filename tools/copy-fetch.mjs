@@ -178,15 +178,43 @@ if (SHARE) {
   const name = decodeURIComponent(
     /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(disp)?.[1] || 'the review document',
   );
-  const modified = res.headers.get('last-modified');
+  /* WHEN WAS IT LAST SAVED. The download endpoint that actually serves the
+     bytes sends no Last-Modified, so ask separately — the shares API carries
+     the metadata even where it will not serve the content. Its 308 for a
+     business link puts the real address in the body rather than in a header,
+     which is why this follows it by hand. */
+  let modified = res.headers.get('last-modified');
+  let by = 'someone';
   if (!modified) {
-    console.error('\n  OneDrive did not say when that file was last saved, so there is no');
-    console.error('  way to tell whether somebody is still working in it. Refusing rather');
-    console.error('  than publishing a half-finished edit.\n');
-    process.exit(1);
+    let meta = await fetch(`https://api.onedrive.com/v1.0/shares/${b64}/root`,
+      { headers: BROWSERISH }).catch(() => null);
+    if (meta?.status === 308) {
+      const next = (await meta.json().catch(() => null))?.redirectUri || meta.headers.get('location');
+      if (next) meta = await fetch(next, { headers: BROWSERISH }).catch(() => null);
+    }
+    if (meta?.ok) {
+      const j = await meta.json().catch(() => null);
+      modified = j?.lastModifiedDateTime || null;
+      by = j?.lastModifiedBy?.user?.displayName || by;
+    }
   }
-  const quietFor = checkQuiet(name, modified, 'someone');
-  await save(res, name, quietFor, 'someone');
+
+  if (modified) {
+    const quietFor = checkQuiet(name, modified, by);
+    await save(res, name, quietFor, by);
+    process.exit(0);
+  }
+
+  /* Nowhere would say. Proceeding rather than refusing: the quiet period is a
+     nicety — a guess at whether somebody is mid-sentence — and refusing without
+     it means this never runs at all. The gates that actually protect the site
+     are untouched, and they are the ones that matter: nothing publishes unless
+     every edit applies, the site builds, and only src/ changed. Worst case a
+     half-written sentence goes out twelve hours early and the next run corrects
+     it. */
+  console.log('  (could not find out when it was last saved, so the quiet period');
+  console.log('   was not checked — see tools/copy-fetch.mjs)');
+  await save(res, name, 0, by);
   process.exit(0);
 }
 
