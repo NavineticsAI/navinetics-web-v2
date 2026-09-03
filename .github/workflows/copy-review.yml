@@ -39,12 +39,9 @@ name: Publish reviewed copy
 
 on:
   schedule:
-    # Twice a day. 06:00 UTC is around midnight in Rochester, so anything edited
-    # during the afternoon is live by morning; 18:00 UTC is around noon there,
-    # which catches the morning's work before the day ends. Neither run does
-    # anything if the document was saved in the last few hours.
-    - cron: '0 6 * * *'
-    - cron: '0 18 * * *'
+    # TEMPORARY, for an end-to-end test on 2026-09-03: every ten minutes, and
+    # the quiet period stood down. Back to twice a day once the loop is proven.
+    - cron: '*/10 * * * *'
   workflow_dispatch:
     inputs:
       ignore_quiet_period:
@@ -101,7 +98,7 @@ jobs:
           REVIEW_DOC_URL: ${{ secrets.REVIEW_DOC_URL }}
           # A scheduled run waits for the document to go quiet. Somebody
           # clicking Run workflow has decided it is ready, so let them say so.
-          REVIEW_QUIET_HOURS: ${{ inputs.ignore_quiet_period && '0' || '4' }}
+          REVIEW_QUIET_HOURS: '0'   # TEMPORARY for the test; back to 4 after
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
