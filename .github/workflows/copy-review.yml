@@ -85,6 +85,9 @@ jobs:
       - name: Collect the document from OneDrive
         if: github.event_name != 'push'
         env:
+          # Either one link, or the four app-registration values. See the top of
+          # tools/copy-fetch.mjs. The link is the one that needs no administrator.
+          REVIEW_DOC_URL: ${{ secrets.REVIEW_DOC_URL }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}

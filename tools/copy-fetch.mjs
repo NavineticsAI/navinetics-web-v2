@@ -1,31 +1,30 @@
 /**
  * Fetch the review document straight out of OneDrive.
  *
- *   node tools/copy-fetch.mjs                       # writes copy/incoming/review.docx
- *   node tools/copy-fetch.mjs --out some/path.docx
+ *   node tools/copy-fetch.mjs                    # writes copy/incoming/review.docx
+ *   node tools/copy-fetch.mjs --quiet-hours 0    # take it however recently it was saved
  *
- * WHY THIS AND NOT POWER AUTOMATE. Calling an outside URL from Power Automate
- * needs the HTTP action, which is a Premium licence — about £15 a month for the
- * flow's owner, forever, to move one file. This does the same job from a
- * scheduled GitHub Action for nothing, and nothing about how the reviewers work
- * changes: the same Word document, in the same OneDrive folder, edited the same
- * way. They never learn this exists.
+ * TWO WAYS IN, and the first needs nothing set up beyond one link.
  *
- * WHAT IT NEEDS, once, from whoever administers Microsoft 365:
+ * 1. A SHARE LINK — set REVIEW_DOC_URL.
+ *    In OneDrive: right-click the document, Share, "Anyone with the link", Copy.
+ *    Paste that into one repository secret and this can read it. No Azure, no
+ *    app registration, no administrator, no tenant. Anyone holding the link can
+ *    read the document, which is why it lives in a secret rather than in this
+ *    file — but what it guards is the wording of a public website, and the link
+ *    is unguessable.
  *
- *   An app registration in Entra ID (Azure AD) with the APPLICATION permission
- *   Files.Read.All, granted admin consent. Application, not delegated: there is
- *   no signed-in user at 6am. Read, not write — this only ever downloads.
+ * 2. AN APP REGISTRATION — set AZURE_TENANT_ID, AZURE_CLIENT_ID,
+ *    AZURE_CLIENT_SECRET and REVIEW_DRIVE_USER. An Entra ID app with the
+ *    APPLICATION permission Files.Read.All and admin consent. For when the
+ *    tenant forbids anonymous sharing, or a link is not wanted at all.
  *
- * and then four repository secrets:
+ * Either way it only ever downloads. Nothing here can write to OneDrive.
  *
- *   AZURE_TENANT_ID      the directory (tenant) ID
- *   AZURE_CLIENT_ID      the application (client) ID
- *   AZURE_CLIENT_SECRET  a client secret from that app
- *   REVIEW_DRIVE_USER    whose OneDrive the folder lives in, e.g. an email
- *
- * It reads and never writes, so the worst a leaked secret does is let somebody
- * read that one document — which is the wording of a public website.
+ * WHY NOT POWER AUTOMATE. Reaching an outside URL from a flow needs its HTTP
+ * action, which is a Premium licence — about £15 a month, forever, to move one
+ * file once a day. This costs nothing and changes nothing for the reviewers:
+ * same document, same folder, same Word. They never learn it exists.
  */
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -37,42 +36,125 @@ const arg = (name, dflt) => {
 
 const OUT = arg('--out', 'copy/incoming/review.docx');
 const FOLDER = arg('--folder', process.env.REVIEW_FOLDER || 'Website Review');
+
 /* How long the document must have been left alone before it is taken.
  *
  * There is no button and no switch: reviewers edit and save, and that is all
- * they ever do. The cost of that is that a run could catch somebody mid-
- * sentence — half a thought, published. OneDrive records when the file was
- * last saved, so instead of asking a person to declare they have finished,
- * infer it: nobody has touched this for hours, so they are done.
+ * they ever do. The cost of that is a run could catch somebody mid-sentence —
+ * half a thought, published. OneDrive records when the file was last saved, so
+ * rather than asking a person to declare they have finished, infer it: nobody
+ * has touched this for hours, so they are done.
  *
  * At 06:00 UTC it is around midnight in Rochester and this passes trivially.
  * It earns its keep on the evening somebody is still working at 01:00. */
-const QUIET_HOURS = Number(arg('--quiet-hours', process.env.REVIEW_QUIET_HOURS || 4));
+const QUIET_HOURS = Number(arg('--quiet-hours', process.env.REVIEW_QUIET_HOURS ?? 4));
+
 const {
+  REVIEW_DOC_URL: SHARE,
   AZURE_TENANT_ID: TENANT,
   AZURE_CLIENT_ID: CLIENT,
   AZURE_CLIENT_SECRET: SECRET,
   REVIEW_DRIVE_USER: USER,
 } = process.env;
 
-const missing = Object.entries({ AZURE_TENANT_ID: TENANT, AZURE_CLIENT_ID: CLIENT, AZURE_CLIENT_SECRET: SECRET, REVIEW_DRIVE_USER: USER })
-  .filter(([, v]) => !v).map(([k]) => k);
-if (missing.length) {
-  console.error(`\n  Missing: ${missing.join(', ')}`);
-  console.error('  See the comment at the top of this file for what to set up.\n');
-  process.exit(1);
-}
-
 const die = async (what, res) => {
   const body = await res.text().catch(() => '');
   console.error(`\n  ${what} failed: ${res.status} ${res.statusText}`);
-  // Never print the response wholesale — a token request echoes back enough to
-  // be worth not putting in a public log.
+  // Never print a response wholesale: a token request echoes back enough to be
+  // worth keeping out of a log anybody can read.
   console.error(`  ${body.slice(0, 300).replace(/[A-Za-z0-9_-]{40,}/g, '<redacted>')}\n`);
   process.exit(1);
 };
 
-// ── a token for the app itself, not for a person ────────────────────────────
+/** Exits 2 — nothing to do — if somebody may still be typing. */
+const checkQuiet = (name, savedAt, by) => {
+  const quietFor = (Date.now() - new Date(savedAt).getTime()) / 3600000;
+  if (quietFor < QUIET_HOURS) {
+    console.log(`\n  ${name}`);
+    console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}.`);
+    console.log('  Somebody may still be working on it. Leaving it until it has been');
+    console.log(`  quiet for ${QUIET_HOURS}h. Nothing was published.\n`);
+    process.exit(2);
+  }
+  return quietFor;
+};
+
+const save = async (res, name, quietFor, by) => {
+  mkdirSync(dirname(OUT), { recursive: true });
+  writeFileSync(OUT, Buffer.from(await res.arrayBuffer()));
+  console.log(`\n  ${name}`);
+  console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}`);
+  console.log(`  -> ${OUT}\n`);
+};
+
+/* ── the easy way: a share link ──────────────────────────────────────────────
+   OneDrive hands a file to anybody holding an "anyone with the link" URL with
+   no sign-in at all — which is exactly what a scheduled job has, and what an
+   app registration exists to work around needing. The link becomes an API
+   address by base64url-encoding it behind `u!`, which is Microsoft's own
+   scheme for it. */
+if (SHARE) {
+  // `download=1` on the share link itself. The tidier route — base64url the
+  // link behind `u!` and ask api.onedrive.com — is the documented one and it
+  // only serves personal OneDrive: a business link (…-my.sharepoint.com) comes
+  // back 308 "User migrated", pointing at Graph, which wants a sign-in this has
+  // no way to do. Appending download=1 works for both and needs nothing.
+  const url = new URL(SHARE);
+  url.searchParams.set('download', '1');
+
+  const res = await fetch(url, { redirect: 'follow' });
+  if (!res.ok) {
+    console.error('\n  That share link did not open.');
+    console.error('  It has to be an "Anyone with the link" share. A link only people in');
+    console.error('  the company can open needs a sign-in, which a scheduled job does not');
+    console.error('  have. Re-share it that way, or use the app registration instead —');
+    console.error('  see the comment at the top of this file.');
+    await die('Opening the share link', res);
+  }
+
+  const type = res.headers.get('content-type') || '';
+  if (type.includes('text/html')) {
+    console.error('\n  That link returned a web page rather than the document.');
+    console.error('  It is almost certainly a sign-in page, which means the share is not');
+    console.error('  set to "Anyone with the link". Re-share it that way.\n');
+    process.exit(1);
+  }
+
+  // The share API is what would have carried a proper name and author. Off a
+  // plain download there is the filename out of Content-Disposition and the
+  // Last-Modified header, which is all the quiet check needs.
+  const disp = res.headers.get('content-disposition') || '';
+  const name = decodeURIComponent(
+    /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(disp)?.[1] || 'the review document',
+  );
+  const modified = res.headers.get('last-modified');
+  if (!modified) {
+    console.error('\n  OneDrive did not say when that file was last saved, so there is no');
+    console.error('  way to tell whether somebody is still working in it. Refusing rather');
+    console.error('  than publishing a half-finished edit.\n');
+    process.exit(1);
+  }
+  const quietFor = checkQuiet(name, modified, 'someone');
+  await save(res, name, quietFor, 'someone');
+  process.exit(0);
+}
+
+/* ── the other way: an app registration ─────────────────────────────────── */
+const missing = Object.entries({
+  AZURE_TENANT_ID: TENANT,
+  AZURE_CLIENT_ID: CLIENT,
+  AZURE_CLIENT_SECRET: SECRET,
+  REVIEW_DRIVE_USER: USER,
+}).filter(([, v]) => !v).map(([k]) => k);
+
+if (missing.length) {
+  console.error('\n  Nothing to fetch with.');
+  console.error('  Either set REVIEW_DOC_URL to an "Anyone with the link" share of the');
+  console.error(`  document, or set: ${missing.join(', ')}`);
+  console.error('  See the comment at the top of this file.\n');
+  process.exit(1);
+}
+
 const tokenRes = await fetch(`https://login.microsoftonline.com/${TENANT}/oauth2/v2.0/token`, {
   method: 'POST',
   headers: { 'content-type': 'application/x-www-form-urlencoded' },
@@ -87,18 +169,16 @@ if (!tokenRes.ok) await die('Signing in', tokenRes);
 const { access_token: token } = await tokenRes.json();
 const auth = { authorization: `Bearer ${token}` };
 
-// ── find the document ───────────────────────────────────────────────────────
-// By listing the folder rather than by name: the filename carries its date, so
-// naming it here would mean editing this file every time a round goes out.
+// The folder is listed rather than the file named: the filename carries its
+// date, so naming it here would mean editing this file every round.
 const base = `https://graph.microsoft.com/v1.0/users/${encodeURIComponent(USER)}/drive/root:/${encodeURIComponent(FOLDER)}`;
 const listRes = await fetch(`${base}:/children`, { headers: auth });
 if (!listRes.ok) await die(`Reading the "${FOLDER}" folder`, listRes);
 const { value: items = [] } = await listRes.json();
 
-const docs = items.filter((f) => f.name.toLowerCase().endsWith('.docx')
-  // Word leaves a ~$<name> lock file beside an open document. It is 162 bytes
-  // of nothing and it is not a document.
-  && !f.name.startsWith('~$'));
+// Word leaves a ~$<name> lock file beside an open document. It is 162 bytes of
+// nothing and it is not a document.
+const docs = items.filter((f) => f.name.toLowerCase().endsWith('.docx') && !f.name.startsWith('~$'));
 
 if (!docs.length) {
   console.log(`\n  No .docx in "${FOLDER}". Nothing to fetch.\n`);
@@ -112,24 +192,9 @@ if (docs.length > 1) {
 }
 
 const [doc] = docs;
-
-const savedAt = new Date(doc.lastModifiedDateTime);
-const quietFor = (Date.now() - savedAt.getTime()) / 3600000;
-const by = doc.lastModifiedBy?.user?.displayName || 'someone';
-if (quietFor < QUIET_HOURS) {
-  console.log(`\n  ${doc.name}`);
-  console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}.`);
-  console.log('  Somebody may still be working on it. Leaving it until it has been');
-  console.log(`  quiet for ${QUIET_HOURS}h. Nothing was published.\n`);
-  process.exit(2);
-}
+const who = doc.lastModifiedBy?.user?.displayName || 'someone';
+const quiet = checkQuiet(doc.name, doc.lastModifiedDateTime, who);
 
 const getRes = await fetch(`${base}/${encodeURIComponent(doc.name)}:/content`, { headers: auth });
 if (!getRes.ok) await die(`Downloading ${doc.name}`, getRes);
-
-mkdirSync(dirname(OUT), { recursive: true });
-writeFileSync(OUT, Buffer.from(await getRes.arrayBuffer()));
-
-console.log(`\n  ${doc.name}`);
-console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}`);
-console.log(`  -> ${OUT}\n`);
+await save(getRes, doc.name, quiet, who);

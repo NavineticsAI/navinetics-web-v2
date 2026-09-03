@@ -291,44 +291,33 @@ reading them first. That may still be the right trade — but it is a different
 decision, and it should be taken rather than inherited. The same note is at the
 top of the workflow.
 
-### Setting it up, once
+### Setting it up, once — one link
 
-Power Automate was the obvious route and it is the wrong one: reaching an
-outside URL needs its HTTP action, which is a **Premium licence** — about £15 a
-month, forever, for the flow's owner, to move one file. A scheduled GitHub
-Action reads the document out of OneDrive for nothing.
+1. In OneDrive, right-click **NaviNetics Website Review ….docx** → **Share**
+2. Click the settings line at the top of the dialog and choose
+   **Anyone with the link** — not "People in NaviNetics". A company-only link
+   needs a sign-in, and a scheduled job has nobody to sign in as.
+3. **Copy link**
+4. In GitHub: **Settings → Secrets and variables → Actions → New repository
+   secret**, named `REVIEW_DOC_URL`, with that link as the value
 
-Nothing changes for the reviewers. Same document, same folder, same Word. The
-only difference is that a change goes out on the next run rather than within a
-minute, which for website copy nobody is waiting on is not a difference.
+That is the whole setup. No Azure, no app registration, no administrator.
 
-**What the Microsoft 365 administrator does, once.** In Entra ID (Azure AD):
+Anybody holding that link can read the document, which is why it is a secret
+rather than written down here — but what it guards is the wording of a public
+website, and the link is unguessable. It can only be read; nothing about it
+allows writing to OneDrive.
 
-1. **App registrations → New registration.** Name it `NaviNetics website review`.
-   No redirect URI.
-2. **API permissions → Add → Microsoft Graph → Application permissions →
-   `Files.Read.All` → Grant admin consent.**
-   Application, not delegated: there is no signed-in user at six in the morning.
-   Read, not write: this only ever downloads.
-3. **Certificates & secrets → New client secret.** Copy the value immediately;
-   it is shown once.
+**If the tenant forbids anonymous sharing**, `copy-fetch.mjs` also takes an
+Entra ID app registration with the application permission `Files.Read.All` and
+admin consent, via `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`
+and `REVIEW_DRIVE_USER`. That needs an administrator, which is why it is the
+second choice rather than the first.
 
-**Then four repository secrets** (Settings → Secrets and variables → Actions):
-
-| secret | what it is |
-|---|---|
-| `AZURE_TENANT_ID` | Directory (tenant) ID from the app's overview |
-| `AZURE_CLIENT_ID` | Application (client) ID from the same page |
-| `AZURE_CLIENT_SECRET` | the secret **value** (not its ID) |
-| `REVIEW_DRIVE_USER` | whose OneDrive holds the folder, e.g. `mhaske.shubham@navinetics.com` |
-
-That is the whole setup. `Files.Read.All` is broad — it is the narrowest
-*application* permission Graph offers for reading a file — but the credential
-can only read, and it is used to read one document whose contents are a public
-website.
-
-**Testing it before waiting for six in the morning:** Actions → *Publish
-reviewed copy* → **Run workflow**. It does exactly what the schedule does.
+**Testing without waiting for six in the morning:** Actions → *Publish reviewed
+copy* → **Run workflow**. It does exactly what the schedule does. If the
+document was saved in the last four hours it will say so and stop, which is
+correct — pass `--quiet-hours 0` locally to override.
 
 ### The same thing from a terminal
 
