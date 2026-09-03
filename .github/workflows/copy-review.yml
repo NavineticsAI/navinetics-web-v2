@@ -185,6 +185,14 @@ jobs:
 
       # Without this the NEXT review is built against positions that have moved,
       # and every one of its edits is refused as "the file changed since export".
+      # What this document said, so the NEXT one is compared against it rather
+      # than against the export it was built from. Written only here, after the
+      # edits have actually been applied - a dry run writing it would leave the
+      # next real run seeing nothing to do.
+      - name: Remember what this document said
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
+        run: python tools/copy-import.py "${{ steps.doc.outputs.found }}" --json /tmp/ignore.json --snapshot copy/baselines/last.json --quiet
+
       - name: Re-record where every sentence now lives
         if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: node tools/copy-export.mjs
@@ -207,11 +215,11 @@ jobs:
           # committed, so git has never heard of it and plain `git rm` is a
           # fatal error at the very last step of an otherwise finished job.
           git rm -q --ignore-unmatch "${{ steps.doc.outputs.found }}"
-          git add src copy/copy-manifest.json copy/published
+          git add src copy/copy-manifest.json copy/published copy/baselines
           # src/, the manifest and the archive only. If anything else moved,
           # something is wrong with the run rather than with the copy, and it
           # must not reach the site.
-          if ! git diff --cached --quiet -- ':!src' ':!copy/copy-manifest.json' ':!copy/published' ':!copy/incoming'; then
+          if ! git diff --cached --quiet -- ':!src' ':!copy/copy-manifest.json' ':!copy/published' ':!copy/incoming' ':!copy/baselines'; then
             echo "::error::Staged changes outside src/ — refusing to publish."
             git diff --cached --name-only
             exit 1

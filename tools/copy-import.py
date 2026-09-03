@@ -123,6 +123,8 @@ def main():
     ap.add_argument('--manifest', default='copy/copy-manifest.json')
     ap.add_argument('--json', default='copy/copy-changes.json')
     ap.add_argument('--quiet', action='store_true')
+    ap.add_argument('--snapshot', default='',
+                    help='write this document\'s cells here, to compare the next one against')
     a = ap.parse_args()
 
     with open(a.manifest, encoding='utf-8') as f:
@@ -134,10 +136,26 @@ def main():
 
     rows, dupes, row_comments, loose, publish, base_id = read_docx(a.docx)
 
-    # The copy AS IT WAS when this document was made. Without it every
-    # comparison is two-way and a stale document reverts published text.
+    # WHAT THIS DOCUMENT SAID LAST TIME WE LOOKED, in preference to what it was
+    # built from.
+    #
+    # The export baseline answers "did the reviewer change this since the
+    # document was made", and that is the wrong question by the second round: a
+    # reviewer who makes an edit, sees it go live, and then changes their mind
+    # and puts the original wording back has a cell that once again matches the
+    # export — so it reads as "never touched" and the live text stays changed.
+    # Measured: reverting an edit did nothing at all.
+    #
+    # Comparing against the previous document answers "what has changed since we
+    # last looked", which is the question actually being asked, and it still
+    # refuses a stale document: if nobody edited, this document and the last are
+    # the same and there is nothing to do.
     baseline = None
-    if base_id:
+    snap = os.path.join(os.path.dirname(a.manifest), 'baselines', 'last.json')
+    if os.path.exists(snap):
+        with open(snap, encoding='utf-8') as f:
+            baseline = json.load(f)
+    elif base_id:
         bp = os.path.join(os.path.dirname(a.manifest), 'baselines', base_id + '.json')
         if os.path.exists(bp):
             with open(bp, encoding='utf-8') as f:
@@ -224,6 +242,14 @@ def main():
     }
     with open(a.json, 'w', encoding='utf-8') as f:
         json.dump(out, f, indent=1, ensure_ascii=False)
+
+    # Only the caller that is about to APPLY these changes asks for this: if a
+    # dry run wrote it, the next real run would compare against a document whose
+    # edits were never published and see nothing to do.
+    if a.snapshot:
+        os.makedirs(os.path.dirname(a.snapshot), exist_ok=True)
+        with open(a.snapshot, 'w', encoding='utf-8') as f:
+            json.dump(rows, f, indent=1, ensure_ascii=False)
 
     if not a.quiet:
         print(f'\n  read {len(rows)} rows from {a.docx}')
