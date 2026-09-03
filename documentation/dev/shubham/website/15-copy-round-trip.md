@@ -223,16 +223,16 @@ GitHub account, no command line. This is the whole interaction:
 
 1. Open the document, edit with Track Changes on, save. **Nothing happens.**
 2. When finished, change the cell on page one from **NO** to **YES**, and save.
-3. It is on the site a couple of minutes later.
+3. It is on the site by the next morning.
 
 Nobody clicks merge. Nobody is in the loop.
 
 ```
   they set the switch to YES and save
         |
-        |  Power Automate (Microsoft 365, clicked together in a browser)
+        |  once a day, 06:00 UTC
         v
-  the file is committed to copy/incoming/
+  a GitHub Action reads the document out of OneDrive
         |
         |  .github/workflows/copy-review.yml
         v
@@ -285,22 +285,44 @@ reading them first. That may still be the right trade — but it is a different
 decision, and it should be taken rather than inherited. The same note is at the
 top of the workflow file.
 
-### Setting up the Power Automate flow, once
+### Setting it up, once
 
-1. **flow.microsoft.com** → Create → Automated cloud flow
-2. Trigger: **OneDrive for Business — When a file is modified**, folder
-   `Website Review`
-3. Action: **Get file content**
-4. Action: **HTTP** —
-   `PUT https://api.github.com/repos/NavineticsAI/navinetics-web-v2/contents/copy/incoming/review.docx`
-   with an `Authorization: Bearer <token>` header and a JSON body carrying
-   `message`, `content` (the file, base64) and the file's current `sha`.
-   GitHub calls this "Create or update file contents".
-5. The token is a fine-grained personal access token with **Contents: read and
-   write** on this repository only. Store it in Power Automate — not in the flow
-   body, and not here.
+Power Automate was the obvious route and it is the wrong one: reaching an
+outside URL needs its HTTP action, which is a **Premium licence** — about £15 a
+month, forever, for the flow's owner, to move one file. A scheduled GitHub
+Action reads the document out of OneDrive for nothing.
 
-Committing that file is what starts the workflow. Nothing else has to happen.
+Nothing changes for the reviewers. Same document, same folder, same Word. The
+only difference is that a change goes out on the next run rather than within a
+minute, which for website copy nobody is waiting on is not a difference.
+
+**What the Microsoft 365 administrator does, once.** In Entra ID (Azure AD):
+
+1. **App registrations → New registration.** Name it `NaviNetics website review`.
+   No redirect URI.
+2. **API permissions → Add → Microsoft Graph → Application permissions →
+   `Files.Read.All` → Grant admin consent.**
+   Application, not delegated: there is no signed-in user at six in the morning.
+   Read, not write: this only ever downloads.
+3. **Certificates & secrets → New client secret.** Copy the value immediately;
+   it is shown once.
+
+**Then four repository secrets** (Settings → Secrets and variables → Actions):
+
+| secret | what it is |
+|---|---|
+| `AZURE_TENANT_ID` | Directory (tenant) ID from the app's overview |
+| `AZURE_CLIENT_ID` | Application (client) ID from the same page |
+| `AZURE_CLIENT_SECRET` | the secret **value** (not its ID) |
+| `REVIEW_DRIVE_USER` | whose OneDrive holds the folder, e.g. `mhaske.shubham@navinetics.com` |
+
+That is the whole setup. `Files.Read.All` is broad — it is the narrowest
+*application* permission Graph offers for reading a file — but the credential
+can only read, and it is used to read one document whose contents are a public
+website.
+
+**Testing it before waiting for six in the morning:** Actions → *Publish
+reviewed copy* → **Run workflow**. It does exactly what the schedule does.
 
 ### The same thing from a terminal
 

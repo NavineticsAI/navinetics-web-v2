@@ -3,11 +3,16 @@ name: Publish reviewed copy
 # A reviewed Word document lands in copy/incoming/, and this puts it on the site.
 #
 # NOBODY WHO REVIEWS NEEDS THE CODE. Management has one thing: the shared Word
-# document. They open it, turn on Track Changes, edit, save. When finished they
-# set the switch on its cover to YES. A Power Automate flow in Microsoft 365
-# commits the file here and this takes it from there — see documentation/dev/
-# shubham/website/15-copy-round-trip.md for the flow, which is clicked together
-# in a browser and needs no code either.
+# document in OneDrive. They open it, turn on Track Changes, edit, save. When
+# finished they set the switch on its cover to YES. Once a day this collects the
+# document and publishes it.
+#
+# IT FETCHES; NOTHING PUSHES TO IT. Power Automate would need its HTTP action to
+# reach GitHub, and that is a Premium licence — about £15 a month, forever, to
+# move one file. Reading the document from OneDrive on a schedule costs nothing
+# and changes nothing for the reviewers: same document, same folder, same Word.
+# The trade is that a change goes out on the next run rather than at once, which
+# for copy nobody is waiting on is not a trade at all.
 #
 # IT PUBLISHES DIRECTLY, WITH NOBODY IN THE LOOP. NaviNetics asked for that on
 # 2026-09-03. At the time the site was served from github.io and was NOT
@@ -33,9 +38,13 @@ name: Publish reviewed copy
 # thing is live".
 
 on:
+  schedule:
+    # 06:00 UTC — before the working day in Rochester, so anything set to YES
+    # the previous afternoon is live by morning.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
   push:
     paths: ['copy/incoming/*.docx']
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -69,6 +78,24 @@ jobs:
         run: |
           npm ci
           pip install python-docx
+
+      # Only on the schedule and on a manual run. A push already put the
+      # document there, and fetching would overwrite it with whatever OneDrive
+      # currently holds.
+      - name: Collect the document from OneDrive
+        if: github.event_name != 'push'
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+          REVIEW_DRIVE_USER: ${{ secrets.REVIEW_DRIVE_USER }}
+        run: |
+          set +e
+          node tools/copy-fetch.mjs --out copy/incoming/review.docx
+          code=$?
+          # 2 means the folder held no document, which is not a failure.
+          if [ $code -eq 2 ]; then exit 0; fi
+          exit $code
 
       - name: Find the document
         id: doc
