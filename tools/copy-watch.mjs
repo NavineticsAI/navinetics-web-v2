@@ -19,7 +19,10 @@ import { spawnSync } from 'node:child_process';
 import { copyFileSync, existsSync, globSync, statSync, watch } from 'node:fs';
 import { basename, dirname } from 'node:path';
 
-const DOCX = process.argv[2] || (globSync('copy/*.docx').sort().pop() || '');
+// Skip Word's ~$<name> lock file: it is not a document, and '~' sorts after
+// every letter, so `.sort().pop()` finds it whenever the document is open.
+const DOCX = process.argv[2]
+  || (globSync('copy/*.docx').filter((f) => !/[\/]~\$/.test(f)).sort().pop() || '');
 const TMP = 'copy/.watching.docx';
 const CHANGES = 'copy/.watch-changes.json';
 

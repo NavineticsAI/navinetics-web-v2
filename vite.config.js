@@ -13,24 +13,35 @@ import react from '@vitejs/plugin-react'
 // place the deployment path is declared.
 //
 // Deploying to a custom domain instead? Set this to '/' and add public/CNAME.
-/* The stamp in the corner of a review build has to name the exact commit it
-   was made from, or a reviewer's marked-up printout cannot be tied back to
-   anything. Falls back to 'local' outside a git checkout rather than
-   failing the build. */
-const commit = (() => {
-  try {
-    const sha = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim()
-    const dirty = execSync('git status --porcelain', { encoding: 'utf8' }).trim()
-    return dirty ? `${sha}+edits` : sha
-  } catch {
-    return 'local'
-  }
+/* The review build's footer carries exactly what Kevin Bennet asked for and
+   nothing else: "Pages have no page identifiers, version or date."
+
+   A git commit was in the first version. It is engineering convenience —
+   useful for tracing a marked-up printout back to source, meaningless to the
+   person holding the paper, and beside a version number it reads as a second,
+   competing version. Gone.
+
+   The version is a REVIEW ROUND, set in .env.review and bumped by hand when a
+   round goes out. That is bookkeeping, and it is the point: a reviewer
+   marking up round 2 must never be confusable with round 1. A build hash
+   changes on every save and answers a different question.
+
+   The date carries a TIME as well. Two review builds can go out on one day,
+   and "Review 1, 3 September" on both of them is no better than nothing. */
+const reviewDate = (() => {
+  const d = new Date()
+  const day = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+  const time = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+  // The zone is named because a marked-up printout can travel: NaviNetics is
+  // in Rochester, CBH is in South Korea, and "14:32" alone settles nothing.
+  const zone = new Intl.DateTimeFormat('en-GB', { timeZoneName: 'short' })
+    .formatToParts(d).find((x) => x.type === 'timeZoneName')?.value || ''
+  return `${day}, ${time}${zone ? ` ${zone}` : ''}`
 })()
 
 export default defineConfig({
   define: {
-    __BUILD_VERSION__: JSON.stringify(commit),
-    __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 16).replace('T', ' ') + ' UTC'),
+    __REVIEW_DATE__: JSON.stringify(reviewDate),
   },
   server: {
     /* copy/ holds the website-copy review working files — a 800KB manifest,

@@ -33,7 +33,13 @@ ET.register_namespace('w', NS)
 
 def _latest():
     """Whichever review document is in copy/ — the filename carries a date."""
-    hits = sorted(glob.glob('copy/*.docx'))
+    # Word writes a lock file beside an open document, named ~$<document>.
+    # It is 162 bytes of nothing, it is not a zip, and '~' sorts AFTER every
+    # letter — so picking the last match grabs the lock file whenever the
+    # document happens to be open, which is exactly when someone is most
+    # likely to run this.
+    hits = sorted(f for f in glob.glob('copy/*.docx')
+                  if not os.path.basename(f).startswith('~$'))
     if not hits:
         raise SystemExit('no .docx in copy/ — run  npm run copy:export  first')
     return hits[-1]

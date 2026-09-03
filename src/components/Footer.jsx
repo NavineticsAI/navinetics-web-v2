@@ -3,6 +3,7 @@ import { Mail, MapPin, Phone } from 'lucide-react';
 import { nav } from '../data/nav.js';
 import { IsoMark } from '../ui/Reticle.jsx';
 import { Logo } from '../ui/Logo.jsx';
+import { ReviewStamp } from '../ui/ReviewStamp.jsx';
 
 /**
  * Footer columns mirror the navbar, both read from data/nav.js — so a new page
@@ -87,6 +88,11 @@ export default function Footer() {
             © 2021–{new Date().getFullYear()} NaviNetics, Inc. · All rights reserved
           </p>
         </div>
+
+        {/* Only ever true under `npm run build:review`. On the public site
+            this folds to false and the component is dropped from the bundle
+            entirely — verified by grepping dist for its class name. */}
+        {import.meta.env.VITE_REVIEW_STAMP === '1' && <ReviewStamp />}
       </div>
     </footer>
   );

@@ -1,48 +1,64 @@
 import { useLocation } from 'react-router-dom';
 
 /**
- * Which page is this, which build, and when was it made.
+ * Page identifier, version and date, in the footer of a review build.
  *
- * WHY. Kevin Bennet, reviewing the site before sign-off: "Just on a few pages,
- * there are enough issues for the document to be edited either on paper or to
- * be able to put information on images of the web pages. Pages have no page
- * identifiers, version or date."
+ * WHY, AND WHY EXACTLY THESE THREE. Kevin Bennet, reviewing before sign-off:
  *
- * He is right, and it is the ordinary problem with reviewing a website rather
- * than a document. A reviewer prints a page or screenshots it, writes on it,
- * and sends it back — and by then nobody can say which page it was, or whether
- * what they marked has since changed. A printed page of a website carries no
- * identity at all.
+ *   "Just on a few pages, there are enough issues for the document to be edited
+ *    either on paper or to be able to put information on images of the web
+ *    pages. Pages have no page identifiers, version or date."
  *
- * The URL path is the identifier, not the page's title: it is unique, it is
- * what every other tool here refers to a page by, and it does not change when
- * someone edits a heading. The first draft printed the document title beside
- * it and the long ones ran off the edge of the stamp.
+ * That is the whole requirement. He reviews controlled documents for a living
+ * and every page of one carries those three in its footer; a printed page of a
+ * website carries nothing, so a marked-up page comes back two weeks later and
+ * nobody can say which page it was or whether it has changed since.
+ *
+ * WHAT IS DELIBERATELY NOT HERE. A git commit was in the first version. It is
+ * engineering convenience — meaningless to the person holding the paper, and
+ * printed beside a version number it reads as a second, competing version.
+ * A status line ("DRAFT — NOT FOR DISTRIBUTION") was in the second. It is
+ * defensible on a regulated site and it was not asked for; it belongs to a
+ * decision NaviNetics should make rather than one this file makes for them.
+ *
+ * WHY THE FOOTER AND NOT A CORNER BADGE. The first version floated a chip over
+ * the bottom-right, which is what preview deployments do — Vercel, Netlify,
+ * Chromatic. NaviNetics' reaction was "the stamp is really weird", and they
+ * were right: an overlay reads as a debug widget left switched on. In the
+ * footer it is ordinary page content. It prints with the page rather than over
+ * it, covers nothing, and reads as deliberate.
  *
  * IT NEVER SHIPS. Rendered only when VITE_REVIEW_STAMP is set, which only
- * .env.review sets, which only `npm run build:review` selects. A normal
- * `npm run build` folds the condition to false and drops the component from
- * the bundle — verified by grepping dist for the class name.
+ * .env.review sets, which only `npm run build:review` selects. A normal build
+ * folds the condition in Footer.jsx to false and drops this component from the
+ * bundle — checked by grepping dist for the class name.
  */
 export function ReviewStamp() {
   const { pathname } = useLocation();
-  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  // Bumped by hand in .env.review when a round goes out, so a page marked up in
+  // round 2 can never be mistaken for one from round 1.
+  const version = import.meta.env.VITE_REVIEW_VERSION || '1';
 
   return (
     <div
-      className="review-stamp pointer-events-none fixed bottom-0 right-0 z-[10002] max-w-[min(92vw,26rem)]
-        select-none overflow-hidden rounded-tl-md border-l border-t border-white/15
-        bg-[#0f1720ee] px-2.5 py-1.5 font-data text-[10px] leading-[1.4]
-        tracking-[0.04em] text-white/95 shadow-[0_-1px_12px_rgba(0,0,0,.25)]"
-      aria-hidden="true"
+      className="review-stamp mt-8 flex flex-wrap gap-x-8 gap-y-1 border-t border-dashed
+        border-nn-300/40 pt-4 font-data text-[0.6875rem] leading-[1.6]
+        tracking-[0.06em] text-nn-300"
     >
-      <div className="truncate font-semibold">{base}{pathname}</div>
-      <div className="text-white/55">
-        {/* Injected by vite.config.js at build time, so the stamp cannot drift
-            from the build it is printed on. `+edits` means the tree had
-            uncommitted changes — that page is not any committed version. */}
-        build {__BUILD_VERSION__} · {__BUILD_DATE__}
-      </div>
+      {/* The path is the identifier: unique, already how every review comment
+          and every tool here refers to a page, and unchanged when somebody
+          edits a heading. */}
+      <span>
+        <b className="font-semibold text-nn-200">Page</b> {pathname}
+      </span>
+      <span>
+        <b className="font-semibold text-nn-200">Review</b> {version}
+      </span>
+      <span>
+        {/* Injected at build time by vite.config.js, so it cannot drift from
+            the build it is printed on. */}
+        <b className="font-semibold text-nn-200">Date</b> {__REVIEW_DATE__}
+      </span>
     </div>
   );
 }

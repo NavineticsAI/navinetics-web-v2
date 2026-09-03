@@ -59,7 +59,6 @@
   "src/ui/NextSection.jsx": "d141611375e11f84fa6b241668660acfafbccc3a",
   "src/ui/PartnerGlobe.jsx": "83b777fa8c40a5edf850d20241ae9c76c7a8e8fe",
   "src/ui/Reticle.jsx": "8524d6369155bf459b0cd927793a7bd7fe91e855",
-  "src/ui/ReviewStamp.jsx": "f80ec4d0c31957dbc62d20d0904229c0573c3091",
   "src/ui/RotationInset.jsx": "234c6a81b37a387e255d4aac0f59e5df291eaa08",
   "src/ui/RouteBoundary.jsx": "176844732ec2111d1a3c6dee47a794feaf2c03c3",
   "src/ui/SceneBand.jsx": "a678e59ce04b200202747425bd05e39c393c58db",
@@ -4459,33 +4458,6 @@
    "rendered": true
   },
   {
-   "id": "9627ac52",
-   "part": "page:/products/d1-stereotactic-frame",
-   "file": "src/pages/D1.jsx",
-   "astPath": "D1/frag[1]/Section[1]/Reveal[0]/SpecTable@caption",
-   "kind": "template-dyn",
-   "key": "caption",
-   "label": "Caption",
-   "fullPath": "Reveal — item 1 — SpecTable — caption — Caption",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 80,
-   "start": 3552,
-   "end": 3583,
-   "indent": "          ",
-   "slots": 1,
-   "slotSrc": [
-    "product.name"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": "{1} specification",
-   "appears_on": [
-    "D1 Stereotactic Frame"
-   ],
-   "rendered": true
-  },
-  {
    "id": "14f3cd82",
    "part": "page:/products/d1-stereotactic-frame",
    "file": "src/pages/D1.jsx",
@@ -7012,33 +6984,6 @@
     "Neuromodulation"
    ],
    "rendered": true
-  },
-  {
-   "id": "4d3f4d1e",
-   "part": "page:/technology/neuromodulation",
-   "file": "src/pages/Neuromodulation.jsx",
-   "astPath": "Citation/div[0]/div[1]/div[1]/a[0]",
-   "kind": "template-dyn",
-   "key": "",
-   "label": "Link",
-   "fullPath": "item 2 — a — item 1",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 231,
-   "start": 10040,
-   "end": 10054,
-   "indent": "            ",
-   "slots": 1,
-   "slotSrc": [
-    "p.doi"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": "DOI {1}",
-   "appears_on": [
-    "Neuromodulation"
-   ],
-   "rendered": false
   },
   {
    "id": "028f9953",
@@ -9866,33 +9811,6 @@
    "rendered": true
   },
   {
-   "id": "9376e511",
-   "part": "page:/resources/publications",
-   "file": "src/pages/Publications.jsx",
-   "astPath": "Authors/frag[0]/span[0]",
-   "kind": "template-dyn",
-   "key": "",
-   "label": "Text",
-   "fullPath": "item 1 — span — item 1",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 179,
-   "start": 6434,
-   "end": 6467,
-   "indent": "      ",
-   "slots": 1,
-   "slotSrc": [
-    "names.length - 5"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": " … +{1} more … ",
-   "appears_on": [
-    "Publications"
-   ],
-   "rendered": false
-  },
-  {
    "id": "50a7b2cd",
    "part": "page:/contact",
    "file": "src/pages/Contact.jsx",
@@ -11530,7 +11448,7 @@
   },
   {
    "id": "c89dfb6a",
-   "part": "lib:src/App.jsx",
+   "part": "lib:scraps",
    "file": "src/App.jsx",
    "astPath": "App/ThemeProvider[0]/Router[1]/a[0]",
    "kind": "jsx-text",
@@ -36291,32 +36209,6 @@
    "rendered": true
   },
   {
-   "id": "e0061ad5",
-   "part": "lib:src/pages/Product.jsx",
-   "file": "src/pages/Product.jsx",
-   "astPath": "Product/frag[1]/frag[2]/Section[1]/div[0]/Reveal[0]/SpecTable@caption",
-   "kind": "template-dyn",
-   "key": "caption",
-   "label": "Caption",
-   "fullPath": "Reveal — item 1 — SpecTable — caption — Caption",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 104,
-   "start": 3549,
-   "end": 3581,
-   "indent": "            ",
-   "slots": 1,
-   "slotSrc": [
-    "product.name"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": "{1} specifications",
-   "appears_on": [],
-   "section": "{1} is in development.",
-   "rendered": true
-  },
-  {
    "id": "fdd6596b",
    "part": "lib:src/pages/Product.jsx",
    "file": "src/pages/Product.jsx",
@@ -36585,7 +36477,7 @@
   },
   {
    "id": "9d3073c4",
-   "part": "lib:src/ui/BrainHero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/BrainHero.jsx",
    "astPath": "BrainHero/header[0]/div[3]/div[0]",
    "kind": "jsx-text",
@@ -36610,7 +36502,7 @@
   },
   {
    "id": "b0059a21",
-   "part": "lib:src/ui/ComingSoon.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ComingSoon.jsx",
    "astPath": "ComingSoon/Reveal[0]/Reticle[1]/div[0]/Button[0]",
    "kind": "jsx-text",
@@ -36651,7 +36543,7 @@
   },
   {
    "id": "17899d63",
-   "part": "lib:src/ui/ComingSoon.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ComingSoon.jsx",
    "astPath": "ComingSoon/Reveal[0]/Reticle[1]/div[1]/Button[0]",
    "kind": "jsx-text",
@@ -36692,7 +36584,7 @@
   },
   {
    "id": "9cb11a9b",
-   "part": "lib:src/ui/ConvergenceDiagram.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ConvergenceDiagram.jsx",
    "astPath": "ConvergenceDiagram/div[1]/div[0]/div[0]/div[3]/div[0]/div[0]",
    "kind": "jsx-text",
@@ -36733,7 +36625,7 @@
   },
   {
    "id": "7d3bb6c3",
-   "part": "lib:src/ui/ConvergenceDiagram.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ConvergenceDiagram.jsx",
    "astPath": "ConvergenceDiagram/div[1]/div[0]/div[1]/div[0]/div[0]",
    "kind": "jsx-text",
@@ -36774,7 +36666,7 @@
   },
   {
    "id": "2f8ca365",
-   "part": "lib:src/ui/ConvergenceDiagram.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ConvergenceDiagram.jsx",
    "astPath": "ConvergenceDiagram/div[1]/div[0]/div[1]/div[2]/div[0]",
    "kind": "jsx-text",
@@ -36815,7 +36707,7 @@
   },
   {
    "id": "c8ceb293",
-   "part": "lib:src/ui/D1Hero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/D1Hero.jsx",
    "astPath": "D1Hero/header[0]/div[0]/div[0]/img@alt",
    "kind": "jsx-attr",
@@ -36841,7 +36733,7 @@
   },
   {
    "id": "1a314145",
-   "part": "lib:src/ui/D1Hero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/D1Hero.jsx",
    "astPath": "D1Hero/header[0]/div[1]/div[0]/span[0]",
    "kind": "jsx-text",
@@ -36866,7 +36758,7 @@
   },
   {
    "id": "589b4514",
-   "part": "lib:src/ui/D1Hero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/D1Hero.jsx",
    "astPath": "D1Hero/header[0]/div[1]/div[1]/h1[0]",
    "kind": "jsx-expr",
@@ -36891,7 +36783,7 @@
   },
   {
    "id": "36654017",
-   "part": "lib:src/ui/D1Hero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/D1Hero.jsx",
    "astPath": "D1Hero/header[0]/div[1]/div[2]/p[0]",
    "kind": "jsx-text",
@@ -36916,7 +36808,7 @@
   },
   {
    "id": "f37db41d",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoLauncher/section[0]/div[0]/div[0]/Badge[0]",
    "kind": "jsx-text",
@@ -36939,7 +36831,7 @@
   },
   {
    "id": "d52fdb6d",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoLauncher/section[0]/div[1]/div[0]/Button[0]",
    "kind": "jsx-text",
@@ -36962,7 +36854,7 @@
   },
   {
    "id": "596c3d3e",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoOverlay/div@aria-label",
    "kind": "jsx-attr",
@@ -36986,7 +36878,7 @@
   },
   {
    "id": "e8a06f90",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoOverlay/div[0]/div[0]/p[0]",
    "kind": "jsx-text",
@@ -37009,7 +36901,7 @@
   },
   {
    "id": "77f917ad",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoOverlay/div[0]/div[0]/p[1]/span[0]",
    "kind": "jsx-text",
@@ -37032,7 +36924,7 @@
   },
   {
    "id": "fceb31ca",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoOverlay/div[0]/div[1]/div[0]/button[0]",
    "kind": "jsx-text",
@@ -37055,7 +36947,7 @@
   },
   {
    "id": "9415f3bb",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "DemoOverlay/div[0]/div[1]/div[0]/button[1]",
    "kind": "jsx-text",
@@ -37078,7 +36970,7 @@
   },
   {
    "id": "09371230",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "AboutPanel/div[0]/button@aria-label",
    "kind": "jsx-attr",
@@ -37102,7 +36994,7 @@
   },
   {
    "id": "0c525179",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "AboutPanel/div[1]/div@aria-label",
    "kind": "jsx-attr",
@@ -37126,7 +37018,7 @@
   },
   {
    "id": "0a9fa927",
-   "part": "lib:src/ui/DemoLauncher.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/DemoLauncher.jsx",
    "astPath": "AboutPanel/div[1]/div[0]/button@aria-label",
    "kind": "jsx-attr",
@@ -38317,7 +38209,7 @@
   },
   {
    "id": "27978995",
-   "part": "lib:src/ui/Gallery.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/Gallery.jsx",
    "astPath": "Gallery/div[1]/div@aria-label",
    "kind": "jsx-attr",
@@ -38359,7 +38251,7 @@
   },
   {
    "id": "c41ec513",
-   "part": "lib:src/ui/LocatorMap.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/LocatorMap.jsx",
    "astPath": "LocatorMap/figure[0]/svg@aria-label",
    "kind": "jsx-attr",
@@ -38385,7 +38277,7 @@
   },
   {
    "id": "b743cae5",
-   "part": "lib:src/ui/LocatorMap.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/LocatorMap.jsx",
    "astPath": "LocatorMap/figure[1]/figcaption[0]",
    "kind": "jsx-text",
@@ -38410,7 +38302,7 @@
   },
   {
    "id": "05e54063",
-   "part": "lib:src/ui/Logo.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/Logo.jsx",
    "astPath": "Logo/img@alt",
    "kind": "jsx-attr",
@@ -38452,7 +38344,7 @@
   },
   {
    "id": "2b6fccdd",
-   "part": "lib:src/ui/MavenHero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/MavenHero.jsx",
    "astPath": "MavenHero/header[0]/div[2]/div[0]/span[0]",
    "kind": "jsx-text",
@@ -38476,33 +38368,8 @@
    "rendered": true
   },
   {
-   "id": "a8d3c2ef",
-   "part": "lib:src/ui/MavenHero.jsx",
-   "file": "src/ui/MavenHero.jsx",
-   "astPath": "MavenHero/header[0]/div[3]/div[2]/img.filter",
-   "kind": "object-field",
-   "key": "filter",
-   "label": "Filter",
-   "fullPath": "item 3 — img — filter",
-   "note": "",
-   "line": 435,
-   "start": 20004,
-   "end": 20048,
-   "indent": "              ",
-   "slots": 0,
-   "slotSrc": [],
-   "pre": null,
-   "post": null,
-   "quote": "'",
-   "text": "drop-shadow(0 18px 26px rgb(0 0 0 / 0.55))",
-   "appears_on": [
-    "MAVEN Neuromodulation"
-   ],
-   "rendered": true
-  },
-  {
    "id": "7cbf7fd7",
-   "part": "lib:src/ui/MavenHero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/MavenHero.jsx",
    "astPath": "MavenHero/header[0]/div[4]/div[0]/div[0]/div[0]/Eyebrow[0]",
    "kind": "template-dyn",
@@ -38529,7 +38396,7 @@
   },
   {
    "id": "9e39df40",
-   "part": "lib:src/ui/MavenHero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/MavenHero.jsx",
    "astPath": "MavenHero/header[0]/div[4]/div[0]/div[0]/div[2]/p[0]",
    "kind": "jsx-text",
@@ -38554,7 +38421,7 @@
   },
   {
    "id": "5aa9b6f9",
-   "part": "lib:src/ui/MavenHero.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/MavenHero.jsx",
    "astPath": "MavenHero/header[0]/div[6]/div[0]",
    "kind": "jsx-text",
@@ -38579,7 +38446,7 @@
   },
   {
    "id": "cb1272ee",
-   "part": "lib:src/ui/PartnerGlobe.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/PartnerGlobe.jsx",
    "astPath": "PartnerGlobe/frag[2]/span[0]",
    "kind": "jsx-text",
@@ -38603,31 +38470,8 @@
    "rendered": true
   },
   {
-   "id": "8e9fa000",
-   "part": "lib:src/ui/ReviewStamp.jsx",
-   "file": "src/ui/ReviewStamp.jsx",
-   "astPath": "ReviewStamp/div[1]/div[0]",
-   "kind": "jsx-text",
-   "key": "",
-   "label": "Div — paragraph 1",
-   "fullPath": "ReviewStamp — item 2 — item 1",
-   "note": "",
-   "line": 43,
-   "start": 2169,
-   "end": 2184,
-   "indent": "",
-   "slots": 0,
-   "slotSrc": [],
-   "pre": "\n        ",
-   "post": " ",
-   "quote": "\n",
-   "text": "build",
-   "appears_on": [],
-   "rendered": true
-  },
-  {
    "id": "7b0bc71a",
-   "part": "lib:src/ui/RotationInset.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/RotationInset.jsx",
    "astPath": "RotationInset/div[1]/span[0]",
    "kind": "jsx-text",
@@ -40501,90 +40345,8 @@
    "rendered": true
   },
   {
-   "id": "fd8387b7",
-   "part": "lib:src/ui/ScrollSequence.jsx",
-   "file": "src/ui/ScrollSequence.jsx",
-   "astPath": "ScrollSequence.offset[0]",
-   "kind": "array-item",
-   "key": "",
-   "label": "Offset — paragraph 1",
-   "fullPath": "ScrollSequence — offset — item 1",
-   "note": "",
-   "line": 21,
-   "start": 926,
-   "end": 939,
-   "indent": "  ",
-   "slots": 0,
-   "slotSrc": [],
-   "pre": null,
-   "post": null,
-   "quote": "'",
-   "text": "start start",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "rendered": true
-  },
-  {
-   "id": "a858df02",
-   "part": "lib:src/ui/ScrollSequence.jsx",
-   "file": "src/ui/ScrollSequence.jsx",
-   "astPath": "ScrollSequence.offset[1]",
-   "kind": "array-item",
-   "key": "",
-   "label": "Offset — paragraph 2",
-   "fullPath": "ScrollSequence — offset — item 2",
-   "note": "",
-   "line": 21,
-   "start": 941,
-   "end": 950,
-   "indent": "  ",
-   "slots": 0,
-   "slotSrc": [],
-   "pre": null,
-   "post": null,
-   "quote": "'",
-   "text": "end end",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "rendered": false
-  },
-  {
    "id": "2b86b719",
-   "part": "lib:src/ui/ScrollSequence.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ScrollSequence.jsx",
    "astPath": "place[0]",
    "kind": "array-item",
@@ -40625,7 +40387,7 @@
   },
   {
    "id": "01681baa",
-   "part": "lib:src/ui/ScrollSequence.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ScrollSequence.jsx",
    "astPath": "place[1]",
    "kind": "array-item",
@@ -40666,7 +40428,7 @@
   },
   {
    "id": "73e3c401",
-   "part": "lib:src/ui/ScrollSequence.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ScrollSequence.jsx",
    "astPath": "place[2]",
    "kind": "array-item",
@@ -40707,7 +40469,7 @@
   },
   {
    "id": "8f305d08",
-   "part": "lib:src/ui/SpecTable.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/SpecTable.jsx",
    "astPath": "ComparisonTable/div[0]/table[0]/thead[0]/tr[0]/th[0]",
    "kind": "jsx-text",
@@ -40748,7 +40510,7 @@
   },
   {
    "id": "772745bd",
-   "part": "lib:src/ui/TableMotion.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/TableMotion.jsx",
    "astPath": "TableMotion/div[1]/svg@aria-label",
    "kind": "template-dyn",
@@ -40776,37 +40538,8 @@
    "assistive": true
   },
   {
-   "id": "e84a9d68",
-   "part": "lib:src/ui/TableMotion.jsx",
-   "file": "src/ui/TableMotion.jsx",
-   "astPath": "TableMotion/div[1]/svg[4]/g@transform",
-   "kind": "template-dyn",
-   "key": "transform",
-   "label": "Transform",
-   "fullPath": "svg — item 5 — g — transform",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 154,
-   "start": 6059,
-   "end": 6109,
-   "indent": "        ",
-   "slots": 3,
-   "slotSrc": [
-    "cx + shift",
-    "topY",
-    "tilt"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": "translate({1} {2}) rotate({3})",
-   "appears_on": [
-    "Carbon-Fiber Surgical Tables"
-   ],
-   "rendered": true
-  },
-  {
    "id": "e76ebc26",
-   "part": "lib:src/ui/TableMotion.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/TableMotion.jsx",
    "astPath": "TableMotion/div[2]/div[1]/p[0]",
    "kind": "template-dyn",
@@ -40834,7 +40567,7 @@
   },
   {
    "id": "be901a8c",
-   "part": "lib:src/ui/Tabs.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/Tabs.jsx",
    "astPath": "Tabs/div[0]/div@aria-label",
    "kind": "jsx-attr",
@@ -40875,96 +40608,8 @@
    "assistive": true
   },
   {
-   "id": "3020e435",
-   "part": "lib:src/ui/Tabs.jsx",
-   "file": "src/ui/Tabs.jsx",
-   "astPath": "Tabs/div[0]/div[0]/button@aria-controls",
-   "kind": "template-dyn",
-   "key": "aria-controls",
-   "label": "Item 1",
-   "fullPath": "item 1 — item 1 — button — aria-controls",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 47,
-   "start": 1546,
-   "end": 1568,
-   "indent": "              ",
-   "slots": 2,
-   "slotSrc": [
-    "uid",
-    "t.id"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": "{1}-panel-{2}",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "rendered": true
-  },
-  {
-   "id": "6e5e0107",
-   "part": "lib:src/ui/Tabs.jsx",
-   "file": "src/ui/Tabs.jsx",
-   "astPath": "Tabs/div[1]/motion.div@aria-labelledby",
-   "kind": "template-dyn",
-   "key": "aria-labelledby",
-   "label": "Item 2",
-   "fullPath": "item 2 — motion — div — aria-labelledby",
-   "note": "Contains {1}-style placeholders filled in by the site. Keep every placeholder, in order.",
-   "line": 68,
-   "start": 2334,
-   "end": 2363,
-   "indent": "          ",
-   "slots": 2,
-   "slotSrc": [
-    "uid",
-    "activeItem.id"
-   ],
-   "pre": null,
-   "post": null,
-   "quote": "`",
-   "text": "{1}-tab-{2}",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "rendered": true
-  },
-  {
    "id": "a892f767",
-   "part": "lib:src/ui/ThemeToggle.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ThemeToggle.jsx",
    "astPath": "options[0].label",
    "kind": "object-field",
@@ -41006,7 +40651,7 @@
   },
   {
    "id": "014c1834",
-   "part": "lib:src/ui/ThemeToggle.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ThemeToggle.jsx",
    "astPath": "options[1].label",
    "kind": "object-field",
@@ -41048,7 +40693,7 @@
   },
   {
    "id": "f2aa0a80",
-   "part": "lib:src/ui/ThemeToggle.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/ThemeToggle.jsx",
    "astPath": "ThemeToggle/div@aria-label",
    "kind": "jsx-attr",
@@ -41089,33 +40734,8 @@
    "assistive": true
   },
   {
-   "id": "1aba393e",
-   "part": "lib:src/ui/Timeline.jsx",
-   "file": "src/ui/Timeline.jsx",
-   "astPath": "io.rootMargin",
-   "kind": "object-field",
-   "key": "rootMargin",
-   "label": "Root margin",
-   "fullPath": "io — rootMargin",
-   "note": "",
-   "line": 37,
-   "start": 1350,
-   "end": 1368,
-   "indent": "      ",
-   "slots": 0,
-   "slotSrc": [],
-   "pre": null,
-   "post": null,
-   "quote": "'",
-   "text": "0px 0px -12% 0px",
-   "appears_on": [
-    "Who We Are"
-   ],
-   "rendered": false
-  },
-  {
    "id": "e62282eb",
-   "part": "lib:src/ui/Timeline.jsx",
+   "part": "lib:scraps",
    "file": "src/ui/Timeline.jsx",
    "astPath": "Timeline/div[1]/ol[0]/li[2]/div[2]/div[1]/Link[0]",
    "kind": "jsx-text",
@@ -42295,7 +41915,7 @@
    "path": "/products/d1-stereotactic-frame",
    "file": "src/pages/D1.jsx",
    "unlisted": false,
-   "count": 14
+   "count": 13
   },
   {
    "key": "page:/products/carbon-fiber-surgical-tables",
@@ -42331,7 +41951,7 @@
    "path": "/technology/neuromodulation",
    "file": "src/pages/Neuromodulation.jsx",
    "unlisted": false,
-   "count": 18
+   "count": 17
   },
   {
    "key": "page:/technology/navinetics-ai",
@@ -42376,7 +41996,7 @@
    "path": "/resources/publications",
    "file": "src/pages/Publications.jsx",
    "unlisted": false,
-   "count": 10
+   "count": 9
   },
   {
    "key": "page:/contact",
@@ -42397,17 +42017,10 @@
    "count": 7
   },
   {
-   "key": "lib:src/App.jsx",
-   "group": "Shared content",
-   "title": "App.jsx",
-   "file": "src/App.jsx",
-   "appears_on": [],
-   "count": 1
-  },
-  {
    "key": "lib:src/data/company.js",
    "group": "Shared content",
-   "title": "data/company.js",
+   "title": "Company history and principles",
+   "note": "The timeline, the principles, and the statistics on Who We Are.",
    "file": "src/data/company.js",
    "appears_on": [
     "Who We Are"
@@ -42417,7 +42030,8 @@
   {
    "key": "lib:src/data/d1.js",
    "group": "Shared content",
-   "title": "data/d1.js",
+   "title": "D1 frame content",
+   "note": "Copy for the D1 stereotactic frame page.",
    "file": "src/data/d1.js",
    "appears_on": [
     "D1 Stereotactic Frame"
@@ -42427,7 +42041,8 @@
   {
    "key": "lib:src/data/disciplines.js",
    "group": "Shared content",
-   "title": "data/disciplines.js",
+   "title": "Careers — disciplines",
+   "note": "The engineering and clinical disciplines listed on Careers and Who We Are.",
    "file": "src/data/disciplines.js",
    "appears_on": [
     "Who We Are",
@@ -42438,7 +42053,8 @@
   {
    "key": "lib:src/data/education.js",
    "group": "Shared content",
-   "title": "data/education.js",
+   "title": "Education articles",
+   "note": "The explainers on the Education and Technology pages.",
    "file": "src/data/education.js",
    "appears_on": [
     "Stereotactic Devices",
@@ -42450,7 +42066,8 @@
   {
    "key": "lib:src/data/maven.js",
    "group": "Shared content",
-   "title": "data/maven.js",
+   "title": "MAVEN content",
+   "note": "Copy and figure captions for the MAVEN page.",
    "file": "src/data/maven.js",
    "appears_on": [
     "MAVEN Neuromodulation"
@@ -42460,7 +42077,8 @@
   {
    "key": "lib:src/data/media.js",
    "group": "Shared content",
-   "title": "data/media.js",
+   "title": "Media library",
+   "note": "Titles and captions for every image and video.",
    "file": "src/data/media.js",
    "appears_on": [
     "Media"
@@ -42470,7 +42088,8 @@
   {
    "key": "lib:src/data/neuromodulation.js",
    "group": "Shared content",
-   "title": "data/neuromodulation.js",
+   "title": "Neuromodulation content",
+   "note": "The technology page on neurochemical sensing.",
    "file": "src/data/neuromodulation.js",
    "appears_on": [
     "Neuromodulation"
@@ -42480,7 +42099,8 @@
   {
    "key": "lib:src/data/orTables.js",
    "group": "Shared content",
-   "title": "data/orTables.js",
+   "title": "Surgical table models",
+   "note": "The five models and their specifications. Withdrawn from the site pending FDA registration.",
    "file": "src/data/orTables.js",
    "appears_on": [
     "Carbon-Fiber Surgical Tables"
@@ -42490,7 +42110,8 @@
   {
    "key": "lib:src/data/partners.js",
    "group": "Shared content",
-   "title": "data/partners.js",
+   "title": "Territories and partners",
+   "note": "Countries, distributors, and what each one does.",
    "file": "src/data/partners.js",
    "appears_on": [
     "Who We Are",
@@ -42501,7 +42122,8 @@
   {
    "key": "lib:src/data/products.js",
    "group": "Shared content",
-   "title": "data/products.js",
+   "title": "Product records",
+   "note": "Names, summaries and specifications. Feeds the menu, the home page and every product page.",
    "file": "src/data/products.js",
    "appears_on": [
     "Home",
@@ -42517,7 +42139,8 @@
   {
    "key": "lib:src/data/publications.js",
    "group": "Shared content",
-   "title": "data/publications.js",
+   "title": "Published papers",
+   "note": "Titles, authors and journals for every paper listed on the site.",
    "file": "src/data/publications.js",
    "appears_on": [
     "Home",
@@ -42530,7 +42153,8 @@
   {
    "key": "lib:src/data/technology.js",
    "group": "Shared content",
-   "title": "data/technology.js",
+   "title": "Technology records",
+   "note": "Names and summaries for each technology area.",
    "file": "src/data/technology.js",
    "appears_on": [
     "Stereotactic Devices",
@@ -42542,95 +42166,17 @@
   {
    "key": "lib:src/pages/Product.jsx",
    "group": "Shared content",
-   "title": "pages/Product.jsx",
+   "title": "Product page template",
+   "note": "Text shared by any product without a page of its own.",
    "file": "src/pages/Product.jsx",
    "appears_on": [],
-   "count": 18
-  },
-  {
-   "key": "lib:src/ui/BrainHero.jsx",
-   "group": "Shared content",
-   "title": "ui/BrainHero.jsx",
-   "file": "src/ui/BrainHero.jsx",
-   "appears_on": [
-    "NaviNetics AI"
-   ],
-   "count": 1
-  },
-  {
-   "key": "lib:src/ui/ComingSoon.jsx",
-   "group": "Shared content",
-   "title": "ui/ComingSoon.jsx",
-   "file": "src/ui/ComingSoon.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 2
-  },
-  {
-   "key": "lib:src/ui/ConvergenceDiagram.jsx",
-   "group": "Shared content",
-   "title": "ui/ConvergenceDiagram.jsx",
-   "file": "src/ui/ConvergenceDiagram.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 3
-  },
-  {
-   "key": "lib:src/ui/D1Hero.jsx",
-   "group": "Shared content",
-   "title": "ui/D1Hero.jsx",
-   "file": "src/ui/D1Hero.jsx",
-   "appears_on": [
-    "D1 Stereotactic Frame"
-   ],
-   "count": 4
-  },
-  {
-   "key": "lib:src/ui/DemoLauncher.jsx",
-   "group": "Shared content",
-   "title": "ui/DemoLauncher.jsx",
-   "file": "src/ui/DemoLauncher.jsx",
-   "appears_on": [],
-   "count": 10
+   "count": 17
   },
   {
    "key": "lib:src/ui/EduFigures.jsx",
    "group": "Shared content",
-   "title": "ui/EduFigures.jsx",
+   "title": "Education diagrams",
+   "note": "Labels and instructions on the interactive figures.",
    "file": "src/ui/EduFigures.jsx",
    "appears_on": [
     "Stereotactic Devices",
@@ -42639,109 +42185,10 @@
    "count": 44
   },
   {
-   "key": "lib:src/ui/Gallery.jsx",
-   "group": "Shared content",
-   "title": "ui/Gallery.jsx",
-   "file": "src/ui/Gallery.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 1
-  },
-  {
-   "key": "lib:src/ui/LocatorMap.jsx",
-   "group": "Shared content",
-   "title": "ui/LocatorMap.jsx",
-   "file": "src/ui/LocatorMap.jsx",
-   "appears_on": [
-    "Community"
-   ],
-   "count": 2
-  },
-  {
-   "key": "lib:src/ui/Logo.jsx",
-   "group": "Shared content",
-   "title": "ui/Logo.jsx",
-   "file": "src/ui/Logo.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 1
-  },
-  {
-   "key": "lib:src/ui/MavenHero.jsx",
-   "group": "Shared content",
-   "title": "ui/MavenHero.jsx",
-   "file": "src/ui/MavenHero.jsx",
-   "appears_on": [
-    "MAVEN Neuromodulation"
-   ],
-   "count": 5
-  },
-  {
-   "key": "lib:src/ui/PartnerGlobe.jsx",
-   "group": "Shared content",
-   "title": "ui/PartnerGlobe.jsx",
-   "file": "src/ui/PartnerGlobe.jsx",
-   "appears_on": [
-    "Partners"
-   ],
-   "count": 1
-  },
-  {
-   "key": "lib:src/ui/ReviewStamp.jsx",
-   "group": "Shared content",
-   "title": "ui/ReviewStamp.jsx",
-   "file": "src/ui/ReviewStamp.jsx",
-   "appears_on": [],
-   "count": 1
-  },
-  {
-   "key": "lib:src/ui/RotationInset.jsx",
-   "group": "Shared content",
-   "title": "ui/RotationInset.jsx",
-   "file": "src/ui/RotationInset.jsx",
-   "appears_on": [
-    "Home"
-   ],
-   "count": 1
-  },
-  {
    "key": "lib:src/ui/RouteBoundary.jsx",
    "group": "Shared content",
-   "title": "ui/RouteBoundary.jsx",
+   "title": "Error messages",
+   "note": "Shown only if a page fails to load.",
    "file": "src/ui/RouteBoundary.jsx",
    "appears_on": [],
    "count": 10
@@ -42749,7 +42196,8 @@
   {
    "key": "lib:src/ui/SceneBand.jsx",
    "group": "Shared content",
-   "title": "ui/SceneBand.jsx",
+   "title": "NaviNetics AI — diagram labels",
+   "note": "Labels on the animated diagrams.",
    "file": "src/ui/SceneBand.jsx",
    "appears_on": [
     "NaviNetics AI"
@@ -42757,136 +42205,22 @@
    "count": 62
   },
   {
-   "key": "lib:src/ui/ScrollSequence.jsx",
-   "group": "Shared content",
-   "title": "ui/ScrollSequence.jsx",
-   "file": "src/ui/ScrollSequence.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 5
-  },
-  {
-   "key": "lib:src/ui/SpecTable.jsx",
-   "group": "Shared content",
-   "title": "ui/SpecTable.jsx",
-   "file": "src/ui/SpecTable.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 1
-  },
-  {
-   "key": "lib:src/ui/TableMotion.jsx",
-   "group": "Shared content",
-   "title": "ui/TableMotion.jsx",
-   "file": "src/ui/TableMotion.jsx",
-   "appears_on": [
-    "Carbon-Fiber Surgical Tables"
-   ],
-   "count": 3
-  },
-  {
-   "key": "lib:src/ui/Tabs.jsx",
-   "group": "Shared content",
-   "title": "ui/Tabs.jsx",
-   "file": "src/ui/Tabs.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 3
-  },
-  {
-   "key": "lib:src/ui/ThemeToggle.jsx",
-   "group": "Shared content",
-   "title": "ui/ThemeToggle.jsx",
-   "file": "src/ui/ThemeToggle.jsx",
-   "appears_on": [
-    "Home",
-    "Who We Are",
-    "Our Founders",
-    "Partners",
-    "Community",
-    "D1 Stereotactic Frame",
-    "Carbon-Fiber Surgical Tables",
-    "MAVEN Neuromodulation",
-    "Stereotactic Devices",
-    "Neuromodulation",
-    "NaviNetics AI",
-    "Education",
-    "Media",
-    "Careers",
-    "Publications",
-    "Contact",
-    "Page Not Found"
-   ],
-   "count": 3
-  },
-  {
-   "key": "lib:src/ui/Timeline.jsx",
-   "group": "Shared content",
-   "title": "ui/Timeline.jsx",
-   "file": "src/ui/Timeline.jsx",
-   "appears_on": [
-    "Who We Are"
-   ],
-   "count": 2
-  },
-  {
    "key": "lib:src/ui/Workstation.jsx",
    "group": "Shared content",
-   "title": "ui/Workstation.jsx",
+   "title": "Planning workstation demo",
+   "note": "View names and controls in the interactive demo.",
    "file": "src/ui/Workstation.jsx",
    "appears_on": [],
    "count": 45
+  },
+  {
+   "key": "lib:scraps",
+   "group": "Shared content",
+   "title": "Buttons, labels and messages",
+   "note": "Single words and short phrases from shared parts of the site — button labels, error messages, and text read aloud by screen readers. Small, but a visitor sees all of it.",
+   "file": "",
+   "appears_on": [],
+   "count": 42
   }
  ]
 }

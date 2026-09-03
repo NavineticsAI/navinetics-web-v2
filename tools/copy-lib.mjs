@@ -65,6 +65,15 @@ const LOOKS_LIKE_CODE = [
   /^(?:rgb|rgba|hsl|var|calc|linear-gradient|radial-gradient)\(/,
   /^#[0-9a-fA-F]{3,8}$/,
   /^(?:hover|focus|active|group|peer|dark|sm|md|lg|xl):/,
+  // Values that read as prose to a machine and as gibberish to a reviewer.
+  // Each of these reached the review document once: a framer-motion scroll
+  // offset ("start start"), an IntersectionObserver rootMargin
+  // ("0px 0px -12% 0px"), a CSS filter, an SVG transform, and an element id
+  // built from a template. A marketing lead asked what they were, which is
+  // the correct reaction.
+  /^(?:start|end|center)(?:\s+(?:start|end|center))+$/,
+  /^-?[\d.]+(?:px|%|rem|em|vh|vw)(?:\s|$)/,
+  /^(?:drop-shadow|translate|rotate|scale|matrix|skew|blur|brightness|url|polygon|inset|circle|ellipse)[XY]?\(/,
 ];
 
 const looksLikeCode = (s) => LOOKS_LIKE_CODE.some((r) => r.test(s.trim()));
@@ -216,6 +225,12 @@ export function extractFile(file) {
       if (i < node.expressions.length) text += `{${i + 1}}`;
     });
     text = templateText(text);
+    // A template whose fixed text holds no actual WORDS is not copy: it is
+    // an id (`${a}-panel-${b}`) or an SVG transform
+    // (`translate(${x} ${y}) rotate(${r})`). Both reached the review
+    // document, and a reviewer rightly asked what they were.
+    const fixed = text.replace(/\{\d+\}/g, ' ').trim();
+    if (!/[A-Za-z]{2,}\s+[A-Za-z]{2,}/.test(fixed) && !/^[A-Z][a-z]+/.test(fixed)) return null;
     // The expressions themselves are kept verbatim so the write-back can put
     // them back where the reviewer left the {n} markers.
     const slotSrc = node.expressions.map((x) => src.slice(x.start, x.end));

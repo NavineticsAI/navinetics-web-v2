@@ -114,7 +114,10 @@ const CHROME_FILES = new Set(CHROME.map((c) => c.file));
    curves and shader constants. Excluded by path rather than by heuristic
    because a stray prose-shaped constant in one of them is a distraction in a
    document meant for a marketing lead. */
-const SKIP = /^src\/(lib|data\/(worldDots|locatorMap))/;
+/* ReviewStamp is the review build's own footer. Its words are addressed to
+   the reviewer, not to a visitor, and a row reading "build" in a document of
+   website copy is the sort of thing that makes a reader distrust the rest. */
+const SKIP = /^src\/(lib|data\/(worldDots|locatorMap)|ui\/ReviewStamp)/;
 
 /* ── naming a string for someone who has never seen the code ───────────────
    `founders[0].bio[2]` is precise and useless to a marketing lead. The document
@@ -198,6 +201,35 @@ const KIND_NOTE = {
   alt: 'Read aloud by screen readers; not shown on screen.',
 };
 
+/* ── what the shared parts are called ─────────────────────────────────────
+   The first draft titled these with their FILENAMES — "data/disciplines.js",
+   "ui/ConvergenceDiagram.jsx" — and put thirty-six of them in the contents.
+   A reviewer opening that has no idea what any of it is, and reasonably asks
+   why it is in a document about website copy.
+
+   So the libraries holding real prose get real names, and the two dozen
+   components carrying a button label apiece are collected into ONE section
+   at the back. Nothing is dropped; it stops being a list of files. */
+const LIBRARY = {
+  'src/data/publications.js': ['Published papers', 'Titles, authors and journals for every paper listed on the site.'],
+  'src/data/products.js': ['Product records', 'Names, summaries and specifications. Feeds the menu, the home page and every product page.'],
+  'src/data/education.js': ['Education articles', 'The explainers on the Education and Technology pages.'],
+  'src/data/disciplines.js': ['Careers — disciplines', 'The engineering and clinical disciplines listed on Careers and Who We Are.'],
+  'src/data/maven.js': ['MAVEN content', 'Copy and figure captions for the MAVEN page.'],
+  'src/data/orTables.js': ['Surgical table models', 'The five models and their specifications. Withdrawn from the site pending FDA registration.'],
+  'src/data/partners.js': ['Territories and partners', 'Countries, distributors, and what each one does.'],
+  'src/data/media.js': ['Media library', 'Titles and captions for every image and video.'],
+  'src/data/neuromodulation.js': ['Neuromodulation content', 'The technology page on neurochemical sensing.'],
+  'src/data/d1.js': ['D1 frame content', 'Copy for the D1 stereotactic frame page.'],
+  'src/data/company.js': ['Company history and principles', 'The timeline, the principles, and the statistics on Who We Are.'],
+  'src/data/technology.js': ['Technology records', 'Names and summaries for each technology area.'],
+  'src/pages/Product.jsx': ['Product page template', 'Text shared by any product without a page of its own.'],
+  'src/ui/SceneBand.jsx': ['NaviNetics AI — diagram labels', 'Labels on the animated diagrams.'],
+  'src/ui/Workstation.jsx': ['Planning workstation demo', 'View names and controls in the interactive demo.'],
+  'src/ui/EduFigures.jsx': ['Education diagrams', 'Labels and instructions on the interactive figures.'],
+  'src/ui/RouteBoundary.jsx': ['Error messages', 'Shown only if a page fails to load.'],
+};
+
 const parts = [];
 const manifest = { generated_from: sha(files.join(',')), files: {}, entries: [] };
 let dropped = 0;
@@ -260,14 +292,28 @@ for (const r of ROUTES) {
 const libFiles = files
   .filter((f) => !PAGE_FILES.has(f) && !CHROME_FILES.has(f) && !SKIP.test(f))
   .sort();
+const scraps = {
+  key: 'lib:scraps', group: 'Shared content', title: 'Buttons, labels and messages',
+  note: 'Single words and short phrases from shared parts of the site — button '
+    + 'labels, error messages, and text read aloud by screen readers. Small, but '
+    + 'a visitor sees all of it.',
+  file: '', appears_on: [], count: 0,
+};
 for (const f of libFiles) {
-  const part = {
-    key: `lib:${f}`, group: 'Shared content', title: f.replace(/^src\//, ''),
-    file: f, appears_on: reach.get(f) || [], count: 0,
-  };
+  const named = LIBRARY[f];
+  // Anything unnamed is a component carrying a label or two. Thirty-six
+  // filenames in the contents is not a document; a dozen named libraries and
+  // one collection of odds and ends is.
+  const part = named
+    ? {
+      key: `lib:${f}`, group: 'Shared content', title: named[0], note: named[1],
+      file: f, appears_on: reach.get(f) || [], count: 0,
+    }
+    : scraps;
   const n = collect(f, part);
-  if (n) parts.push(part); else dropped += 1;
+  if (named) { if (n) parts.push(part); else dropped += 1; } else if (!n) dropped += 1;
 }
+if (scraps.count) parts.push(scraps);
 
 /* ── grouping the content libraries ────────────────────────────────────────
    A page's sections come from its own markup. A data file has no markup, so a
