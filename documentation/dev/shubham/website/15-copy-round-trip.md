@@ -221,20 +221,20 @@ document — follows.
 Upper management has the shared document and nothing else — no checkout, no
 GitHub account, no command line. This is the whole interaction:
 
-1. Open the document, edit with Track Changes on, save. **Nothing happens.**
-2. When finished, change the cell on page one from **NO** to **YES**, and save.
-3. It is on the site by the next morning.
+1. Open the document, edit with Track Changes on, and **save**.
+2. That is it.
 
-Nobody clicks merge. Nobody is in the loop.
+There is no switch, no button, nothing to press and nothing to send back. Their
+changes are on the site by the next morning.
 
 ```
-  they set the switch to YES and save
+  they edit and save
         |
         |  once a day, 06:00 UTC
         v
   a GitHub Action reads the document out of OneDrive
         |
-        |  .github/workflows/copy-review.yml
+        |  skips it if it was saved in the last 4 hours
         v
   edits applied, site built and linted, PUSHED
         |
@@ -242,24 +242,30 @@ Nobody clicks merge. Nobody is in the loop.
   the existing deploy workflow publishes it
 ```
 
-### Why the switch
+### How it knows they have finished
 
-Word autosaves to OneDrive every few seconds, so twenty minutes of editing is
-dozens of commits. The switch is the reviewer saying "I have finished" — in the
-document, with no macro, add-in or button, none of which would work anyway: a
-macro runs on their laptop, and their laptop has no copy of the site.
+It does not ask. There WAS a switch — a cell on the cover reading NO that a
+reviewer changed to YES — and it worked, and it was one more thing five busy
+people had to be told about and would forget.
 
-It accepts `YES`, `yes`, `y`, `publish`, `go`. Anything else means no.
+So finishing is inferred instead. The collection skips the document if OneDrive
+says it was saved in the last four hours, on the reasoning that somebody saving
+at 05:55 is mid-sentence. At 06:00 UTC it is around midnight in Rochester and
+that check passes trivially; it earns its keep on the evening somebody is still
+working at one in the morning, whose half-written paragraph waits for tomorrow
+instead of going out.
 
-### Five gates, and nothing happens unless all of them pass
+`REVIEW_QUIET_HOURS` changes the window. Four hours is a working assumption, not
+a measurement.
+
+### Four gates, and nothing happens unless all pass
 
 | | |
 |---|---|
-| the cover says YES | otherwise every autosave would publish |
-| at least one real text change | no build for a save that changed nothing |
+| the document has been left alone for four hours | nobody is mid-sentence |
+| at least one real text change | nothing to do otherwise |
 | **nothing was refused** | see below |
-| builds, lints, passes the deploy check | |
-| only `src/`, the manifest and the archive changed | anything else means the run itself is wrong |
+| builds, lints, passes the deploy check, touches only `src/` | |
 
 **The third is the one that matters.** Everywhere else a refused edit is
 reported and the rest proceeds, which is right when somebody is reading the
@@ -272,18 +278,18 @@ A failure is always "nothing happened", and GitHub emails the repository owner.
 ### What is kept
 
 Every published document is archived as `copy/published/<date>_<time>.docx`.
-The shared document is mutable, so that is the only way to answer "what exactly
-went live on the third, and from which document".
+The shared document is mutable and several people co-author it, so the version
+that produced a given publish cannot be recovered from it afterwards.
 
 ### Before navinetics.com is connected, re-take this decision
 
-Publishing straight to the live site was chosen on 2026-09-03, when the site was
-served from github.io and was a review URL rather than public promotional
+Publishing without a person in the loop was chosen on 2026-09-03, when the site
+was served from github.io and was a review URL rather than public promotional
 material. From the day the domain is connected, a Word document in a shared
 folder can change public claims about a 510(k)-cleared device with nobody
 reading them first. That may still be the right trade — but it is a different
 decision, and it should be taken rather than inherited. The same note is at the
-top of the workflow file.
+top of the workflow.
 
 ### Setting it up, once
 

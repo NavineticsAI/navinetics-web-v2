@@ -28,11 +28,8 @@ from xml.etree import ElementTree as ET
 
 W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 ANCHOR = re.compile(r'⟦([0-9a-f]{8})⟧')
-# The switch on the cover. Nothing downstream acts until this says YES.
-SWITCH = '⟦PUBLISH⟧'
 # The export the document was built from, stamped on its cover.
 BASE = re.compile(r'⟦BASE:([0-9a-f]{40})⟧')
-YES = re.compile(r'^\s*(yes|y|publish|go|true|ok)\b', re.I)
 SLOT = re.compile(r'\{(\d+)\}')
 
 # Word helpfully rewrites what people type. The site's source uses real
@@ -88,15 +85,20 @@ def read_docx(path):
     rows = {}
     dupes = []
     row_comments = {}
-    publish = False
+    # There is no switch on the cover any more. It was how a reviewer said "I
+    # have finished", it worked, and it was one more thing five busy people had
+    # to be told about and would forget. Finishing is inferred instead: the
+    # collection skips a document saved in the last few hours, on the reasoning
+    # that somebody saving at 05:55 is mid-sentence. See tools/copy-fetch.mjs.
+    #
+    # The field stays in the output so nothing downstream has to change, and so
+    # a future gate has somewhere to live.
+    publish = True
     for tr in doc.iter(f'{W}tr'):
         tcs = list(tr.findall(f'{W}tc'))
         if len(tcs) != 2:
             continue
         left = cell_text(tcs[0])
-        if SWITCH in left:
-            publish = bool(YES.match(cell_text(tcs[1])))
-            continue
         m = ANCHOR.search(left)
         if not m:
             continue

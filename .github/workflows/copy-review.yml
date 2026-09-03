@@ -3,9 +3,9 @@ name: Publish reviewed copy
 # A reviewed Word document lands in copy/incoming/, and this puts it on the site.
 #
 # NOBODY WHO REVIEWS NEEDS THE CODE. Management has one thing: the shared Word
-# document in OneDrive. They open it, turn on Track Changes, edit, save. When
-# finished they set the switch on its cover to YES. Once a day this collects the
-# document and publishes it.
+# document in OneDrive. They open it, turn on Track Changes, edit, and save.
+# That is the whole interaction — there is no switch, no button and nothing to
+# remember. Once a day this collects the document and publishes what changed.
 #
 # IT FETCHES; NOTHING PUSHES TO IT. Power Automate would need its HTTP action to
 # reach GitHub, and that is a Premium licence — about £15 a month, forever, to
@@ -27,7 +27,7 @@ name: Publish reviewed copy
 # SO IT FAILS SAFE. It publishes only when ALL of these hold, and does nothing
 # whatsoever otherwise:
 #
-#   the cover of the document says YES
+#   the document has been left alone for hours (nobody is mid-sentence)
 #   there is at least one real text change
 #   NOTHING was refused — not one broken {1}, emptied cell or stale file
 #   the site builds, lints and passes the deploy check
@@ -93,7 +93,8 @@ jobs:
           set +e
           node tools/copy-fetch.mjs --out copy/incoming/review.docx
           code=$?
-          # 2 means the folder held no document, which is not a failure.
+          # 2 means nothing to do: an empty folder, or the document was saved
+          # too recently and somebody may still be working in it.
           if [ $code -eq 2 ]; then exit 0; fi
           exit $code
 
@@ -134,40 +135,32 @@ jobs:
           echo "count=$n"     >> "$GITHUB_OUTPUT"
           echo "publish=$go"  >> "$GITHUB_OUTPUT"
           echo "refused=$bad" >> "$GITHUB_OUTPUT"
-          echo "$n text change(s); cover switch says $go; $bad edit(s) refused"
-
-      # THE SWITCH ON THE COVER. Word autosaves constantly, so most commits here
-      # are somebody mid-sentence. Nothing happens to any of them until the cell
-      # on page one has been changed from NO to YES — the reviewer saying "I have
-      # finished", in the document, with no macro or add-in involved.
-      - name: Not asked to publish
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish != 'true'
-        run: echo "The cover still says NO. Read, and left alone."
+          echo "$n text change(s); $bad edit(s) refused"
 
       # Normally a refused edit is reported and the rest proceeds. Not here.
       # With nobody reading the run, publishing four of a reviewer's five changes
       # and leaving the fifth in a log is how a half-made correction goes live —
       # a disclaimer edited but its qualifier lost. All or nothing.
       - name: Something was refused — stop
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.refused != '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.refused != '0'
         run: |
           echo "::error::${{ steps.edits.outputs.refused }} edit(s) could not be applied. Nothing was published."
           echo "The reasons are in 'Read the edits' above. Fix the document and save again."
           exit 1
 
       - name: Nothing changed
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count == '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count == '0'
         run: echo "Asked to publish, but the document already matches the site."
 
       # Applying refuses on a stale manifest — if the copy changed while the
       # document was out, the recorded positions no longer point at the right
       # text and that file is skipped rather than written at the wrong offsets.
       - name: Apply the edits
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: node tools/copy-apply.mjs --changes copy/copy-changes.json --apply --force
 
       - name: Prove the site still works
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: |
           npm run lint
           npm run build
@@ -176,20 +169,20 @@ jobs:
       # Without this the NEXT review is built against positions that have moved,
       # and every one of its edits is refused as "the file changed since export".
       - name: Re-record where every sentence now lives
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: node tools/copy-export.mjs
 
       # The shared document is mutable, so the version that produced a given
       # publish cannot be recovered from it afterwards. Keeping a copy is the
       # only way to answer "what exactly went live on the third, and from what?".
       - name: Keep the document this came from
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: |
           mkdir -p copy/published
           cp "${{ steps.doc.outputs.found }}" "copy/published/$(date -u +%Y-%m-%d_%H%M).docx"
 
       - name: Publish
-        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: |
           # The document has been dealt with: move it out of incoming/ so a
           # manual re-run cannot publish the same round twice.

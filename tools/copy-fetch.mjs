@@ -37,6 +37,17 @@ const arg = (name, dflt) => {
 
 const OUT = arg('--out', 'copy/incoming/review.docx');
 const FOLDER = arg('--folder', process.env.REVIEW_FOLDER || 'Website Review');
+/* How long the document must have been left alone before it is taken.
+ *
+ * There is no button and no switch: reviewers edit and save, and that is all
+ * they ever do. The cost of that is that a run could catch somebody mid-
+ * sentence — half a thought, published. OneDrive records when the file was
+ * last saved, so instead of asking a person to declare they have finished,
+ * infer it: nobody has touched this for hours, so they are done.
+ *
+ * At 06:00 UTC it is around midnight in Rochester and this passes trivially.
+ * It earns its keep on the evening somebody is still working at 01:00. */
+const QUIET_HOURS = Number(arg('--quiet-hours', process.env.REVIEW_QUIET_HOURS || 4));
 const {
   AZURE_TENANT_ID: TENANT,
   AZURE_CLIENT_ID: CLIENT,
@@ -101,6 +112,18 @@ if (docs.length > 1) {
 }
 
 const [doc] = docs;
+
+const savedAt = new Date(doc.lastModifiedDateTime);
+const quietFor = (Date.now() - savedAt.getTime()) / 3600000;
+const by = doc.lastModifiedBy?.user?.displayName || 'someone';
+if (quietFor < QUIET_HOURS) {
+  console.log(`\n  ${doc.name}`);
+  console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}.`);
+  console.log('  Somebody may still be working on it. Leaving it until it has been');
+  console.log(`  quiet for ${QUIET_HOURS}h. Nothing was published.\n`);
+  process.exit(2);
+}
+
 const getRes = await fetch(`${base}/${encodeURIComponent(doc.name)}:/content`, { headers: auth });
 if (!getRes.ok) await die(`Downloading ${doc.name}`, getRes);
 
@@ -108,5 +131,5 @@ mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, Buffer.from(await getRes.arrayBuffer()));
 
 console.log(`\n  ${doc.name}`);
-console.log(`  last saved ${doc.lastModifiedDateTime} by ${doc.lastModifiedBy?.user?.displayName || 'someone'}`);
+console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}`);
 console.log(`  -> ${OUT}\n`);

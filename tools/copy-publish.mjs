@@ -45,13 +45,12 @@ const run = (cmd, cmdArgs, label) => {
 step(1, `Reading ${docx}`);
 run(py, ['tools/copy-import.py', docx, '--json', 'copy/copy-changes.json', '--quiet'],
   'reading the document');
-const { changes, problems, comments, publish } = JSON.parse(
+const { changes, problems, comments } = JSON.parse(
   execSync(`node -e "process.stdout.write(require('fs').readFileSync('copy/copy-changes.json','utf8'))"`,
     { encoding: 'utf8' }),
 );
 
 console.log(`     ${changes.length} text change${changes.length === 1 ? '' : 's'}`);
-console.log(`     cover switch: ${publish ? 'YES' : 'NO'}`);
 for (const c of changes.slice(0, 15)) {
   console.log(`       ${c.page} — ${c.label}`);
   console.log(`         was: ${c.before.replace(/\n/g, ' ').slice(0, 88)}`);
@@ -75,14 +74,6 @@ if (nComments) {
 if (!changes.length) {
   console.log('\n  No wording changes to publish.\n');
   process.exit(0);
-}
-
-// The switch on the document's cover. --publish is the operator's intent;
-// this is the reviewer's. Both have to agree.
-if (PUBLISH && !publish) {
-  console.log('\n  The cover of this document still says NO.');
-  console.log('  Change it to YES and save, or re-run without --publish to look only.\n');
-  process.exit(1);
 }
 
 if (!PUBLISH) {

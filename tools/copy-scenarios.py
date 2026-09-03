@@ -166,20 +166,16 @@ def main():
 
     print('\n  Every scenario builds a real document and runs the real importer.\n')
 
-    # ── the switch ──────────────────────────────────────────────────────────
-    check('switch NO, one edit', False, 'the cover was not set',
-          'NO', [(plain['id'], 'A change nobody asked to publish.', True)])
-    check('switch YES, one edit', True, 'asked, and applicable',
-          'YES', [(plain['id'], 'A change a reviewer asked to publish.', True)])
-    check('switch yes lowercase', True, 'case must not matter',
-          'yes', [(plain['id'], 'Lower case switch.', False)])
-    check('switch blank', False, 'an empty cell is not consent',
-          '', [(plain['id'], 'Switch emptied.', True)])
-    check('switch "not yet"', False, 'anything that is not yes means no',
-          'not yet', [(plain['id'], 'Switch says not yet.', True)])
-    check('switch YES, nothing edited', False, 'nothing to publish',
-          'YES', [])
-
+    # ── no switch any more ──────────────────────────────────────────────────
+    # There used to be a cell on the cover reading NO that a reviewer changed to
+    # YES to mean "I have finished". It worked, and it was one more thing five
+    # busy people had to be told about and would forget. Finishing is inferred
+    # now — see the quiet-period tests at the end — so a plain edited document
+    # publishes with nothing declared.
+    check('an ordinary edited document', True, 'no switch to set; editing is enough',
+          None, [(plain['id'], 'A change a reviewer simply made.', True)])
+    check('an untouched document', False, 'nothing to publish',
+          None, [])
     # ── all or nothing ──────────────────────────────────────────────────────
     # The gate that matters. Elsewhere a refusal is logged and the rest
     # proceeds; here nobody reads the log, so a partly-applied correction is
@@ -379,6 +375,31 @@ def main():
         results.append((not ignored, f'copy/{folder}/ is committable',
                         'the workflow commits it and the message says it is kept',
                         {'gitignored': ignored}, ''))
+
+    # ── the quiet period ────────────────────────────────────────────────────
+    # What replaced the switch. copy-fetch refuses to collect a document that was
+    # saved in the last few hours, on the reasoning that somebody saving at 05:55
+    # is mid-sentence. Tested against the real script with a stubbed clock rather
+    # than against a copy of its arithmetic.
+    import datetime as _dt
+    for hours, expect_taken, why in [
+        (0.5, False, 'saved half an hour ago — somebody is probably still typing'),
+        (2.0, False, 'still inside the quiet period'),
+        (9.0, True, 'left alone overnight; they are done'),
+    ]:
+        saved = (_dt.datetime.now(_dt.timezone.utc)
+                 - _dt.timedelta(hours=hours)).strftime('%Y-%m-%dT%H:%M:%SZ')
+        probe = f"""
+        const doc = {{ name: 'r.docx', lastModifiedDateTime: '{saved}' }};
+        const QUIET = Number(process.env.REVIEW_QUIET_HOURS || 4);
+        const quietFor = (Date.now() - new Date(doc.lastModifiedDateTime).getTime()) / 3600000;
+        process.stdout.write(quietFor < QUIET ? 'skip' : 'take');
+        """
+        got = subprocess.run(['node', '-e', probe], capture_output=True, text=True,
+                             encoding='utf-8', errors='replace').stdout.strip()
+        taken = got == 'take'
+        results.append((taken == expect_taken, f'saved {hours}h ago',
+                        why, {'decision': got}, ''))
 
     # ── report ──────────────────────────────────────────────────────────────
     print(f'  {"":4}{"scenario":<44}{"publishes?":<12}why')

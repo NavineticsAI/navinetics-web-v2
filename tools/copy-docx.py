@@ -176,9 +176,6 @@ def build(manifest, out_path, generated_on):
          'The grey column on the left is the address of each piece of text — which page '
          'it is on and what it is. It is how your wording finds its way back to the '
          'website. Change it and that edit is lost.'),
-        ('When you have finished, change NO to YES below, and save.',
-         'Nothing reaches the website until you do. Edit and save as much as you like '
-         'first — for an hour, over a week — and nothing happens.'),
     ]
     for n, (what, why) in enumerate(steps, 1):
         pp = para(doc, space_after=2)
@@ -187,36 +184,25 @@ def build(manifest, out_path, generated_on):
         b = para(doc, space_after=9, indent=0.3)
         run(b, why, size=10, color=GREY)
 
-    # ── the publish switch ───────────────────────────────────────────────
-    # Word autosaves to OneDrive every few seconds. Without this, twenty minutes
-    # of editing would publish fifty times. It is the reviewer saying "I have
-    # finished" — one cell, no macro, no button, no add-in, nothing to install,
-    # because a macro would run on their laptop and their laptop has no copy of
-    # the website.
-    sw = doc.add_table(rows=1, cols=2)
-    sw.autofit = False
-    borders(sw)
-    left, right = sw.rows[0].cells
-    lp = left.paragraphs[0]
-    lp.paragraph_format.space_after = Pt(0)
-    run(lp, 'Publish to the website', size=11, bold=True)
-    code = left.add_paragraph()
-    code.paragraph_format.space_after = Pt(0)
-    run(code, '⟦PUBLISH⟧', size=7, color=GREY, font='Consolas')
-    shade(left, BAND)
-    rp = right.paragraphs[0]
-    rp.paragraph_format.space_after = Pt(0)
-    run(rp, 'NO', size=20, bold=True)
-    run(rp, '        ← change to YES when you are done', size=9.5, color=GREY)
-    left.width = Inches(2.2)
-    right.width = Inches(4.7)
-    run(para(doc, space_before=7, space_after=4),
-        'Your changes appear on the website a few minutes later. Set it back to '
-        'NO afterwards, so the next round is deliberate too.', size=10, color=GREY)
-    # The export this document was built from. Everything the reviewer types is
-    # compared against the copy AS IT WAS THEN, not as it is now — see s5 of the
-    # spec. Without it a document made before a correction was published, and
-    # returned after, silently puts the old wording back.
+    # NO SWITCH, NO BUTTON, NOTHING TO REMEMBER. There used to be a cell here
+    # reading NO that a reviewer changed to YES to mean "I have finished". It
+    # worked, and it was one more thing five busy people had to be told about and
+    # would forget. Finishing is now inferred instead: the collection runs once a
+    # day and skips the document if it was saved in the last few hours, on the
+    # reasoning that somebody saving at 05:55 is still mid-sentence. Nobody has
+    # to declare anything.
+    run(para(doc, space_after=4), 'That is all.', size=12, bold=True, color=ACTION)
+    run(para(doc, space_after=16),
+        'Your changes go onto the website by the next morning. There is nothing '
+        'to press and nothing to send back — just save, and close it when you are '
+        'done. If you are still part-way through something, that is fine: it '
+        'waits until the document has been left alone for a few hours.',
+        size=10, color=GREY)
+
+    # The export this document was built from. Everything typed into it is
+    # compared against the copy AS IT WAS THEN, not as it is now — see s10 of
+    # the spec. Without it a document made before a correction was published,
+    # and returned after, silently puts the old wording back.
     bp = para(doc, space_after=16)
     run(bp, 'Document version ', size=8, color=GREY)
     run(bp, f'⟦BASE:{manifest["generated_from"]}⟧', size=7, color=GREY, font='Consolas')
