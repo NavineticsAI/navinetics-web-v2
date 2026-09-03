@@ -32,7 +32,12 @@ export default function Product() {
     description: product?.summary,
   });
 
-  if (!product) return <NotFound />;
+  // `product.hidden` as well as absence. getProduct still finds a hidden
+  // record on purpose — its own page and every slug reference keep working —
+  // so without this the dynamic /products/:slug route renders the withdrawn
+  // range through the generic template, which is exactly what taking the
+  // route out was meant to stop.
+  if (!product || product.hidden) return <NotFound />;
 
   const others = otherProducts(slug);
 

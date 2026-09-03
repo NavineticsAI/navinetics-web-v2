@@ -12,7 +12,15 @@
     "check:webkit": "node tools/check-webkit.mjs",
     "check:perf": "node tools/check-perf.mjs",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "copy:export": "node tools/copy-export.mjs && python tools/copy-docx.py",
+    "copy:import": "python tools/copy-import.py",
+    "copy:apply": "node tools/copy-apply.mjs",
+    "copy:check": "node tools/copy-coverage.mjs",
+    "copy:test": "python tools/copy-selftest.py",
+    "copy:watch": "node tools/copy-watch.mjs",
+    "build:review": "vite build --mode review",
+    "preview:review": "vite build --mode review && vite preview"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -28,6 +36,8 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
+    "acorn": "^8.18.0",
+    "acorn-jsx": "^5.3.2",
     "autoprefixer": "^10.5.4",
     "oxlint": "^1.75.0",
     "playwright": "^1.62.1",

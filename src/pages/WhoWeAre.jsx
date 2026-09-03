@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { cn } from '../lib/cn.js';
 import { usePageMeta } from '../lib/meta.js';
 import { numbers, principles, timeline } from '../data/company.js';
-import { isPlaceholder, products } from '../data/products.js';
+import { isPlaceholder, visibleProducts } from '../data/products.js';
 import { asset } from '../lib/asset.js';
 import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
 import { Timeline } from '../ui/Timeline.jsx';
@@ -36,7 +36,7 @@ const FOUNDERS = [
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
     image: asset('/stephan-goerss-150.jpg'), focus: '50% 0%' },
   { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'Co-Founder',
-    line: 'Associate Director of the Neural Engineering and Precision Surgery Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
+    line: 'Associate Director of the Neural Engineering Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
     image: asset('/yoonbae-oh.jpg'), focus: '50% 0%' },
 ];
 
@@ -55,10 +55,10 @@ export default function WhoWeAre() {
     description:
       'NaviNetics makes medical devices that change lives, by listening to patients and physicians '
       + 'and translating those conversations into safe, effective and high-quality device '
-      + 'offerings. Out of the Neural Engineering and Precision Surgery Laboratories at Mayo Clinic.',
+      + 'offerings. Out of the Neural Engineering Laboratories at Mayo Clinic.',
   });
 
-  const shipping = products.filter((p) => !isPlaceholder(p));
+  const shipping = visibleProducts.filter((p) => !isPlaceholder(p));
 
   return (
     <>

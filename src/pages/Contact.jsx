@@ -28,7 +28,9 @@ const INBOX = 'info@navinetics.com';
  */
 const REASONS = [
   'NRSS inquiry',
-  'Surgical tables inquiry',
+  /* 'Surgical tables inquiry' removed with the range itself, pending FDA
+     registration — see data/products.js. Offering it as a reason to write
+     in is offering the product. */
   'Neuromodulation research',
   'Distribution and partnerships',
   'Product complaint or device issue',
@@ -50,8 +52,7 @@ export default function Contact() {
     title: 'Contact',
     description:
       'Get in touch with NaviNetics about the NaviNetics Reusable Stereotactic System (NRSS), '
-      + 'surgical tables, neuromodulation '
-      + 'research, distribution, careers, or to report a product issue.',
+      + 'neuromodulation research, distribution, careers, or to report a product issue.',
   });
 
   /* Product pages link here with ?reason=… so the form arrives set to the
@@ -66,7 +67,6 @@ export default function Contact() {
   const PRESET = {
     d1: 'NRSS inquiry',
     nrss: 'NRSS inquiry',
-    tables: 'Surgical tables inquiry',
     maven: 'Neuromodulation research',
     distribution: 'Distribution and partnerships',
     press: 'Press and media',
@@ -238,7 +238,13 @@ export default function Contact() {
                     value={form.name}
                     onChange={set('name')}
                     error={errors.name}
-                    placeholder="Dr. Jane Okafor"
+                    /* Placeholders are formats, never examples of a person. The
+                       three here were "Dr. Jane Okafor", "jane.okafor@hospital.org"
+                       and "Mayo Clinic, Department of Neurosurgery" — an invented
+                       clinician with an invented address, and an affiliation this
+                       company licenses from rather than belongs to. On a medical
+                       device site both read as claims. */
+                    placeholder="First and last name"
                     autoComplete="name"
                   />
                   <Field
@@ -247,7 +253,7 @@ export default function Contact() {
                     value={form.email}
                     onChange={set('email')}
                     error={errors.email}
-                    placeholder="jane.okafor@hospital.org"
+                    placeholder="you@organization.org"
                     autoComplete="email"
                   />
                   <Field
@@ -255,7 +261,7 @@ export default function Contact() {
                     hint="Optional"
                     value={form.organization}
                     onChange={set('organization')}
-                    placeholder="Mayo Clinic, Department of Neurosurgery"
+                    placeholder="Hospital, clinic or company"
                     autoComplete="organization"
                   />
                   <Field as="select" label="I'm reaching out about" value={form.reason} onChange={set('reason')}>
