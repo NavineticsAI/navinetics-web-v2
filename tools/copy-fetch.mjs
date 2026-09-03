@@ -26,6 +26,7 @@
  * file once a day. This costs nothing and changes nothing for the reviewers:
  * same document, same folder, same Word. They never learn it exists.
  */
+import { createHash } from 'node:crypto';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
@@ -81,7 +82,12 @@ const checkQuiet = (name, savedAt, by) => {
 
 const save = async (res, name, quietFor, by) => {
   mkdirSync(dirname(OUT), { recursive: true });
-  writeFileSync(OUT, Buffer.from(await res.arrayBuffer()));
+  const bytes = Buffer.from(await res.arrayBuffer());
+  writeFileSync(OUT, bytes);
+  // Printed so a stale or cached copy is visible as itself. Without it, an old
+  // version arriving reads as "the reviewer changed nothing", which is the same
+  // output as everything working.
+  console.log(`  ${bytes.length} bytes, sha1 ${createHash('sha1').update(bytes).digest('hex').slice(0, 16)}`);
   console.log(`\n  ${name}`);
   console.log(`  last saved ${quietFor.toFixed(1)}h ago by ${by}`);
   console.log(`  -> ${OUT}\n`);
@@ -138,8 +144,15 @@ if (SHARE) {
   let res = null;
   const tried = [];
   for (const [candidate, how] of candidates) {
-    let attempt = await fetch(candidate, { redirect: 'follow', headers: BROWSERISH })
-      .catch(() => null);
+    // SharePoint will happily serve a cached copy of a share link, which is
+    // indistinguishable from the reviewer having changed nothing. A nonce
+    // and no-store make it fetch the current one.
+    const bust = candidate + (candidate.includes('?') ? '&' : '?') + `_=${Date.now()}`;
+    let attempt = await fetch(bust, {
+      redirect: 'follow',
+      cache: 'no-store',
+      headers: { ...BROWSERISH, 'cache-control': 'no-cache', pragma: 'no-cache' },
+    }).catch(() => null);
 
     // api.onedrive.com answers a business link with 308 and the real address in
     // the body rather than in a Location header, so fetch has nothing to follow.
