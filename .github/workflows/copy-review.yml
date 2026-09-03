@@ -56,6 +56,9 @@ on:
 
 permissions:
   contents: write
+  # It deploys the site itself - see the note on the last steps.
+  pages: write
+  id-token: write
 
 # Word autosaves to OneDrive every few seconds, so a reviewer working for twenty
 # minutes can land a dozen commits here. A run still going when the next save
@@ -224,4 +227,23 @@ jobs:
           reviewer edited in the Word document. The document it came from is
           kept in copy/published/."
           git push
-          echo "Published. The deploy workflow takes it from here."
+          echo "Pushed."
+
+      # AND DEPLOYS IT, rather than leaving that to the workflow watching main.
+      # A push made by a workflow does not trigger other workflows - GitHub's
+      # guard against a job setting itself off forever - so the copy commit
+      # lands and nothing happens. The site is already built and checked two
+      # steps up; this publishes that same build.
+      - name: Configure GitHub Pages
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
+        uses: actions/configure-pages@v5
+
+      - name: Upload site artifact
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
+        uses: actions/deploy-pages@v4
