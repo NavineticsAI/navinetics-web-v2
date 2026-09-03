@@ -289,7 +289,7 @@ top of the workflow file.
 
 1. **flow.microsoft.com** → Create → Automated cloud flow
 2. Trigger: **OneDrive for Business — When a file is modified**, folder
-   `Website copy review`
+   `Website Review`
 3. Action: **Get file content**
 4. Action: **HTTP** —
    `PUT https://api.github.com/repos/NavineticsAI/navinetics-web-v2/contents/copy/incoming/review.docx`
