@@ -62,7 +62,7 @@ export default function Home() {
               down this same page, so the primary call to action named a thing
               the visitor had not been told about yet. */}
           <Button to={visibleProducts[0].path} size="lg" arrow>
-            Discover the frame
+            Discover the system
           </Button>
           <Button to="/company/who-we-are" size="lg" variant="secondary">
             Who we are
