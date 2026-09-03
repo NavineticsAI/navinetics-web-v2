@@ -155,6 +155,36 @@ def build(manifest, out_path, generated_on):
     run(para(doc, space_after=2), 'Every word on the site, for review', size=14, color=ACTION)
     run(para(doc, space_after=18), f'{generated_on}   ·   {len(live)} pieces of text', size=9, color=GREY)
 
+    # ── the publish switch ───────────────────────────────────────────────
+    # Word autosaves to OneDrive every few seconds. If every save published,
+    # twenty minutes of editing would be fifty builds. This is the reviewer
+    # saying "I have finished" — one cell, two words, no macro, no button, no
+    # add-in, nothing to install. Everything downstream reads this cell first
+    # and stops immediately if it does not say YES.
+    run(para(doc, space_after=6),
+        'When you have finished, change NO to YES and save.',
+        size=11, bold=True, color=ACTION)
+    sw = doc.add_table(rows=1, cols=2)
+    sw.autofit = False
+    borders(sw)
+    left, right = sw.rows[0].cells
+    lp = left.paragraphs[0]
+    lp.paragraph_format.space_after = Pt(0)
+    run(lp, 'Publish to the website', size=10, bold=True)
+    code = left.add_paragraph()
+    code.paragraph_format.space_after = Pt(0)
+    run(code, '⟦PUBLISH⟧', size=7, color=GREY, font='Consolas')
+    shade(left, BAND)
+    rp = right.paragraphs[0]
+    rp.paragraph_format.space_after = Pt(0)
+    run(rp, 'NO', size=14, bold=True)
+    left.width = Inches(1.7)
+    right.width = Inches(5.2)
+    run(para(doc, space_before=6, space_after=16),
+        'It goes back to NO by itself once your changes are published. '
+        'Until it says YES, you can edit and save as much as you like and '
+        'nothing happens.', size=9.5, color=GREY)
+
     run(para(doc, space_after=8), 'Four rules', size=13, bold=True, color=ACTION)
     for n, (rule, why) in enumerate([
         ('Turn on Track Changes before you type.', 'Review ▸ Track Changes'),

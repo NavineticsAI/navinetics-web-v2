@@ -20,7 +20,8 @@
     "copy:test": "python tools/copy-selftest.py",
     "copy:watch": "node tools/copy-watch.mjs",
     "build:review": "vite build --mode review",
-    "preview:review": "vite build --mode review && vite preview"
+    "preview:review": "vite build --mode review && vite preview",
+    "copy:publish": "node tools/copy-publish.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

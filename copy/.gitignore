@@ -9,3 +9,9 @@
 .preview.html
 copy-changes.json
 .bios*.json
+
+# …except a reviewed document arriving from the shared folder. That one has to
+# be committable, because committing it is what triggers the workflow that
+# applies it. Without this exception the Power Automate flow pushes a file git
+# silently ignores and nothing ever happens.
+!incoming/*.docx

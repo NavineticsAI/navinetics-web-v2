@@ -1,0 +1,175 @@
+name: Publish reviewed copy
+
+# A reviewed Word document lands in copy/incoming/, and this puts it on the site.
+#
+# NOBODY WHO REVIEWS NEEDS THE CODE. Management has one thing: the shared Word
+# document. They open it, turn on Track Changes, edit, save. When finished they
+# set the switch on its cover to YES. A Power Automate flow in Microsoft 365
+# commits the file here and this takes it from there — see documentation/dev/
+# shubham/website/15-copy-round-trip.md for the flow, which is clicked together
+# in a browser and needs no code either.
+#
+# IT PUBLISHES DIRECTLY, WITH NOBODY IN THE LOOP. NaviNetics asked for that on
+# 2026-09-03. At the time the site was served from github.io and was NOT
+# connected to navinetics.com — a review URL, not public promotional material.
+#
+#   READ THIS AGAIN BEFORE THE DOMAIN IS CONNECTED. From that day a Word
+#   document in a shared folder can change public claims about a 510(k)-cleared
+#   medical device with nobody reading them first. That may still be the right
+#   trade, but it is a different decision from the one made here, and it should
+#   be taken deliberately rather than inherited.
+#
+# SO IT FAILS SAFE. It publishes only when ALL of these hold, and does nothing
+# whatsoever otherwise:
+#
+#   the cover of the document says YES
+#   there is at least one real text change
+#   NOTHING was refused — not one broken {1}, emptied cell or stale file
+#   the site builds, lints and passes the deploy check
+#   the change touches src/, the manifest and the archive only
+#
+# Any one failing stops the run with nothing pushed, and GitHub emails the
+# repository owner. A mistake is always "nothing happened", never "the wrong
+# thing is live".
+
+on:
+  push:
+    paths: ['copy/incoming/*.docx']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Word autosaves to OneDrive every few seconds, so a reviewer working for twenty
+# minutes can land a dozen commits here. A run still going when the next save
+# arrives is working on stale text: cancel it and let the newer one win.
+concurrency:
+  group: copy-review
+  cancel-in-progress: true
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          pip install python-docx
+
+      - name: Find the document
+        id: doc
+        run: |
+          # Word leaves a ~$<name> lock file beside an open document. It is not a
+          # document, and it sorts late enough to be picked by accident.
+          f=$(ls -t copy/incoming/*.docx 2>/dev/null | grep -v '/~\$' | head -1)
+          if [ -z "$f" ]; then
+            echo "No document in copy/incoming/ — nothing to do."
+            echo "found=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Using $f"
+          echo "found=$f" >> "$GITHUB_OUTPUT"
+
+      - name: Read the edits
+        id: edits
+        if: steps.doc.outputs.found != ''
+        run: |
+          python tools/copy-import.py "${{ steps.doc.outputs.found }}" --json copy/copy-changes.json
+          n=$(node -e "process.stdout.write(String(require('./copy/copy-changes.json').changes.length))")
+          go=$(node -e "process.stdout.write(String(require('./copy/copy-changes.json').publish))")
+          bad=$(node -e "process.stdout.write(String((require('./copy/copy-changes.json').problems||[]).filter(p=>p.kind!=='row missing').length))")
+          echo "count=$n"     >> "$GITHUB_OUTPUT"
+          echo "publish=$go"  >> "$GITHUB_OUTPUT"
+          echo "refused=$bad" >> "$GITHUB_OUTPUT"
+          echo "$n text change(s); cover switch says $go; $bad edit(s) refused"
+
+      # THE SWITCH ON THE COVER. Word autosaves constantly, so most commits here
+      # are somebody mid-sentence. Nothing happens to any of them until the cell
+      # on page one has been changed from NO to YES — the reviewer saying "I have
+      # finished", in the document, with no macro or add-in involved.
+      - name: Not asked to publish
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish != 'true'
+        run: echo "The cover still says NO. Read, and left alone."
+
+      # Normally a refused edit is reported and the rest proceeds. Not here.
+      # With nobody reading the run, publishing four of a reviewer's five changes
+      # and leaving the fifth in a log is how a half-made correction goes live —
+      # a disclaimer edited but its qualifier lost. All or nothing.
+      - name: Something was refused — stop
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.refused != '0'
+        run: |
+          echo "::error::${{ steps.edits.outputs.refused }} edit(s) could not be applied. Nothing was published."
+          echo "The reasons are in 'Read the edits' above. Fix the document and save again."
+          exit 1
+
+      - name: Nothing changed
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count == '0'
+        run: echo "Asked to publish, but the document already matches the site."
+
+      # Applying refuses on a stale manifest — if the copy changed while the
+      # document was out, the recorded positions no longer point at the right
+      # text and that file is skipped rather than written at the wrong offsets.
+      - name: Apply the edits
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        run: node tools/copy-apply.mjs --changes copy/copy-changes.json --apply --force
+
+      - name: Prove the site still works
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        run: |
+          npm run lint
+          npm run build
+          npm run check:build
+
+      # Without this the NEXT review is built against positions that have moved,
+      # and every one of its edits is refused as "the file changed since export".
+      - name: Re-record where every sentence now lives
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        run: node tools/copy-export.mjs
+
+      # The shared document is mutable, so the version that produced a given
+      # publish cannot be recovered from it afterwards. Keeping a copy is the
+      # only way to answer "what exactly went live on the third, and from what?".
+      - name: Keep the document this came from
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        run: |
+          mkdir -p copy/published
+          cp "${{ steps.doc.outputs.found }}" "copy/published/$(date -u +%Y-%m-%d_%H%M).docx"
+
+      - name: Publish
+        if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
+        run: |
+          git add src copy/copy-manifest.json copy/published
+          # src/, the manifest and the archive only. If anything else moved,
+          # something is wrong with the run rather than with the copy, and it
+          # must not reach the site.
+          if ! git diff --cached --quiet -- ':!src' ':!copy/copy-manifest.json' ':!copy/published'; then
+            echo "::error::Staged changes outside src/ — refusing to publish."
+            git diff --cached --name-only
+            exit 1
+          fi
+          git config user.name  "NaviNetics copy review"
+          git config user.email "noreply@navinetics.com"
+          git commit -m "Apply reviewed copy from the shared document
+
+          ${{ steps.edits.outputs.count }} text change(s), published automatically
+          after the switch on the document's cover was set to YES.
+
+          Nothing here was written by the workflow: every change is a cell a
+          reviewer edited in the Word document. The document it came from is
+          kept in copy/published/."
+          git push
+          echo "Published. The deploy workflow takes it from here."

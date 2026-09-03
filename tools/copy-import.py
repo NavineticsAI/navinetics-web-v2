@@ -27,6 +27,9 @@ from xml.etree import ElementTree as ET
 
 W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 ANCHOR = re.compile(r'⟦([0-9a-f]{8})⟧')
+# The switch on the cover. Nothing downstream acts until this says YES.
+SWITCH = '⟦PUBLISH⟧'
+YES = re.compile(r'^\s*(yes|y|publish|go|true|ok)\b', re.I)
 SLOT = re.compile(r'\{(\d+)\}')
 
 # Word helpfully rewrites what people type. The site's source uses real
@@ -78,11 +81,15 @@ def read_docx(path):
     rows = {}
     dupes = []
     row_comments = {}
+    publish = False
     for tr in doc.iter(f'{W}tr'):
         tcs = list(tr.findall(f'{W}tc'))
         if len(tcs) != 2:
             continue
         left = cell_text(tcs[0])
+        if SWITCH in left:
+            publish = bool(YES.match(cell_text(tcs[1])))
+            continue
         m = ANCHOR.search(left)
         if not m:
             continue
@@ -98,7 +105,7 @@ def read_docx(path):
     # have left one on a heading to say a whole section should go.
     attached = {c['text'] for lst in row_comments.values() for c in lst}
     loose = [c for c in comments.values() if c['text'] not in attached]
-    return rows, dupes, row_comments, loose
+    return rows, dupes, row_comments, loose, publish
 
 
 def main():
@@ -114,7 +121,7 @@ def main():
     index = {e['id']: e for e in manifest['entries']}
     parts = {p['key']: p for p in manifest['parts']}
 
-    rows, dupes, row_comments, loose = read_docx(a.docx)
+    rows, dupes, row_comments, loose, publish = read_docx(a.docx)
 
     changes, problems = [], []
 
@@ -160,6 +167,8 @@ def main():
 
     out = {
         'source_document': a.docx,
+        # The cover switch. Everything downstream stops unless this is true.
+        'publish': publish,
         'manifest_version': manifest['generated_from'],
         'changes': changes,
         'problems': [{'kind': k, 'id': i, 'label': l, 'detail': d} for k, i, l, d in problems],

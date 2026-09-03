@@ -213,3 +213,103 @@ paragraph.
 `copy-export.mjs` holds the route list, in nav order, at the top. Add the route
 and the page file. Everything else — labels, which pages a library reaches, the
 document — follows.
+
+---
+
+## 9 · Publishing from the document, with no code
+
+Upper management has the shared document and nothing else — no checkout, no
+GitHub account, no command line. This is the whole interaction:
+
+1. Open the document, edit with Track Changes on, save. **Nothing happens.**
+2. When finished, change the cell on page one from **NO** to **YES**, and save.
+3. It is on the site a couple of minutes later.
+
+Nobody clicks merge. Nobody is in the loop.
+
+```
+  they set the switch to YES and save
+        |
+        |  Power Automate (Microsoft 365, clicked together in a browser)
+        v
+  the file is committed to copy/incoming/
+        |
+        |  .github/workflows/copy-review.yml
+        v
+  edits applied, site built and linted, PUSHED
+        |
+        v
+  the existing deploy workflow publishes it
+```
+
+### Why the switch
+
+Word autosaves to OneDrive every few seconds, so twenty minutes of editing is
+dozens of commits. The switch is the reviewer saying "I have finished" — in the
+document, with no macro, add-in or button, none of which would work anyway: a
+macro runs on their laptop, and their laptop has no copy of the site.
+
+It accepts `YES`, `yes`, `y`, `publish`, `go`. Anything else means no.
+
+### Five gates, and nothing happens unless all of them pass
+
+| | |
+|---|---|
+| the cover says YES | otherwise every autosave would publish |
+| at least one real text change | no build for a save that changed nothing |
+| **nothing was refused** | see below |
+| builds, lints, passes the deploy check | |
+| only `src/`, the manifest and the archive changed | anything else means the run itself is wrong |
+
+**The third is the one that matters.** Everywhere else a refused edit is
+reported and the rest proceeds, which is right when somebody is reading the
+report. Nobody is reading this one. So if a reviewer makes five changes and one
+cannot be applied, NONE of them go — publishing four of five is how a
+disclaimer gets edited and its qualifier lost.
+
+A failure is always "nothing happened", and GitHub emails the repository owner.
+
+### What is kept
+
+Every published document is archived as `copy/published/<date>_<time>.docx`.
+The shared document is mutable, so that is the only way to answer "what exactly
+went live on the third, and from which document".
+
+### Before navinetics.com is connected, re-take this decision
+
+Publishing straight to the live site was chosen on 2026-09-03, when the site was
+served from github.io and was a review URL rather than public promotional
+material. From the day the domain is connected, a Word document in a shared
+folder can change public claims about a 510(k)-cleared device with nobody
+reading them first. That may still be the right trade — but it is a different
+decision, and it should be taken rather than inherited. The same note is at the
+top of the workflow file.
+
+### Setting up the Power Automate flow, once
+
+1. **flow.microsoft.com** → Create → Automated cloud flow
+2. Trigger: **OneDrive for Business — When a file is modified**, folder
+   `Website copy review`
+3. Action: **Get file content**
+4. Action: **HTTP** —
+   `PUT https://api.github.com/repos/NavineticsAI/navinetics-web-v2/contents/copy/incoming/review.docx`
+   with an `Authorization: Bearer <token>` header and a JSON body carrying
+   `message`, `content` (the file, base64) and the file's current `sha`.
+   GitHub calls this "Create or update file contents".
+5. The token is a fine-grained personal access token with **Contents: read and
+   write** on this repository only. Store it in Power Automate — not in the flow
+   body, and not here.
+
+Committing that file is what starts the workflow. Nothing else has to happen.
+
+### The same thing from a terminal
+
+For anyone who does have the code:
+
+```bash
+npm run copy:publish -- reviewed.docx              # show what changed, write nothing
+npm run copy:publish -- reviewed.docx --publish    # apply, build, commit, push
+```
+
+It refuses if the document's cover still says NO — the operator's intent and the
+reviewer's have to agree.
