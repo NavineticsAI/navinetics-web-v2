@@ -114,13 +114,14 @@ if (SHARE) {
 
   // 1. SharePoint's own download endpoint, built from the sharing token. The
   //    reliable one for OneDrive for Business.
-  const token = /\/:[a-z]:\/[a-z]\/(?:personal|r|g)\/([^?]+)/i.exec(src.pathname)?.[1]
-    || /\/:[a-z]:\/[a-z]\/([^?]+)/i.exec(src.pathname)?.[1];
-  if (token) {
-    const parts = token.split('/');
-    const shareId = parts.pop();
-    candidates.push([`${src.origin}/${parts.join('/')}/_layouts/15/download.aspx?share=${shareId}`,
-      'SharePoint download endpoint']);
+  // /:w:/g/personal/<user>/<shareId>  ->  /personal/<user>/_layouts/15/…
+  // The site path has to keep its `personal/` segment; dropping it 404s.
+  const m = /^\/:[a-z]:\/[a-z]\/(.+)\/([^/?]+)$/i.exec(src.pathname);
+  if (m) {
+    candidates.push([
+      `${src.origin}/${m[1]}/_layouts/15/download.aspx?share=${m[2]}`,
+      'SharePoint download endpoint',
+    ]);
   }
 
   // 2. The documented shares API. Serves personal OneDrive; a business link
@@ -137,8 +138,19 @@ if (SHARE) {
   let res = null;
   const tried = [];
   for (const [candidate, how] of candidates) {
-    const attempt = await fetch(candidate, { redirect: 'follow', headers: BROWSERISH })
+    let attempt = await fetch(candidate, { redirect: 'follow', headers: BROWSERISH })
       .catch(() => null);
+
+    // api.onedrive.com answers a business link with 308 and the real address in
+    // the body rather than in a Location header, so fetch has nothing to follow.
+    if (attempt?.status === 308) {
+      const where = await attempt.json().catch(() => null);
+      const next = where?.redirectUri || attempt.headers.get('location');
+      if (next) {
+        attempt = await fetch(next, { redirect: 'follow', headers: BROWSERISH }).catch(() => null);
+      }
+    }
+
     const type = attempt?.headers.get('content-type') || '';
     if (attempt?.ok && !type.includes('text/html')) {
       console.log(`  opened via the ${how}`);
