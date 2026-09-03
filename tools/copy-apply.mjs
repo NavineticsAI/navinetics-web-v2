@@ -139,21 +139,48 @@ const preview = [];
 
 for (const [file, edits] of byFile) {
   const src = readFileSync(file, 'utf8');
+
+  /* WHERE each string is, worked out NOW, from the file as it is.
+   *
+   * The manifest carries offsets, and they were the plan: record the exact
+   * bytes at export and write to them later. They are not portable. Exported on
+   * Windows the file is CRLF; checked out on a Linux runner it is LF, so every
+   * offset past the first newline is wrong by the number of lines above it and
+   * the file hash never matches. The guard fired on every single run and
+   * reported "the file changed since the document was exported" about a file
+   * nobody had touched.
+   *
+   * So the manifest says WHICH string — by astPath, which is structural and
+   * survives reformatting — and the file itself says where. Offsets become a
+   * record of where it was, not an instruction about where to write, and a
+   * whole class of staleness stops existing. Protection against a genuinely
+   * stale document lives in the three-way comparison in copy-import.py, which
+   * is where it belongs. */
   const live = extractFile(file);
-  if (live.hash !== manifest.files[file]) {
-    skippedFiles += 1;
-    refused.push([file, `${edits.length} edits`,
-      'the file changed since the document was exported, so the recorded '
-      + 'positions no longer point at the right text. Re-run copy-export.mjs, '
-      + 'rebuild the document, and re-apply.']);
-    continue;
-  }
+  const here = new Map(live.entries.map((x) => [x.astPath, x]));
   const eol = src.includes('\r\n') ? '\r\n' : '\n';
 
-  // Last first: an earlier replacement must never move a later one's offsets.
-  edits.sort((a, b) => b.e.start - a.e.start);
-  let next = src;
+  const placed = [];
   for (const { e, after, label } of edits) {
+    const at = here.get(e.astPath);
+    if (!at) {
+      refused.push([file, label,
+        'this sentence is no longer where the document says it is — the code '
+        + 'around it has been restructured. Re-export, rebuild the document, '
+        + 'and it will line up again.']);
+      continue;
+    }
+    placed.push({ e: { ...e, start: at.start, end: at.end, line: at.line }, after, label });
+  }
+  if (!placed.length) {
+    skippedFiles += 1;
+    continue;
+  }
+
+  // Last first: an earlier replacement must never move a later one's offsets.
+  placed.sort((a, b) => b.e.start - a.e.start);
+  let next = src;
+  for (const { e, after, label } of placed) {
     const replacement = render(e, after, eol);
     preview.push({ file, line: e.line, label, was: src.slice(e.start, e.end), now: replacement });
     next = next.slice(0, e.start) + replacement + next.slice(e.end);

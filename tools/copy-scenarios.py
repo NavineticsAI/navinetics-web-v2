@@ -289,26 +289,33 @@ def main():
     revert()
     subprocess.run(['node', 'tools/copy-export.mjs'], capture_output=True, encoding='utf-8', errors='replace')
 
-    # ── the source moved while the document was out ─────────────────────────
-    # Somebody edits the copy in code during a two-week review. The recorded
-    # positions no longer point at the right text, and writing at them would
-    # corrupt the file silently.
-    build_docx(switch='YES', edits=[(plain['id'], 'An edit made against a stale document.', True)])
+    # ── the source is reformatted while the document is out ─────────────────
+    # This used to be fatal: the manifest recorded byte offsets, so a line
+    # added above a string moved it and the whole file was skipped. Those
+    # offsets were not even portable between machines - exported on Windows the
+    # file is CRLF, checked out on a Linux runner it is LF, and every offset
+    # past the first newline is wrong. It refused every run in CI while
+    # reporting that a file nobody had touched had changed.
+    #
+    # Offsets are re-derived at apply time now and the manifest only says
+    # WHICH string, so this must SUCCEED and land in the right place.
+    build_docx(switch=None, edits=[(plain['id'], 'An edit applied to a reformatted file.', True)])
     read(TMP)
     victim = plain['file']
     original = open(victim, encoding='utf-8').read()
     marker = '// a line added while the review was out' + chr(13) + chr(10)
     open(victim, 'w', encoding='utf-8', newline='').write(marker + original)
-    r = subprocess.run(['node', 'tools/copy-apply.mjs', '--changes', OUT, '--apply', '--force'],
-                       capture_output=True, text=True, encoding='utf-8', errors='replace')
-    out = r.stdout + r.stderr
-    refused_stale = 'changed since' in out or 'NOT APPLIED' in out
-    unchanged = open(victim, encoding='utf-8').read().count('An edit made against a stale document.') == 0
+    ok_apply, _ = apply_for_real()
+    subprocess.run(['node', 'tools/copy-export.mjs'], capture_output=True,
+                   encoding='utf-8', errors='replace')
+    landed = next((e for e in manifest()['entries'] if e['id'] == plain['id']), None)
+    results.append((bool(ok_apply and landed and landed['text'] == 'An edit applied to a reformatted file.'),
+                    'source reformatted since the document was made',
+                    'offsets are re-derived, so the edit still lands correctly',
+                    {'built': ok_apply, 'value': (landed or {}).get('text', '')[:48]}, ''))
     revert()
-    subprocess.run(['node', 'tools/copy-export.mjs'], capture_output=True, encoding='utf-8', errors='replace')
-    results.append((refused_stale and unchanged, 'source changed since the document was made',
-                    'must skip the file whole, not write at stale positions',
-                    {'refused': refused_stale, 'file left alone': unchanged}, ''))
+    subprocess.run(['node', 'tools/copy-export.mjs'], capture_output=True,
+                   encoding='utf-8', errors='replace')
 
     # ── the site moved on while the document was out ────────────────────────
     # THE WORST BUG THIS SUITE FOUND. The importer compared the reviewer's cell
@@ -346,23 +353,30 @@ def main():
                     'refuse both rather than silently discard one',
                     {'reported': g4['refused_kinds'], 'applied anyway': len(applied)}, ''))
 
-    # ── a document with no version stamp ─────────────────────────────────────
-    # Anything made before stamping existed cannot be compared safely.
+    # ── nothing to compare against ──────────────────────────────────────────
+    # No version stamp is fine while copy/baselines/last.json exists - that is
+    # the better baseline anyway, being what the document said last time rather
+    # than what it was built from. With NEITHER there is no way to tell an edit
+    # from the site having moved on, and it must refuse rather than guess.
     import zipfile as _zip
-    build_docx(switch='YES', edits=[(plain['id'], 'An edit in an unstamped document.', True)])
+    build_docx(switch=None, edits=[(plain['id'], 'An edit in an unstamped document.', True)])
     with _zip.ZipFile(TMP) as zf:
         names = zf.namelist()
         blobs = {n: zf.read(n) for n in names}
-    blobs['word/document.xml'] = blobs['word/document.xml'].replace(
-        b'BASE:', b'XXXX:')
+    blobs['word/document.xml'] = blobs['word/document.xml'].replace(b'BASE:', b'XXXX:')
     with _zip.ZipFile(TMP, 'w', _zip.ZIP_DEFLATED) as zf:
         for n in names:
             zf.writestr(n, blobs[n])
-    r3 = read(TMP)
-    g5 = gates(r3)
+    last, aside = 'copy/baselines/last.json', 'copy/baselines/last.json.aside'
+    had = os.path.exists(last)
+    if had:
+        os.rename(last, aside)
+    g5 = gates(read(TMP))
+    if had:
+        os.rename(aside, last)
     results.append(('no document version' in g5['refused_kinds'] and not would_publish(g5),
-                    'document carries no version stamp',
-                    'cannot be compared safely, so nothing is applied',
+                    'no version stamp and no previous document',
+                    'nothing to compare against, so nothing is applied',
                     {'reported': g5['refused_kinds']}, ''))
 
     # ── the archive and baselines must be committable ────────────────────────
