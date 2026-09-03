@@ -102,7 +102,16 @@ if (SHARE) {
   const url = new URL(SHARE);
   url.searchParams.set('download', '1');
 
-  const res = await fetch(url, { redirect: 'follow' });
+  // SharePoint refuses a request that does not look like a browser — no
+  // User-Agent gets 403 Forbidden whatever the sharing permissions are, which
+  // reads exactly like "this link is private" and is not. Node's fetch sends
+  // none, so say something.
+  const BROWSERISH = {
+    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+      + '(KHTML, like Gecko) Chrome/126.0 Safari/537.36',
+    accept: '*/*',
+  };
+  const res = await fetch(url, { redirect: 'follow', headers: BROWSERISH });
   if (!res.ok) {
     console.error('\n  That share link did not open.');
     console.error('  It has to be an "Anyone with the link" share. A link only people in');
