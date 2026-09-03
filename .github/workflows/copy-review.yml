@@ -39,10 +39,18 @@ name: Publish reviewed copy
 
 on:
   schedule:
-    # 06:00 UTC — before the working day in Rochester, so anything set to YES
-    # the previous afternoon is live by morning.
+    # Twice a day. 06:00 UTC is around midnight in Rochester, so anything edited
+    # during the afternoon is live by morning; 18:00 UTC is around noon there,
+    # which catches the morning's work before the day ends. Neither run does
+    # anything if the document was saved in the last few hours.
     - cron: '0 6 * * *'
+    - cron: '0 18 * * *'
   workflow_dispatch:
+    inputs:
+      ignore_quiet_period:
+        description: 'Publish even if the document was saved in the last few hours'
+        type: boolean
+        default: false
   push:
     paths: ['copy/incoming/*.docx']
 
@@ -88,6 +96,9 @@ jobs:
           # Either one link, or the four app-registration values. See the top of
           # tools/copy-fetch.mjs. The link is the one that needs no administrator.
           REVIEW_DOC_URL: ${{ secrets.REVIEW_DOC_URL }}
+          # A scheduled run waits for the document to go quiet. Somebody
+          # clicking Run workflow has decided it is ready, so let them say so.
+          REVIEW_QUIET_HOURS: ${{ inputs.ignore_quiet_period && '0' || '4' }}
           AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
           AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
           AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
