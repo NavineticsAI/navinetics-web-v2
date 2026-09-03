@@ -50,7 +50,6 @@ import d1Hero from '../assets/d1/hero.webp';
 import d1Detail from '../assets/d1/detail.webp';
 import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
-import table from '../assets/or-tables/table.webp';
 import swFusion from '../assets/software/fusion.webp';
 import swNbar from '../assets/software/nbar.webp';
 import swAcpc from '../assets/software/acpc.webp';
