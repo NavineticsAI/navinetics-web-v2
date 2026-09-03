@@ -231,7 +231,7 @@ const LIBRARY = {
 };
 
 const parts = [];
-const manifest = { generated_from: sha(files.join(',')), files: {}, entries: [] };
+const manifest = { generated_from: '', files: {}, entries: [] };
 let dropped = 0;
 
 const collect = (file, part) => {
@@ -388,6 +388,27 @@ for (const e of manifest.entries) {
 }
 
 manifest.parts = parts;
+/* ── the export id, and the baseline it names ─────────────────────────────
+   A returned document is compared against THREE texts, not two: what it was
+   born from, what the reviewer typed, and what is live now. Without the
+   first, any row that differs from live reads as an edit — so a document
+   made before a correction was published, submitted afterwards untouched,
+   silently puts the old wording back. Measured: one change recorded, zero
+   refusals, and with nobody in the loop it reaches the site.
+
+   The id is CONTENT-ADDRESSED — a hash of every id:text pair — so it changes
+   exactly when the copy changes and never otherwise. The previous value
+   hashed the list of filenames, which is the same for two exports six
+   months apart. */
+manifest.generated_from = sha(manifest.entries.map((e) => `${e.id}:${e.text}`).join(' '));
+
+mkdirSync(resolve(ROOT, outDir, "baselines"), { recursive: true });
+writeFileSync(
+  resolve(ROOT, outDir, "baselines", `${manifest.generated_from}.json`),
+  `${JSON.stringify(Object.fromEntries(manifest.entries.map((e) => [e.id, e.text])))}
+`,
+);
+
 mkdirSync(resolve(ROOT, outDir), { recursive: true });
 const outFile = resolve(ROOT, outDir, 'copy-manifest.json');
 writeFileSync(outFile, `${JSON.stringify(manifest, null, 1)}\n`);

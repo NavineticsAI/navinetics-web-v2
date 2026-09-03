@@ -20,6 +20,7 @@ to remember to accept their own changes before sending the file back.
 """
 import argparse
 import json
+import os
 import re
 import sys
 import zipfile
@@ -29,6 +30,8 @@ W = '{http://schemas.openxmlformats.org/wordprocessingml/2006/main}'
 ANCHOR = re.compile(r'⟦([0-9a-f]{8})⟧')
 # The switch on the cover. Nothing downstream acts until this says YES.
 SWITCH = '⟦PUBLISH⟧'
+# The export the document was built from, stamped on its cover.
+BASE = re.compile(r'⟦BASE:([0-9a-f]{40})⟧')
 YES = re.compile(r'^\s*(yes|y|publish|go|true|ok)\b', re.I)
 SLOT = re.compile(r'\{(\d+)\}')
 
@@ -78,6 +81,10 @@ def read_docx(path):
         doc = ET.fromstring(zf.read('word/document.xml'))
         comments = read_comments(zf)
 
+    whole = ''.join(t.text or '' for t in doc.iter(f'{W}t'))
+    mb = BASE.search(whole)
+    base_id = mb.group(1) if mb else None
+
     rows = {}
     dupes = []
     row_comments = {}
@@ -105,7 +112,7 @@ def read_docx(path):
     # have left one on a heading to say a whole section should go.
     attached = {c['text'] for lst in row_comments.values() for c in lst}
     loose = [c for c in comments.values() if c['text'] not in attached]
-    return rows, dupes, row_comments, loose, publish
+    return rows, dupes, row_comments, loose, publish, base_id
 
 
 def main():
@@ -121,9 +128,28 @@ def main():
     index = {e['id']: e for e in manifest['entries']}
     parts = {p['key']: p for p in manifest['parts']}
 
-    rows, dupes, row_comments, loose, publish = read_docx(a.docx)
-
     changes, problems = [], []
+
+    rows, dupes, row_comments, loose, publish, base_id = read_docx(a.docx)
+
+    # The copy AS IT WAS when this document was made. Without it every
+    # comparison is two-way and a stale document reverts published text.
+    baseline = None
+    if base_id:
+        bp = os.path.join(os.path.dirname(a.manifest), 'baselines', base_id + '.json')
+        if os.path.exists(bp):
+            with open(bp, encoding='utf-8') as f:
+                baseline = json.load(f)
+        else:
+            problems.append(('baseline missing', base_id[:8], '',
+                             'this document names an export whose record is not in '
+                             'copy/baselines/. Without it there is no way to tell a '
+                             'reviewer edit from the site having moved on, so nothing '
+                             'is applied'))
+    elif index:
+        problems.append(('no document version', '', '',
+                         'this document carries no version stamp — it predates them. '
+                         'Re-export and send a fresh one'))
 
     for cid in dupes:
         problems.append(('duplicate row', cid, index.get(cid, {}).get('label', '?'),
@@ -136,9 +162,28 @@ def main():
                              'not in this manifest — the document was built from a '
                              'different export'))
             continue
-        before = e['text']
-        if after == before:
+        live = e['text']
+        # THREE TEXTS, NOT TWO. `origin` is what this document was built from;
+        # `live` is what the site says now. Comparing only the cell against the
+        # site cannot tell "the reviewer changed this" from "the site moved on
+        # while they had the document open" — and treats the second as the
+        # first, so a document made before a correction was published and
+        # returned afterwards silently puts the old wording back. Measured on
+        # this repo: one change recorded, zero refusals, straight to the site.
+        origin = baseline.get(cid, live) if baseline else live
+        if after == origin:
+            # The reviewer did not touch this row. Whatever the site says now
+            # is right, and this document has no opinion about it.
             continue
+        if after == live:
+            continue
+        if baseline and live != origin:
+            problems.append(('changed on both sides', cid, e['label'],
+                             'this text was edited in the document AND changed on '
+                             'the site since the document was made. Applying either '
+                             'would silently discard the other, so neither is'))
+            continue
+        before = live
         if not after.strip():
             problems.append(('emptied', cid, e['label'],
                              'the cell was emptied. Removing text needs a code change '

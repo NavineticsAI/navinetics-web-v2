@@ -15,3 +15,9 @@ copy-changes.json
 # applies it. Without this exception the Power Automate flow pushes a file git
 # silently ignores and nothing ever happens.
 !incoming/*.docx
+
+# …and the archive of what was actually published, which the workflow commits
+# and the commit message promises is kept. Without this exception `git add`
+# stages nothing, the file is thrown away with the runner, and the record
+# does not exist while claiming to.
+!published/*.docx

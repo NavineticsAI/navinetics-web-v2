@@ -75,12 +75,24 @@ jobs:
         run: |
           # Word leaves a ~$<name> lock file beside an open document. It is not a
           # document, and it sorts late enough to be picked by accident.
-          f=$(ls -t copy/incoming/*.docx 2>/dev/null | grep -v '/~\$' | head -1)
-          if [ -z "$f" ]; then
+          # NOT `ls -t`: actions/checkout writes every file in the same
+          # millisecond, so with two documents the newest is a coin toss and
+          # the loser stays in the repo, republishable by a manual run.
+          shopt -s nullglob
+          docs=(copy/incoming/*.docx)
+          docs=("${docs[@]//*\/~\$*/}")
+          n=${#docs[@]}
+          if [ "$n" -eq 0 ]; then
             echo "No document in copy/incoming/ — nothing to do."
             echo "found=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
+          if [ "$n" -gt 1 ]; then
+            echo "::error::$n documents in copy/incoming/. Which one is meant is a guess, so nothing was published."
+            printf '  %s\n' "${docs[@]}"
+            exit 1
+          fi
+          f="${docs[0]}"
           echo "Using $f"
           echo "found=$f" >> "$GITHUB_OUTPUT"
 
@@ -152,11 +164,14 @@ jobs:
       - name: Publish
         if: steps.doc.outputs.found != '' && steps.edits.outputs.publish == 'true' && steps.edits.outputs.count != '0'
         run: |
+          # The document has been dealt with: move it out of incoming/ so a
+          # manual re-run cannot publish the same round twice.
+          git rm -q "${{ steps.doc.outputs.found }}"
           git add src copy/copy-manifest.json copy/published
           # src/, the manifest and the archive only. If anything else moved,
           # something is wrong with the run rather than with the copy, and it
           # must not reach the site.
-          if ! git diff --cached --quiet -- ':!src' ':!copy/copy-manifest.json' ':!copy/published'; then
+          if ! git diff --cached --quiet -- ':!src' ':!copy/copy-manifest.json' ':!copy/published' ':!copy/incoming'; then
             echo "::error::Staged changes outside src/ — refusing to publish."
             git diff --cached --name-only
             exit 1

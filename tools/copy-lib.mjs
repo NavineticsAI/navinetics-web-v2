@@ -454,4 +454,15 @@ export function extractFile(file) {
 }
 
 /** Short, stable id for one string: position in the structure, never content. */
-export const idFor = (e) => sha(`${e.file}|${e.astPath}|${e.kind}`).slice(0, 8);
+/**
+ * Short, stable id for one string: WHERE it is, never what it is or how it is
+ * written.
+ *
+ * `kind` used to be part of this, and that was a bug with a delayed fuse. A
+ * reviewer who shortens a long paragraph enough that it no longer needs
+ * wrapping turns a `concat` into a plain literal — same sentence, same place,
+ * different kind, and so a different id. The row's code in their document then
+ * matches nothing, the next edit to it is refused as an unknown id, and under
+ * the all-or-nothing rule their whole round of changes stops. Position alone.
+ */
+export const idFor = (e) => sha(`${e.file}|${e.astPath}`).slice(0, 8);

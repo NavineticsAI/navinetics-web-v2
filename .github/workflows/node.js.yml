@@ -3,6 +3,14 @@ name: Deploy website to GitHub Pages
 on:
   push:
     branches: [main]
+    # Not on every commit. Power Automate commits the review document to
+    # main on each of Word's autosaves, and without this each one fires a
+    # full Pages deploy and cancels the one in flight. Deploy when the SITE
+    # changes; the copy workflow's own push touches src/ and is covered.
+    paths-ignore:
+      - 'copy/**'
+      - 'documentation/**'
+      - '**/*.md'
   workflow_dispatch:
 
 permissions:

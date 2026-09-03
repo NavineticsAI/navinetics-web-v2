@@ -313,3 +313,57 @@ npm run copy:publish -- reviewed.docx --publish    # apply, build, commit, push
 
 It refuses if the document's cover still says NO — the operator's intent and the
 reviewer's have to agree.
+
+---
+
+## 10 · Three texts, not two
+
+A returned document is compared against **what it was born from**, not only
+against what the site says now.
+
+Every export writes `copy/baselines/<export-id>.json` — the copy exactly as it
+was — and stamps that id on the document's cover. The id is a hash of every
+`id:text` pair, so it changes when the copy changes and never otherwise.
+
+**Why it has to work this way.** Without a baseline there are only two texts, and
+two texts cannot tell *"the reviewer changed this"* from *"the site moved on
+while they had the document open"*. It treats the second as the first. Measured
+on this repo before the fix: a document made before a correction was published,
+returned afterwards **completely untouched**, silently put the old wording back —
+one change recorded, zero refusals, and with nobody in the loop it reached the
+site.
+
+With three texts:
+
+| document vs baseline | site vs baseline | what happens |
+|---|---|---|
+| same | anything | **ignored** — the reviewer did not touch it |
+| different | same | **applied** — a genuine edit |
+| different | different | **refused** — both changed; applying either discards the other |
+
+The last row is a new refusal, `changed on both sides`. Like every other
+refusal it stops the whole round, because nobody is reading the log.
+
+`copy/baselines/` is committed. A document naming a baseline that is not there
+is refused rather than guessed at, and so is a document carrying no stamp.
+
+---
+
+## 11 · Four things that were wrong and are tested now
+
+`npm run copy:scenarios` — 27 scenarios, each building a real document and
+running the real tools. Publishing scenarios are applied to real source, built,
+and reverted. Four of them exist because the thing they test was broken:
+
+| what was wrong | what it caused |
+|---|---|
+| the id included the string's *kind* | a reviewer who shortened a long paragraph enough to stop it wrapping changed its kind, so its code changed, so their next edit to that row was refused as unknown — and under all-or-nothing their whole round stopped |
+| two-way comparison | §10 — silent reverts |
+| `copy/published/` was gitignored | `git add` staged nothing, the archive was thrown away with the runner, and the commit message said it was kept. **Solved on paper and absent in fact.** |
+| the deploy ran on every push to `main` | Power Automate commits the document on each of Word's autosaves, so each one fired a full Pages deploy and cancelled the one in flight |
+
+Two more, found by reading rather than by test: the cover claimed the switch
+resets itself, which nothing did; and `ls -t` picked between two documents in
+`copy/incoming/` arbitrarily, because checkout writes every file in the same
+millisecond. The workflow now refuses when there is more than one, and removes
+the document it has dealt with so a manual re-run cannot publish a round twice.

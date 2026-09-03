@@ -150,57 +150,107 @@ def build(manifest, out_path, generated_on):
     dead = [e for e in entries if e.get('rendered') is False]
     parts = [p for p in manifest['parts'] if p['count']]
 
-    # ── cover ────────────────────────────────────────────────────────────────
+    # ── cover ────────────────────────────────────────────────────────────
+    # THIS PAGE IS THE PRODUCT. Everything else is a table. Five directors and
+    # a regulatory consultant will read this once, in a hurry, six months apart,
+    # and nobody will explain it to them — so it is three numbered steps, in
+    # order, with the thing they must do LAST given its own box. The earlier
+    # draft opened with four rules and a switch and a section on searching, and
+    # buried the one action that makes anything happen.
     run(para(doc, space_after=2), 'NaviNetics website', size=26, bold=True)
-    run(para(doc, space_after=2), 'Every word on the site, for review', size=14, color=ACTION)
-    run(para(doc, space_after=18), f'{generated_on}   ·   {len(live)} pieces of text', size=9, color=GREY)
+    run(para(doc, space_after=3), 'Every word on the site, for review', size=14, color=ACTION)
+    run(para(doc, space_after=4),
+        f'{generated_on}   ·   {len(live)} pieces of text', size=9, color=GREY)
+    run(para(doc, space_after=16),
+        'Change the wording here and it goes onto the website. Nobody has to '
+        'retype anything, and you do not need any software except Word.',
+        size=10.5, color=GREY)
+
+    run(para(doc, space_after=9), 'How to use this document', size=14, bold=True, color=ACTION)
+
+    steps = [
+        ('Turn on Track Changes.',
+         'Review ▸ Track Changes. Do this first, so we can see who changed what. '
+         'If it is off your edits still work, but they arrive with no name on them.'),
+        ('Edit the right-hand column. Only that column.',
+         'The grey column on the left is the address of each piece of text — which page '
+         'it is on and what it is. It is how your wording finds its way back to the '
+         'website. Change it and that edit is lost.'),
+        ('When you have finished, change NO to YES below, and save.',
+         'Nothing reaches the website until you do. Edit and save as much as you like '
+         'first — for an hour, over a week — and nothing happens.'),
+    ]
+    for n, (what, why) in enumerate(steps, 1):
+        pp = para(doc, space_after=2)
+        run(pp, f'{n}.  ', size=12, bold=True, color=ACTION)
+        run(pp, what, size=12, bold=True)
+        b = para(doc, space_after=9, indent=0.3)
+        run(b, why, size=10, color=GREY)
 
     # ── the publish switch ───────────────────────────────────────────────
-    # Word autosaves to OneDrive every few seconds. If every save published,
-    # twenty minutes of editing would be fifty builds. This is the reviewer
-    # saying "I have finished" — one cell, two words, no macro, no button, no
-    # add-in, nothing to install. Everything downstream reads this cell first
-    # and stops immediately if it does not say YES.
-    run(para(doc, space_after=6),
-        'When you have finished, change NO to YES and save.',
-        size=11, bold=True, color=ACTION)
+    # Word autosaves to OneDrive every few seconds. Without this, twenty minutes
+    # of editing would publish fifty times. It is the reviewer saying "I have
+    # finished" — one cell, no macro, no button, no add-in, nothing to install,
+    # because a macro would run on their laptop and their laptop has no copy of
+    # the website.
     sw = doc.add_table(rows=1, cols=2)
     sw.autofit = False
     borders(sw)
     left, right = sw.rows[0].cells
     lp = left.paragraphs[0]
     lp.paragraph_format.space_after = Pt(0)
-    run(lp, 'Publish to the website', size=10, bold=True)
+    run(lp, 'Publish to the website', size=11, bold=True)
     code = left.add_paragraph()
     code.paragraph_format.space_after = Pt(0)
     run(code, '⟦PUBLISH⟧', size=7, color=GREY, font='Consolas')
     shade(left, BAND)
     rp = right.paragraphs[0]
     rp.paragraph_format.space_after = Pt(0)
-    run(rp, 'NO', size=14, bold=True)
-    left.width = Inches(1.7)
-    right.width = Inches(5.2)
-    run(para(doc, space_before=6, space_after=16),
-        'It goes back to NO by itself once your changes are published. '
-        'Until it says YES, you can edit and save as much as you like and '
-        'nothing happens.', size=9.5, color=GREY)
+    run(rp, 'NO', size=20, bold=True)
+    run(rp, '        ← change to YES when you are done', size=9.5, color=GREY)
+    left.width = Inches(2.2)
+    right.width = Inches(4.7)
+    run(para(doc, space_before=7, space_after=4),
+        'Your changes appear on the website a few minutes later. Set it back to '
+        'NO afterwards, so the next round is deliberate too.', size=10, color=GREY)
+    # The export this document was built from. Everything the reviewer types is
+    # compared against the copy AS IT WAS THEN, not as it is now — see s5 of the
+    # spec. Without it a document made before a correction was published, and
+    # returned after, silently puts the old wording back.
+    bp = para(doc, space_after=16)
+    run(bp, 'Document version ', size=8, color=GREY)
+    run(bp, f'⟦BASE:{manifest["generated_from"]}⟧', size=7, color=GREY, font='Consolas')
 
-    run(para(doc, space_after=8), 'Four rules', size=13, bold=True, color=ACTION)
-    for n, (rule, why) in enumerate([
-        ('Turn on Track Changes before you type.', 'Review ▸ Track Changes'),
-        ('Edit the right-hand column only.', 'the left column is how your edit finds its page'),
-        ('Do not add or delete rows.', 'to remove or add text, leave a comment instead'),
-        ('Keep any {1} exactly as it is.', 'the website fills those in'),
-    ], 1):
-        p = para(doc, space_after=5)
-        run(p, f'{n}.  ', size=10.5, bold=True, color=ACTION)
-        run(p, rule, size=10.5, bold=True)
-        run(p, f'   {why}', size=9.5, color=GREY)
+    run(para(doc, space_after=6), 'Two things to avoid', size=13, bold=True, color=ACTION)
+    for what, why in [
+        ('Do not add or delete rows.',
+         'To have a sentence removed, or a new one added, leave a comment instead '
+         '(Review ▸ New Comment). Both need a change to the page itself, which we '
+         'will make.'),
+        ('Keep anything written like {1} exactly as it is.',
+         'The website fills those in — a name, a number, a year. Move the words '
+         'around them freely, but every {1} has to stay, in the same order.'),
+    ]:
+        pp = para(doc, space_after=2)
+        run(pp, '•  ', size=11, bold=True, color=ACTION)
+        run(pp, what, size=11, bold=True)
+        b = para(doc, space_after=8, indent=0.3)
+        run(b, why, size=10, color=GREY)
 
-    run(para(doc, space_before=14, space_after=2), 'How to find something', size=13, bold=True, color=ACTION)
+    run(para(doc, space_before=6, space_after=3), 'Finding what you want to change',
+        size=13, bold=True, color=ACTION)
     run(para(doc, space_after=4),
-        'Ctrl+F and paste the sentence you are looking for. Or use the contents '
-        'below — pages are in the same order as the website menu.', size=10, color=GREY)
+        'Ctrl+F and paste in the sentence you are looking for. Or use the contents '
+        'on the next page — the pages are in the same order as the website menu, '
+        'and each one says its web address.', size=10, color=GREY)
+
+    run(para(doc, space_before=10, space_after=3), 'If something cannot be done',
+        size=13, bold=True, color=ACTION)
+    run(para(doc, space_after=4),
+        'Nothing is applied unless all of it can be. If one of your changes cannot '
+        'go through — a {1} was lost, or a page changed while you had this open — '
+        'then none of them do, and Shubham is told why. You will not get half of '
+        'an edit.', size=10, color=GREY)
 
     # ── contents ─────────────────────────────────────────────────────────────
     doc.add_page_break()
