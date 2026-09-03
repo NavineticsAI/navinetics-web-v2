@@ -401,6 +401,30 @@ def main():
         results.append((taken == expect_taken, f'saved {hours}h ago',
                         why, {'decision': got}, ''))
 
+    # ── the documents this harness builds must open in Word ─────────────────
+    # They did not. Rewriting word/document.xml with ElementTree and rezipping
+    # loses something Word needs, and every scenario still passed because the
+    # importer reads the XML directly and does not care. Word answers "found
+    # unreadable content", which is what a reviewer would have seen.
+    #
+    # A full check needs Word. What can be checked without it: the parts a .docx
+    # must contain, and that the XML declares the namespaces it uses.
+    import zipfile as _z
+    build_docx(switch=None, edits=[(plain['id'], 'A document Word has to be able to open.', True)])
+    with _z.ZipFile(TMP) as zf:
+        names = set(zf.namelist())
+        xml = zf.read('word/document.xml').decode('utf-8', 'replace')
+        broken = zf.testzip()
+    required = {'[Content_Types].xml', '_rels/.rels', 'word/document.xml',
+                'word/_rels/document.xml.rels'}
+    missing_parts = required - names
+    declared = 'xmlns:w=' in xml[:2000]
+    results.append((not broken and not missing_parts and declared,
+                    'the document this harness builds is a valid .docx',
+                    'the importer reading it is not the same as Word opening it',
+                    {'zip ok': broken is None, 'missing parts': sorted(missing_parts),
+                     'namespaces declared': declared}, ''))
+
     # ── report ──────────────────────────────────────────────────────────────
     print(f'  {"":4}{"scenario":<44}{"publishes?":<12}why')
     print('  ' + '-' * 96)
