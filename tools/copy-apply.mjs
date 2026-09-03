@@ -9,13 +9,14 @@
  * from reading the document so that reading one is never accidentally a write.
  * It refuses by default: without --apply it prints the patch and exits.
  *
- * THE SAFETY THAT MATTERS. Every edit is applied to a BYTE RANGE recorded at
- * export. If the file has changed at all since then — someone pushed a copy fix
- * while the document was out for review, which on a two-week review is likely —
- * those offsets now point at the wrong characters, and applying them would
- * corrupt the file silently. So each file's hash is checked first and the whole
- * file is skipped if it moved. Re-export, rebuild the document, and the review
- * can be re-applied against the new offsets.
+ * WHERE A SENTENCE IS, is worked out from the file as it is now — the manifest
+ * says WHICH string, by its position in the structure, and not where its bytes
+ * were. Recorded offsets do not survive a reformat or even a different line
+ * ending; the note beside extractFile below has what that cost.
+ *
+ * Asked to write and writing nothing is a FAILURE and exits like one. It used to
+ * report its refusals and exit 0, which let everything downstream treat a review
+ * that applied none of its edits as a review that had been published.
  *
  * Ranges within a file are applied LAST FIRST, so that replacing one string
  * never shifts the offsets of the ones not yet written.
@@ -202,6 +203,21 @@ if (preview.length > 40) console.log(`  ... and ${preview.length - 40} more\n`);
 if (refused.length) {
   console.log('\n  NOT APPLIED');
   for (const [a, b, why] of refused) console.log(`  ${a}  (${b})\n      ${why}`);
+}
+
+/* REFUSING IS A FAILURE, and has to exit like one.
+ *
+ * This reported its refusals and exited 0. The workflow read that as success,
+ * carried on, and recorded "this is what the document said" — so the next run
+ * compared the document against itself, found no difference, and the reviewer's
+ * edit became permanently invisible. It had to be dug out of a log.
+ *
+ * Asked to write and wrote nothing: that is a failure. */
+if (APPLY && changes.length && !written) {
+  console.error(`
+  ${changes.length} change(s) to make and none could be made.
+`);
+  process.exit(1);
 }
 
 if (!APPLY) {

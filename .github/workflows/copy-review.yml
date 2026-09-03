@@ -190,9 +190,13 @@ jobs:
       # Without this the NEXT review is built against positions that have moved,
       # and every one of its edits is refused as "the file changed since export".
       # What this document said, so the NEXT one is compared against it rather
-      # than against the export it was built from. Written only here, after the
-      # edits have actually been applied - a dry run writing it would leave the
-      # next real run seeing nothing to do.
+      # than against the export it was built from.
+      #
+      # ONLY once the edits have actually been written. A dry run writing it, or
+      # a failed apply writing it, leaves the next run comparing the document
+      # against itself: no difference, nothing to do, and the reviewer's edit
+      # gone for good. That happened - copy-apply reported its refusals and
+      # exited 0, so this step ran anyway. It exits non-zero now.
       - name: Remember what this document said
         if: steps.doc.outputs.found != '' && steps.edits.outputs.count != '0'
         run: python tools/copy-import.py "${{ steps.doc.outputs.found }}" --json /tmp/ignore.json --snapshot copy/baselines/last.json --quiet
