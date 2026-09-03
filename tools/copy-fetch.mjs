@@ -94,38 +94,68 @@ const save = async (res, name, quietFor, by) => {
    address by base64url-encoding it behind `u!`, which is Microsoft's own
    scheme for it. */
 if (SHARE) {
-  // `download=1` on the share link itself. The tidier route — base64url the
-  // link behind `u!` and ask api.onedrive.com — is the documented one and it
-  // only serves personal OneDrive: a business link (…-my.sharepoint.com) comes
-  // back 308 "User migrated", pointing at Graph, which wants a sign-in this has
-  // no way to do. Appending download=1 works for both and needs nothing.
-  const url = new URL(SHARE);
-  url.searchParams.set('download', '1');
-
   // SharePoint refuses a request that does not look like a browser — no
   // User-Agent gets 403 Forbidden whatever the sharing permissions are, which
-  // reads exactly like "this link is private" and is not. Node's fetch sends
-  // none, so say something.
+  // reads exactly like "this link is private" and is not.
   const BROWSERISH = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
       + '(KHTML, like Gecko) Chrome/126.0 Safari/537.36',
     accept: '*/*',
   };
-  const res = await fetch(url, { redirect: 'follow', headers: BROWSERISH });
-  if (!res.ok) {
-    console.error('\n  That share link did not open.');
-    console.error('  It has to be an "Anyone with the link" share. A link only people in');
-    console.error('  the company can open needs a sign-in, which a scheduled job does not');
-    console.error('  have. Re-share it that way, or use the app registration instead —');
-    console.error('  see the comment at the top of this file.');
-    await die('Opening the share link', res);
+
+  /* THERE IS NO ONE URL THAT WORKS. A share link is a link to a VIEWER, not to
+     a file, and how to ask for the bytes instead depends on which product minted
+     it. `?download=1` is the answer everywhere on the internet and on a `:w:`
+     link it just opens the Word web viewer, which arrives as HTML and looks
+     exactly like a sign-in page. So: try each known form and take whichever
+     hands back something that is not a web page. */
+  const src = new URL(SHARE);
+  const candidates = [];
+
+  // 1. SharePoint's own download endpoint, built from the sharing token. The
+  //    reliable one for OneDrive for Business.
+  const token = /\/:[a-z]:\/[a-z]\/(?:personal|r|g)\/([^?]+)/i.exec(src.pathname)?.[1]
+    || /\/:[a-z]:\/[a-z]\/([^?]+)/i.exec(src.pathname)?.[1];
+  if (token) {
+    const parts = token.split('/');
+    const shareId = parts.pop();
+    candidates.push([`${src.origin}/${parts.join('/')}/_layouts/15/download.aspx?share=${shareId}`,
+      'SharePoint download endpoint']);
   }
 
-  const type = res.headers.get('content-type') || '';
-  if (type.includes('text/html')) {
-    console.error('\n  That link returned a web page rather than the document.');
-    console.error('  It is almost certainly a sign-in page, which means the share is not');
-    console.error('  set to "Anyone with the link". Re-share it that way.\n');
+  // 2. The documented shares API. Serves personal OneDrive; a business link
+  //    answers 308 "User migrated" and points at Graph, which wants a sign-in.
+  const b64 = `u!${Buffer.from(SHARE).toString('base64')
+    .replace(/=+$/, '').replaceAll('+', '-').replaceAll('/', '_')}`;
+  candidates.push([`https://api.onedrive.com/v1.0/shares/${b64}/root/content`, 'shares API']);
+
+  // 3. download=1, which does work on some link shapes.
+  const dl = new URL(SHARE);
+  dl.searchParams.set('download', '1');
+  candidates.push([dl.toString(), 'download=1']);
+
+  let res = null;
+  const tried = [];
+  for (const [candidate, how] of candidates) {
+    const attempt = await fetch(candidate, { redirect: 'follow', headers: BROWSERISH })
+      .catch(() => null);
+    const type = attempt?.headers.get('content-type') || '';
+    if (attempt?.ok && !type.includes('text/html')) {
+      console.log(`  opened via the ${how}`);
+      res = attempt;
+      break;
+    }
+    tried.push(`${how}: ${attempt ? `${attempt.status} ${type.split(';')[0] || 'no type'}` : 'no response'}`);
+  }
+
+  if (!res) {
+    console.error('\n  That share link did not give up the document.');
+    for (const t of tried) console.error(`    ${t}`);
+    console.error('');
+    console.error('  An HTML response is a viewer or a sign-in page. If the link opens for');
+    console.error('  you in a private browser window then the sharing is right and this is');
+    console.error('  a link shape not handled here — say so. If it asks you to sign in,');
+    console.error('  re-share it as "Anyone with the link".\n');
     process.exit(1);
   }
 
