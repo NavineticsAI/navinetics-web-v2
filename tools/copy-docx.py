@@ -34,6 +34,9 @@ ACTION = RGBColor(0x0B, 0x5F, 0x87)
 RULE = 'D9DCE0'
 BAND = 'F4F6F7'
 
+# Where the words in this document actually appear.
+SITE_URL = 'https://navineticsai.github.io/navinetics-web-v2/'
+
 
 def shade(cell, fill):
     el = OxmlElement('w:shd')
@@ -165,6 +168,37 @@ def build(manifest, out_path, generated_on):
         'Change the wording here and it goes onto the website. Nobody has to '
         'retype anything, and you do not need any software except Word.',
         size=10.5, color=GREY)
+
+    # The site itself, at the top. A reviewer reading a table of sentences with
+    # no way to see them in place is guessing at context, and the first thing
+    # anybody asks is "where does this appear". python-docx has no link helper,
+    # so the relationship and the w:hyperlink are added by hand.
+    lp = para(doc, space_after=16)
+    run(lp, 'The website: ', size=10.5, bold=True)
+    rel = doc.part.relate_to(
+        SITE_URL,
+        'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink',
+        is_external=True,
+    )
+    link = OxmlElement('w:hyperlink')
+    link.set(qn('r:id'), rel)
+    r = OxmlElement('w:r')
+    pr = OxmlElement('w:rPr')
+    for tag, val in (('w:color', '0B5F87'), ('w:sz', '21')):
+        el = OxmlElement(tag)
+        el.set(qn('w:val'), val if tag != 'w:sz' else '21')
+        pr.append(el)
+    u = OxmlElement('w:u')
+    u.set(qn('w:val'), 'single')
+    pr.append(u)
+    r.append(pr)
+    t = OxmlElement('w:t')
+    t.text = SITE_URL
+    r.append(t)
+    link.append(r)
+    lp._p.append(link)
+    run(lp, '   — open it beside this document, so you can see what you are '
+            'changing.', size=9.5, color=GREY)
 
     run(para(doc, space_after=9), 'How to use this document', size=14, bold=True, color=ACTION)
 
