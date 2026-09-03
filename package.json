@@ -23,7 +23,8 @@
     "preview:review": "vite build --mode review && vite preview",
     "copy:publish": "node tools/copy-publish.mjs",
     "copy:scenarios": "python tools/copy-scenarios.py",
-    "copy:fetch": "node tools/copy-fetch.mjs"
+    "copy:fetch": "node tools/copy-fetch.mjs",
+    "copy:drift": "node tools/copy-diff-reference.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

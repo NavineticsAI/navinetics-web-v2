@@ -21,3 +21,7 @@ copy-changes.json
 # stages nothing, the file is thrown away with the runner, and the record
 # does not exist while claiming to.
 !published/*.docx
+
+# The pristine copy and the published archive are kept, not ignored.
+!reference/*.json
+!baselines/*.json

@@ -17,7 +17,7 @@ import {
 
 export default function Home() {
   usePageMeta({
-    title: '123Precision stereotactic and neuromodulation devices',
+    title: 'Precision stereotactic and neuromodulation devices',
     description:
       'NaviNetics designs stereotactic and neuromodulation devices for functional neurosurgery, born from the Neural Engineering Laboratories at Mayo Clinic.',
   });
