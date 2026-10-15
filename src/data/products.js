@@ -116,7 +116,7 @@ export const products = [
     technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nComfortable.',
     summary:
-      'Arc-centered targeting from a Skull Anchor Key. Three axes to set the target, two rotations to reach it.',
+      'Five degrees of freedom are in an arc-centered targeting device attached to a patient with a Skull Anchor Key.. Three axes to set the target location and two rotational  to approach it safely.',
     intro:
       'The brief was a device robust enough for daily use and simple enough to trust, working '
       + 'across stereotactic and functional procedures — deep brain stimulation among them. It was '
@@ -337,7 +337,7 @@ export const products = [
        Stated first rather than appended, because a reader who stops after one
        clause should still have the important half. */
     summary:
-      'A pre-clinical research device: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact.',
+      'A pre-clinical research device to measure neuronal activity and neurotransmitter concentration: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact, eliciting data collection supporting neuronal based experiments.',
     /**
      * MAVEN is the product name — confirmed by NaviNetics. The copy below used
      * to be written around "the WINCS Harmoni Device" throughout; it now names

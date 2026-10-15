@@ -25,7 +25,7 @@ const founders = [
     /* Their title at NaviNetics. The "Co-Director" further down each bio is a
        different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
-    role: 'Co-CEO & Co-Founder',
+    role: 'Co-Founder',
     image: asset('/kendall-lee-150-500x400-1.jpg'),
     focus: '50% 0%',
     bio: [
@@ -45,7 +45,7 @@ const founders = [
     /* Their title at NaviNetics. The "Co-Director" further down each bio is a
        different job — the Mayo Clinic Neural Engineering Laboratories — and is
        correct as written. */
-    role: 'Co-CEO & Co-Founder',
+    role: 'Co-Founder',
     image: asset('/kevin-bennet.jpg'),
     focus: '50% 0%',
     bio: [
@@ -79,7 +79,7 @@ const founders = [
   },
   {
     name: 'Yoonbae Oh, Ph.D.',
-    role: 'Co-Founder',
+    role: 'CEO & Co-Founder',
     image: asset('/yoonbae-oh.jpg'),
     focus: '50% 0%',
     /* Short by comparison because it is only what NaviNetics has supplied: the
@@ -167,8 +167,7 @@ export default function Founders() {
           <span className="eyebrow text-action">Come and talk</span>
           <h2 className="text-d2">We would like to hear from you.</h2>
           <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            Whether you operate, run a laboratory, or cover a territory — the people above are the
-            people you would be working with.
+            Whether you are a neurosurgeon, run a laboratory, or cover a territory — the people above are the people you would be working with.
           </p>
           <div className="mt-2 flex flex-wrap justify-center gap-3">
             <Button to="/contact" size="lg" arrow>

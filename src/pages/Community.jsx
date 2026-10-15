@@ -51,7 +51,7 @@ const REASONS = [
 const FACTS = [
   { k: 'Address', v: '206 S Broadway, Suite 700', note: 'Downtown Rochester, MN 55904' },
   { k: 'Region', v: 'Southeast Minnesota', note: 'Olmsted County' },
-  { k: 'Minneapolis–Saint Paul', v: '124 km', note: 'about an hour by road' },
+  { k: 'Minneapolis–Saint Paul', v: '80 miles / 124 km', note: 'about an hour by road' },
 ];
 
 export default function Community() {

@@ -26,16 +26,16 @@ const SHOW_TIMELINE = false;
    face size and equal eye height the crops are solved for carry over to it
    unchanged — and it trims the bottom edge, where Lee's crop is padded. */
 const FOUNDERS = [
-  { name: 'Kendall H. Lee', suffix: 'M.D., Ph.D.', role: 'Co-CEO & Co-Founder',
+  { name: 'Kendall H. Lee', suffix: 'M.D., Ph.D.', role: 'Co-Founder',
     line: 'Neurosurgeon at Mayo Clinic. Deep brain stimulation for Parkinson’s, tremor, depression, OCD and epilepsy.',
     image: asset('/kendall-lee-150-500x400-1.jpg'), focus: '50% 0%' },
-  { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-CEO & Co-Founder',
+  { name: 'Kevin E. Bennet', suffix: 'MBA, Ph.D.', role: 'Co-Founder',
     line: 'Thirty years in technology development. Patents in neurosurgery, diamond, semiconductor and optical technology.',
     image: asset('/kevin-bennet.jpg'), focus: '50% 0%' },
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
     image: asset('/stephan-goerss-150.jpg'), focus: '50% 0%' },
-  { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'Co-Founder',
+  { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'CE0 & Co-Founder',
     line: 'Associate Director of the Neural Engineering Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
     image: asset('/yoonbae-oh.jpg'), focus: '50% 0%' },
 ];

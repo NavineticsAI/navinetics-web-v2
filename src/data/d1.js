@@ -81,9 +81,10 @@ export const bands = [
        a surgeon evaluating this page would never reach it — and it is the model
        for differentiating without a competitive claim, comparing against a
        historical category rather than a company. */
-    lead: 'A small Skull Anchor Key is affixed to the skull, and everything else attaches to that. '
-      + 'Historically a stereotactic frame was a ring encircling the head; this one fixes near the '
-      + 'top of the skull, leaving the face clear.',
+    lead: 'Replacing a traditional stereotactic baseframe is a small Skull Anchor Key affixed to '
+    + 'the skull to which the NRSS is attached.. This design removes all of the mechanics from '
+    + 'the patient’s face, making the process more comfortable to the patient and safer from '
+    + 'the anesthesiol',
     figure: {
       src: headArt,
       w: 444, h: 1042,

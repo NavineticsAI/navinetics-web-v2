@@ -55,7 +55,7 @@ export default function Home() {
            closing clause lost "see through the table" with them; what is left
            is still the same one-route idea, and every clause is still true on
            its own page. */
-        lead="Stereotactic frames and neuromodulation instruments for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, reach it, and measure what changed."
+        lead="Contempory stereotactic frames design and development along with advanced neuromodulation instruments combine to advance the future for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
           {/* "Discover the NRSS" used an acronym that is first defined further
