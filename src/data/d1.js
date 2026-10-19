@@ -106,8 +106,8 @@ export const bands = [
     points: [
       {
         label: 'Three linear, two angular.',
-        body: 'X, Y and Z position the target; the collar and the arc choose the trajectory to it '
-          + 'without moving the target.',
+        body: 'X, Y and Z settings position the target at the focus of the frame; the collar and '
+        + 'the arc settings define the trajectory to the target.',
       },
       {
         label: 'Adjustments near the field.',
@@ -118,8 +118,8 @@ export const bands = [
            mean anything. And it put "ring" back on the page after the term was
            removed everywhere else, which is how a retired word survives a sweep.
            Stated on its own terms, the sentence needs no comparison. */
-        body: 'Every adjustment sits within reach of the surgical field, so the target is set '
-          + 'from where the surgeon is already standing.',
+        body: 'Every adjustmentis assessable in surgical field, giving the surgeon access to easily '
+        + 'set the target coordonates and trajectory values on the NRSS.',
       },
       {
         /* NO ACCURACY FIGURE ON THIS PAGE. Decided by NaviNetics, 2026-08-17.
@@ -141,8 +141,8 @@ export const bands = [
 
            DO NOT re-add a figure here without the company asking for it. */
         label: 'One focus, every approach.',
-        body: 'Because the two rotations turn about the focus, changing the approach cannot move '
-          + 'the target.',
+        body: 'Two rotations about the focus allows the target, located at the focus, to be '
+        + 'approached from a multitude of directionsproviding the optimal  approach the target.',
       },
     ],
     meta: [{ label: 'Classification', value: 'Arc-centered' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
@@ -161,8 +161,8 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
-    lead: 'Once the arc has chosen the approach, a mechanical microdrive advances along it — '
-      + 'down the same line the frame has already set.',
+    lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
+    + 'leads and micro-recording electrodes to the target.',
     points: [
       {
         label: 'Coaxial with the approach.',
@@ -193,8 +193,9 @@ export const bands = [
     tone: 'soft',
     eyebrow: 'Access',
     title: 'Room\nto work.',
-    lead: 'Components attach to and detach from the Skull Anchor Key as the procedure needs them, so '
-      + 'the burr hole stays reachable and the sterile field stays intact from start to finish.',
+    lead: 'The Skull Anchor Key provides the common attachment site to which the image localizers '
+    + 'and the NRSS are attached as the procedure needs them. The compact design of the NRSS '
+    + 'provides easy access to  the burr hole.',
     points: [
       {
         label: 'Take it off, put it back.',
@@ -211,7 +212,7 @@ export const bands = [
     figure: {
       src: detailArt,
       w: 759, h: 1134,
-      alt: 'The D1 frame from the opposite side, rendered from the assembly CAD.',
+      alt: 'The NNRS frame from the opposite side, rendered from the assembly CAD.',
       caption: 'The frame from the opposite side',
     },
   },

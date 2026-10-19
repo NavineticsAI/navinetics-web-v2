@@ -46,7 +46,7 @@ export const disciplines = [
     group: 'Clinical',
     role: 'Clinical — Neurology',
     title: 'Deciding what “better” means.',
-    body: 'Movement disorders, target selection, and what happens to the patient afterwards. Neurology sets the outcome everything upstream is optimizing for — and it is not millimetres on a bench, it is whether a person can hold a cup of coffee.',
+    body: 'Movement disorders, target selection, and what happens to the patient afterwards. Neurology sets the outcome everything upstream is optimizing for — and it is not millimeters on a bench, it is whether a person can hold a cup of coffee.',
     problem: '“Which target, in which patient — and how would we know afterwards whether we were right?”',
     owns: ['Indications & selection', 'Target planning', 'Outcome measures', 'Clinical follow-up'],
     with: [
