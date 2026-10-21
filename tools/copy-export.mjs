@@ -39,19 +39,24 @@ const outDir = (() => {
 /* ── the site's own shape ──────────────────────────────────────────────────
    Route order is NAV order, not the order routes happen to be declared in.
    The document is read top to bottom by someone who thinks in menus. */
+/* `unlisted` — the page renders on its own URL but no menu links to it.
+   `withdrawn` — the route is gone and the URL answers with the 404 page; the
+   copy stays in the document because the page is coming back. Both are
+   labelled on the document's contents page and on the part itself, so a
+   reviewer knows before editing whether anyone can see the text. */
 const ROUTES = [
   { path: '/', title: 'Home', file: 'src/pages/Home.jsx' },
   { path: '/company/who-we-are', title: 'Who We Are', file: 'src/pages/WhoWeAre.jsx' },
   { path: '/company/our-founders', title: 'Our Founders', file: 'src/pages/Founders.jsx' },
   { path: '/company/partners', title: 'Partners', file: 'src/pages/Partners.jsx', unlisted: true },
   { path: '/company/community', title: 'Community', file: 'src/pages/Community.jsx' },
-  { path: '/products/d1-stereotactic-frame', title: 'D1 Stereotactic Frame', file: 'src/pages/D1.jsx' },
-  { path: '/products/carbon-fiber-surgical-tables', title: 'Carbon-Fiber Surgical Tables', file: 'src/pages/SurgicalTables.jsx' },
+  { path: '/products/d1-stereotactic-frame', title: 'NRSS', file: 'src/pages/D1.jsx' },
+  { path: '/products/carbon-fiber-surgical-tables', title: 'Carbon-Fiber Surgical Tables', file: 'src/pages/SurgicalTables.jsx', withdrawn: true },
   { path: '/products/maven-neuromodulation', title: 'MAVEN Neuromodulation', file: 'src/pages/Maven.jsx' },
   { path: '/technology/stereotactic-devices', title: 'Stereotactic Devices', file: 'src/pages/Technology.jsx' },
   { path: '/technology/neuromodulation', title: 'Neuromodulation', file: 'src/pages/Neuromodulation.jsx' },
-  { path: '/technology/navinetics-ai', title: 'NaviNetics AI', file: 'src/pages/NaviNeticsAI.jsx' },
-  { path: '/technology/education', title: 'Education', file: 'src/pages/Education.jsx' },
+  { path: '/technology/navinetics-ai', title: 'NaviNetics AI', file: 'src/pages/NaviNeticsAI.jsx', unlisted: true },
+  { path: '/technology/education', title: 'Education', file: 'src/pages/Education.jsx', unlisted: true },
   { path: '/resources/media', title: 'Media', file: 'src/pages/Media.jsx' },
   { path: '/resources/careers', title: 'Careers', file: 'src/pages/Careers.jsx' },
   { path: '/resources/publications', title: 'Publications', file: 'src/pages/Publications.jsx' },
@@ -214,18 +219,18 @@ const LIBRARY = {
   'src/data/publications.js': ['Published papers', 'Titles, authors and journals for every paper listed on the site.'],
   'src/data/products.js': ['Product records', 'Names, summaries and specifications. Feeds the menu, the home page and every product page.'],
   'src/data/education.js': ['Education articles', 'The explainers on the Education and Technology pages.'],
-  'src/data/disciplines.js': ['Careers — disciplines', 'The engineering and clinical disciplines listed on Careers and Who We Are.'],
+  'src/data/disciplines.js': ['Careers — disciplines', 'The engineering and clinical disciplines held for Careers. Not shown on the site at the moment.'],
   'src/data/maven.js': ['MAVEN content', 'Copy and figure captions for the MAVEN page.'],
   'src/data/orTables.js': ['Surgical table models', 'The five models and their specifications. Withdrawn from the site pending FDA registration.'],
   'src/data/partners.js': ['Territories and partners', 'Countries, distributors, and what each one does.'],
   'src/data/media.js': ['Media library', 'Titles and captions for every image and video.'],
   'src/data/neuromodulation.js': ['Neuromodulation content', 'The technology page on neurochemical sensing.'],
-  'src/data/d1.js': ['D1 frame content', 'Copy for the D1 stereotactic frame page.'],
+  'src/data/d1.js': ['NRSS page content', 'Copy and figures for the NRSS product page.'],
   'src/data/company.js': ['Company history and principles', 'The timeline, the principles, and the statistics on Who We Are.'],
-  'src/data/technology.js': ['Technology records', 'Names and summaries for each technology area.'],
+  'src/data/technology.js': ['Technology records', 'Names and summaries for each technology area. NaviNetics AI is not linked from the site.'],
   'src/pages/Product.jsx': ['Product page template', 'Text shared by any product without a page of its own.'],
-  'src/ui/SceneBand.jsx': ['NaviNetics AI — diagram labels', 'Labels on the animated diagrams.'],
-  'src/ui/Workstation.jsx': ['Planning workstation demo', 'View names and controls in the interactive demo.'],
+  'src/ui/SceneBand.jsx': ['NaviNetics AI — diagram labels', 'Labels on the animated diagrams. The NaviNetics AI page is not linked from the site.'],
+  'src/ui/Workstation.jsx': ['Planning workstation demo', 'View names and controls in the interactive demo on the NaviNetics AI page, which is not linked from the site.'],
   'src/ui/EduFigures.jsx': ['Education diagrams', 'Labels and instructions on the interactive figures.'],
   'src/ui/RouteBoundary.jsx': ['Error messages', 'Shown only if a page fails to load.'],
 };
@@ -281,7 +286,7 @@ for (const c of CHROME) {
 for (const r of ROUTES) {
   const part = {
     key: `page:${r.path}`, group: 'Pages', title: r.title, path: r.path,
-    file: r.file, unlisted: !!r.unlisted, count: 0,
+    file: r.file, unlisted: !!r.unlisted, withdrawn: !!r.withdrawn, count: 0,
   };
   collect(r.file, part);
   parts.push(part);

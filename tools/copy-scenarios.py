@@ -353,6 +353,46 @@ def main():
                     'refuse both rather than silently discard one',
                     {'reported': g4['refused_kinds'], 'applied anyway': len(applied)}, ''))
 
+    # ── a published row that stops being copy ───────────────────────────────
+    # A video title edited to "NRSS" went live on 2026-10-21, then failed the
+    # exporter's value test, so the shared document still had a row the
+    # manifest no longer knew. It was refused as an unknown id, and under
+    # all-or-nothing that one untouched row blocked every round after it. A row
+    # the site stopped offering, unchanged since we last looked, is not an
+    # edit; one the reviewer DID change still has nowhere to go and is refused.
+    snap = 'copy/baselines/last.json'
+    seen = json.load(open(snap, encoding='utf-8')) if os.path.exists(snap) else {}
+    gone = next((e for e in m['entries']
+                 if e['id'] not in (plain['id'], jsx['id'])
+                 and seen.get(e['id']) == e['text'] and len(e['text']) > 20), None)
+
+    def with_row_gone(edits):
+        """Pretend the site stopped offering `gone` after this document was made."""
+        shutil.copy('copy/copy-manifest.json', 'copy/.mani.bak')
+        mm = manifest()
+        mm['entries'] = [x for x in mm['entries'] if x['id'] != gone['id']]
+        json.dump(mm, open('copy/copy-manifest.json', 'w', encoding='utf-8'),
+                  indent=1, ensure_ascii=False)
+        build_docx(switch=None, edits=edits)
+        res = read(TMP)
+        shutil.move('copy/.mani.bak', 'copy/copy-manifest.json')
+        return res
+
+    if gone:
+        g6 = gates(with_row_gone([(plain['id'], 'An edit beside a row the site stopped offering.', True)]))
+        results.append((would_publish(g6) and g6['changes'] == 1,
+                        'untouched row the site stopped offering',
+                        'must not block the edits beside it', g6, ''))
+        g7 = gates(with_row_gone([(plain['id'], 'An edit beside a row the site stopped offering.', True),
+                                  (gone['id'], 'And an edit to that row as well.', True)]))
+        results.append(('unknown id' in g7['refused_kinds'] and not would_publish(g7),
+                        'edited row the site stopped offering',
+                        'that edit has nowhere to go, so the round stops', g7, ''))
+    else:
+        results.append((False, 'untouched row the site stopped offering',
+                        'needs copy/baselines/last.json to agree with the manifest on some row',
+                        {'last.json': os.path.exists(snap)}, ''))
+
     # ── nothing to compare against ──────────────────────────────────────────
     # No version stamp is fine while copy/baselines/last.json exists - that is
     # the better baseline anyway, being what the document said last time rather

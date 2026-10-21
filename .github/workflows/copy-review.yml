@@ -240,7 +240,7 @@ jobs:
           git commit -m "Apply reviewed copy from the shared document
 
           ${{ steps.edits.outputs.count }} text change(s), published automatically
-          after the switch on the document's cover was set to YES.
+          once the shared document had been left alone for the quiet period.
 
           Nothing here was written by the workflow: every change is a cell a
           reviewer edited in the Word document. The document it came from is

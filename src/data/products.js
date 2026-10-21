@@ -282,7 +282,12 @@ export const products = [
        they were the last place on the site still setting it in title case. */
     name: 'MAVEN: Multifunctional Apparatus for Voltammetry, Electrophysiology and Neuromodulation',
     shortName: 'MAVEN',
-    family: 'MAVEN Neuromodulation',
+    /* Was "MAVEN Neuromodulation". Changed in the shared review document on
+       2026-10-21 and carried over by hand when the document was re-issued,
+       because its round was blocked by an unrelated refusal and would
+       otherwise have been lost. Shown in the Products menu, the Who We Are
+       cards and the product cards. */
+    family: 'MAVEN: Multifunctional Apparatus for Voltammetry, Electrophysiology and Neuromodulation',
     /**
      * NO `aka` HERE, deliberately.
      *
