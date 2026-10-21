@@ -116,7 +116,7 @@ export const products = [
     technology: 'stereotactic-devices',
     tagline: 'Robust. Low complexity.\nComfortable.',
     summary:
-      'Five degrees of freedom are in an arc-centered targeting device attached to a patient with a Skull Anchor Key.. Three axes to set the target location and two rotational  to approach it safely.',
+      'Five degrees of freedom are in an arc-centered targeting device attached to a patient with a Skull Anchor Key. Three axes to set the target location and two rotational  to approach it safely.',
     intro:
       'The brief was a device robust enough for daily use and simple enough to trust, working '
       + 'across stereotactic and functional procedures — deep brain stimulation among them. It was '
@@ -280,7 +280,7 @@ export const products = [
     /* MAVEN, not "Maven" — see the note below on the product name. These three
        fields are the ones the catalog, the nav and the page heading read, and
        they were the last place on the site still setting it in title case. */
-    name: 'MAVEN Neuromodulation',
+    name: 'MAVEN: Multifunctional Apparatus for Voltammetry, Electrophysiology and Neuromodulation',
     shortName: 'MAVEN',
     family: 'MAVEN Neuromodulation',
     /**

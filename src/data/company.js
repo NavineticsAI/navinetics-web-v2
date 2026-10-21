@@ -143,20 +143,17 @@ export const principles = [
     title: 'Design by listening',
     body:
       /* See data/disciplines.js — same sentence, same reason for the change. */
-      'A co-founder is a practicing neurosurgeon. Clinical input is not a quarterly advisory call — '
-      + 'it is someone who will be holding the device at 7am, telling you there is metal where '
-      + 'their hands need to be. The Skull Anchor Key exists because of that complaint.',
+      'A co-founder are experienced stereotacticians that listen to neurosurgeons and '
+      + 'patients to improve the surgical experience.',
   },
   {
     title: 'Quality and simplicity',
     body:
-      'Low complexity is a safety property, not a cost saving. Fewer parts to set, fewer ways to '
-      + 'set them wrong, and fewer tolerances stacking up between the plan and the target.',
+      'Low complexity is a safety property.',
   },
   {
     title: 'Publish the evidence',
     body:
-      'The methods behind these devices are in the peer-reviewed record, under the founders’ names '
-      + 'and their laboratory’s. We cite what we claim.',
+      'The methods behind these devices can be founded in the peer-reviewed journals.',
   },
 ];

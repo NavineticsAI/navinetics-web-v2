@@ -36,8 +36,8 @@ export default function D1() {
   usePageMeta({
     title: product.name,
     description:
-      'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centered stereotactic targeting from '
-      + 'a Skull Anchor Key. Three linear degrees of freedom, two angles of rotation.',
+      'The NaviNetics Reusable Stereotactic System (NRSS) — arc-centered stereotactic '
+      + 'targeting from a Skull Anchor Key.',
   });
 
   return (

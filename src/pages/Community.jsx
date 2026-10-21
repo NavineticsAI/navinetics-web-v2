@@ -67,7 +67,7 @@ export default function Community() {
       <Hero
         eyebrow="Company — Community"
         title="Rochester, Minnesota."
-        lead="We are in the middle of downtown Rochester, in southeast Minnesota. The address is why the design loop closes as fast as it does."
+        lead="."
       />
 
       <Section wide className="!pt-0">

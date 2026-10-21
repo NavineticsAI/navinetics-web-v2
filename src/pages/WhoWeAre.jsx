@@ -36,7 +36,7 @@ const FOUNDERS = [
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
     image: asset('/stephan-goerss-150.jpg'), focus: '50% 0%' },
   { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'CE0 & Co-Founder',
-    line: 'Associate Director of the Neural Engineering Laboratories. Senior author on the laboratory’s neurochemical sensing work.',
+    line: 'Associate Professor of Neurosurgery, Mayo Clinic. Associate Director of the Neural Engineering Laboratories. Associate Professor of Brain and Cognitive Engineering, Korea University',
     image: asset('/yoonbae-oh.jpg'), focus: '50% 0%' },
 ];
 
@@ -167,7 +167,7 @@ export default function WhoWeAre() {
       </Section>
 
       <Section wide band>
-        <SectionHead eyebrow="What we make" title="Three lines of work." />
+        <SectionHead eyebrow="What we make" title="Two lines of work." />
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {shipping.map((p, i) => (
             <Reveal key={p.slug} delay={i * 0.06}>

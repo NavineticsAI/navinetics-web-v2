@@ -81,10 +81,9 @@ export const bands = [
        a surgeon evaluating this page would never reach it — and it is the model
        for differentiating without a competitive claim, comparing against a
        historical category rather than a company. */
-    lead: 'Replacing a traditional stereotactic baseframe is a small Skull Anchor Key affixed to '
-    + 'the skull to which the NRSS is attached.. This design removes all of the mechanics from '
-    + 'the patient’s face, making the process more comfortable to the patient and safer from '
-    + 'the anesthesiol',
+    lead: 'Replacing a traditional stereotactic baseframe is the Skull Anchor Key. This design '
+    + 'removes all of the mechanics from the patient’s face, improving the patients and '
+    + 'clinicians’ experience.',
     figure: {
       src: headArt,
       w: 444, h: 1042,
@@ -193,9 +192,8 @@ export const bands = [
     tone: 'soft',
     eyebrow: 'Access',
     title: 'Room\nto work.',
-    lead: 'The Skull Anchor Key provides the common attachment site to which the image localizers '
-    + 'and the NRSS are attached as the procedure needs them. The compact design of the NRSS '
-    + 'provides easy access to  the burr hole.',
+    lead: 'The Skull Anchor Key and the The compact design provides easy access to  the surgical '
+    + 'field.',
     points: [
       {
         label: 'Take it off, put it back.',
