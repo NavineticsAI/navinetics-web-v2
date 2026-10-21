@@ -136,8 +136,8 @@ export const chapters = [
     tone: 'stim',
     eyebrow: 'Watching stimulation act',
     title: 'Asking what\nthe response\nmeans.',
-    lead: 'Deep brain stimulation is known to help before it is understood to. Measuring the '
-    + 'chemistry with/without stimulation turns an outcome into a mechanism.',
+    lead: 'Deep brain stimulation is known to help before it is understood to. Measuring chemistry '
+    + 'with/without stimulation turns an outcome into a mechanism.',
     points: [
       {
         label: 'One clock for both.',
