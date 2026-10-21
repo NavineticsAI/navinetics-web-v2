@@ -102,7 +102,7 @@ export const topics = [
     parts: [
       {
         key: 'A',
-        title: 'Localization, and why it is needed',
+        title: 'Localization',
         body:
           'A surgeon cannot see the target. It is centimetres inside the brain, it looks like the tissue '
           + 'around it, and it has to be reached without disturbing what is on the way. So the target is '
@@ -119,12 +119,10 @@ export const topics = [
         key: 'B',
         title: 'The arc-centered principle',
         body:
-          'Knowing where the target is does not yet say how to reach it. An arc-centered instrument answers '
-          + 'that by putting the target at the center of a circle: the arc swings around a single fixed '
-          + 'point, and anything carried on the arc points at that point from wherever it sits.\n\n'
-          + 'The consequence is the useful part. The approach can be moved — around a vessel, around '
-          + 'eloquent cortex, away from a sulcus — and the target does not move with it. One target, many '
-          + 'routes, and no arithmetic to redo when the route changes.',
+          'Knowing where the target is does not yet say how to reach it. An arc-centered '
+          + 'instrument answers that by putting the target at the center of a circle: the arc '
+          + 'swings around a single fixed point, and anything carried on the arc points at that '
+          + 'point from wherever it sits.',
         /* The principle, then the instrument that embodies it. */
         figures: ['arc', 'frame'],
       },

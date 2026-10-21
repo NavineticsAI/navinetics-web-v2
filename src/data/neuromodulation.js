@@ -66,10 +66,8 @@ export const gap = {
   eyebrow: 'The problem',
   title: 'Firing is not the same as releasing.',
   body: 'An electrode in the brain will tell you when the cells around it fire. It will not tell '
-    + 'you what they released, and the chemistry is where a great deal of what goes wrong in '
-    + 'neurological and psychiatric disease actually lives. A stimulator that could read the '
-    + 'chemistry might one day respond to it — but only if the chemistry can be measured in '
-    + 'living tissue, at the right speed, while the stimulation is running.',
+  + 'you what they released, and the chemistry is where a great deal of what goes wrong in '
+  + 'neurological and psychiatric disease actually lives. ',
   /* Was: "…working toward that. This page is those four." The second sentence
      describes the page's own structure to the reader, which is a note to
      ourselves about how the page was built. The first sentence is the useful
@@ -94,15 +92,15 @@ export const chapters = [
        about ten characters a line — an authored line longer than that
        wraps again and a three-line heading becomes five. */
     title: 'Reporting an\namount.',
-    lead: 'Fast-scan voltammetry subtracts its own background, and the baseline goes with it — so '
-      + 'it reports change beautifully and cannot report an amount. Multiple cyclic square wave '
-      + 'voltammetry models the capacitive current instead of subtracting a neighboring sweep, '
-      + 'which is what leaves the standing level intact underneath.',
+    lead: 'Fast-scan cyclic voltammetry subtracts its own background, and the baseline goes with it '
+    + '— so it reports changes. Multiple cyclic square wave voltammetry models the capacitive '
+    + 'current instead of subtracting a neighboring sweep, which is what leaves the standing '
+    + 'level intact underneath.',
     points: [
       {
         label: 'Phasic and tonic are different questions.',
         body: 'One is a release event in fractions of a second; the other is the level that shifts '
-          + 'over minutes and hours, in disease and in response to a drug or to stimulation.',
+        + 'over minutes and hours.',
       },
       {
         label: 'Selectivity had to be demonstrated.',
@@ -139,9 +137,7 @@ export const chapters = [
     eyebrow: 'Watching stimulation act',
     title: 'Asking what\nthe response\nmeans.',
     lead: 'Deep brain stimulation is known to help before it is understood to. Measuring the '
-      + 'chemistry while the stimulation runs turns an outcome into a mechanism — which is the '
-      + 'difference between knowing that a setting works and knowing what to change when it '
-      + 'stops.',
+    + 'chemistry with/without stimulation turns an outcome into a mechanism.',
     points: [
       {
         label: 'One clock for both.',
@@ -151,7 +147,7 @@ export const chapters = [
       {
         label: 'Reported in Brain, 2023.',
         body: 'Deep brain stimulation alleviates tics in Tourette syndrome via striatal dopamine '
-          + 'transmission. The dopamine is the mechanism the title is naming.',
+        + 'transmission.',
       },
       {
         label: 'The case for closing the loop.',

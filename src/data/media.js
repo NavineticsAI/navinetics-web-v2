@@ -86,8 +86,7 @@ export const videos = [
     note: 'Surgical footage',
     /* Describes what is on screen and no more. The instrument in this clip is
        not the one the rest of the site shows — see the notice above. */
-    caption: 'A stereotactic frame in use: the arc set on its collar, instruments laid out, and '
-      + 'the trajectory taken down to target under fluoroscopy.',
+    caption: 'A stereotactic frame in use.',
   },
   {
     id: 'launch',
@@ -103,7 +102,7 @@ export const videos = [
   },
   {
     id: 'instrument-turned',
-    title: 'The instrument, turned',
+    title: 'NRSS',
     src: frameVideo,
     poster: framePoster,
     w: 1280,

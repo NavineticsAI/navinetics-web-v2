@@ -88,7 +88,7 @@ export default function Maven() {
                 accurate, and they already say this is research. */}
             <div className="mt-2 flex flex-wrap justify-center gap-3">
               <Button to="/contact?reason=maven" size="lg" arrow>
-                Talk to the team
+                Request a Quote
               </Button>
               <Button to="/resources/publications" size="lg" variant="secondary">
                 Read the research

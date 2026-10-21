@@ -232,8 +232,8 @@ export const bands = [
       },
       {
         label: 'Artifact minimized at the integration.',
-        body: 'The stimulation artifact is dealt with where the channels meet, so the recording '
-          + 'stays usable through the stimulus rather than around it.',
+        body: 'The stimulation artifact is desynchronized from recording, so the signal stays '
+        + 'usable through the stimulus.',
       },
       {
         label: 'Placed by the same route.',

@@ -65,14 +65,14 @@ export const technologies = [
     principles: [
       {
         title: 'A coordinate system fixed to the patient',
-        body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy. That link is what turns a point on a scan into a point in a person.',
+        body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy.',
       },
       {
-        title: 'Three linear axes, two rotations',
+        title: 'The center-of-arc principle',
         // "Collar", not "ring" — the review retired ring terminology, and the
         // education and software pages already say collar. A surgeon dialling
         // coordinates needs one word for the axis across the whole site.
-        body: 'X, Y and Z place the target at the focus — the iso-center — of the arc. Collar and arc angles then set the approach trajectory to it. Because every trajectory passes through the same focus, one set of coordinates serves every approach to the target.',
+        body: 'X, Y and Z place the target at the focus — the iso-center — of the arc. Collar and arc angles then set the approach trajectory to it.',
       },
       {
         title: 'Localizers tie it to the image',
