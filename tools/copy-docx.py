@@ -288,7 +288,9 @@ def build(manifest, out_path, generated_on):
             run(row, p['title'], size=10)
             if p.get('path'):
                 run(row, f'   {p["path"]}', size=8.5, color=GREY)
-            if p.get('unlisted'):
+            if p.get('withdrawn'):
+                run(row, '   withdrawn — not on the site', size=8.5, italic=True, color=GREY)
+            elif p.get('unlisted'):
                 run(row, '   not in the menus', size=8.5, italic=True, color=GREY)
 
     # ── the copy ─────────────────────────────────────────────────────────────
@@ -310,7 +312,11 @@ def build(manifest, out_path, generated_on):
             m = para(doc, space_after=8)
             if part.get('path'):
                 run(m, part['path'], size=9, color=GREY)
-                if part.get('unlisted'):
+                if part.get('withdrawn'):
+                    run(m, '   ·   withdrawn: this page is not on the site at the moment, '
+                        'so nobody can see this text until it returns',
+                        size=9, italic=True, color=GREY)
+                elif part.get('unlisted'):
                     run(m, '   ·   page is not linked from the menus', size=9, italic=True, color=GREY)
             if part.get('appears_on'):
                 if part.get('path'):

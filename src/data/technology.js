@@ -150,6 +150,14 @@ export const technologies = [
   },
 
   {
+    /* HIDDEN, on review: the page should not be linked from anywhere. Like
+       Partners, it still renders on its own URL — the route and this record
+       are untouched — but `hidden` takes it out of the Technology menu and the
+       footer (see data/nav.js), and the other links to it are gone: the
+       "Seen on" links in data/media.js, the closing line on the MAVEN page,
+       and public/sitemap.xml. Remove this one word and the menu entry is
+       back; the other three are each a one-line restore. */
+    hidden: true,
     slug: 'navinetics-ai',
     path: '/technology/navinetics-ai',
     name: 'NaviNetics AI',

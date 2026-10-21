@@ -78,6 +78,12 @@ const LOOKS_LIKE_CODE = [
 
 const looksLikeCode = (s) => LOOKS_LIKE_CODE.some((r) => r.test(s.trim()));
 
+/* Under a key that always holds copy, one word in capitals is a product name
+   or an acronym — "NRSS", "MAVEN" — and not a CONSTANT. Without this a video
+   title edited to "NRSS" went live and then dropped out of the document, and
+   the row left behind blocked the next round. */
+const isAcronym = (s) => /^[A-Z][A-Z]+$/.test(s.trim());
+
 /** Prose test: multi-word, or a single capitalised word like "Careers". */
 function looksLikeProse(s) {
   const t = s.trim();
@@ -312,7 +318,8 @@ export function extractFile(file) {
       const kp = `${path}.${nm}`;
       if (val?.type === 'Literal' && typeof val.value === 'string') {
         const allow = KEY_ALLOW.has(nm);
-        if ((allow || !KEY_DENY.has(nm)) && (allow ? !looksLikeCode(val.value) : looksLikeProse(val.value))) {
+        if ((allow || !KEY_DENY.has(nm))
+          && (allow ? isAcronym(val.value) || !looksLikeCode(val.value) : looksLikeProse(val.value))) {
           push(val, val.value, 'object-field', kp, nm);
         }
         return;

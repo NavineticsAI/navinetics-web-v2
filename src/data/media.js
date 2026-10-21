@@ -67,7 +67,10 @@ import launchPoster from '../assets/media/launch.poster.webp';
 const P = {
   d1: { to: '/products/d1-stereotactic-frame', label: 'NRSS' },
   maven: { to: '/products/maven-neuromodulation', label: 'MAVEN' },
-  ai: { to: '/technology/navinetics-ai', label: 'NaviNetics AI' },
+  /* Was { to: '/technology/navinetics-ai', label: 'NaviNetics AI' }. That page
+     is hidden and linked from nowhere (see data/technology.js), so the six
+     software images keep their place and category but lose "Seen on". */
+  ai: null,
   neuro: { to: '/technology/neuromodulation', label: 'Neuromodulation' },
   education: { to: '/technology/education', label: 'Education' },
   founders: { to: '/company/our-founders', label: 'Our Founders' },

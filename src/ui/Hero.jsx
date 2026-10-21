@@ -22,6 +22,7 @@ export function Hero({
   isoMark = true,
   className,
   size = 'md',
+  fill = false,
 }) {
   const reduced = usePrefersReducedMotion();
   const ref = useRef(null);
@@ -49,7 +50,21 @@ export function Hero({
     transition: { duration: D.d3, delay: reduced ? 0 : i * 0.09, ease: EASE_OUT },
   });
 
-  const pad = size === 'lg' ? 'min-h-[min(84vh,760px)]' : 'min-h-[52vh]';
+  /* `fill` makes the hero exactly one screen tall on arrival, whatever the
+     screen — the home page asked for this on review, because the capped lg
+     height let the product plates show at the foot of a tall window. svh, not
+     vh or dvh: it is the height with the mobile browser's toolbars showing,
+     which is what the visitor actually sees first, and unlike dvh it does not
+     resize the hero as those toolbars slide away on scroll. It is a minimum,
+     so a phone too short for the copy still gets all of it.
+     The bottom padding drops too: the content is centred in the screen, so the
+     section-matching pb below only made the hero taller than the window — by
+     29px at 1280×720. */
+  const pad = fill
+    ? 'min-h-svh pb-10 md:pb-10 lg:pb-12'
+    : size === 'lg'
+      ? 'min-h-[min(84vh,760px)]'
+      : 'min-h-[52vh]';
 
   return (
     <header

@@ -7,7 +7,7 @@ Changes, and back into the source without anyone retyping anything.
   src/**                                            the site
     │  node tools/copy-export.mjs
     ▼
-  copy/copy-manifest.json                           1,552 strings + byte ranges
+  copy/copy-manifest.json                           1,468 strings + byte ranges
     │  python tools/copy-docx.py
     ▼
   copy/NaviNetics Website Review <date>.docx        ─────►   stakeholders, Word, Track Changes
@@ -99,7 +99,7 @@ node tools/dump-copy.mjs copy/.rendered.json    # every line a browser renders
 npm run copy:check                              # prove each one is in the manifest
 ```
 
-Currently **95.9%** of rendered lines (931 of 971). The residual is text the
+Currently **96.5%** of rendered lines (748 of 775, 2026-10-21). The residual is text the
 browser composes as you look at it — `Browse 9 papers`, `2353 × 613 mm`,
 `vol 29 · pp 93-101`, a list joined with dots. Those are built from pieces that
 *are* in the document and are not separately editable. The cover page says so.
@@ -213,6 +213,17 @@ paragraph.
 `copy-export.mjs` holds the route list, in nav order, at the top. Add the route
 and the page file. Everything else — labels, which pages a library reaches, the
 document — follows.
+
+Two flags on a route say who can see its text, and the document prints both on
+the contents page and at the top of the page's part:
+
+| | |
+|---|---|
+| `unlisted` | renders on its own URL, but no menu links to it — Partners, Education, NaviNetics AI |
+| `withdrawn` | the route is gone and the URL answers with the 404 page; the copy stays because the page is coming back — Surgical Tables |
+
+A page taken out of the menus or off the site needs its flag here too, or the
+document goes on presenting it to reviewers as a live page.
 
 ---
 
@@ -328,8 +339,8 @@ npm run copy:publish -- reviewed.docx              # show what changed, write no
 npm run copy:publish -- reviewed.docx --publish    # apply, build, commit, push
 ```
 
-It refuses if the document's cover still says NO — the operator's intent and the
-reviewer's have to agree.
+There is no cover switch to check any more (see *How it knows they have
+finished*); `--publish` is the operator's decision, and the same refusals apply.
 
 ---
 
@@ -378,9 +389,56 @@ and reverted. Four of them exist because the thing they test was broken:
 | two-way comparison | §10 — silent reverts |
 | `copy/published/` was gitignored | `git add` staged nothing, the archive was thrown away with the runner, and the commit message said it was kept. **Solved on paper and absent in fact.** |
 | the deploy ran on every push to `main` | Power Automate commits the document on each of Word's autosaves, so each one fired a full Pages deploy and cancelled the one in flight |
+| a published edit could stop being copy | 2026-10-21: a video title edited to "NRSS" went live, then failed the value test (four capitals read as a CONSTANT) and dropped out of the manifest. The shared document still had the row, now an **unknown id**, and that one untouched row refused every round after it — three later edits sat unpublished. Two fixes: a capitalised word under a copy key (`title`, `label`, `name` …) is an acronym, not a constant; and an unknown row the reviewer has not touched since last time is not an edit and no longer refuses |
 
 Two more, found by reading rather than by test: the cover claimed the switch
 resets itself, which nothing did; and `ls -t` picked between two documents in
 `copy/incoming/` arbitrarily, because checkout writes every file in the same
 millisecond. The workflow now refuses when there is more than one, and removes
 the document it has dealt with so a manual re-run cannot publish a round twice.
+
+---
+
+## 12 · Re-issuing the shared document
+
+When the site's structure changes — sections removed, pages rebuilt — the shared
+document has to be replaced, or reviewers go on editing rows that no longer
+exist. Done for the first time on 2026-10-21. The order matters.
+
+1. **Read the shared document first.** `node tools/copy-fetch.mjs --quiet-hours 0
+   --out <somewhere>` and `python tools/copy-import.py <that file>` against `main`.
+   Anything it reports is a reviewer edit that has not been published, and it
+   must be carried into the source before the document is replaced — replacing
+   it otherwise throws the edit away.
+2. **Export and build the replacement** with the SAME filename as the shared
+   file, so uploading it replaces that file rather than sitting beside it:
+
+   ```bash
+   node tools/copy-export.mjs
+   python tools/copy-docx.py --date "<today>" --out copy/for-sharepoint \
+     --name "<exact name of the shared file>.docx"
+   ```
+
+3. **Record it as the last document seen.** The importer compares a returned
+   document against `copy/baselines/last.json` — the previous shared document —
+   in preference to the export stamp. Left as it was, the first edit to any
+   sentence the restructure changed is refused as *changed on both sides*, and
+   that refusal stops the whole round:
+
+   ```bash
+   python tools/copy-import.py "copy/for-sharepoint/<name>.docx" \
+     --json /tmp/x.json --snapshot copy/baselines/last.json --quiet
+   ```
+
+   It must report **0 text changes**.
+4. **Merge to `main`, then replace the file in OneDrive** — in that order, and
+   between scheduled runs (06:00 and 18:00 UTC). Upload it into the same folder
+   and choose **Replace**: that keeps the file, its version history and the
+   share link in `REVIEW_DOC_URL`, so nothing in GitHub changes. Uploading
+   under a new name makes a new file with a new link, and the workflow goes on
+   reading the old one.
+
+   If a scheduled run falls between the two steps, it reads the old document
+   against the new `main`. That fails safe: the old document's rows for removed
+   sections are unknown and edited relative to `last.json`, so the round is
+   refused and nothing is published.

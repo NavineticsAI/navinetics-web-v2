@@ -61,6 +61,7 @@ const ALL = [
            note in data/technology.js. */
         mark: t.mark,
         note: null,
+        hidden: t.hidden,
       })),
       /* EDUCATION IS NO LONGER A PAGE. Its five topics are rendered INTO the
          two technology pages that own them — stereotaxy on

@@ -178,6 +178,17 @@ def main():
     for cid, after in rows.items():
         e = index.get(cid)
         if not e:
+            # A row the site no longer offers, but which the reviewer has not
+            # touched since we last looked, is not an edit. It happens when a
+            # published edit stops being copy — a video title changed to "NRSS"
+            # went live on 2026-10-21 and then failed the exporter's value test,
+            # four capitals reading as a code — or when the code around a
+            # string is removed. Refusing it blocked every round after it, under
+            # all-or-nothing: three later edits sat unpublished behind a row
+            # nobody had touched. An unknown row that HAS been edited is still
+            # refused; that edit has nowhere to go.
+            if baseline and baseline.get(cid) == after:
+                continue
             problems.append(('unknown id', cid, '',
                              'not in this manifest — the document was built from a '
                              'different export'))

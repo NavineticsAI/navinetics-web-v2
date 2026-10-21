@@ -4,7 +4,7 @@ import { usePageMeta } from '../lib/meta.js';
 import { numbers, principles, timeline } from '../data/company.js';
 import { isPlaceholder, visibleProducts } from '../data/products.js';
 import { asset } from '../lib/asset.js';
-import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
+import { Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
 import { Timeline } from '../ui/Timeline.jsx';
 
 /**
@@ -80,7 +80,7 @@ export default function WhoWeAre() {
       <Section wide className="!pt-0">
         <Reveal>
           <div className="grid gap-px overflow-hidden rounded-lg border border-hairline
-            bg-hairline sm:grid-cols-2 lg:grid-cols-4">
+            bg-hairline sm:grid-cols-3">
             {/* `to` is optional. A tile without one renders as a plain panel
                 rather than a Link, because <Link to={undefined}> throws — and
                 a tile that looks clickable and is not is worse than one that
@@ -166,26 +166,22 @@ export default function WhoWeAre() {
         </div>
       </Section>
 
+      {/* Centred on review, and the metric chips under each card ("Degrees of
+          freedom 3 + 2", "Localizers MR · CT", and MAVEN's two) removed. The
+          grid was three columns from lg for two cards, which left the right
+          third of the row empty; two columns across the full width keeps the
+          pair centred under the heading, and at that width the NRSS text no
+          longer runs short of MAVEN's and leaves a gap at the foot of its
+          card. */}
       <Section wide band>
-        <SectionHead eyebrow="What we make" title="Two lines of work." />
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <SectionHead align="center" eyebrow="What we make" title="Two lines of work." />
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
           {shipping.map((p, i) => (
             <Reveal key={p.slug} delay={i * 0.06}>
               <Card lift as={Link} to={p.path} className="flex h-full flex-col gap-3">
                 <span className="eyebrow text-action">{p.family}</span>
                 <h3 className="text-xl tracking-[-0.03em]">{p.tagline.replace('\n', ' ')}</h3>
-                <p className="flex-1 text-sm leading-relaxed text-ink-2">{p.summary}</p>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {(p.metrics ?? []).slice(0, 2).map((m) => (
-                    <span
-                      key={m.label}
-                      className="rounded-instr bg-action-soft px-1.5 py-0.5 font-data
-                        text-[0.625rem] tracking-[0.08em] text-action"
-                    >
-                      {`${m.label} ${m.value}`}
-                    </span>
-                  ))}
-                </div>
+                <p className="text-sm leading-relaxed text-ink-2">{p.summary}</p>
               </Card>
             </Reveal>
           ))}
@@ -193,36 +189,28 @@ export default function WhoWeAre() {
       </Section>
 
       <Section>
-        <SectionHead eyebrow="How we work" title="Three things we hold to." />
-        <div className="mt-10 flex flex-col divide-y divide-hairline-soft border-y border-hairline-soft">
+        {/* Heading centred on review, and the list with it. Centring the list
+            as a box was not enough: titles in a fixed left column and ragged
+            text on the right still put the weight left of the heading. So the
+            rows are set on the page's centre line instead — titles ranged right
+            up to it, text ranged left from it — and stacked and centred on a
+            phone. */}
+        <SectionHead align="center" eyebrow="How we work" title="Three things we hold to." />
+        <div className="mx-auto mt-10 flex max-w-4xl flex-col divide-y divide-hairline-soft border-y border-hairline-soft">
           {principles.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.05}>
-              <div className="grid gap-2 py-7 sm:grid-cols-[14rem_1fr] sm:gap-8">
-                <h3 className="text-base tracking-[-0.025em]">{p.title}</h3>
-                <p className="max-w-prose text-sm leading-relaxed text-ink-2">{p.body}</p>
+              <div className="grid gap-2 py-7 text-center sm:grid-cols-2 sm:gap-x-10 sm:text-left">
+                <h3 className="text-base tracking-[-0.025em] sm:text-right">{p.title}</h3>
+                <p className="text-sm leading-relaxed text-ink-2">{p.body}</p>
               </div>
             </Reveal>
           ))}
         </div>
       </Section>
 
-      <Section band>
-        <Reveal className="flex flex-col items-center gap-6 text-center">
-          <h2 className="text-d2">Come and find us.</h2>
-          <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            We are in downtown Rochester, Minnesota — next door to one of the world's leading
-            medical centers, which is not incidental to how the work gets done.
-          </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <Button to="/company/community" size="lg" arrow>
-              Where we are
-            </Button>
-            <Button to="/resources/careers" size="lg" variant="secondary">
-              Work with us
-            </Button>
-          </div>
-        </Reveal>
-      </Section>
+      {/* The "Come and find us." closing band — downtown Rochester, with
+          buttons to /company/community and /resources/careers — was removed
+          on review. */}
     </>
   );
 }

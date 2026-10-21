@@ -100,11 +100,9 @@ export default function Maven() {
               the rest of our work — the{' '}
               <Link to="/products/d1-stereotactic-frame" className="text-action underline-offset-4 hover:underline">
                 NRSS
-              </Link>{' '}
-              and{' '}
-              <Link to="/technology/navinetics-ai" className="text-action underline-offset-4 hover:underline">
-                NaviNetics AI
               </Link>
+              {/* "and NaviNetics AI", linked, came off here: that page is
+                  hidden and linked from nowhere (see data/technology.js). */}
               .
             </p>
           </Reveal>

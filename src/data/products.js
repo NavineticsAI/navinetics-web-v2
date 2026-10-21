@@ -282,7 +282,12 @@ export const products = [
        they were the last place on the site still setting it in title case. */
     name: 'MAVEN: Multifunctional Apparatus for Voltammetry, Electrophysiology and Neuromodulation',
     shortName: 'MAVEN',
-    family: 'MAVEN Neuromodulation',
+    /* Was "MAVEN Neuromodulation". Changed in the shared review document on
+       2026-10-21 and carried over by hand when the document was re-issued,
+       because its round was blocked by an unrelated refusal and would
+       otherwise have been lost. Shown in the Products menu, the Who We Are
+       cards and the product cards. */
+    family: 'MAVEN: Multifunctional Apparatus for Voltammetry, Electrophysiology and Neuromodulation',
     /**
      * NO `aka` HERE, deliberately.
      *
@@ -338,6 +343,10 @@ export const products = [
        clause should still have the important half. */
     summary:
       'A pre-clinical research device to measure neuronal activity and neurotransmitter concentration: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact, eliciting data collection supporting neuronal based experiments.',
+    /* Set under the product heading on the home page. NaviNetics' wording,
+       from review on 2026-10-21 — the home page lost its other pre-clinical
+       qualifier when the summary and the research card came off it. */
+    useNote: 'For preclinical research only',
     /**
      * MAVEN is the product name — confirmed by NaviNetics. The copy below used
      * to be written around "the WINCS Harmoni Device" throughout; it now names

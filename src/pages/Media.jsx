@@ -208,15 +208,19 @@ export default function Media() {
                     <p className="text-sm leading-relaxed text-ink-2">{m.caption}</p>
                   </figcaption>
                 </button>
-                <div className="mt-auto px-5 pb-4">
-                  <Link
-                    to={m.page.to}
-                    className="font-data text-[0.625rem] uppercase tracking-[0.12em] text-action
-                      underline-offset-4 hover:underline"
-                  >
-                    Seen on {m.page.label}
-                  </Link>
-                </div>
+                {/* `page` can be null — an image whose page is hidden keeps
+                    its card but has nowhere to send the reader. */}
+                {m.page && (
+                  <div className="mt-auto px-5 pb-4">
+                    <Link
+                      to={m.page.to}
+                      className="font-data text-[0.625rem] uppercase tracking-[0.12em] text-action
+                        underline-offset-4 hover:underline"
+                    >
+                      Seen on {m.page.label}
+                    </Link>
+                  </div>
+                )}
               </figure>
             </Reveal>
           ))}
@@ -254,13 +258,15 @@ export default function Media() {
             <figcaption className="flex flex-col gap-1 bg-surface p-5">
               <h2 className="text-lg tracking-[-0.025em]">{lightbox.title}</h2>
               <p className="text-sm text-ink-2">{lightbox.caption}</p>
-              <Link
-                to={lightbox.page.to}
-                className="mt-2 w-fit font-data text-[0.625rem] uppercase tracking-[0.12em]
-                  text-action underline-offset-4 hover:underline"
-              >
-                Seen on {lightbox.page.label}
-              </Link>
+              {lightbox.page && (
+                <Link
+                  to={lightbox.page.to}
+                  className="mt-2 w-fit font-data text-[0.625rem] uppercase tracking-[0.12em]
+                    text-action underline-offset-4 hover:underline"
+                >
+                  Seen on {lightbox.page.label}
+                </Link>
+              )}
             </figcaption>
           </figure>
         </div>

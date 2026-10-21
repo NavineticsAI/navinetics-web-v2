@@ -1,6 +1,6 @@
 import { asset } from '../lib/asset.js';
 import { usePageMeta } from '../lib/meta.js';
-import { Button, Hero, Reveal, Section } from '../ui/index.js';
+import { Hero, Reveal, Section } from '../ui/index.js';
 
 /**
  * `focus` is the CSS object-position for the portrait.
@@ -158,27 +158,9 @@ export default function Founders() {
         </div>
       </Section>
 
-      {/* The page ended on the last line of the last biography. Someone who has
-          read four CVs has just done the work of deciding these people are real
-          — which is the single most persuasive thing this site can do for a
-          distributor or a surgeon — and then had nowhere to go. */}
-      <Section>
-        <Reveal className="flex flex-col items-center gap-6 text-center">
-          <span className="eyebrow text-action">Come and talk</span>
-          <h2 className="text-d2">We would like to hear from you.</h2>
-          <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-            Whether you are a neurosurgeon, run a laboratory, or cover a territory — the people above are the people you would be working with.
-          </p>
-          <div className="mt-2 flex flex-wrap justify-center gap-3">
-            <Button to="/contact" size="lg" arrow>
-              Get in touch
-            </Button>
-            <Button to="/resources/publications" size="lg" variant="secondary">
-              Read the published work
-            </Button>
-          </div>
-        </Reveal>
-      </Section>
+      {/* A closing "Come and talk — We would like to hear from you." band, with
+          buttons to /contact and /resources/publications, sat here. Removed on
+          review; the page ends on the last biography again. */}
     </>
   );
 }
