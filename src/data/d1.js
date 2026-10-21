@@ -90,7 +90,6 @@ export const bands = [
       bare: true,
       alt: 'The NRSS fitted to an anatomical head model, clear of the face, with a probe on its '
         + 'trajectory.',
-      caption: '',
     },
   },
   {
@@ -99,59 +98,34 @@ export const bands = [
     tone: 'ephys',
     eyebrow: 'Targeting',
     title: 'Arc-centered.',
+    /* NO ACCURACY FIGURE ON THIS PAGE. Decided by NaviNetics, 2026-08-17.
+       ────────────────────────────────────────────────────────────────────
+       A figure was added to this band and removed the same day. It is published
+       and it is good — Shin, Scheitler, Sharaf et al., Operative Neurosurgery
+       2025;29(1):93-101, already cited on /resources/publications, reports mean
+       radial error of 0.71 +/- 0.33 mm across 32 leads in 17 patients.
+
+       It comes off because the company does not want performance numbers on the
+       published site while the work is still developing, and because
+       navinetics.com states no accuracy figure either — putting one here would
+       make the two sites disagree about what NaviNetics claims.
+
+       DO NOT re-add a figure here without the company asking for it. */
     lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, '
       + 'and two angles of rotation set how you reach it. Every approach the arc allows meets '
       + 'the same point.',
-    points: [
-      {
-        label: 'Three linear, two angular.',
-        body: 'X, Y and Z settings position the target at the focus of the frame; the collar and '
-        + 'the arc settings define the trajectory to the target.',
-      },
-      {
-        label: 'Adjustments near the field.',
-        /* Was "... close to where the work is, rather than out at the rim of a
-           ring." Two problems. It defines the instrument against an unnamed
-           competitor instead of describing itself — the reader is told what we
-           are not, and has to already know the alternative for the sentence to
-           mean anything. And it put "ring" back on the page after the term was
-           removed everywhere else, which is how a retired word survives a sweep.
-           Stated on its own terms, the sentence needs no comparison. */
-        body: 'Every adjustmentis assessable in surgical field, giving the surgeon access to easily '
-        + 'set the target coordonates and trajectory values on the NRSS.',
-      },
-      {
-        /* NO ACCURACY FIGURE ON THIS PAGE. Decided by NaviNetics, 2026-08-17.
-           ────────────────────────────────────────────────────────────────
-           A figure was added here and removed the same day. It is published and
-           it is good — Shin, Scheitler, Sharaf et al., Operative Neurosurgery
-           2025;29(1):93-101, already cited on /resources/publications, reports
-           mean radial error of 0.71 +/- 0.33 mm across 32 leads in 17 patients.
-
-           It comes off because the company does not want performance numbers on
-           the published site while the work is still developing, and because
-           navinetics.com states no accuracy figure either — putting one here
-           would make the two sites disagree about what NaviNetics claims.
-
-           The paper stays cited in full. A surgeon who wants the number can read
-           it in its own context, with its n and its conditions, which is where a
-           measured result belongs. What this page says instead is what the
-           instrument does, which needs no substantiation file.
-
-           DO NOT re-add a figure here without the company asking for it. */
-        label: 'One focus, every approach.',
-        body: 'Two rotations about the focus allows the target, located at the focus, to be '
-        + 'approached from a multitude of directionsproviding the optimal  approach the target.',
-      },
-    ],
-    meta: [{ label: 'Classification', value: 'Arc-centered' }, { label: 'Freedom', value: '3 linear · 2 angular' }],
     figure: {
       video: frameVideo,
       poster: framePoster,
       w: 1280, h: 720,
+      /* One-third speed, on review — half was asked to go slower still. The
+         master is only 15 fps (see tools/education-video.mjs), so this already
+         shows five frames a second; much below it the turn reads as a series of
+         stills, and the cure for that is a higher-rate render, not a lower
+         rate here. */
+      rate: 0.33,
       alt: 'The stereotactic frame on a head model, turning, with a probe held on its trajectory '
         + 'as the arc moves around it.',
-      caption: 'The arc moving through its approaches',
     },
   },
   {
@@ -162,28 +136,10 @@ export const bands = [
     title: 'Down the\ntrajectory.',
     lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
     + 'leads and micro-recording electrodes to the target.',
-    points: [
-      {
-        label: 'Coaxial with the approach.',
-        body: 'The drive runs on the axis the arc chose, so advancing stays on the line the '
-          + 'frame has set.',
-      },
-      {
-        label: 'A manual microdrive.',
-        /* No longer says "supplied with the frame". data/products.js records it
-           as an open question that the microdrive and the X-ray reticles are not
-           in the nine-kit bill of materials, so the two files were asserting
-           different things about what is in the box. */
-        body: 'Advanced by hand, along the trajectory the arc has set. It also accepts Alpha '
-          + 'Omega drives.',
-      },
-    ],
-    meta: [{ label: 'Drive', value: 'Mechanical' }, { label: 'Supplied', value: 'With the frame' }],
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
       w: 1024, h: 797,
       alt: 'The NaviNetics manual microdrive.',
-      caption: 'The manual microdrive',
     },
   },
   {
@@ -192,26 +148,28 @@ export const bands = [
     tone: 'soft',
     eyebrow: 'Access',
     title: 'Room\nto work.',
-    lead: 'The Skull Anchor Key and the The compact design provides easy access to  the surgical '
+    /* Was "…and the The compact design provides easy access to  the surgical
+       field." — doubled "the", a doubled space, and a singular verb on a
+       compound subject. */
+    lead: 'The Skull Anchor Key and the compact design provide easy access to the surgical '
     + 'field.',
-    points: [
-      {
-        label: 'Take it off, put it back.',
-        body: 'The frame comes away from the key without losing the coordinate system the key '
-          + 'defines.',
-      },
-      {
-        label: 'Frameless size, frame workflow.',
-        body: 'The record’s own claim: the workflow of a frame-based system at the size of a '
-          + 'frameless one.',
-      },
-    ],
-    meta: [{ label: 'Localizers', value: 'MR · CT · X-ray' }, { label: 'Reusable', value: 'Yes' }],
     figure: {
       src: detailArt,
       w: 759, h: 1134,
-      alt: 'The NNRS frame from the opposite side, rendered from the assembly CAD.',
-      caption: 'The frame from the opposite side',
+      /* A tall cut-out with its own alpha, so it goes unplated. On a plate it
+         filled the column and stood about 840px high, well over twice the
+         plated figures above it; reduced on review to match them, so it takes
+         the `plate` cap — about the microdrive plate's height — rather than the
+         head model's taller one. */
+      bare: true,
+      cap: 'plate',
+      alt: 'The NRSS frame from the opposite side, rendered from the assembly CAD.',
     },
   },
 ];
+
+/* On review, every band lost its bullet points, its chips ("Classification ·
+   Arc-centered", "Freedom · 3 linear · 2 angular", "Drive · Mechanical",
+   "Supplied · With the frame", "Localizers · MR · CT · X-ray", "Reusable ·
+   Yes") and its figure caption. ScienceBand renders each only when present, so
+   leaving them out is the whole change. */

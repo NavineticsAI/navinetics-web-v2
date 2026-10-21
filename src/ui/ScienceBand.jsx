@@ -214,14 +214,17 @@ export function ScienceBand({
                        makes it two thousand pixels high — so it is capped by
                        height and centered instead. */
                     className={figure.bare
-                      ? 'mx-auto block h-auto w-auto max-h-[26rem] max-w-full sm:max-h-[32rem] lg:max-h-[38rem]'
+                      ? cn('mx-auto block h-auto w-auto max-w-full', BARE_CAP[figure.cap ?? 'tall'])
                       : 'block h-auto w-full'}
                   />
                 )}
               </div>
-              <figcaption className="mt-3 font-data text-[0.625rem] uppercase tracking-[0.12em] text-ink-3">
-                {figure.caption}
-              </figcaption>
+              {/* Only with a caption: an empty one still took its margin. */}
+              {figure.caption && (
+                <figcaption className="mt-3 font-data text-[0.625rem] uppercase tracking-[0.12em] text-ink-3">
+                  {figure.caption}
+                </figcaption>
+              )}
             </figure>
           </Reveal>
         )}
@@ -229,6 +232,15 @@ export function ScienceBand({
     </section>
   );
 }
+
+/* Height caps for unplated cut-outs. `tall` suits a narrow object like the
+   head model. A cut-out with any breadth to it carries far more weight at that
+   height than the plated figures in the bands either side, so `plate` caps it
+   at about their height instead. */
+const BARE_CAP = {
+  tall: 'max-h-[26rem] sm:max-h-[32rem] lg:max-h-[38rem]',
+  plate: 'max-h-[20rem] sm:max-h-[24rem] lg:max-h-[30rem]',
+};
 
 /**
  * A figure that moves.
@@ -245,6 +257,13 @@ function BandVideo({ figure, reduced }) {
   useEffect(() => {
     const el = ref.current;
     if (!el || reduced) return undefined;
+    /* `rate` slows a clip without re-encoding it. Set as the default too,
+       because with preload="none" the media loads on first play and loading
+       resets playbackRate to defaultPlaybackRate. */
+    if (figure.rate) {
+      el.defaultPlaybackRate = figure.rate;
+      el.playbackRate = figure.rate;
+    }
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) el.play().catch(() => { /* autoplay refused; poster stands */ });
@@ -254,7 +273,7 @@ function BandVideo({ figure, reduced }) {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [reduced]);
+  }, [reduced, figure.rate]);
 
   if (reduced) {
     return (

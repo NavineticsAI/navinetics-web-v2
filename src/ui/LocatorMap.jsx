@@ -151,11 +151,8 @@ export function LocatorMap({ className }) {
           );
         })}
       </svg>
-      <figcaption className="mt-4 font-data text-[0.6875rem] uppercase tracking-[0.12em] text-ink-3">
-        {/* 124 km is the great-circle distance between the two civic
-            coordinates, computed in tools/locator-map.mjs — not an estimate. */}
-        Rochester, Minnesota · 124 km from Minneapolis–Saint Paul
-      </figcaption>
+      {/* The caption "Rochester, Minnesota · 124 km from Minneapolis–Saint
+          Paul" was removed on review. */}
     </figure>
   );
 }

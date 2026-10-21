@@ -1,19 +1,37 @@
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
-import { RotationInset } from '../ui/RotationInset.jsx';
 import { isPlaceholder, visibleProducts } from '../data/products.js';
-import { publications } from '../data/publications.js';
-import {
-  Button,
-  Card,
-  Hero,
-  LinkAction,
-  ProductPlate,
-  Reveal,
-  Section,
-  SectionHead,
-  Badge,
-} from '../ui/index.js';
+import { Button, Hero, ProductPlate, Reveal, Section } from '../ui/index.js';
+
+/* Both product names carry an acronym, in two different shapes —
+   "MAVEN: Multifunctional Apparatus for …" and "NaviNetics Reusable
+   Stereotactic System (NRSS)". On review both are set the same way here: the
+   acronym at heading size, the spelled-out name smaller beneath it, so the
+   two cards weigh the same. The colon stays in the accessible name; it is
+   only hidden visually. A name in neither shape renders as it is. */
+function splitName(name) {
+  const colon = name.match(/^([^:]+):\s(.+)$/);
+  if (colon) return [colon[1], colon[2]];
+  const paren = name.match(/^(.+?)\s*\(([^)]+)\)$/);
+  if (paren) return [paren[2], paren[1]];
+  return [name];
+}
+
+function ProductName({ name }) {
+  const [short, expansion] = splitName(name);
+  return (
+    <h2 className="text-d2">
+      {short}
+      {expansion && (
+        <>
+          <span className="sr-only">: </span>
+          <span className="mt-2 block text-xl leading-[1.25] tracking-[-0.02em] lg:text-2xl">
+            {expansion}
+          </span>
+        </>
+      )}
+    </h2>
+  );
+}
 
 export default function Home() {
   usePageMeta({
@@ -34,6 +52,7 @@ export default function Home() {
           a decision for NaviNetics, not a fix to make quietly. */}
       <Hero
         size="lg"
+        fill
         targeting
         eyebrow="NaviNetics"
         /* The company slogan, which is what navinetics.com leads with. It
@@ -70,172 +89,63 @@ export default function Home() {
         </div>
       </Hero>
 
-      {/* Product features — alternating plate and copy. Products still in
-          development are excluded: a half-empty feature section reads worse
-          than absence. They still appear in the nav, the footer and product
-          cross-sell. */}
-      {visibleProducts.filter((p) => !isPlaceholder(p)).map((product, i) => (
-        <Section key={product.slug} wide band={i % 2 === 1}>
-          <div
-            className={`flex flex-col items-center gap-12 lg:gap-20 ${
-              i % 2 === 1 ? 'lg:flex-row-reverse' : 'lg:flex-row'
-            }`}
-          >
-            <Reveal className="lg:w-1/2">
-              <h2 className="text-d2">{product.family}</h2>
-              <p className="mt-5 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-ink-2">
-                {product.summary}
-              </p>
-              <LinkAction to={product.path} className="mt-7">
-                Explore {product.shortName}
-              </LinkAction>
-            </Reveal>
+      {/* Product features — side by side, plate over heading over button. This
+          was one full-width alternating band per product until review asked
+          for NRSS and MAVEN next to each other. Products still in development
+          are excluded: a half-empty feature section reads worse than absence.
+          They still appear in the nav, the footer and product cross-sell.
 
-            <Reveal className="w-full lg:w-1/2">
-              <div className="relative">
-                {/* `tone` is forwarded because these are cut-outs with
-                    transparent backgrounds and each record says which ground
-                    it needs. Home was ignoring that and putting all three on
-                    the pale plate — on the one page most people see first. */}
-                <ProductPlate
-                  src={product.hero}
-                  alt={product.heroAlt}
-                  tone={product.heroTone}
-                  className="aspect-square w-full"
-                />
-                {/* The floating lens panel that used to sit over each plate is
-                    gone, at NaviNetics' request — "DEGREES OF FREEDOM 3 + 2" on
-                    the NRSS plate and the equivalent first metric on the other
-                    two. The figures are not lost: `metrics` still feeds the
-                    spec table on each product page.
+          The summary paragraph under each heading came out on review, and the
+          Explore link was promoted from an inline text action to a full button
+          so it carries the card on its own. The summaries are still in
+          data/products.js — they feed the product cards on other pages — so
+          this only takes them off the home page.
 
-                    In its place, on the NRSS plate only, a drawing of what that
-                    number means — the collar and the arc turning while the
-                    target holds still. Only this product is arc-centred, so
-                    only this plate gets it. */}
-                {product.slug === 'd1-stereotactic-frame' && (
-                  <RotationInset className="hidden md:block" />
-                )}
-              </div>
-            </Reveal>
-          </div>
-        </Section>
-      ))}
-
-      {/* Bento */}
+          The "Every angle, one point" rotation drawing that sat on the NRSS
+          plate was removed on review as well. */}
       <Section wide>
-        {/* "exceptional accuracy" came out of the lead. It is an adjective
-            standing where a figure belongs, on the one attribute a surgeon
-            checks first, and this site's own rule is that claims which cannot
-            be cited do not appear on it. The accuracy work IS published — two
-            validation papers on /resources/publications — but until a figure
-            from them is stated here, an adjective is the weakest possible
-            stand-in. Workflow and comfort stay: the pages behind them show the
-            mechanism. */}
-        <SectionHead
-          align="center"
-          eyebrow="How we build"
-          title="Targeting, measurement and access."
-          /* Was "Surgical workflow, patient comfort, and exceptional accuracy".
-             "Exceptional accuracy" is the same comparative claim the note at the
-             top of this file records removing from the hero, and no accuracy
-             figure exists anywhere on the site to support it — data/products.js
-             withholds those on purpose. The eyebrow was "Designed for the
-             future", which said nothing above a section about present work. */
-          lead="Surgical workflow and patient comfort, from a team that has spent decades in the operating room and the laboratory."
-        />
-
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Reveal className="sm:col-span-2">
-            <Card lift className="nn-retic relative h-full min-h-56 overflow-hidden">
-              {/* Was "Unprecedented access" — a superlative with no comparator,
-                  removed on instruction. The eyebrow now names the mechanism,
-                  which is the term NaviNetics wants carried. */}
-              <span className="eyebrow text-action">Skull Anchor Key</span>
-              <h3 className="mt-3 text-2xl tracking-[-0.03em]">
-                The frame anchors to a key on the skull
-              </h3>
-              <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                The patient's face stays clear, and the surgical team keeps full access to the
-                field.
-              </p>
-            </Card>
-          </Reveal>
-
-          <Reveal delay={0.06}>
-            <Card
-              lift
-              className="flex h-full min-h-56 flex-col justify-between border-transparent bg-action text-on-action"
-            >
-              <div>
-                <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] opacity-75">
-                  Origin
-                </span>
-                <h3 className="mt-3 text-2xl tracking-[-0.03em]">Mayo Clinic roots</h3>
-                <p className="mt-2.5 text-sm leading-relaxed opacity-85">
-                  Born from the Neural Engineering Laboratories, on decades of clinical experience.
-                </p>
-              </div>
-              <Link
-                to="/company/our-founders"
-                className="mt-5 inline-flex w-fit rounded-full bg-on-action px-4 py-2 text-[0.8125rem] font-semibold text-action"
-              >
-                Meet the founders
-              </Link>
-            </Card>
-          </Reveal>
-
-          <Reveal delay={0.12}>
-            <Card lift className="flex h-full min-h-56 flex-col justify-between">
-              <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-ink-3">
-                Research
-              </span>
-              {/* The number is the one we can stand behind. "100+" was uncited
-                  anywhere on the site and sat directly above a link reading
-                  "Browse 9 selected" — putting an unsupported figure next to a
-                  much smaller supported one, which invites the reader to notice
-                  the gap rather than the record. The nine are cited to their
-                  DOIs, so they are the stronger claim. */}
-              <div>
-                <div className="text-5xl font-semibold leading-none tracking-[-0.045em] tabular-nums">
-                  {publications.length}
+        <div className="grid gap-14 md:grid-cols-2 md:gap-8 lg:gap-12">
+          {visibleProducts.filter((p) => !isPlaceholder(p)).map((product, i) => (
+            <Reveal key={product.slug} delay={i * 0.06} className="flex flex-col">
+              {/* `tone` is forwarded because these are cut-outs with transparent
+                  backgrounds and each record says which ground it needs. 4:3
+                  rather than square, on review — two square plates side by
+                  side made the images outweigh everything else on the page. */}
+              <ProductPlate
+                src={product.hero}
+                alt={product.heroAlt}
+                tone={product.heroTone}
+                className="aspect-[4/3] w-full"
+              />
+              {/* Button to the right of the title, top-aligned so both sit on
+                  the same line across the two cards whatever the title's
+                  length. Below xl a column is too narrow to share — at 1024px
+                  the MAVEN expansion broke across six lines — so the button
+                  drops under the title, and justify-between pins it to the
+                  foot of the card so the two still line up. */}
+              <div className="mt-8 flex flex-1 flex-col justify-between gap-6 xl:flex-row xl:items-start">
+                <div>
+                  {/* `name`, not `family`: MAVEN is spelled out in full here on
+                      review. For the NRSS the two fields are the same string.
+                      The acronym-first layout is this page's only; the records
+                      and every other page keep the names as written. */}
+                  <ProductName name={product.name} />
+                  {product.useNote && (
+                    <p className="mt-3 text-lead text-ink-2">{product.useNote}</p>
+                  )}
                 </div>
-                <p className="mt-2 text-sm text-ink-2">
-                  peer-reviewed papers by our founders and their laboratory, each one cited
-                </p>
-                <LinkAction to="/resources/publications" className="mt-4 !text-sm">
-                  Browse {publications.length} papers
-                </LinkAction>
+                <Button to={product.path} size="lg" arrow className="self-start xl:shrink-0">
+                  Explore {product.shortName}
+                </Button>
               </div>
-            </Card>
-          </Reveal>
-
-          <Reveal delay={0.18} className="sm:col-span-2">
-            <Card lift className="flex h-full min-h-56 flex-col justify-between">
-              <div>
-                <Badge>Neuromodulation</Badge>
-                {/* "Closed-loop, one day" left a reader unable to tell product
-                    from roadmap, above a link that reads as availability. And the
-                    body claimed artifact "never contaminates the recording" where
-                    data/products.js says "engineered to minimize" it — the home
-                    page was escalating a hedged engineering statement into an
-                    absolute, for a preclinical instrument. */}
-                <h3 className="mt-3.5 text-2xl tracking-[-0.03em]">
-                  Stimulation for pre-clinical research
-                </h3>
-                <p className="mt-2.5 max-w-md text-sm leading-relaxed text-ink-2">
-                  Synchronized neurochemical and electrophysiological measurement, engineered to
-                  minimize stimulation artifact.
-                </p>
-              </div>
-              <LinkAction to="/products/maven-neuromodulation" className="mt-5">
-                See how MAVEN measures
-              </LinkAction>
-            </Card>
-          </Reveal>
+            </Reveal>
+          ))}
         </div>
       </Section>
 
+      {/* The "How we build — Targeting, measurement and access." bento that
+          sat here (Skull Anchor Key, Mayo Clinic roots, publication count,
+          MAVEN research card) was removed on review. */}
       <Section band>
         <Reveal className="flex flex-col items-center gap-6 text-center">
           <h2 className="text-d2">Let's talk.</h2>

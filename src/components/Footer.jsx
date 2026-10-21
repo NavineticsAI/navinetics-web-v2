@@ -33,15 +33,11 @@ export default function Footer() {
             <p className="mt-4 eyebrow text-sg-300">
               Quality and simplicity, in everything we do
             </p>
-            {/* The legal entity. navinetics.com named two — NaviNetics, Inc.
-                and NaviNetics NeuroModulation, Inc. — but they have since
-                merged, and NaviNetics, Inc. is now the single entity. A device
-                company's site should say who it is. */}
-            <p className="mt-6 text-[0.8125rem] leading-relaxed text-nn-300">
-              NaviNetics, Inc.<br />
-              206 S Broadway, STE 700<br />
-              Rochester, MN 55904, USA
-            </p>
+            {/* The entity-and-address block that sat here came out on review.
+                The address is still in the contact row at the foot, and the
+                legal entity — NaviNetics, Inc., the single entity since the
+                merger with NaviNetics NeuroModulation, Inc. — still in the
+                copyright line. */}
           </div>
 
           {nav.map((col) => (

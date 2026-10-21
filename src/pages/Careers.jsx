@@ -1,14 +1,14 @@
+import { ArrowRight } from 'lucide-react';
 import { usePageMeta } from '../lib/meta.js';
 import { jobs } from '../data/jobs.js';
 import { disciplines, expectations } from '../data/disciplines.js';
 import { cn } from '../lib/cn.js';
 import {
   Badge,
-  Button,
   ConvergenceDiagram,
   Eyebrow,
+  Hero,
   Reveal,
-  Rule,
   Section,
   SectionHead,
   TickLine,
@@ -21,114 +21,120 @@ import {
  *
  *   SHOW_DISCIPLINE_DIAGRAM → src/ui/ConvergenceDiagram.jsx + data/disciplines.js
  *   SHOW_EXPECTATIONS       → `expectations` in data/disciplines.js
- *
- * With both off the page is the Open roles block alone, which is intentional.
  */
 const SHOW_DISCIPLINE_DIAGRAM = false;
 const SHOW_EXPECTATIONS = false;
 
+const CAREERS_MAIL = 'mailto:info@navinetics.com?subject=Careers';
+
+/**
+ * The content is navinetics.com/careers, verbatim, on review: the heading from
+ * its "Join Our Team" banner, its three paragraphs, and the address they all
+ * point to. It replaced "No open postings today." over a grid of the six
+ * disciplines, which the company site does not have and the review did not
+ * keep.
+ *
+ * Open roles still list themselves: add one to data/jobs.js and it appears
+ * under the introduction with no page work.
+ */
 export default function Careers() {
   usePageMeta({
     title: 'Careers',
     description:
-      'Six disciplines converging on one target. Neurosurgery, neurology, mechanical and software engineering, research, and regulatory — building stereotactic navigation systems at NaviNetics.',
+      'NaviNetics is a design and development company with a core of engineers and regulatory specialists bringing medical devices to market. For careers, contact info@navinetics.com.',
   });
 
   return (
     <>
-      {/* ── 1 · Open roles ─────────────────────────────────────────────────
-          Deliberately first. With nothing posted, "no roles" would normally be
-          a dead end; here it is the primary call to action. */}
-      <Section wide className="pt-36">
-        {jobs.length > 0 ? (
-          <>
-            <SectionHead
-              eyebrow="Open roles"
-              level="h1"
-              title={`${jobs.length} ${jobs.length === 1 ? 'opening' : 'openings'}`}
-            />
-            <ul className="mt-10 flex flex-col gap-3">
-              {jobs.map((job) => (
-                <li key={job.id}>
-                  <Reveal>
-                    <a
-                      href={`mailto:info@navinetics.com?subject=${encodeURIComponent(job.title)}`}
-                      className="group/job flex flex-col gap-4 rounded-lg border border-hairline-soft bg-surface p-6 transition-[transform,box-shadow,border-color] duration-[420ms] ease-out hover:-translate-y-1 hover:border-hairline hover:shadow-e2 md:flex-row md:items-center"
-                    >
-                      <div className="flex-1">
-                        <h3 className="text-xl tracking-[-0.028em] group-hover/job:text-action">
-                          {job.title}
-                        </h3>
-                        <p className="mt-1.5 text-sm text-ink-2">{job.summary}</p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Badge tone="line">{job.team}</Badge>
-                        <Badge tone="line">{job.location}</Badge>
-                        <Badge>{job.type}</Badge>
-                      </div>
-                    </a>
-                  </Reveal>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <>
-            {/* Careers has no Hero, so this is the page's only top-level
-                heading — without level it rendered an h2 and the document
-                outline started at 2 with no h1 above it. */}
-            <SectionHead
-              eyebrow="Open roles"
-              level="h1"
-              title="No open postings today."
-              lead={
-                'We hire against the six disciplines below whenever the right person appears — ' +
-                'so tell us which one is yours.'
-              }
-            />
+      {/* The paragraphs below continue the hero's lead, so the hero gives up
+          its half-screen minimum height and the section-sized bottom padding
+          that came with it — on review, the gap between the first paragraph
+          and the second read as a break in the text. */}
+      <Hero
+        className="min-h-0 pb-8 md:pb-8 lg:pb-10"
+        eyebrow="Careers"
+        title="Join our team."
+        lead="NaviNetics is a design and development company with a core of engineers and regulatory specialists bringing medical devices to market. Our partnerships reach from the research laboratory to the bedside with access to cutting-edge technology and worldwide resources."
+      />
 
-            <Reveal className="mt-10">
-              <div className="overflow-hidden rounded-lg border border-hairline-soft bg-surface">
-                <Rule />
-                <div className="px-8 py-11 text-center">
-                  {/* h2, not h3. The h1 above is the page's only other heading,
-                      so this jumped a level — and a screen reader announcing the
-                      outline tells the listener they have missed a section.
-                      Size is unchanged; only the tag is. */}
-                  <h2 className="text-[clamp(1.4rem,2.6vw,1.9rem)]">
-                    Tell us which angle you'd come in from.
-                  </h2>
-                  <p className="mx-auto mt-3 max-w-[52ch] leading-relaxed text-ink-2">
-                    One paragraph on what you'd want to own here, and something you've built or
-                    published. No cover letter. It goes to the founders, not a portal.
-                  </p>
-                  <div className="mt-6 flex justify-center">
-                    <Button href="mailto:info@navinetics.com?subject=Open%20application" arrow>
-                      Write to us
-                    </Button>
-                  </div>
-                </div>
+      <Section wide className="!pt-0">
+        <div className="grid items-start gap-10 lg:grid-cols-[7fr_5fr] lg:gap-16">
+          <Reveal className="flex flex-col gap-6 text-lead leading-[1.55] tracking-[-0.015em] text-ink-2">
+            <p className="max-w-prose">
+              A career at NaviNetics gives opportunities to grow and develop your skills in a highly
+              collaborative and supportive environment. We have a passion for making a meaningful
+              difference in people’s lives and are always seeking fellow innovators and
+              problem-solvers.
+            </p>
+            <p className="max-w-prose">
+              For more information on available careers, contact us at{' '}
+              <a href={CAREERS_MAIL} className="font-semibold text-action hover:text-action-hi">
+                info@navinetics.com
+              </a>
+              .
+            </p>
+          </Reveal>
 
-                <div className="grid gap-px border-t border-hairline-soft bg-hairline-soft [grid-template-columns:repeat(auto-fit,minmax(140px,1fr))]">
-                  {disciplines.map((d) => (
-                    <div
-                      key={d.id}
-                      className="flex flex-col gap-1 bg-surface px-5 py-4 transition-colors duration-200 hover:bg-action-soft"
-                    >
-                      <span className="text-[0.9375rem] font-semibold tracking-[-0.02em]">
-                        {d.short}
-                      </span>
-                      <span className="font-[family-name:var(--font-mono)] text-[0.625rem] uppercase tracking-[0.12em] text-ink-3">
-                        {d.group}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </>
-        )}
+          {/* Stands where the company site has its "Join Our Team" banner,
+              which is an image of text linking to the same address. Real text
+              here, so it reads, scales and translates. */}
+          <Reveal delay={0.06}>
+            <div className="flex flex-col gap-5 rounded-lg bg-action p-8 text-on-action md:p-10">
+              <span className="font-data text-[0.6875rem] uppercase tracking-[0.14em] opacity-75">
+                Contact us
+              </span>
+              <a
+                href={CAREERS_MAIL}
+                className="w-fit text-[clamp(1.375rem,2.4vw,1.75rem)] font-semibold tracking-[-0.03em]
+                  underline-offset-4 hover:underline"
+              >
+                info@navinetics.com
+              </a>
+              <a
+                href={CAREERS_MAIL}
+                className="mt-1 inline-flex w-fit items-center gap-2 rounded-full bg-on-action px-5 py-2.5
+                  text-sm font-semibold text-action transition-transform duration-200 hover:-translate-y-px"
+              >
+                Write to us
+                <ArrowRight size={15} aria-hidden="true" />
+              </a>
+            </div>
+          </Reveal>
+        </div>
       </Section>
+
+      {jobs.length > 0 && (
+        <Section wide band>
+          <SectionHead
+            eyebrow="Open roles"
+            title={`${jobs.length} ${jobs.length === 1 ? 'opening' : 'openings'}`}
+          />
+          <ul className="mt-10 flex flex-col gap-3">
+            {jobs.map((job) => (
+              <li key={job.id}>
+                <Reveal>
+                  <a
+                    href={`mailto:info@navinetics.com?subject=${encodeURIComponent(job.title)}`}
+                    className="group/job flex flex-col gap-4 rounded-lg border border-hairline-soft bg-surface p-6 transition-[transform,box-shadow,border-color] duration-[420ms] ease-out hover:-translate-y-1 hover:border-hairline hover:shadow-e2 md:flex-row md:items-center"
+                  >
+                    <div className="flex-1">
+                      <h3 className="text-xl tracking-[-0.028em] group-hover/job:text-action">
+                        {job.title}
+                      </h3>
+                      <p className="mt-1.5 text-sm text-ink-2">{job.summary}</p>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge tone="line">{job.team}</Badge>
+                      <Badge tone="line">{job.location}</Badge>
+                      <Badge>{job.type}</Badge>
+                    </div>
+                  </a>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
 
       {/* ── 2 · Careers at NaviNetics ──────────────────────────────────────
           Arc-centered stereotaxy reaches one point from many angles. So does the

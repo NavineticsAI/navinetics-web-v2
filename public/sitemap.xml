@@ -32,10 +32,8 @@
     <loc>https://navineticsai.github.io/navinetics-web-v2/technology/neuromodulation</loc>
     <priority>0.8</priority>
   </url>
-  <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/technology/navinetics-ai</loc>
-    <priority>0.8</priority>
-  </url>
+  <!-- /technology/navinetics-ai is hidden: it still renders on its own URL but
+       is linked from nowhere, this file included. -->
 
   <url>
     <loc>https://navineticsai.github.io/navinetics-web-v2/company/who-we-are</loc>

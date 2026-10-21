@@ -1,7 +1,6 @@
 import { publications } from './publications.js';
 import { visibleProducts } from './products.js';
 import { territories } from './partners.js';
-import { disciplines } from './disciplines.js';
 
 /**
  * The company, as facts rather than adjectives.
@@ -113,10 +112,12 @@ export const timeline = [
 export const numbers = () => {
   const years = publications.map((p) => p.year);
   return [
+    /* These two opened /resources/publications and the NRSS page; both were
+       made plain panels on review. A tile with no `to` renders as a <div>. */
     { value: String(publications.length), label: 'Selected papers',
-      unit: `${Math.min(...years)}–${Math.max(...years)}`, to: '/resources/publications' },
+      unit: `${Math.min(...years)}–${Math.max(...years)}` },
     { value: String(visibleProducts.length), label: 'Product lines',
-      unit: 'frames and sensing', to: '/products/d1-stereotactic-frame' },
+      unit: 'frames and sensing' },
     { value: String(territories.length), label: 'Territories',
       /* Was "covered by partners", and the arithmetic did not survive a look:
          the United States is sold direct, three territories have no named
@@ -128,12 +129,8 @@ export const numbers = () => {
          is the only remaining way into a hidden page defeats hiding it. The
          number and the wording are unchanged. */
       unit: 'served, direct and through partners' },
-    { value: String(disciplines.length), label: 'Disciplines',
-      /* The unit named three where the number says six — see disciplines.js,
-         which runs surgery, product, mechanical, imaging, verification and
-         regulatory. Naming the span instead of a subset keeps the two in step
-         however the list changes. */
-      unit: 'surgery through to regulatory', to: '/resources/careers' },
+    /* A fourth tile, "Disciplines — surgery through to regulatory", counted
+       data/disciplines.js and opened /resources/careers. Removed on review. */
   ];
 };
 

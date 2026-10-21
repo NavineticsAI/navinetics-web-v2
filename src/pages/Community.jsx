@@ -1,5 +1,5 @@
 import { usePageMeta } from '../lib/meta.js';
-import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
+import { Button, Hero, Reveal, Section } from '../ui/index.js';
 import { LocatorMap } from '../ui/LocatorMap.jsx';
 
 /**
@@ -21,32 +21,6 @@ import { LocatorMap } from '../ui/LocatorMap.jsx';
  * to live" that used to be in the hero has been dropped for the same reason.
  * ─────────────────────────────────────────────────────────────────────────────
  */
-
-/** Why the address matters, rather than what is nearby. */
-const REASONS = [
-  {
-    title: 'The clinicians are down the corridor',
-    body:
-      'A co-founder operates at Mayo Clinic. Design input arrives as a surgeon telling you what was '
-      + 'in the way this morning, not as a summary of a survey some months later.',
-  },
-  {
-    title: 'Prototypes travel by hand',
-    body:
-      'A part can be machined, taken across town, held in gloved hands, criticized and changed '
-      + 'again inside a week. Distance is the thing that usually stops that loop closing.',
-  },
-  {
-    title: 'The laboratory is still here',
-    body:
-      /* Was "where the first reusable stereotactic system was prototyped". That
-         is a priority claim, and as written a reader takes it as first anywhere
-         rather than first of ours — which is the reading we cannot support.
-         Naming the system says the same true thing and claims nothing. */
-      'The Neural Engineering Laboratories, where the founders work and where '
-      + 'the NRSS was prototyped, are in the same city.',
-  },
-];
 
 const FACTS = [
   { k: 'Address', v: '206 S Broadway, Suite 700', note: 'Downtown Rochester, MN 55904' },
@@ -88,33 +62,18 @@ export default function Community() {
                 </div>
               ))}
             </div>
-            <Button href="https://maps.google.com/?q=206+S+Broadway+Ave+Suite+700,+Rochester,+MN+55904" variant="secondary" className="mt-8" arrow>
+            {/* NaviNetics' own Google Maps listing, on review, rather than a
+                search for the street address. */}
+            <Button href="https://maps.app.goo.gl/Yx3JPRkuzbwsXGiCA" variant="secondary" className="mt-8" arrow>
               Open in Maps
             </Button>
           </Reveal>
         </div>
       </Section>
 
-      <Section wide band>
-        <SectionHead
-          eyebrow="Why here"
-          title="Proximity is a design tool."
-          lead="Being a short walk from the operating theater changes what can be asked, and how
-            quickly it can be answered."
-        />
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {REASONS.map((r, i) => (
-            <Reveal key={r.title} delay={i * 0.06}>
-              {/* No 01/02/03 markers. These three reasons are not a sequence —
-                  numbering implied an order the content does not have. */}
-              <Card className="flex h-full flex-col gap-3">
-                <h3 className="text-lg tracking-[-0.03em]">{r.title}</h3>
-                <p className="text-sm leading-relaxed text-ink-2">{r.body}</p>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
+      {/* The "Why here — Proximity is a design tool." section (three cards:
+          clinicians down the corridor, prototypes by hand, the laboratory)
+          was removed on review. */}
 
       {/* The "Visiting, or joining?" close is removed on NaviNetics'
           instruction, along with the assumption that a reader is coming to
