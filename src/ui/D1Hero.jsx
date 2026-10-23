@@ -61,8 +61,7 @@ export function D1Hero() {
             {'Robust. Low complexity.\nComfortable.'}
           </h1>
           <p className="max-w-prose text-lead leading-[1.55] text-nn-200">
-            Arc-centered targeting from a Skull Anchor Key. Three linear degrees of freedom, two
-            angles of rotation.
+            Traditional arc-centered targeting having Three linear and  two rotational degrees of freedom.
           </p>
 
           {/*
