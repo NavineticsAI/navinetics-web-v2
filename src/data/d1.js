@@ -82,7 +82,7 @@ export const bands = [
        for differentiating without a competitive claim, comparing against a
        historical category rather than a company. */
     lead: 'Replacing a traditional stereotactic baseframe is the Skull Anchor Key. This design '
-    + 'removes all of the mechanics from the patient’s face, improving the patients and '
+    + 'removes all of the mechanics away from the patient’s face, improving the patients’ and '
     + 'clinicians’ experience.',
     figure: {
       src: headArt,
@@ -111,9 +111,8 @@ export const bands = [
        make the two sites disagree about what NaviNetics claims.
 
        DO NOT re-add a figure here without the company asking for it. */
-    lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, '
-      + 'and two angles of rotation set how you reach it. Every approach the arc allows meets '
-      + 'the same point.',
+    lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, and '
+    + 'two angles of rotation set how you reach it.',
     figure: {
       video: frameVideo,
       poster: framePoster,
