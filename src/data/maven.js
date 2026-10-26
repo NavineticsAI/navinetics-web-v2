@@ -2,7 +2,9 @@ import device from '../assets/maven/device.webp';
 import detail from '../assets/maven/detail.webp';
 import figWaveform from '../assets/maven/fig-waveform.webp';
 import figFscv from '../assets/maven/fig-fscv.webp';
-import figField from '../assets/maven/fig-field.webp';
+/* fig-field.webp is no longer imported: the only band that showed it was
+   'Every sweep is kept.', withdrawn 2026-10-21. The file stays in
+   assets/maven/ so restoring that band is one paste. */
 
 /**
  * The MAVEN system.
@@ -138,20 +140,30 @@ export const domains = [
  * `short` is what the ring shows; `name` is what a list says. Where the slide
  * uses the abbreviation and the product record uses the word, the ring takes
  * the word — a diagram that needs a glossary is not a diagram.
+ *
+ * THE ABBREVIATIONS ARE GONE. Each chemical channel used to carry a `sub` —
+ * DA under Dopamine, 5-HT under Serotonin, LFP under Local field potential —
+ * set small and grey beneath the word on the ring. Withdrawn on NaviNetics'
+ * instruction 2026-10-21: the ring already names the thing in full, and a
+ * second, shorter name beneath it is the glossary the note above says a
+ * diagram should not need. The render in ui/MavenHero.jsx went with them.
  */
 export const channels = [
-  { id: 'da', domain: 'chem', deg: -8, short: 'Dopamine', name: 'Dopamine', sub: 'DA' },
-  { id: '5ht', domain: 'chem', deg: -33.5, short: 'Serotonin', name: 'Serotonin', sub: '5-HT' },
-  { id: 'ado', domain: 'chem', deg: -59, short: 'Adenosine', name: 'Adenosine', sub: null },
+  { id: 'da', domain: 'chem', deg: -8, short: 'Dopamine', name: 'Dopamine' },
+  { id: '5ht', domain: 'chem', deg: -33.5, short: 'Serotonin', name: 'Serotonin' },
+  { id: 'ado', domain: 'chem', deg: -59, short: 'Adenosine', name: 'Adenosine' },
   /* Glutamate and acetylcholine were named individually and are now folded
      into one "Other" channel on NaviNetics' instruction. Two slots become one,
-     so this takes the midpoint of the angles they used to hold. */
-  { id: 'other', domain: 'chem', deg: -97, short: 'Other', name: 'Other neurochemicals', sub: null },
-  { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential', sub: 'LFP' },
-  { id: 'unit', domain: 'ephys', deg: 62, short: 'Single-unit', name: 'Single-unit activity', sub: null },
-  { id: 'gui', domain: 'soft', deg: 108, short: 'Intuitive GUI', name: 'One interface for every channel', sub: null },
-  { id: 'adv', domain: 'soft', deg: 138, short: 'Advanced analysis', name: 'Advanced analysis', sub: null },
-  { id: 'stim', domain: 'stim', deg: 195, short: 'Electrical stimulation', name: 'Electrical stimulation', sub: null },
+     so this takes the midpoint of the angles they used to hold.
+
+     `short` was "Other", which on a ring of named chemicals reads as a
+     leftovers bin rather than as a channel. It now says what it is. */
+  { id: 'other', domain: 'chem', deg: -97, short: 'Other neurochemicals', name: 'Other neurochemicals' },
+  { id: 'lfp', domain: 'ephys', deg: 32, short: 'LFP', name: 'Local field potential' },
+  { id: 'unit', domain: 'ephys', deg: 62, short: 'Single-unit', name: 'Single-unit activity' },
+  { id: 'gui', domain: 'soft', deg: 108, short: 'Intuitive GUI', name: 'One interface for every channel' },
+  { id: 'adv', domain: 'soft', deg: 138, short: 'Advanced analysis', name: 'Advanced analysis' },
+  { id: 'stim', domain: 'stim', deg: 195, short: 'Electrical stimulation', name: 'Electrical stimulation' },
 ];
 
 /** The three techniques, which are modes rather than channels. */
@@ -183,9 +195,21 @@ export const bands = [
        so the animation has somewhere to be seen, and left to wrap, every one
        of these strands a word on its own line. */
     title: 'The chemistry,\nas it happens.',
-    lead: 'Apply a changing potential to a carbon-fiber or diamond sensor and electrochemically '
-      + 'active substances give up or take back electrons at its surface. Subtract the applied '
-      + 'waveform from what comes back, and what is left is the current the chemistry drew.',
+    /* NO LEAD, AND NO META ROW. Withdrawn on NaviNetics' instruction
+       2026-10-21, along with the third point.
+
+       The lead described the electrochemistry — a changing potential, electrons
+       given up at the sensor surface, the applied waveform subtracted back out.
+       The third point was 'The waveform does the discriminating.', which named
+       six analytes (dopamine, serotonin, adenosine, norepinephrine, histamine
+       and others) and said the shape of the answer tells them apart; the same
+       discrimination claim is attributed to the 2018 Biosensors and
+       Bioelectronics paper on /technology/neuromodulation, where it carries
+       its citation. The meta row read Sensor / Reports.
+
+       ScienceBand guards all three — `lead &&`, `points.length`, `meta.length`
+       — so omitting the keys is the whole removal. Restore by putting them
+       back; nothing else has to change. */
     points: [
       {
         label: 'Fast-scan cyclic voltammetry.',
@@ -197,15 +221,6 @@ export const bands = [
         body: 'A staircase with a square wave riding on it. Where FSCV gives change, MCSWV '
           + 'measures absolute concentration.',
       },
-      {
-        label: 'The waveform does the discriminating.',
-        body: 'Dopamine, serotonin, adenosine, norepinephrine, histamine and '
-          + 'others each answer a sweep differently, and the shape of the answer tells them apart.',
-      },
-    ],
-    meta: [
-      { label: 'Sensor', value: 'Carbon fiber · diamond' },
-      { label: 'Reports', value: 'Relative · absolute' },
     ],
     figure: {
       src: figWaveform, w: 1262, h: 639,
@@ -221,30 +236,26 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Neuromodulation',
     title: 'The response\nto stimulation.',
-    lead: 'Electrical stimulation goes in on one channel while the other two keep recording. That '
-      + 'is the point of the instrument — deliver something, then see what the tissue does about '
-      + 'it, without the stimulation swamping the measurement of its own effect.',
+    /* ONE POINT, NO LEAD. Withdrawn on NaviNetics' instruction 2026-10-21:
+       the lead, the first point ('Synchronized with the measurement.') and the
+       third ('Placed by the same route.') are gone, and the second is the whole
+       band. The electrode-route sentence the third point made survives on the
+       page — it is the closing line under the buttons in pages/Maven.jsx.
+
+       'usable through the stimulus' is now 'stable through the stimulus', which
+       is NaviNetics' own wording for it. */
     points: [
-      {
-        label: 'Synchronized with the measurement.',
-        body: 'The stimulus sits on the same timeline as both signals, so what follows can be '
-          + 'read against it.',
-      },
       {
         label: 'Artifact minimized at the integration.',
         body: 'The stimulation artifact is desynchronized from recording, so the signal stays '
-        + 'usable through the stimulus.',
-      },
-      {
-        label: 'Placed by the same route.',
-        body: 'Sensing and stimulating electrodes go in through the stereotactic workflow the '
-          + 'rest of NaviNetics is built around.',
+        + 'stable through the stimulus.',
       },
     ],
-    meta: [
-      { label: 'Delivered', value: 'Electrical stimulation' },
-      { label: 'Observed', value: 'Chemical + electrical' },
-    ],
+    /* The meta row is withdrawn - 2026-10-26. It read Delivered / Electrical
+       stimulation and Observed / Chemical + electrical. The Neurochemistry
+       band's row (Sensor / Reports) went on 2026-10-21, so neither band
+       carries one now and ScienceBand's `meta.length > 0` guard means the grey
+       strip is simply absent rather than empty. */
     figure: {
       src: figFscv, w: 717, h: 848,
       alt: 'A voltammetric color plot with the extracted concentration trace above it and the '
@@ -252,44 +263,20 @@ export const bands = [
       caption: 'A release event, with the stimulus marked beneath',
     },
   },
-  {
-    id: 'soft',
-    ground: 'light',
-    scene: 'stack',
-    tone: 'soft',
-    eyebrow: 'Software & analysis',
-    title: 'Every sweep\nis kept.',
-    lead: 'A run is thousands of sweeps. They stack into a field with potential running one way '
-      + 'and time the other; take off what the background was doing, and a concentration against '
-      + 'time comes back out of it.',
-    points: [
-      {
-        label: 'Kept in full.',
-        body: 'Every sweep is kept as its own column, so a run can be re-read rather than only '
-          + 're-plotted.',
-      },
-      {
-        label: 'Background subtracted.',
-        body: 'The steady current the electrode draws before the event is taken off, so the '
-          + 'release itself is the signal.',
-      },
-      {
-        label: 'Read as a trace.',
-        body: 'A line through the field at the analyte’s own potential is the concentration '
-          + 'against time.',
-      },
-    ],
-    meta: [
-      { label: 'Field', value: 'Potential × time' },
-      { label: 'Out', value: 'Concentration × time' },
-    ],
-    figure: {
-      src: figField, w: 577, h: 513,
-      alt: 'A square-wave voltammogram as the software renders it: current in color across '
-        + 'potential and scan number.',
-      caption: 'The field as the software draws it',
-    },
-  },
+  /* THE SOFTWARE BAND IS WITHDRAWN. 'Every sweep is kept.' — the third band,
+     on the light ground, with the stacked-field scene and the square-wave
+     voltammogram figure — came off on NaviNetics' instruction 2026-10-21.
+
+     Two consequences worth knowing, because neither is visible from here:
+
+       · The page now ends on a dark band. The light ground existed so the page
+         "breathes instead of running as one long tunnel" (see the note at the
+         top of pages/Maven.jsx) and handed the reader back to the site; the
+         closing section still does that, and it is light.
+
+       · 'stack' in lib/mavenScene.js and the figure asset are now unreferenced.
+         Both are left in place deliberately — restoring this band means
+         pasting this block back, and nothing else. */
 ];
 
 export const domainOf = (id) => domains.find((d) => d.id === id);

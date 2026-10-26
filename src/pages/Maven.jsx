@@ -62,13 +62,34 @@ export default function Maven() {
       <section className="border-t border-hairline-soft bg-canvas px-6 py-16 md:py-20 lg:px-8 lg:py-24">
         <div className="nn-frame mx-auto">
           <Reveal className="flex flex-col items-center gap-6 text-center">
-            <span className="eyebrow text-action">Where it stands</span>
-            <h2 className="text-d2">A research instrument.</h2>
-            <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-              MAVEN is used in preclinical research. Its purpose is to let the chemistry, the
-              electrophysiology and the stimulation be observed together, so the mechanisms behind
-              neuromodulation can be studied rather than inferred.
-            </p>
+            {/* THE STATUS STATEMENT IS WITHDRAWN. On NaviNetics' instruction
+                2026-10-21 this section lost its eyebrow ("Where it stands"),
+                its heading ("A research instrument.") and its paragraph:
+
+                  "MAVEN is used in preclinical research. Its purpose is to let
+                   the chemistry, the electrophysiology and the stimulation be
+                   observed together, so the mechanisms behind neuromodulation
+                   can be studied rather than inferred."
+
+                The buttons and the electrode-route line below are kept, so the
+                page still ends with somewhere to go.
+
+                READ THIS BEFORE THE SITE GOES PUBLIC. That paragraph was the
+                only statement of MAVEN's status anywhere on this page, and
+                Keystone Regulatory asked on 2026-09-02 for the OPPOSITE of
+                removing it — "I would prefer to have a more clear indication of
+                the device's market status, especially on a website which
+                features commercially-available medical devices". With it gone,
+                the page's only remaining status signal is the small
+                "Pre-clinical research" stamp on the hero ring in
+                ui/MavenHero.jsx, and the call to action beneath this comment
+                reads "Request a Quote".
+
+                That pairing — no status statement, and an invitation to buy —
+                is the thing the regulatory review was trying to prevent, and it
+                is not a judgement this file can make for NaviNetics. Restoring
+                the paragraph is three lines; the record of what it said is
+                above so it can be put back verbatim. */}
             {/* NO REGULATORY STATEMENT HERE — deliberately, and it is worth
                 knowing why it was removed rather than never written.
 

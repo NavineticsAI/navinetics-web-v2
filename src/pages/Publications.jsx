@@ -2,12 +2,10 @@ import { ArrowUpRight } from 'lucide-react';
 import { usePageMeta } from '../lib/meta.js';
 import {
   doiLink,
-  founders,
-  publicationLineBlurbs,
   publicationLines,
   publications,
 } from '../data/publications.js';
-import { Badge, Hero, Reveal, Section } from '../ui/index.js';
+import { Hero, Reveal, Section } from '../ui/index.js';
 
 /**
  * Publications.
@@ -33,19 +31,16 @@ export default function Publications() {
       + 'stereotactic systems and intraoperative neurochemical sensing.',
   });
 
-  const years = publications.map((p) => p.year);
-  const minYear = Math.min(...years);
-  const maxYear = Math.max(...years);
-
   return (
     <>
-      {/* The lead's years were hard-coded and went stale the moment a 2026 paper
-          was added — it said the list ran "to 2025" above a list opening on
-          2026. Derived from the records now, so it cannot disagree again. */}
+      {/* THE YEAR RANGE IS WITHDRAWN - 2026-10-26. The lead read
+          "Peer-reviewed work by our founders and their laboratory, from 2018
+          to 2026", and the range was derived from the records rather than
+          typed so it could not go stale. It is simply gone now, which also
+          retires that whole problem. */}
       <Hero
         eyebrow="Resources — Publications"
         title="Highlighted research."
-        lead={`Peer-reviewed work by our founders and their laboratory, from ${minYear} to ${maxYear}.`}
       />
 
       <Section wide className="!pt-14 md:!pt-16">
@@ -53,10 +48,14 @@ export default function Publications() {
           <LineSection key={line} line={line} first={i === 0} />
         ))}
 
-        <p className="mt-16 max-w-[70ch] border-t border-hairline-soft pt-6 text-sm text-ink-3">
-          A selection from a longer record. Every citation comes from the published DOI, and
-          each title links to the paper.
-        </p>
+        {/* "A selection from a longer record. Every citation comes from the
+            published DOI, and each title links to the paper." - withdrawn
+            2026-10-26.
+
+            NOTE WHAT WENT WITH IT: that line was the only statement on the
+            site that this list is a SELECTION rather than the complete record.
+            Anyone counting the papers will now read the page as everything the
+            laboratory has published. */}
       </Section>
     </>
   );
@@ -78,9 +77,8 @@ function LineSection({ line, first }) {
             {rows.length === 1 ? '1 paper' : `${rows.length} papers`}
           </span>
         </div>
-        <p className="mt-3.5 max-w-[62ch] text-[0.9375rem] leading-relaxed text-ink-2">
-          {publicationLineBlurbs[line]}
-        </p>
+        {/* No blurb under the heading. Both lines had one until 2026-10-26;
+            data/publications.js records what they said. */}
       </Reveal>
 
       <ul className="mt-2">
@@ -119,7 +117,9 @@ function Row({ p }) {
           <span className="font-data text-xs text-ink-3">
             <Citation p={p} />
           </span>
-          {p.nnAffiliation && <Badge>NaviNetics affiliation</Badge>}
+          {/* The "NaviNetics affiliation" badge is withdrawn - 2026-10-26.
+              `nnAffiliation` is still on the records in data/publications.js;
+              nothing reads it now. */}
         </div>
         <p className="mt-2.5 text-sm leading-relaxed text-ink-2">
           <Authors names={p.authors} />
@@ -148,14 +148,14 @@ function Citation({ p }) {
  * rather than dropping them silently.
  */
 function Authors({ names }) {
-  const mark = (n) =>
-    founders.includes(n) ? (
-      <strong key={n} className="font-semibold text-ink">
-        {n}
-      </strong>
-    ) : (
-      <span key={n}>{n}</span>
-    );
+  /* NO FOUNDER EMPHASIS - 2026-10-26. Each name in `founders` was rendered as
+     <strong className="font-semibold text-ink"> against plain spans for
+     everyone else. Every author now reads the same.
+
+     The head/tail truncation below is unchanged, and its reasoning still
+     refers to the founders sitting at the end of an author list - that is
+     still why the last two names are kept, it is just no longer marked. */
+  const mark = (n) => <span key={n}>{n}</span>;
 
   if (names.length <= 6) {
     return names.map((n, i) => (

@@ -184,7 +184,7 @@ function Topic({ t }) {
       </Reveal>
 
       <Reveal>
-        <p className="mt-6 max-w-[40ch] text-lead leading-[1.45] tracking-[-0.018em]">{t.definition}</p>
+        {t.definition && <p className="mt-6 max-w-[40ch] text-lead leading-[1.45] tracking-[-0.018em]">{t.definition}</p>}
         {t.body && <p className="mt-5 max-w-prose leading-[1.72] text-ink-2">{t.body}</p>}
       </Reveal>
 
@@ -287,7 +287,10 @@ function Topic({ t }) {
         const shots = figures.length > 0 && all.length === 1 ? [] : all;
         const paired = shots.length > 0 && shots.length < 3;
 
-        const deep = (
+        /* `t.deep` is optional. Unguarded, `t.deep.label` below is a
+           TypeError that takes the whole page down rather than leaving one
+           panel out - stereotaxy has had no deep-dive since 2026-10-21. */
+        const deep = t.deep && (
           /* A chevron, because without one this reads as a card rather than as
              something you can open. */
           <details className="group overflow-hidden rounded-lg border border-hairline-soft bg-surface">
@@ -306,7 +309,7 @@ function Topic({ t }) {
         if (!paired) {
           return (
             <>
-              <Reveal className="mt-6">{deep}</Reveal>
+              {deep && <Reveal className="mt-6">{deep}</Reveal>}
               {shots.length > 0 && (
                 <Reveal>
                   <div className="mt-10 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -348,7 +351,7 @@ function Part({ part }) {
         </div>
         {/* Authored with blank lines between paragraphs rather than as an
             array — it reads as prose in the data file, which is what it is. */}
-        {part.body.split('\n\n').map((para) => (
+        {part.body?.split('\n\n').map((para) => (
           <p key={para.slice(0, 40)} className="mt-5 max-w-prose leading-[1.72] text-ink-2">
             {para}
           </p>

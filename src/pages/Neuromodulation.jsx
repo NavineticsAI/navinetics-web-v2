@@ -1,12 +1,9 @@
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getTechnology } from '../data/technology.js';
-import { getProduct } from '../data/products.js';
 import { chapters, evidence, gap, paperFor } from '../data/neuromodulation.js';
-import { doiLink, founders } from '../data/publications.js';
-import { Hero, LinkAction, ProductCard, Reveal, Section, SectionHead } from '../ui/index.js';
+import { doiLink } from '../data/publications.js';
+import { Hero, LinkAction, Reveal, Section, SectionHead } from '../ui/index.js';
 import { ScienceBand } from '../ui/ScienceBand.jsx';
-import { topics } from '../data/education.js';
 
 /**
  * Neuromodulation — the research behind it.
@@ -24,7 +21,6 @@ import { topics } from '../data/education.js';
  */
 export default function Neuromodulation() {
   const tech = getTechnology('neuromodulation');
-  const product = getProduct('maven-neuromodulation');
 
   usePageMeta({
     title: 'Neuromodulation',
@@ -50,9 +46,6 @@ export default function Neuromodulation() {
           <p className="max-w-prose text-lead leading-[1.6] tracking-[-0.015em] text-ink-2">
             {gap.body}
           </p>
-          <p className="font-data text-[0.6875rem] uppercase tracking-[0.14em] text-ink-3">
-            {gap.note}
-          </p>
         </Reveal>
       </Section>
 
@@ -66,12 +59,12 @@ export default function Neuromodulation() {
       {/* The four, together, so the arc is visible as a list and not only as a
           scroll. Same records the publications page renders. */}
       <Section wide band>
-        <SectionHead
-          eyebrow="The evidence"
-          title="The published record."
-          lead="Peer-reviewed and resolved from Crossref against their DOIs — the same records the
-            publications page carries."
-        />
+        {/* EYEBROW AND LEAD WITHDRAWN - 2026-10-22. The eyebrow read "The
+            evidence"; the lead read "Peer-reviewed and resolved from Crossref
+            against their DOIs - the same records the publications page
+            carries." The title was "The published record." and is reworded on
+            the same instruction. */}
+        <SectionHead title="The published work behind it." />
         <div className="mt-10 flex flex-col divide-y divide-hairline-soft border-y border-hairline-soft">
           {evidence.map((p) => (
             <Reveal key={p.doi}>
@@ -89,14 +82,13 @@ export default function Neuromodulation() {
                     {p.title}
                   </span>
                   <span className="mt-1 block text-sm leading-relaxed text-ink-3">
-                    {p.authors.map((a, i) => (
-                      <span key={a}>
-                        {i > 0 && ', '}
-                        <span className={founders.includes(a) ? 'font-semibold text-ink-2' : undefined}>
-                          {a}
-                        </span>
-                      </span>
-                    ))}
+                    {/* NO FOUNDER HIGHLIGHTING - 2026-10-22. Each author
+                        whose name appeared in `founders` was set in
+                        font-semibold text-ink-2 against the rest. Every author
+                        now reads the same. The author list is otherwise
+                        unchanged, and /resources/publications still
+                        highlights - only this page was asked to stop. */}
+                    {p.authors.join(', ')}
                   </span>
                 </span>
                 <span className="font-data text-[0.6875rem] uppercase tracking-[0.12em] text-ink-3">
@@ -106,89 +98,47 @@ export default function Neuromodulation() {
             </Reveal>
           ))}
         </div>
+
+        {/* ONE WAY OUT. Removing the two closing sections on 2026-10-22 left
+            this page with no internal links at all - every remaining link was
+            an external DOI, so a reader finishing the page had nowhere to go
+            inside the site. Restored as a single link on 2026-10-26 rather
+            than as the section it came from. */}
+        <Reveal className="mt-10">
+          <LinkAction to="/resources/publications">
+            The full publication record
+          </LinkAction>
+        </Reveal>
       </Section>
 
-      {/* Where the work ended up, and where the detail lives. */}
-      <Section wide>
-        <div className="grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-16">
-          <div>
-            <SectionHead
-              eyebrow="Applied in"
-              title="The instrument it became."
-              lead="Why it records chemistry and electrophysiology together."
-            />
-            <div className="mt-10 max-w-sm">
-              {product && <ProductCard product={product} />}
-            </div>
-          </div>
-          <div>
-            <SectionHead eyebrow="Go deeper" title="The evidence." tick={false} />
-            {/* Was "The method itself", pointing at the education page for the
-                redox chemistry and the sweep. That material is now further down
-                this same page, so the hand-off would send a reader away to read
-                something they are already on. What is left here is the evidence
-                hand-off, which is a different page and still worth making. */}
-            <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-2">
-              This page is what the work established. The papers themselves, and the rest of the
-              laboratory’s published record, are listed in full.
-            </p>
-            <div className="mt-6 flex flex-col gap-4">
-              {(tech.readMore ?? []).map((r) => (
-                <LinkAction key={r.to} to={r.to}>{r.label}</LinkAction>
-              ))}
-              <LinkAction to="/technology/stereotactic-devices">
-                How the electrode is placed
-              </LinkAction>
-            </div>
-          </div>
-        </div>
-      </Section>
+      {/* THE CLOSING SECTION IS WITHDRAWN - both of its columns, on
+         NaviNetics' instruction 2026-10-22.
 
-      {/* THE METHOD, INDEXED — not inlined.
-          ─────────────────────────────────────────────────────────────────
-          This used to render all four education topics in full, on the
-          grounds that the education page sat three levels down the nav and
-          the reader most likely to want the science was least likely to find
-          it. The discovery problem was real; the fix was not. Four complete
-          lessons ran to about 9,000px on a page whose four bands had already
-          explained the same science, so the page was 12,300px long and said
-          most things twice.
+         Left column: "Applied in" / "The instrument it became." / "Why it
+         records chemistry and electrophysiology together.", over a ProductCard
+         for MAVEN.
 
-          An index solves the discovery problem at a twentieth of the length:
-          the four topics are named here, with the definition each opens on,
-          one click from the page that teaches them. */}
-      <Section band>
-        <SectionHead
-          eyebrow="The method"
-          title="From first principles."
-          lead="What deep brain stimulation is, how a neurochemical is detected at all, and the
-            two recording methods these papers introduced."
-        />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          {topics
-            .filter((t) => (tech.teaches ?? []).includes(t.id))
-            .map((t) => (
-              <Reveal key={t.id}>
-                <Link
-                  to={`/technology/education#${t.id}`}
-                  className="group/t flex h-full flex-col gap-2 rounded-lg border border-hairline-soft
-                    bg-surface p-6 transition-[transform,box-shadow,border-color] duration-[420ms]
-                    ease-out hover:-translate-y-1 hover:border-hairline hover:shadow-e2"
-                >
-                  <span className="font-data text-[0.625rem] uppercase tracking-[0.14em] text-action">
-                    {t.n}
-                  </span>
-                  <h3 className="text-lg tracking-[-0.025em]">{t.title}</h3>
-                  <p className="text-sm leading-relaxed text-ink-2">{t.definition}</p>
-                  <span className="mt-auto pt-3 font-data text-[0.625rem] uppercase tracking-[0.12em]
-                    text-action underline-offset-4 group-hover/t:underline">
-                    Read it
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-        </div>
-      </Section>
+         Right column: "Go deeper" / "The evidence." / "This page is what the
+         work established. The papers themselves, and the rest of the
+         laboratory's published record, are listed in full.", over two links -
+         "Voltammetry method papers" (from tech.readMore) and "How the
+         electrode is placed" (to /technology/stereotactic-devices).
+
+         WHAT THIS COSTS: this page no longer links to MAVEN or to the
+         stereotactic page at all, and the only route from here to
+         /resources/publications is the per-paper DOI links in the record
+         section above, which open externally rather than going there. The page
+         now ends on that list. */}
+      {/* THE METHOD SECTION IS WITHDRAWN - "The method" / "From first
+         principles." / "What deep brain stimulation is, how a neurochemical is
+         detected at all, and the two recording methods this work introduced",
+         over an index of the education topics named on the technology record.
+         Off on NaviNetics' instruction 2026-10-22.
+
+         The topics themselves are untouched in data/education.js and still
+         render on /technology/education. This page simply no longer indexes
+         them, so `teaches` on the neuromodulation record is now read by
+         nothing. */}
     </>
   );
 }
@@ -202,35 +152,32 @@ export default function Neuromodulation() {
  */
 function Citation({ chapter }) {
   const p = paperFor(chapter.doi);
+  /* ONE LINK, ON THE PAPER ITSELF - 2026-10-22. This strip used to carry the
+     title as plain text with two links beside it: the chapter's `readMore`
+     ("Absolute concentration recording, explained" and the like) and a
+     "DOI 10.xxxx/yyyy" link. Both are gone and the title is now the link,
+     which is what "make the paper clickable" asked for.
+
+     The DOI is no longer printed here. It is still what the href is built from
+     (doiLink), and it is still shown in full on /resources/publications. */
   return (
     <div className="border-b border-hairline-soft bg-sunk px-6 py-4 lg:px-8">
-      <div className="nn-frame mx-auto flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
+      <div className="nn-frame mx-auto flex flex-wrap items-baseline gap-x-8 gap-y-2">
         <p className="text-[0.8125rem] leading-relaxed text-ink-2">
           <span className="font-data text-[0.625rem] uppercase tracking-[0.14em] text-ink-3">
             {'Paper · '}
           </span>
-          {p.title}
-          {'. '}
-          <i className="not-italic text-ink-3">{`${p.journal} ${p.volume}, ${p.pages} (${p.year}).`}</i>
-        </p>
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
-          <Link
-            to={chapter.readMore.to}
-            className="font-data text-[0.625rem] uppercase tracking-[0.12em] text-action
-              underline-offset-4 hover:underline"
-          >
-            {chapter.readMore.label}
-          </Link>
           <a
             href={doiLink(p)}
             target="_blank"
             rel="noreferrer"
-            className="font-data text-[0.625rem] uppercase tracking-[0.12em] text-action
-              underline-offset-4 hover:underline"
+            className="text-action underline-offset-4 hover:underline"
           >
-            {`DOI ${p.doi}`}
+            {p.title}
           </a>
-        </div>
+          {'. '}
+          <i className="not-italic text-ink-3">{`${p.journal} ${p.volume}, ${p.pages} (${p.year}).`}</i>
+        </p>
       </div>
     </div>
   );

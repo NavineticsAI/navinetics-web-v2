@@ -27,17 +27,35 @@ export default function Product() {
   const { slug } = useParams();
   const product = getProduct(slug);
 
-  usePageMeta({
-    title: product?.name,
-    description: product?.summary,
-  });
-
   // `product.hidden` as well as absence. getProduct still finds a hidden
   // record on purpose — its own page and every slug reference keep working —
   // so without this the dynamic /products/:slug route renders the withdrawn
   // range through the generic template, which is exactly what taking the
   // route out was meant to stop.
-  if (!product || product.hidden) return <NotFound />;
+  const shown = product && !product.hidden ? product : null;
+
+  // GATED BEFORE THE HOOK, NOT AFTER IT. This read `product?.name` directly
+  // and sat ABOVE the guard below, which meant a withdrawn product's page
+  // rendered the 404 body while still writing that product's name and
+  // marketing summary into document.title, og:title, og:description and the
+  // Twitter tags — Product is the parent, so its effect ran last and won.
+  //
+  // /products/carbon-fiber-surgical-tables therefore answered 404 in the body
+  // and "Carbon Fiber Surgical Tables — NaviNetics" in the browser tab, and
+  // any link unfurl (Slack, Teams, LinkedIn) showed the withdrawn range's
+  // radiolucency sentence. That URL has been circulated for review, so the
+  // leak was reachable by everyone holding the link.
+  //
+  // The guard cannot simply move above this call — a hook must run on every
+  // render — so the record is gated instead. Passing undefined leaves the
+  // 404's own title and description in place, which is what an unknown slug
+  // has always done.
+  usePageMeta({
+    title: shown?.name,
+    description: shown?.summary,
+  });
+
+  if (!shown) return <NotFound />;
 
   const others = otherProducts(slug);
 

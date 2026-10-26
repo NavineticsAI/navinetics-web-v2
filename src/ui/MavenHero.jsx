@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { art, channels, channelsIn, domains, expansion, modes } from '../data/maven.js';
+import { art, channels, domains, expansion } from '../data/maven.js';
 import { GROUND, R, VIEW, arcFlipped, arcPath, makeField, pt, sideOf, wirePath } from '../lib/mavenScene.js';
 import { usePrefersReducedMotion } from '../lib/motion.js';
 import { Eyebrow } from './Section.jsx';
@@ -48,7 +48,6 @@ export function MavenHero({ product }) {
   const deviceRef = useRef(null);
   const copyRef = useRef(null);
   const cueRef = useRef(null);
-  const stripRef = useRef(null);
   const wireRefs = useRef([]);
   const dotRefs = useRef([]);
   const nodeRefs = useRef([]);
@@ -183,11 +182,6 @@ export function MavenHero({ product }) {
           `translate(${dx.toFixed(1)}%, ${dy.toFixed(1)}%) scale(${s.toFixed(3)})`;
         stageRef.current.style.opacity = String((narrow ? 0.34 : 0.62) + (narrow ? 0.66 : 0.38) * settle);
       }
-      if (stripRef.current) {
-        const on = span(p, 0.62, 0.86);
-        stripRef.current.style.opacity = String(reduced ? 1 : on);
-        stripRef.current.style.transform = `translateY(${((1 - (reduced ? 1 : on)) * 16).toFixed(1)}px)`;
-      }
       if (deviceRef.current) {
         const k = 1 - span(p, 0, 0.5);
         deviceRef.current.style.transform =
@@ -313,7 +307,11 @@ export function MavenHero({ product }) {
             sm:top-[80%]"
         >
           <span className="font-data text-[0.625rem] uppercase tracking-[0.16em] text-sg-300">
-            Pre-clinical research
+            {/* "For pre-clinical research", not "Pre-clinical research", on
+                NaviNetics' instruction 2026-10-22: the stamp now says what the
+                instrument is FOR rather than labelling the instrument itself.
+                Rendered uppercase by the class above. */}
+            For pre-clinical research
           </span>
         </div>
 
@@ -326,9 +324,12 @@ export function MavenHero({ product }) {
               : 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
           }
           style={{
-            /* 70svh, not 84: the four domains sit under the ring on the same
-               screen, and they need the room. */
-            width: reduced ? 'min(660px, 100%)' : 'min(70svh, 760px, 92vw)',
+            /* BACK TO 84svh. It was 70 "because the four domains sit under
+               the ring on the same screen, and they need the room" - and that
+               strip was withdrawn on 2026-10-22, which left the foot of the
+               hero empty. The instrument now fills the space the cards used to
+               occupy. If the strip is ever restored, this goes back to 70. */
+            width: reduced ? 'min(660px, 100%)' : 'min(84svh, 760px, 92vw)',
             aspectRatio: '1 / 1',
           }}
         >
@@ -467,11 +468,9 @@ export function MavenHero({ product }) {
                   <span className="block text-[0.9375rem] font-semibold tracking-[-0.02em] text-nn-50">
                     {c.short}
                   </span>
-                  {c.sub && (
-                    <span className="block font-data text-[0.625rem] uppercase tracking-[0.14em] text-ink-3">
-                      {c.sub}
-                    </span>
-                  )}
+                  {/* The abbreviation under the name — DA, 5-HT, LFP — was
+                      here. Withdrawn 2026-10-21; `sub` is off the channel
+                      records in data/maven.js, where the reasoning is. */}
                 </span>
               </button>
             );
@@ -492,12 +491,24 @@ export function MavenHero({ product }) {
           <div className="nn-frame mx-auto w-full">
             <div className={reduced ? 'max-w-2xl' : 'max-w-lg'}>
               <Eyebrow className="!text-sg-300">{`Products — ${product.shortName}`}</Eyebrow>
-              <h1 className="mt-5 whitespace-pre-line text-d1 !tracking-[-0.045em]">{product.tagline}</h1>
+              {/* NO HEADLINE. The <h1> was product.tagline — "Measuring the
+                  living brain, / while you stimulate it." — and it came off on
+                  NaviNetics' instruction 2026-10-21. The paragraph below it
+                  stays and now opens the page.
+
+                  The tagline is still in the product record, because the
+                  catalog cards and /technology/neuromodulation read it from
+                  there. This is the one page that does not show it.
+
+                  WORTH KNOWING: the page now has no <h1>. The eyebrow above is
+                  a <span>, and the first heading on the page is the <h2> of the
+                  first band. Harmless for the document outline, but if a
+                  heading is ever wanted back, this is where it goes. */}
               {/* The name is an acronym and the deck expands it, so the page
                   does too — the initial of each word set in the brand color,
                   which is the only place on the site type is coloured mid-word
                   and is worth it here because the word IS the product. */}
-              <p className="mt-6 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-nn-200">
+              <p className="mt-5 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-nn-200">
                 {expansion.map(([cap, rest]) => (
                   <span key={cap + rest}>
                     <b className="font-semibold text-sg-300">{cap}</b>
@@ -507,64 +518,42 @@ export function MavenHero({ product }) {
                 . A research platform that reads the brain&rsquo;s chemistry and its electrical
                 activity at the same instant, while stimulating it.
               </p>
-              <div className="mt-8 flex flex-wrap gap-x-4 gap-y-2">
-                {modes.map((m) => (
-                  <span
-                    key={m}
-                    className="rounded-instr bg-white/[0.06] px-2 py-1 font-data text-[0.625rem]
-                      uppercase tracking-[0.14em] text-nn-200"
-                  >
-                    {m}
-                  </span>
-                ))}
-              </div>
+              {/* THE TECHNIQUE PILLS ARE GONE — FSCV, MCSWV and Amperometry,
+                  set as three small capsules under the paragraph. Withdrawn
+                  2026-10-21. `modes` is still exported from data/maven.js and
+                  the first two are named in full in the Neurochemistry band's
+                  points, so nothing is lost by taking the abbreviations off
+                  the opening. */}
             </div>
           </div>
         </div>
 
-        {/* ── the four domains ─────────────────────────────────────────────
-            Arrives as the ring stops, on the same screen as the instrument it
-            belongs to. The ring names them round its rim, where they can only
-            be read a word at a time; this is the same four with room to say
-            what each one is. */}
-        <div
-          ref={stripRef}
-          className={
-            reduced
-              ? 'relative nn-frame mx-auto w-full'
-              : 'absolute inset-x-0 bottom-0 px-6 pb-9 opacity-0 lg:px-8'
-          }
-        >
-          {/* Two columns before lg and four after. Below lg the ring carries
-              no names of its own, so this is the only place the four are
-              written down — but the channel list under each has to go, or the
-              strip grows tall enough to stand on the instrument. */}
-          <div className="nn-frame mx-auto grid w-full grid-cols-2 gap-x-6 gap-y-4 border-t
-            border-[var(--mv-rule-2)] pt-4 sm:gap-x-8 lg:grid-cols-4 lg:gap-y-5 lg:pt-5">
-            {domains.map((d) => (
-              <div key={d.id} className="flex flex-col gap-1.5">
-                <span className="flex items-center gap-2">
-                  <i
-                    className="block h-1.5 w-1.5 shrink-0 rounded-full not-italic"
-                    style={{ background: `var(--mv-${d.tone})` }}
-                    aria-hidden="true"
-                  />
-                  <span
-                    className="font-data text-[0.5625rem] uppercase tracking-[0.14em] lg:text-[0.625rem]
-                      lg:tracking-[0.16em]"
-                    style={{ color: `var(--mv-${d.tone})` }}
-                  >
-                    {d.name}
-                  </span>
-                </span>
-                <p className="text-[0.75rem] leading-snug text-nn-200 lg:text-[0.8125rem]">{d.line}</p>
-                <p className="hidden text-[0.6875rem] leading-snug text-ink-3 lg:block">
-                  {channelsIn(d.id).map((c) => c.short).join(' · ')}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* THE FOUR DOMAIN CARDS ARE WITHDRAWN - off on NaviNetics'
+            instruction 2026-10-22. The strip under the ring carried the four
+            domain names, each with its colored dot and its channel list:
+
+              Neurochemistry       Dopamine / Serotonin / Adenosine / Other neurochemicals
+              Electrophysiology    LFP / Single-unit
+              Software & analysis  Intuitive GUI / Advanced analysis
+              Neuromodulation      Electrical stimulation
+
+            (their one-line descriptions had already gone on 2026-10-21.)
+
+            WHAT THIS COSTS, because the original note is worth repeating:
+            below the lg breakpoint the ring carries NO names of its own, so
+            this strip was the only place the four domains and their channels
+            were written down. On a phone the opening is now an unlabelled
+            instrument in an unlabelled ring. The names return at lg, set
+            around the rim, where they can only be read a word at a time.
+
+            ALSO: the ring is sized min(70svh, 760px, 92vw) rather than 84svh
+            specifically to leave this strip room - see the note on stageRef's
+            style below. With the strip gone that reasoning no longer holds and
+            the foot of the hero is now empty. Raising it back is a one-value
+            change, and it is a visual decision rather than this file's.
+
+            `domains` is still imported - the ring's own rim labels, wires and
+            tones all read from it. `channelsIn` was used only here. */}
 
         {!reduced && (
           <div

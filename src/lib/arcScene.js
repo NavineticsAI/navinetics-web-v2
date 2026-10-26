@@ -89,7 +89,9 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   const project = makeProject(cam, w, h);
   const segs = [];
 
-  headWire(segs, palette.soft);
+  /* The head reads as what the instrument is placed on. At palette.soft it
+     was faint to the point of looking like a rendering artifact. */
+  headWire(segs, palette.line);
 
   // the horizontal track the arc's feet ride on — this is what the collar turns
   for (let j = 0; j < 72; j++) {
@@ -106,7 +108,12 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   if (state.ghosts) {
     for (let d = -75; d <= 75; d += 25) {
       if (Math.abs(d - state.arc) < 8) continue;
-      segs.push({ a: arcPoint(d), b: [0, 0, 0], c: palette.sub, w: 1, o: 0.32, dash: true });
+      /* These are the figure's whole argument - every approach angle ending
+         at the same focus - and at 0.32 on a 2-3px dash they were all but
+         invisible in print and on a bright screen. The caption that used to
+         say it in words came off on 2026-10-21, so they now have to carry the
+         point alone. */
+      segs.push({ a: arcPoint(d), b: [0, 0, 0], c: palette.sub, w: 1.4, o: 0.6, dash: true });
     }
   }
 
@@ -171,9 +178,31 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   ctx.fillStyle = palette.action;
   ctx.beginPath(); ctx.arc(pc[0], pc[1], 2.6, 0, TAU); ctx.fill();
 
+  /* LABELS. The figure lost its title bar and its caption on 2026-10-21, so
+     everything it has to say it has to say here. ENTRY used to sit at
+     (pc + 13, pc - 9), which put it straight on top of the arc band and made
+     both unreadable; it is right-aligned off the carrier now. ARC and COLLAR
+     name the two rotations, which is what principle 02 on the page talks
+     about - "Collar and arc angles then set the approach trajectory". */
   ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+  ctx.textAlign = 'left';
   ctx.fillStyle = palette.action;
   ctx.fillText('TARGET', pf[0] + 22, pf[1] + 4);
+
+  ctx.textAlign = 'right';
   ctx.fillStyle = palette.sub;
-  ctx.fillText('ENTRY', pc[0] + 13, pc[1] - 9);
+  ctx.fillText('ENTRY', pc[0] - 14, pc[1] - 4);
+
+  // The arc band, named where it is clear of the carrier and the graduations.
+  const pa = project(arcPoint(72));
+  ctx.textAlign = 'left';
+  ctx.fillStyle = palette.sub;
+  ctx.globalAlpha = 0.85;
+  ctx.fillText('ARC', pa[0] + 12, pa[1] + 4);
+
+  // The horizontal track the arc's feet ride on.
+  const pcl = project([ARC_R * Math.cos(rad(205)), ARC_R * Math.sin(rad(205)), 0]);
+  ctx.fillText('COLLAR', pcl[0] - 4, pcl[1] + 16);
+  ctx.globalAlpha = 1;
+  ctx.textAlign = 'left';
 }

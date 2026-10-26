@@ -126,15 +126,22 @@ export function Hero({
             <Eyebrow className={dark ? '!text-sg-300' : undefined}>{eyebrow}</Eyebrow>
           </motion.div>
         )}
-        <motion.h1
-          {...step(1)}
-          className={cn(
-            'mt-5 whitespace-pre-line',
-            size === 'lg' ? 'text-hero !tracking-[-0.045em]' : 'text-d1',
-          )}
-        >
-          {title}
-        </motion.h1>
+        {/* GUARDED. `lead` and `eyebrow` were already optional but this was
+            not, so a hero with no title rendered an empty <h1> that still
+            carried its top margin and its hero line-height - a tall blank gap
+            above the first section. /resources/media is title-less as of
+            2026-10-26. */}
+        {title && (
+          <motion.h1
+            {...step(1)}
+            className={cn(
+              'mt-5 whitespace-pre-line',
+              size === 'lg' ? 'text-hero !tracking-[-0.045em]' : 'text-d1',
+            )}
+          >
+            {title}
+          </motion.h1>
+        )}
         {lead && (
           <motion.p
             {...step(2)}

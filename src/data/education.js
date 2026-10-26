@@ -94,69 +94,52 @@ export const topics = [
     id: 'stereotaxy',
     n: '02',
     title: 'Stereotactic Neurosurgery',
-    definition: 'Reaching a point inside the brain by coordinate, not by sight.',
-    /* Three parts, in the order the problem is actually solved: find out where
-       things are, decide how the instrument will aim, then read off the
-       numbers to set. The `keys` cards are gone from this topic — they said
-       the same three things a second time. */
+    /* STRIPPED TO THE FIGURES, on NaviNetics' instruction 2026-10-21. What
+       came off, so it can go back verbatim:
+
+         definition - 'Reaching a point inside the brain by coordinate, not by
+         sight.'
+
+         A's body - the two paragraphs beginning 'A surgeon cannot see the
+         target...' and 'A frame fixed to the skull is what carries that
+         across...', the second of which carried the 'Historically the frame
+         was a large ring encircling the head' comparison.
+
+         B's body - 'Knowing where the target is does not yet say how to reach
+         it. An arc-centered instrument answers that by putting the target at
+         the center of a circle...'
+
+         C entirely - 'The six numbers, and what each of them does', its two
+         paragraphs and its three axis rows (Three translations / Two rotations
+         / One depth).
+
+         deep - 'How the localizer fixes a slice in space' and its paragraph on
+         how the rod spacings report a slice's height and tilt.
+
+       A and B are now title-plus-figure. pages/Education.jsx guards
+       `definition`, `part.body` and `deep` so their absence renders nothing
+       rather than throwing - before those guards, `part.body.split` on a part
+       with no body took the whole page down.
+
+       THIS TOPIC IS ON TWO PAGES. It renders into
+       /technology/stereotactic-devices via `teaches` in data/technology.js,
+       AND on /technology/education, which lists all five topics. The second
+       page was not part of the instruction but is changed by it: its
+       stereotaxy section is now three headings and three figures with no
+       teaching text at all. */
     parts: [
       {
         key: 'A',
         title: 'Localization',
-        body:
-          'A surgeon cannot see the target. It is centimetres inside the brain, it looks like the tissue '
-          + 'around it, and it has to be reached without disturbing what is on the way. So the target is '
-          + 'found on a scan instead, and the problem becomes one of transfer: the point is known in the '
-          + 'image, and it has to be known in the patient.\n\n'
-          + 'A frame fixed to the skull is what carries that across. A localizer attached to it appears in '
-          + 'the scan itself — its rods cross every slice at a set of points whose spacing says where in '
-          + 'the frame that slice was taken. Find those points in the image and the whole scan is placed in '
-          + 'the frame’s coordinates. Historically the frame was a large ring encircling the head; the '
-          + 'NaviNetics system fixes near the top of the skull instead, leaving the face clear.',
         figures: ['localizer'],
       },
       {
         key: 'B',
         title: 'The arc-centered principle',
-        body:
-          'Knowing where the target is does not yet say how to reach it. An arc-centered '
-          + 'instrument answers that by putting the target at the center of a circle: the arc '
-          + 'swings around a single fixed point, and anything carried on the arc points at that '
-          + 'point from wherever it sits.',
         /* The principle, then the instrument that embodies it. */
         figures: ['arc', 'frame'],
       },
-      {
-        key: 'C',
-        title: 'The six numbers, and what each of them does',
-        body:
-          'A trajectory is fully described by six values, and they fall into three jobs. Three translations '
-          + 'move the frame until the target lies at the arc’s focus. Two rotations then turn about that '
-          + 'focus to choose the approach. One depth advances the instrument along it.\n\n'
-          + 'The split is the whole geometry. The first three decide where; the next two decide how you get '
-          + 'there; the last decides how far. Because the two rotations turn about the focus rather than '
-          + 'about the frame, changing your approach can never change your target — which is what makes the '
-          + 'first three worth solving once.',
-        axes: [
-          ['Three translations', 'X  Y  Z', 'Move the frame until the target sits at the focus.'],
-          ['Two rotations', 'Collar · Arc', 'Turn about the focus. The target does not move.'],
-          ['One depth', 'Entry → target', 'Advance along the trajectory that has been set.'],
-        ],
-      },
     ],
-    deep: {
-      label: 'How the localizer fixes a slice in space',
-      body:
-        'The rods are arranged so that each panel presents two uprights and one diagonal. A plane cuts the '
-        + 'uprights at a fixed separation and the diagonal somewhere between them, and where it cuts the '
-        + 'diagonal depends on how high the plane is. The ratio of those spacings therefore reports the '
-        + 'height of the slice, and with three panels the plane’s tilt is recovered too — so a single image '
-        + 'carries enough information to place itself in the frame without any assumption about how the '
-        + 'patient was lying.',
-    },
-    /* No image slots. Between the localizer pair, the interactive arc and the
-       video of the instrument turning, this topic is the best illustrated on
-       the page already. */
   },
   {
     id: 'neurochemical',

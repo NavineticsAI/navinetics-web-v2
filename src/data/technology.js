@@ -74,10 +74,15 @@ export const technologies = [
         // coordinates needs one word for the axis across the whole site.
         body: 'X, Y and Z place the target at the focus — the iso-center — of the arc. Collar and arc angles then set the approach trajectory to it.',
       },
-      {
-        title: 'Localizers tie it to the image',
-        body: 'MR and CT localizers, and X-ray reticles, register the imaging volume to the frame so that a planned coordinate and a delivered coordinate are the same thing.',
-      },
+      /* THE THIRD PRINCIPLE IS WITHDRAWN - 'Localizers tie it to the image',
+         whose body read: "MR and CT localizers, and X-ray reticles, register
+         the imaging volume to the frame so that a planned coordinate and a
+         delivered coordinate are the same thing."
+
+         Off on NaviNetics' instruction 2026-10-21. Worth recording that its
+         closing clause was the strongest unbacked assertion on the page: a
+         planned and a delivered coordinate being "the same thing" is an
+         accuracy claim with no figure behind it. */
     ],
     /* The tables came off this list. It renders as "the devices this technology
        is built into", and arc-centered stereotactic targeting is not built into

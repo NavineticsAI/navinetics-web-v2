@@ -1,6 +1,7 @@
 import figWaveform from '../assets/maven/fig-waveform.webp';
 import figFscv from '../assets/maven/fig-fscv.webp';
-import figField from '../assets/maven/fig-field.webp';
+/* fig-field.webp is no longer imported here: the only band that used it was
+   'Almost the same answer.', withdrawn 2026-10-22. The asset stays in place. */
 import { publications } from './publications.js';
 
 /**
@@ -65,14 +66,22 @@ export const evidence = publications
 export const gap = {
   eyebrow: 'The problem',
   title: 'Firing is not the same as releasing.',
+  /* Lightly rewritten 2026-10-22 for readability. Was: '...It will not tell
+     you what they released, and the chemistry is where a great deal of what
+     goes wrong in neurological and psychiatric disease actually lives.' The
+     claim is unchanged; the sentence is shorter and the trailing space is
+     gone. */
   body: 'An electrode in the brain will tell you when the cells around it fire. It will not tell '
-  + 'you what they released, and the chemistry is where a great deal of what goes wrong in '
-  + 'neurological and psychiatric disease actually lives. ',
+  + 'you what they released — and the chemistry is where much of what goes wrong in neurological '
+  + 'and psychiatric disease actually lives.',
   /* Was: "…working toward that. This page is those four." The second sentence
      describes the page's own structure to the reader, which is a note to
      ourselves about how the page was built. The first sentence is the useful
      part — eight years of sustained work is evidence, and it stays. */
-  note: 'Four papers, over eight years, each one a step toward it.',
+  /* `note` is withdrawn - 2026-10-22. It read 'Four papers, over eight years,
+     each one a step toward it.' and is no longer true of the page in any case:
+     two of the four bands have gone, so a count printed under the opening
+     paragraph would have to be maintained against the array below it. */
 };
 
 /**
@@ -86,7 +95,7 @@ export const chapters = [
     ground: 'bay',
     scene: 'sweep',
     tone: 'chem',
-    eyebrow: 'The standing level',
+    /* No eyebrow: 'The standing level' withdrawn 2026-10-22. */
     /* Breaks are explicit AND short. The copy column is ~28% of the band so
        the animation has somewhere to be seen, which at this type size is
        about ten characters a line — an authored line longer than that
@@ -102,24 +111,26 @@ export const chapters = [
         body: 'One is a release event in fractions of a second; the other is the level that shifts '
         + 'over minutes and hours.',
       },
-      {
-        label: 'Selectivity had to be demonstrated.',
-        body: 'The paper reports the method against the usual electroactive interferents — '
-          + 'ascorbic acid, DOPAC, and changes in pH.',
-      },
-      {
-        label: 'Demonstrated in living tissue.',
-        body: 'Tonic dopamine tracked in the living brain, which is the whole difficulty.',
-      },
     ],
-    meta: [{ label: 'Method', value: 'MCSWV' }, { label: 'Reported', value: '2018' }],
+    /* TWO POINTS AND THE META ROW WITHDRAWN - 2026-10-22. Gone:
+         'Selectivity had to be demonstrated.' - the method against the usual
+         electroactive interferents, ascorbic acid, DOPAC and changes in pH.
+         'Demonstrated in living tissue.' - tonic dopamine tracked in the
+         living brain, which is the whole difficulty.
+       The meta row read Method / MCSWV and Reported / 2018.
+
+       Worth noting: the selectivity point was the one place on this page the
+       method's specificity was stated against named interferents, and it was
+       sourced from the paper's own abstract. The same claim is made without
+       attribution on /technology/education. */
     figure: {
       src: figWaveform, w: 1262, h: 639,
       alt: 'A staircase potential added to a square wave to give the cyclic square waveform, with '
         + 'the current it produces shown beneath.',
       caption: 'The cyclic square waveform',
     },
-    readMore: { label: 'Absolute concentration recording, explained', to: '/technology/neuromodulation#absolute' },
+    /* `readMore` withdrawn ('Absolute concentration recording, explained').
+       The Citation strip under each band no longer renders one. */
   },
   /* CHRONOLOGICAL, and it was not.
      The page opens on "four papers, over eight years, each one a step toward
@@ -134,73 +145,58 @@ export const chapters = [
     ground: 'bay',
     scene: 'stim',
     tone: 'stim',
-    eyebrow: 'Watching stimulation act',
+    /* No eyebrow: 'Watching stimulation act' withdrawn 2026-10-22. */
     title: 'Asking what\nthe response\nmeans.',
     lead: 'Deep brain stimulation is known to help before it is understood to. Measuring chemistry '
     + 'with/without stimulation turns an outcome into a mechanism.',
+    /* ONE POINT LEFT - 2026-10-22. Withdrawn: 'One clock for both.' (the
+       stimulus and the response on the same timebase, or the delay between
+       them is not recoverable) and 'Reported in Brain, 2023.' (which carried
+       the paper's title, now shown in the Citation strip below the band
+       instead). The meta row read Journal / Brain and Reported / 2023.
+
+       The surviving point was rewritten for readability, chosen from three
+       drafts on 2026-10-26. The original was: 'A stimulator that can see what
+       it changed is a stimulator that could eventually be told to change it by
+       a different amount.'
+
+       THE HEDGE IS DELIBERATE AND SURVIVES THE REWRITE. 'First step toward'
+       describes a direction, not a product - nothing here says NaviNetics is
+       building closed-loop stimulation, and nothing should be allowed to drift
+       into saying so. */
     points: [
       {
-        label: 'One clock for both.',
-        body: 'The stimulus and the chemical response have to be on the same timebase, or the '
-          + 'delay between them — the thing you are actually measuring — is not recoverable.',
-      },
-      {
-        label: 'Reported in Brain, 2023.',
-        body: 'Deep brain stimulation alleviates tics in Tourette syndrome via striatal dopamine '
-        + 'transmission.',
-      },
-      {
         label: 'The case for closing the loop.',
-        body: 'A stimulator that can see what it changed is a stimulator that could eventually '
-          + 'be told to change it by a different amount.',
+        body: 'A device that can measure its own effect is the first step toward one that can '
+          + 'adjust itself in response.',
       },
     ],
-    meta: [{ label: 'Journal', value: 'Brain' }, { label: 'Reported', value: '2023' }],
     figure: {
       src: figFscv, w: 717, h: 848,
       alt: 'A voltammetric color plot with the extracted concentration trace above it and the '
         + 'cyclic voltammogram inset; the stimulus is marked beneath the plot.',
       caption: 'A release event, with the stimulus marked beneath',
     },
-    readMore: { label: 'Deep brain stimulation, explained', to: '/technology/neuromodulation#dbs' },
+    /* `readMore` withdrawn ('Deep brain stimulation, explained'). */
   },
-  {
-    id: 'resolve',
-    doi: '10.1038/s41380-024-02537-1',
-    ground: 'light',
-    scene: 'stack',
-    tone: 'soft',
-    eyebrow: 'Telling them apart',
-    title: 'Almost the\nsame answer.',
-    lead: 'Dopamine and norepinephrine differ by one hydroxyl group, and a sweep asks them both '
-      + 'much the same question. Where the waveform alone cannot separate two species, what is '
-      + 'left is in the shape of the response — and a model trained on that shape can do the '
-      + 'separating the chemistry will not.',
-    points: [
-      {
-        label: 'The waveform does part of the work.',
-        body: 'Each species turns over at its own potential, which is what makes voltammetry '
-          + 'selective at all.',
-      },
-      {
-        label: 'A model does the rest.',
-        body: 'The paper resolves tonic concentrations of highly similar neurotransmitters by '
-          + 'combining voltammetry with deep learning.',
-      },
-      {
-        label: 'Which widens what can be asked.',
-        body: 'A technique that can only report one analyte confidently answers one question '
-          + 'about a system that runs on several.',
-      },
-    ],
-    meta: [{ label: 'Method', value: 'Voltammetry + learning' }, { label: 'Reported', value: '2024' }],
-    figure: {
-      src: figField, w: 577, h: 513,
-      alt: 'A square-wave voltammogram: current in color across potential and scan number.',
-      caption: 'A square-wave voltammogram',
-    },
-    readMore: { label: 'Neurochemical detection, explained', to: '/technology/neuromodulation#neurochemical' },
-  },
+  /* THE THIRD CHAPTER IS WITHDRAWN - 'Almost the same answer.', on
+     NaviNetics' instruction 2026-10-22. It was the Molecular Psychiatry 2024
+     paper (DOI 10.1038/s41380-024-02537-1) on resolving dopamine from
+     norepinephrine by combining voltammetry with deep learning, with three
+     points ('The waveform does part of the work.', 'A model does the rest.',
+     'Which widens what can be asked.'), a Method / Reported meta row, the
+     square-wave voltammogram figure and a 'Neurochemical detection, explained'
+     link.
+
+     THE PAPER IS NOT GONE FROM THE PAGE. `evidence` above is derived from
+     data/publications.js by `line`, not from this array, so the 2024 paper is
+     still listed in the published-record section at the foot of this page and
+     still appears on /resources/publications. Only its band is gone.
+
+     Its figure (fig-field.webp) and its scene ('stack' in lib/mavenScenes) are
+     now unreferenced from here. Both are left in place - the MAVEN page's own
+     withdrawn band had the same two, so neither is dead weight introduced by
+     this change. */
 ];
 
 /** The paper a chapter is built on, by DOI. Throws rather than render a gap. */

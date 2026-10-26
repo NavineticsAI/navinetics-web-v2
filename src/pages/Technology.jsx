@@ -1,12 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getTechnology, isTechPlaceholder } from '../data/technology.js';
-import { getProduct } from '../data/products.js';
 import {
   ComingSoon,
   Hero,
   LinkAction,
-  ProductCard,
   ProductPlate,
   Reveal,
   Section,
@@ -31,9 +29,6 @@ export default function Technology() {
 
   if (!tech) return <NotFound />;
 
-  // `.filter(!hidden)` as well as Boolean: appliedIn names products by slug,
-  // and getProduct finds a hidden one perfectly well.
-  const products = (tech.appliedIn ?? []).map(getProduct).filter(Boolean).filter((x) => !x.hidden);
 
   return (
     <>
@@ -42,7 +37,15 @@ export default function Technology() {
         tone="dark"
         eyebrow={tech.eyebrow}
         title={tech.tagline}
-        lead={tech.summary}
+        /* NO LEAD, on NaviNetics' instruction 2026-10-21. It was
+           `tech.summary` - "Arc-centered targeting: three linear degrees of
+           freedom place a target at the focus of an arc, and two rotations set
+           the trajectory to it."
+
+           `summary` itself stays on the record: it is still this page's meta
+           description (usePageMeta above) and still the subtitle under
+           Stereotactic Devices in the Technology nav panel. This page is the
+           one place it is no longer shown. */
       />
 
       {isTechPlaceholder(tech) ? (
@@ -108,35 +111,27 @@ export default function Technology() {
               back read as a page running out of things to say. Side by side
               they read as a close — and it matches how the neuromodulation
               page ends, which is the same job. */}
-          {(products.length > 0 || tech.readMore?.length > 0) && (
+          {tech.readMore?.length > 0 && (
             <Section band wide>
-              <div className="grid gap-12 lg:grid-cols-[1fr_22rem] lg:gap-16">
-                {products.length > 0 && (
-                  <div>
-                    <SectionHead
-                      eyebrow="Applied in"
-                      title="Where you'll find it."
-                      lead="The devices this technology is built into."
-                    />
-                    {/* Capped at two columns: `appliedIn` is one product today
-                        and a single card stretched across a three-column grid
-                        looked like two had failed to load. */}
-                    <div className="mt-10 grid max-w-3xl gap-5 sm:grid-cols-2">
-                      {products.map((p) => (
-                        <Reveal key={p.slug}>
-                          <ProductCard product={p} />
-                        </Reveal>
-                      ))}
-                    </div>
-                  </div>
-                )}
+              <div className="max-w-3xl">
+                {/* THE "APPLIED IN" COLUMN IS WITHDRAWN - off on NaviNetics'
+                    instruction 2026-10-21. It was a SectionHead reading
+                    "Applied in" / "Where you'll find it." / "The devices this
+                    technology is built into.", over a two-column grid of
+                    ProductCards built from `appliedIn`.
+
+                    `appliedIn: ['d1-stereotactic-frame']` is left on the record
+                    in data/technology.js: nothing else reads it today, but it
+                    is a true statement about the platform and restoring this
+                    column needs it. */}
                 {tech.readMore?.length > 0 && (
                   <div>
                     <SectionHead eyebrow="Go deeper" title="The science, and the evidence." tick={false} />
-                    <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-2">
-                      This page stays at platform level on purpose. The detail lives where it
-                      belongs.
-                    </p>
+                    {/* "This page stays at platform level on purpose. The
+                        detail lives where it belongs." - withdrawn 2026-10-26.
+                        It explained the page's own editorial policy to the
+                        reader, which is a note for a maintainer rather than
+                        page copy. The links below say where to go. */}
                     <div className="mt-6 flex flex-col gap-4">
                       {tech.readMore.map((r) => (
                         <Reveal key={r.to}>
