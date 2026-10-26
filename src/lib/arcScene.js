@@ -106,14 +106,16 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   const arcPoint = (deg) => carrier(deg, state.collar);
 
   if (state.ghosts) {
-    for (let d = -75; d <= 75; d += 25) {
+    /* Step 25 -> 18: seven spokes read as a handful of chosen angles, ten read
+       as a family, which is what the label beside the focus now claims. */
+    for (let d = -81; d <= 81; d += 18) {
       if (Math.abs(d - state.arc) < 8) continue;
       /* These are the figure's whole argument - every approach angle ending
          at the same focus - and at 0.32 on a 2-3px dash they were all but
          invisible in print and on a bright screen. The caption that used to
          say it in words came off on 2026-10-21, so they now have to carry the
          point alone. */
-      segs.push({ a: arcPoint(d), b: [0, 0, 0], c: palette.sub, w: 1.4, o: 0.6, dash: true });
+      segs.push({ a: arcPoint(d), b: [0, 0, 0], c: palette.sub, w: 1.4, o: 0.7, dash: true });
     }
   }
 
@@ -188,6 +190,26 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   ctx.textAlign = 'left';
   ctx.fillStyle = palette.action;
   ctx.fillText('TARGET', pf[0] + 22, pf[1] + 4);
+
+  /* THE FIGURE STATES ITS OWN POINT - 2026-10-26.
+     ---------------------------------------------------------------------
+     The sentence that used to carry it, "Every approach the arc allows meets
+     the same point.", was deleted from the NRSS page lead by a reviewer on
+     2026-10-23 and published automatically. The figure's own caption
+     ("Schematic, and interactive. Whatever the two angles are, the trajectory
+     ends at the same point...") had already been withdrawn on 2026-10-21.
+
+     So the one idea this drawing exists to show was, between those two edits,
+     stated nowhere on the site. It is said here instead - inside the picture,
+     where it cannot drift away from the thing it describes, and in six words
+     rather than as a restored paragraph. */
+  ctx.font = '9px "IBM Plex Mono", ui-monospace, monospace';
+  ctx.fillStyle = palette.sub;
+  ctx.globalAlpha = 0.9;
+  ctx.fillText('EVERY APPROACH MEETS HERE', pf[0] + 22, pf[1] + 18);
+  ctx.globalAlpha = 1;
+  ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+  ctx.fillStyle = palette.action;
 
   ctx.textAlign = 'right';
   ctx.fillStyle = palette.sub;

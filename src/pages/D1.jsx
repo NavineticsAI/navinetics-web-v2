@@ -62,8 +62,14 @@ export default function D1() {
               <span className="eyebrow text-action">The system</span>
               <h2 className="text-d2">What’s included.</h2>
               <p className="max-w-prose text-sm leading-relaxed text-ink-2">
-                Everything supplied with the system, including both sterilization trays and the
-                accuracy verification fixture.
+                {/* Was "Everything supplied with the system, including both
+                    sterilization trays and the accuracy verification
+                    fixture." - a list intro that read as though its list had
+                    failed to render, saying "both" trays without naming
+                    either, and calling the fixture something the product
+                    record does not (it is the Ground Truth Fixture Kit). */}
+                Supplied with the system, including the sterilization trays and the Ground
+                Truth Fixture Kit used to verify accuracy.
               </p>
             </div>
           </Reveal>

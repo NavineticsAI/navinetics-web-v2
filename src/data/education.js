@@ -52,8 +52,11 @@ export const topics = [
       ['It is reversible',
         'Unlike a lesion, stimulation can be turned down or off. The tissue is not destroyed.'],
       ['The target is the therapy',
-        'Which structure the lead sits in — and how precisely — decides what the stimulation does. This is '
-        + 'the reason for everything in topic 02.'],
+        /* The second sentence pointed forward: "This is the reason for
+           everything in topic 02." Topic 02 was stripped to its figures on
+           2026-10-21, so the reference now sends a reader to three
+           uncaptioned pictures. Dropped 2026-10-26. */
+        'Which structure the lead sits in — and how precisely — decides what the stimulation does.'],
     ],
     lists: [
       { label: 'Established use', tone: 'action',

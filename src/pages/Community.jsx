@@ -41,7 +41,11 @@ export default function Community() {
       <Hero
         eyebrow="Company — Community"
         title="Rochester, Minnesota."
-        lead="."
+        /* NO LEAD. This read lead="." - a single full stop, rendered at
+           lead type size as the page opening paragraph, which is the
+           largest body text on it. It was the residue of a deleted
+           sentence, not restraint. Hero guards `lead &&`, so omitting the
+           prop renders nothing. */
       />
 
       <Section wide className="!pt-0">

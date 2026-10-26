@@ -74,7 +74,16 @@ export default function Home() {
            closing clause lost "see through the table" with them; what is left
            is still the same one-route idea, and every clause is still true on
            its own page. */
-        lead="Contempory stereotactic frames design and development along with advanced neuromodulation instruments combine to advance the future for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, reach it, and measure what changed."
+        /* REWRITTEN 2026-10-26. This was the first sentence on the site and
+           it did not parse: "Contempory stereotactic frames design and
+           development along with advanced neuromodulation instruments combine
+           to advance the future for functional neurosurgery..." - a
+           misspelling, no subject, and a noun phrase doing a verb job.
+
+           "plan it" is dropped from the closing line too. The planning
+           software it referred to is hidden in data/technology.js, so the
+           home page was promising a capability no page on the site shows. */
+        lead="We design and develop contemporary stereotactic frames and advanced neuromodulation instruments for functional neurosurgery — with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
           {/* "Discover the NRSS" used an acronym that is first defined further

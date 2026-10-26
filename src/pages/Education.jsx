@@ -109,7 +109,7 @@ export function EducationTopics({ topics: list }) {
           {list.length > 1 && <Rail topics={list} active={active} progress={progress} />}
           <div>
             {list.map((t) => (
-              <Topic key={t.id} t={t} />
+              <Topic key={t.id} t={t} showNumber={list.length > 1} />
             ))}
           </div>
         </div>
@@ -171,12 +171,19 @@ function Rail({ topics: list, active, progress }) {
 }
 
 /* ── one topic ──────────────────────────────────────────────────────────── */
-function Topic({ t }) {
+function Topic({ t, showNumber = true }) {
   return (
     <section id={t.id} className="scroll-mt-28 pb-24">
       <Reveal>
         <div className="flex items-center gap-3.5 border-b border-ink pb-3">
-          <span className="font-data text-[0.8125rem] font-semibold tracking-[0.08em] text-action">{t.n}</span>
+          {/* The ordinal only means something in a numbered series.
+              Embedded into a technology page, a single topic brought its
+              "02" with it and printed it three lines under that page own
+              principle 02 - two numbering schemes colliding. The rail is
+              already suppressed for a single topic; this follows it. */}
+          {showNumber && (
+            <span className="font-data text-[0.8125rem] font-semibold tracking-[0.08em] text-action">{t.n}</span>
+          )}
           {/* Not text-d2: five of these on one page at 2.75rem would compete
               with the hero. There is no d3 in the scale, so this is explicit. */}
           <h2 className="text-[clamp(1.5rem,3vw,2rem)] tracking-[-0.03em]">{t.title}</h2>

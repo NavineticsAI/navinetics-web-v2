@@ -134,7 +134,11 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
-    lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
+    /* "collar" was used twice on the whole site and defined neither time.
+       One clause, so a reader is not left to infer which rotation is
+       which. */
+    lead: 'Once the arc and collar angles are set — the collar turning about the '
+    + 'vertical axis, the arc swinging over it — a mechanical microdrive attaches to advance DBS '
     + 'leads and micro-recording electrodes to the target.',
     figure: {
       src: asset('/microdrive-image-1024x797.png'),

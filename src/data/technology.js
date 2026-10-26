@@ -68,6 +68,24 @@ export const technologies = [
         body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy.',
       },
       {
+        /* "The center-of-arc principle", kept on NaviNetics' decision
+           2026-10-26 after being briefly renamed to "Arc-centered targeting".
+
+           KNOWN AND ACCEPTED: this is the only use of "center-of-arc" on the
+           site. Everywhere else says "arc-centered" - the product record's
+           Classification field, the 510(k)-style description ("Classified as
+           an arc centered stereotactic device"), the NRSS page heading, the
+           summary above, the engineering discipline, and the education topic
+           that renders a few lines BELOW this one as "The arc-centered
+           principle". So this page names the same principle two ways within
+           one screen, deliberately.
+
+           It is kept because it pairs with its own body text, which calls the
+           focus "the iso-center" - and because the phrase is standard in the
+           stereotactic literature. If the two names are ever reconciled, note
+           that "arc-centered" is the one that appears in the regulated-sounding
+           copy and is the likelier controlled term; check with NaviNetics
+           before changing that rather than this. */
         title: 'The center-of-arc principle',
         // "Collar", not "ring" — the review retired ring terminology, and the
         // education and software pages already say collar. A surgeon dialling
@@ -109,7 +127,11 @@ export const technologies = [
     eyebrow: 'Technology — Neuromodulation',
     tagline: 'Measuring what\nstimulation changes.',
     summary:
-      'Recording neurochemical and electrophysiological activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
+      /* "and electrophysiological" came out 2026-10-26. The band that
+         supported it was removed, so the lead promised a second half the
+         page never developed - after this sentence the word survived only
+         inside a cited paper title. */
+      'Recording neurochemical activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
     /* The MAVEN unit's own artwork. This replaced a journal figure that was
        standing in as a product shot — see the note in data/products.js. */
     hero: mavenDevice,

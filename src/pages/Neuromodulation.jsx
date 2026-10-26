@@ -106,7 +106,11 @@ export default function Neuromodulation() {
             than as the section it came from. */}
         <Reveal className="mt-10">
           <LinkAction to="/resources/publications">
-            The full publication record
+            {/* Not "The full publication record": the page it reaches is
+                headed "Highlighted research." and the line stating it was a
+                selection was itself withdrawn, so the link promised a
+                completeness the destination does not claim. */}
+            Selected publications
           </LinkAction>
         </Reveal>
       </Section>
