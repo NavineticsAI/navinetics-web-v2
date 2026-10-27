@@ -193,6 +193,15 @@
 
 /* ── Semantic tokens · DARK ─────────────────────────────────────────────── */
 :root[data-theme="dark"] {
+  /* The light-ground band scrim, redefined for dark - 2026-10-27. Without
+     these the three --band-scrim tokens kept their light-theme values, so on a
+     light-ground band in dark theme the scrim computed to a PALE stripe
+     (rgba 244 247 249 / .88) directly behind light text: the NRSS
+     "Arc-centered." lead measured 1.0-1.5:1, i.e. invisible. Same stops as the
+     light set, on --canvas. */
+  --band-scrim-1: rgb(4 20 29 / 0.88);
+  --band-scrim-2: rgb(4 20 29 / 0.06);
+  --band-scrim-3: rgb(4 20 29 / 0.34);
   --canvas: #04141d;
   --sunk: #020c12;
   --surface: #0a2231;

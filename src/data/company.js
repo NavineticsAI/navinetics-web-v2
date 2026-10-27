@@ -158,6 +158,6 @@ export const principles = [
   {
     title: 'Publish the evidence',
     body:
-      'The methods behind these devices can be founded in the peer-reviewed journals.',
+      'The methods behind these devices can be found in the peer-reviewed journals.',
   },
 ];

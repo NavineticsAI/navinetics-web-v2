@@ -341,10 +341,10 @@ export function MavenHero({ product }) {
              replaces it with the same offset the stage carries, so the stamp
              stays under the instrument. */
           className="pointer-events-none absolute left-1/2 top-[78%] z-[3] -translate-x-1/2
-            rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
+            whitespace-nowrap rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
             sm:top-[80%]"
         >
-          <span className="font-data text-[0.625rem] uppercase tracking-[0.16em] text-sg-300">
+          <span className="font-data text-[0.6875rem] uppercase tracking-[0.16em] text-sg-300">
             {/* "For preclinical research" - 2026-10-22 asked for the FOR (the stamp
                 says what the instrument is for rather than labelling it), and
                 2026-10-27 settled the spelling: one word, no hyphen, as on the
@@ -562,8 +562,15 @@ export function MavenHero({ product }) {
               <h1 className="mt-5 text-[clamp(1.75rem,4.25vw,3.8rem)] font-semibold leading-[1.1]
                 !tracking-[-0.04em] text-nn-50">
                 <span className="sr-only">{product.shortName}: </span>
+                {/* whitespace-nowrap: a line must never wrap, or the capital
+                    that starts the next row is no longer a capital. At 1280 and
+                    up "Electrophysiology and" is wider than the 512px copy
+                    column and broke as "Electrophysiology / and", so the
+                    initials read M-A-V-E-a-N - shipped in 3f6c9bc and caught by
+                    the animation audit. Held to one row, it runs past the
+                    column into the space before the ring, which it clears. */}
                 {expansion.map(([cap, rest], i) => (
-                  <span key={cap + rest} className="block">
+                  <span key={cap + rest} className="block whitespace-nowrap">
                     <span className="text-sg-300">{cap}</span>
                     {rest}
                     {i === expansion.length - 1 ? '.' : ''}
@@ -581,7 +588,7 @@ export function MavenHero({ product }) {
                   "...and its electrical" into the green Neurochemistry arc.
                   42vw keeps it inside the title's measure all the way down to
                   lg, and the 32rem cap is the old width from about 1220 up. */}
-              <p className="mt-6 max-w-[min(32rem,42vw)] text-lead leading-[1.55] tracking-[-0.015em] text-nn-200 [text-wrap:pretty]">
+              <p className="mt-6 lg:max-w-[min(32rem,42vw)] text-lead leading-[1.55] tracking-[-0.015em] text-nn-200 [text-wrap:pretty]">
                 A research platform that reads the brain&rsquo;s chemistry and its electrical
                 activity at the same instant, while stimulating it.
               </p>

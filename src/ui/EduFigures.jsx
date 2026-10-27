@@ -756,7 +756,6 @@ function LocaliserFigure() {
      is gone, so the figure now animates without announcing that it will. */
   const ease = (v) => v * v * (3 - 2 * v);
   const drop = ease(Math.min(1, p / 0.62));                 // the plane arriving
-  const land = ease(Math.max(0, Math.min(1, (p - 0.5) / 0.5))); // the slice resolving
   const cy = PLANE.from + (PLANE.to - PLANE.from) * drop;
 
   return (
@@ -783,12 +782,15 @@ function LocaliserFigure() {
           >
             <ellipse
               cx={RING.cx} cy={cy} rx={RING.rx} ry={RING.ry}
-              fill="none" stroke="var(--color-action-hi)" strokeWidth="4"
+              /* A fixed light blue and a heavier line. The render is dark in
+                 both themes, so the theme's action colour went low-contrast on
+                 it, and at strokeWidth 4 the plane was a hairline at card size. */
+              fill="none" stroke="#82bad9" strokeWidth="10"
               opacity={0.35 + drop * 0.55}
             />
             <ellipse
               cx={RING.cx} cy={cy} rx={RING.rx} ry={RING.ry}
-              fill="var(--color-action-hi)" opacity={0.06 + drop * 0.08}
+              fill="#82bad9" opacity={0.06 + drop * 0.08}
             />
           </svg>
         </div>
@@ -799,7 +801,11 @@ function LocaliserFigure() {
             alt="The axial CT slice at that plane, with the nine localizer fiducials around the skull."
             loading="lazy" width="1280" height="1260"
             className="block h-full w-full object-contain"
-            style={{ opacity: 0.12 + land * 0.88, filter: `blur(${(1 - land) * 7}px)` }}
+            /* No fade or blur-in - 2026-10-27. For the first half of the scroll
+               the slice sat at opacity 0.12 behind a 7px blur: a navy box with a
+               faint oval, which reads as an image failing to load rather than as
+               a slice resolving. The plane still descends on the render beside
+               it; the slice is simply always readable. */
           />
         </div>
       </div>
@@ -821,13 +827,20 @@ function FrameVideo() {
   const ref = useRef(null);
   const reduced = usePrefersReducedMotion();
   const [playing, setPlaying] = useState(false);
+  /* A pause the visitor chose survives scrolling away and back. The in-view
+     watcher below called el.play() every time the video came back into view,
+     so Pause only lasted until the next scroll - which undoes the one control
+     auto-playing video is required to give (WCAG 2.2.2). */
+  const userPaused = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el || reduced) return undefined;
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) el.play().then(() => setPlaying(true)).catch(() => {});
+        if (e.isIntersecting) {
+          if (!userPaused.current) el.play().then(() => setPlaying(true)).catch(() => {});
+        }
         else { el.pause(); setPlaying(false); }
       },
       { threshold: 0.25 },
@@ -839,6 +852,7 @@ function FrameVideo() {
   const toggle = () => {
     const el = ref.current;
     if (!el) return;
+    userPaused.current = !el.paused;
     if (el.paused) el.play().then(() => setPlaying(true)).catch(() => {});
     else { el.pause(); setPlaying(false); }
   };
@@ -884,7 +898,9 @@ function FrameVideo() {
         <button
           type="button"
           onClick={toggle}
-          aria-pressed={playing}
+          /* No aria-pressed. The label already changes between Play and Pause,
+             and announcing it as a toggle that is "pressed" while playing as
+             well made a screen reader say both. */
           className="eyebrow absolute bottom-3 right-3 rounded-full border border-hairline bg-surface px-3 py-1.5 text-ink-2 transition-colors hover:text-action"
         >
           {playing ? 'Pause' : 'Play'}

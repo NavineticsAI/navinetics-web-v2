@@ -245,7 +245,21 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   ctx.textAlign = 'left';
   ctx.fillStyle = palette.sub;
   ctx.globalAlpha = 0.85;
-  put('ARC', pa[0] + 12, pa[1] + 4);
+  /* Outside the arc when it fits, otherwise just INSIDE it. `put` used to slide
+     the label left until it fitted, which on 360-560px canvases landed it on
+     the arc line itself - the same grey - so 16-23% of it merged with the
+     line. Right-aligned 10px inside the arc it clears every line by about 7px
+     up to 770px wide; from there up it sits outside as before. */
+  {
+    const tw = ctx.measureText('ARC').width;
+    if (pa[0] + 12 + tw + EDGE <= w) {
+      ctx.fillText('ARC', pa[0] + 12, pa[1] + 4);
+    } else {
+      ctx.textAlign = 'right';
+      ctx.fillText('ARC', pa[0] - 10, pa[1] + 4);
+      ctx.textAlign = 'left';
+    }
+  }
 
   // The horizontal track the arc's feet ride on.
   const pcl = project([ARC_R * Math.cos(rad(205)), ARC_R * Math.sin(rad(205)), 0]);

@@ -64,14 +64,24 @@ export const detail = detailArt;
 export const DETAIL = { w: 759, h: 1134 };
 
 /**
- * The four explanations, each with an abstract ground and a figure.
+ * The four explanations, each with a figure. Two of them - "Arc-centered."
+ * and "Down the trajectory." - also carry an abstract animated ground;
+ * "Anchored to the skull." and "Room to work." lost theirs on review.
  *
  * Copy is paraphrased from the product record's own `sequence`, `highlights`
  * and `detail` — nothing here says more than the existing site already does.
  */
 export const bands = [
   {
-    scene: 'anchor',
+    /* NO SCENE - the 'anchor' animation came off on the animation audit,
+       2026-10-27. Its own header in lib/d1Scenes.js describes it: "Screws come
+       in from three directions and tighten". That is the fitting detail
+       NaviNetics had already cut from this band's copy, and it showed THREE
+       screws, a count the site never states. Nothing in it showed what the
+       lead now says - that the key replaces the baseframe and keeps the
+       mechanics off the face - and on a phone its lines crossed three lines
+       of the lead under a scrim of about 0.13: the same unlabelled-callout
+       look "Room to work." was removed for. */
     ground: 'bay',
     tone: 'chem',
     eyebrow: 'New mechanism',

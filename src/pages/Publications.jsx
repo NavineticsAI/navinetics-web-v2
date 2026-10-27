@@ -5,7 +5,7 @@ import {
   publicationLines,
   publications,
 } from '../data/publications.js';
-import { Hero, Reveal, Section } from '../ui/index.js';
+import { Hero, LinkAction, Reveal, Section } from '../ui/index.js';
 
 /**
  * Publications.
@@ -59,6 +59,14 @@ export default function Publications() {
             site that this list is a SELECTION rather than the complete record.
             Anyone counting the papers will now read the page as everything the
             laboratory has published. */}
+
+        {/* ONE WAY ON. Every link on this page goes to a journal on another
+            site, the footer has no Contact link, and on a phone the header's
+            Contact button is hidden - so a reader the evidence has convinced
+            had to go back to the menu to get in touch. */}
+        <Reveal className="mt-16">
+          <LinkAction to="/contact">Talk to us</LinkAction>
+        </Reveal>
       </Section>
     </>
   );

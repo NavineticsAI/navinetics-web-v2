@@ -93,13 +93,24 @@ export const chapters = [
     id: 'tonic',
     doi: '10.1016/j.bios.2018.08.034',
     ground: 'bay',
-    scene: 'sweep',
+    /* NO SCENE - withdrawn 2026-10-27 on the animation audit. It was 'sweep',
+       MAVEN's fast-scan cyclic voltammetry scene: a smooth triangular sweep
+       with a background-subtracted current on a flat baseline. On MAVEN that
+       is right - its bullet reads "A triangular sweep, applied over and over".
+       Here it was misleading: this chapter is about MULTIPLE CYCLIC SQUARE
+       WAVE voltammetry and a standing level, its lead introduces FSCV only as
+       the contrast ("subtracts its own background ... so it reports
+       changes"), and the figure beside it draws the MCSWV staircase. So the
+       one moving thing on the band animated the method the chapter argues
+       against. On a phone its flat baseline also ran through the last bullet
+       like a strikethrough. A scene for this band would have to draw a
+       staircase plus square wave on a slowly drifting, non-zero level; none
+       exists. makeSweep stays - MAVEN uses it. */
     tone: 'chem',
     /* No eyebrow: 'The standing level' withdrawn 2026-10-22. */
-    /* Breaks are explicit AND short. The copy column is ~28% of the band so
-       the animation has somewhere to be seen, which at this type size is
-       about ten characters a line — an authored line longer than that
-       wraps again and a three-line heading becomes five. */
+    /* Breaks are explicit AND short, which at this type size is about ten
+       characters a line - an authored line longer than that wraps again and a
+       three-line heading becomes five. */
     title: 'Reporting an\namount.',
     lead: 'Fast-scan cyclic voltammetry subtracts its own background, and the baseline goes with it '
     + '— so it reports changes. Multiple cyclic square wave voltammetry models the capacitive '

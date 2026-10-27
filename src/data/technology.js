@@ -117,6 +117,10 @@ export const technologies = [
     teaches: ['stereotaxy'],
     readMore: [
       { label: 'Published accuracy and validation work', to: '/resources/publications' },
+      /* The product this page explains. With "Applied in" withdrawn on
+         2026-10-21 the page linked only to Publications and never back to the
+         frame it describes; the NRSS page links here, so this closes the loop. */
+      { label: 'The NRSS', to: '/products/d1-stereotactic-frame' },
     ],
   },
 

@@ -61,7 +61,7 @@ export function D1Hero() {
             {'Robust. Low complexity.\nComfortable.'}
           </h1>
           <p className="max-w-prose text-lead leading-[1.55] text-nn-200">
-            Traditional arc-centered targeting having Three linear and  two rotational degrees of freedom.
+            Traditional arc-centered targeting having three linear and two rotational degrees of freedom.
           </p>
 
           {/*

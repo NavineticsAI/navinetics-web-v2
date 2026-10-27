@@ -48,7 +48,10 @@ export default function Footer() {
                   <li key={l.path}>
                     <Link
                       to={l.path}
-                      className="text-sm text-nn-100 transition-colors duration-100 hover:text-sg-300"
+                      /* inline-block py-1.5: these were 18px-tall targets. On a
+                         phone the footer is one of only two ways to reach
+                         Neuromodulation, Community, Media and Careers. */
+                      className="inline-block py-1.5 text-sm text-nn-100 transition-colors duration-100 hover:text-sg-300"
                     >
                       {l.title}
                     </Link>

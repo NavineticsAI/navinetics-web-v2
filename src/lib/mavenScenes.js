@@ -204,7 +204,7 @@ export function makeStim(light) {
 
     // the answer, rising after the train and returning to baseline
     const resp = phase < 0.3 ? 0
-      : (1 - Math.exp(-(phase - 0.3) / 0.32)) * Math.exp(-(phase - 0.3) / 2.4);
+      : (1 - Math.exp(-(phase - 0.3) / 0.32)) * Math.exp(-(phase - 0.3) / 1.4);
     if (resp > 0.004) {
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, reach * 0.75);
       g.addColorStop(0, rgba(P.a, resp * 0.3, P));
@@ -220,8 +220,17 @@ export function makeStim(light) {
     ctx.lineWidth = 1.4;
     ctx.beginPath();
     for (let x = 0; x <= w; x += 3) {
-      const p = ((x / w) * PERIOD + PERIOD - phase) % PERIOD;
-      const v = p < 0.3 ? 0 : (1 - Math.exp(-(p - 0.3) / 0.32)) * Math.exp(-(p - 0.3) / 2.4);
+      /* + phase, not PERIOD - phase. The trace scrolled RIGHT while the
+         stimulus ticks below it scroll LEFT, so the two only lined up behind
+         the copy scrim or the figure and a visitor never saw a response sitting
+         above the stimulus that caused it - which is the whole point of the
+         scene. Now both move left, newest on the right, and the response
+         starts about 0.3s after the first tick. The decay is 1.4s rather than
+         2.4 so the trace is back at baseline by the loop restart: at 2.4 the
+         leftover 7.7px step landed exactly on the first tick and looked like
+         a stimulation artifact, which the MAVEN copy says is minimized. */
+      const p = ((x / w) * PERIOD + phase) % PERIOD;
+      const v = p < 0.3 ? 0 : (1 - Math.exp(-(p - 0.3) / 0.32)) * Math.exp(-(p - 0.3) / 1.4);
       const y = baseY - v * h * 0.16;
       if (x) ctx.lineTo(x, y); else ctx.moveTo(x, y);
     }

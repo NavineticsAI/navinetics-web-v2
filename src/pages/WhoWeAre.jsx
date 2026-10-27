@@ -35,7 +35,7 @@ const FOUNDERS = [
   { name: 'Stephan J. Goerss', suffix: '', role: 'Co-Founder',
     line: 'Forty years designing neurosurgical devices and stereotactic instrumentation. 51 peer-reviewed papers.',
     image: asset('/stephan-goerss-150.jpg'), focus: '50% 0%' },
-  { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'CE0 & Co-Founder',
+  { name: 'Yoonbae Oh', suffix: 'Ph.D.', role: 'CEO & Co-Founder',
     line: 'Associate Professor of Neurosurgery, Mayo Clinic. Associate Director of the Neural Engineering Laboratories. Associate Professor of Brain and Cognitive Engineering, Korea University',
     image: asset('/yoonbae-oh.jpg'), focus: '50% 0%' },
 ];

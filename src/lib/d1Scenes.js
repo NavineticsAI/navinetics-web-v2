@@ -5,6 +5,10 @@
  * the ground's lightness and returns `draw(ctx, w, h, t)`, keeping whatever it
  * needs in the closure.
  *
+ * Two are in use - arc and drive. anchor and access were withdrawn from their
+ * bands on review (see data/d1.js) and are kept here unreferenced, so a band
+ * can have its scene back by naming it again.
+ *
  * All four are about the same idea from four directions — a point in the head
  * that must not move while everything around it does. Nothing here is a
  * measurement, a trajectory or a coordinate; they are drawings of an argument.
@@ -145,11 +149,16 @@ export function makeDrive(light) {
   const P = palette(light);
   return function draw(ctx, w, h, t) {
     clear(ctx, w, h);
-    const cx = w * 0.5;
+    /* w*0.5 - 40, not the centre: the tick scale stood against the figure's
+       left edge at desktop widths. 40px clears it by 35-45px from 1024 to 1440.
+       t*0.2, not t*0.7: at 0.7 it stepped every ~65ms and ran top to bottom
+       in 1.43s, which read as a stutter rather than as the step-by-step
+       advance of a drive. 0.2 is a 5s descent at about 230ms a step. */
+    const cx = w * 0.5 - 40;
     const top = h * 0.12;
     const bot = h * 0.86;
     const STEPS = 22;
-    const k = Math.floor(((t * 0.7) % 1) * STEPS) / STEPS;
+    const k = Math.floor(((t * 0.2) % 1) * STEPS) / STEPS;
     const y = top + (bot - top) * k;
 
     // the scale it moves against

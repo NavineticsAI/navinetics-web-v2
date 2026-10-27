@@ -26,23 +26,41 @@ export function Hero({
 }) {
   const reduced = usePrefersReducedMotion();
   const ref = useRef(null);
+  const crossRef = useRef(null);
   const dark = tone === 'dark';
+  /* A mouse, not a finger. The crosshair rested at 50%/50% until the pointer
+     moved, and on a touch screen a tap never moves it - so on a phone its
+     horizontal line ran through the first line of the lead like a
+     strikethrough and its vertical cut every line of the heading and lead for
+     the whole visit. It is only for a fine pointer that can hover. */
+  const fine = typeof window !== 'undefined'
+    && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* Drives the crosshair only. It used to also feed a coordinate readout,
      which has been removed — see the note at the foot of this component. */
   useEffect(() => {
     const el = ref.current;
-    if (!el || !targeting || reduced) return;
+    if (!el || !targeting || reduced || !fine) return;
     const onMove = (e) => {
       const r = el.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width;
       const py = (e.clientY - r.top) / r.height;
       el.style.setProperty('--px', `${(px * 100).toFixed(2)}%`);
       el.style.setProperty('--py', `${(py * 100).toFixed(2)}%`);
+      if (crossRef.current) crossRef.current.style.opacity = '1';
     };
+    /* Hidden until the mouse is over the hero, and again when it leaves -
+       otherwise it sat at the centre like a stray text cursor before the first
+       move, and froze wherever the pointer left (onto the navbar, half the
+       ring under it). */
+    const onLeave = () => { if (crossRef.current) crossRef.current.style.opacity = '0'; };
     el.addEventListener('pointermove', onMove, { passive: true });
-    return () => el.removeEventListener('pointermove', onMove);
-  }, [targeting, reduced]);
+    el.addEventListener('pointerleave', onLeave);
+    return () => {
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerleave', onLeave);
+    };
+  }, [targeting, reduced, fine]);
 
   const step = (i) => ({
     initial: reduced ? { opacity: 0 } : { opacity: 0, y: 22 },
@@ -111,8 +129,12 @@ export function Hero({
       </div>
 
       {/* targeting crosshair */}
-      {targeting && !reduced && (
-        <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden="true">
+      {targeting && !reduced && fine && (
+        <div
+          ref={crossRef}
+          className="pointer-events-none absolute inset-0 z-[1] opacity-0 transition-opacity duration-200"
+          aria-hidden="true"
+        >
           <i
             className="absolute left-0 right-0 h-px bg-[var(--retic)]"
             style={{ top: 'var(--py,50%)' }}
