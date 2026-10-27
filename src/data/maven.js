@@ -239,8 +239,9 @@ export const bands = [
     /* ONE POINT, NO LEAD. Withdrawn on NaviNetics' instruction 2026-10-21:
        the lead, the first point ('Synchronized with the measurement.') and the
        third ('Placed by the same route.') are gone, and the second is the whole
-       band. The electrode-route sentence the third point made survives on the
-       page — it is the closing line under the buttons in pages/Maven.jsx.
+       band. The electrode-route sentence the third point made used to survive
+       as the closing line under the buttons in pages/Maven.jsx; that line was
+       withdrawn too, on 2026-10-26, so the idea is no longer on the page.
 
        'usable through the stimulus' is now 'stable through the stimulus', which
        is NaviNetics' own wording for it. */

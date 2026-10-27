@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getProduct } from '../data/products.js';
 import { bands } from '../data/maven.js';
@@ -116,16 +115,15 @@ export default function Maven() {
               </Button>
             </div>
 
-            <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-              Sensing and stimulating electrodes are placed through the same stereotactic route as
-              the rest of our work — the{' '}
-              <Link to="/products/d1-stereotactic-frame" className="text-action underline-offset-4 hover:underline">
-                NRSS
-              </Link>
-              {/* "and NaviNetics AI", linked, came off here: that page is
-                  hidden and linked from nowhere (see data/technology.js). */}
-              .
-            </p>
+            {/* The closing line is withdrawn - 2026-10-26. It read "Sensing and
+                stimulating electrodes are placed through the same stereotactic
+                route as the rest of our work - the NRSS.", with NRSS linked to
+                /products/d1-stereotactic-frame.
+
+                WHAT GOES WITH IT: that link was the only route from this page
+                to the NRSS. The MAVEN page now links out to Contact and to
+                Publications and nowhere else - not to the frame its electrodes
+                are placed through, and not to /technology/neuromodulation. */}
           </Reveal>
         </div>
       </section>

@@ -146,7 +146,13 @@ export const bands = [
     },
   },
   {
-    scene: 'access',
+    /* NO SCENE - the 'access' animation came off on NaviNetics' instruction
+       2026-10-26. It drew pale blocks floating around the frame cut-out, which
+       on this light ground read as empty callouts rather than as access to the
+       field; the layout audit found the same three blocks (x 112-312,
+       y ~3344-3519 on phone) and called them that. ScienceBand renders a band
+       with no scene as copy and figure only. 'access' itself is still in
+       lib/d1Scenes.js and unreferenced. */
     ground: 'light',
     tone: 'soft',
     eyebrow: 'Access',

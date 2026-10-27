@@ -44,6 +44,7 @@ export function MavenHero({ product }) {
   const hostRef = useRef(null);
   const fieldRef = useRef(null);
   const stageRef = useRef(null);
+  const stampRef = useRef(null);
   const asmRef = useRef(null);
   const deviceRef = useRef(null);
   const copyRef = useRef(null);
@@ -173,7 +174,19 @@ export function MavenHero({ product }) {
            which is the opposite of the usual grow-into-place and reads far
            better against a headline. */
         const s = (narrow ? 0.92 : 1.14) - (narrow ? -0.08 : 0.14) * settle;
-        const dx = narrow ? 0 : 15 * rest;
+        /* 15 -> 33. At 15 the ring settled 107px right of the viewport
+           centre, which left the composition hugging the left: a 73px margin
+           on one side and 360px of dead space on the other, with the heading
+           almost touching the Neurochemistry arc.
+
+           33% of the stage width centres the art in the space to the RIGHT of
+           the copy column rather than in the viewport, which is what this
+           layout actually is - a text column and an object beside it. Checked
+           at 1440 and 1280: the gap between the heading and the ring and the
+           margin outside the ring come out within ~5px of each other at both,
+           because the copy column is a fixed max-w-xl and the stage is capped
+           at 760px, so the two scale together. */
+        const dx = narrow ? 0 : 33 * rest;
         /* Settled, the ring rides up to leave the foot of the screen for the
            four domains — the point of the whole opening is that the instrument
            and what it covers are legible at once, without scrolling. */
@@ -181,6 +194,27 @@ export function MavenHero({ product }) {
         stageRef.current.style.transform =
           `translate(${dx.toFixed(1)}%, ${dy.toFixed(1)}%) scale(${s.toFixed(3)})`;
         stageRef.current.style.opacity = String((narrow ? 0.34 : 0.62) + (narrow ? 0.66 : 0.38) * settle);
+
+        /* THE STAMP TRACKS THE RING. It is positioned against the section, not
+           against the stage, so it sat at the viewport centre while the stage
+           translated away from it - at dx 15 that was tolerable, at 33 the
+           label ended up under the gap between the heading and the ring
+           instead of under the instrument it labels.
+           `dx` is a percentage of the stage's own width, so it is converted
+           here rather than guessed.
+
+           `translate`, NOT `transform`. Tailwind v4's -translate-x-1/2 sets
+           the standalone CSS `translate` property, which composes with
+           `transform` rather than being replaced by it. Writing the offset to
+           `transform` therefore applied the -50% centring twice - once from the
+           class, once from here - and left the stamp exactly half its own width
+           (108px) left of the instrument at every viewport. Writing to
+           `translate` overrides the class's value instead of stacking on it,
+           and the class still centres the stamp before this first runs. */
+        if (stampRef.current) {
+          const px = (dx / 100) * stageRef.current.offsetWidth;
+          stampRef.current.style.translate = `calc(-50% + ${px.toFixed(1)}px) 0`;
+        }
       }
       if (deviceRef.current) {
         const k = 1 - span(p, 0, 0.5);
@@ -299,9 +333,13 @@ export function MavenHero({ product }) {
             an approval that has not been granted. This one carries no
             regulatory meaning at all, which is exactly the point. */}
         <div
+          ref={stampRef}
           /* Under the ring, not above it — at the top of the section it sat
              behind the fixed navbar and was unreadable. Here it reads as a
-             label on the instrument, which is what it is. */
+             label on the instrument, which is what it is.
+             The -translate-x-1/2 is the resting position; the scroll handler
+             replaces it with the same offset the stage carries, so the stamp
+             stays under the instrument. */
           className="pointer-events-none absolute left-1/2 top-[78%] z-[3] -translate-x-1/2
             rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
             sm:top-[80%]"
@@ -491,31 +529,58 @@ export function MavenHero({ product }) {
           <div className="nn-frame mx-auto w-full">
             <div className={reduced ? 'max-w-2xl' : 'max-w-lg'}>
               <Eyebrow className="!text-sg-300">{`Products — ${product.shortName}`}</Eyebrow>
-              {/* NO HEADLINE. The <h1> was product.tagline — "Measuring the
-                  living brain, / while you stimulate it." — and it came off on
-                  NaviNetics' instruction 2026-10-21. The paragraph below it
-                  stays and now opens the page.
+              {/* THE ACROSTIC IS THE TITLE.
+                  ---------------------------------------------------------
+                  `expansion` in data/maven.js is five entries for a five-letter
+                  acronym, so set one line per entry the coloured capitals read
+                  M A V E N straight down the left edge - the heading spells the
+                  product while expanding it.
 
-                  The tagline is still in the product record, because the
-                  catalog cards and /technology/neuromodulation read it from
-                  there. This is the one page that does not show it.
+                  There is no separate "MAVEN" above it. There was, briefly, on
+                  2026-10-26, and NaviNetics took it out as repetitive: the
+                  eyebrow already says "Products - MAVEN" and the initials spell
+                  it, so a third MAVEN in 64px said nothing the page had not.
+                  The name is still the first thing in the heading for anyone
+                  who is not looking at it - the visually hidden "MAVEN: " means
+                  a screen reader and a search engine read "MAVEN: Multifunctional
+                  Apparatus for Voltammetry, Electrophysiology and
+                  Neuromodulation."
 
-                  WORTH KNOWING: the page now has no <h1>. The eyebrow above is
-                  a <span>, and the first heading on the page is the <h2> of the
-                  first band. Harmless for the document outline, but if a
-                  heading is ever wanted back, this is where it goes. */}
-              {/* The name is an acronym and the deck expands it, so the page
-                  does too — the initial of each word set in the brand color,
-                  which is the only place on the site type is coloured mid-word
-                  and is worth it here because the word IS the product. */}
-              <p className="mt-5 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-nn-200">
-                {expansion.map(([cap, rest]) => (
-                  <span key={cap + rest}>
-                    <b className="font-semibold text-sg-300">{cap}</b>
+                  SIZE: AS LARGE AS FITS BESIDE THE RING, NOT A SCALE STEP. The
+                  band headings below are text-d1 (64px at 1440), and that is
+                  the size this was asked to match. It cannot reach it here:
+                  each line has to start on its capital, so "Electrophysiology
+                  and" can never wrap, and at 64px/600 that one line is 618px -
+                  past the ring's left edge at 1280 and below. 4.25vw is the
+                  largest fluid size that clears the ring by about 50px at 1024,
+                  1280 and 1440 alike (measured 2026-10-26), which puts it at
+                  about 61px on a 1440 screen against the bands' 64. The 1.75rem
+                  floor keeps that line inside the 327px phone column. Weight
+                  600 matches the bands; the capitals differ by colour alone. */}
+              <h1 className="mt-5 text-[clamp(1.75rem,4.25vw,3.8rem)] font-semibold leading-[1.1]
+                !tracking-[-0.04em] text-nn-50">
+                <span className="sr-only">{product.shortName}: </span>
+                {expansion.map(([cap, rest], i) => (
+                  <span key={cap + rest} className="block">
+                    <span className="text-sg-300">{cap}</span>
                     {rest}
+                    {i === expansion.length - 1 ? '.' : ''}
                   </span>
                 ))}
-                . A research platform that reads the brain&rsquo;s chemistry and its electrical
+              </h1>
+              {/* Held to the copy column (max-w-lg, set on the wrapper above)
+                  rather than max-w-prose: at prose width the second line ran
+                  out past the acrostic and finished against the green
+                  Neurochemistry arc. text-wrap: pretty stops "it." being left
+                  alone on the last line at 1440. */}
+              {/* min(32rem, 42vw), not a fixed max-w-lg. The title above
+                  scales with the viewport, so its longest line shrinks toward
+                  1024; this paragraph did not, and at 1024 its first line ran
+                  "...and its electrical" into the green Neurochemistry arc.
+                  42vw keeps it inside the title's measure all the way down to
+                  lg, and the 32rem cap is the old width from about 1220 up. */}
+              <p className="mt-6 max-w-[min(32rem,42vw)] text-lead leading-[1.55] tracking-[-0.015em] text-nn-200 [text-wrap:pretty]">
+                A research platform that reads the brain&rsquo;s chemistry and its electrical
                 activity at the same instant, while stimulating it.
               </p>
               {/* THE TECHNIQUE PILLS ARE GONE — FSCV, MCSWV and Amperometry,

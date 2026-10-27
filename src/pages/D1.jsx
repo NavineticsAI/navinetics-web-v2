@@ -43,8 +43,12 @@ export default function D1() {
     <>
       <D1Hero />
 
+      {/* Keyed by title, not scene. A band may have no scene - "Room to work."
+          lost its animation on 2026-10-26 - and keying by scene then gave that
+          band an undefined key, which React reports as a list child with no
+          unique key. Every band has a title, and they are all different. */}
       {bands.map((b) => (
-        <ScienceBand key={b.scene} builders={BUILDERS} {...b} />
+        <ScienceBand key={b.title} builders={BUILDERS} {...b} />
       ))}
 
       {/* ── what's included ────────────────────────────────────────────────

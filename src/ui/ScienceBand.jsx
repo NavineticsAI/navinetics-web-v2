@@ -38,10 +38,16 @@ export function ScienceBand({
   const light = ground === 'light';
   const reduced = usePrefersReducedMotion();
   const canvasRef = useRef(null);
+  /* A band may carry no scene. The NRSS "Room to work." band lost its
+     animation on 2026-10-26, and `builders[scene](light)` below was called
+     unconditionally - an absent scene was a TypeError that took the whole page
+     down, not a still band. With no scene there is no canvas, no scrim and no
+     animation loop; the band is copy and figure on its ground. */
+  const animated = Boolean(scene && builders[scene]);
 
   useEffect(() => {
     const cv = canvasRef.current;
-    if (!cv) return undefined;
+    if (!cv || !animated) return undefined;
 
     const ctx = cv.getContext('2d');
     const draw = builders[scene](light);
@@ -95,7 +101,7 @@ export function ScienceBand({
       io.disconnect();
       ro.disconnect();
     };
-  }, [scene, builders, light, reduced]);
+  }, [scene, builders, light, reduced, animated]);
 
   return (
     <section
@@ -114,6 +120,7 @@ export function ScienceBand({
          ground it is standing on — see the note beside the tokens. */
       style={{ '--tint': `var(--mv-${tone}${light ? '-ink' : ''})` }}
     >
+      {animated && (<>
       {/* Capped, not inset-0: when the layout stacks this section runs past
           2500px, and a canvas spanning it repaints four megapixels a frame. */}
       <canvas
@@ -140,6 +147,7 @@ export function ScienceBand({
               + 'rgb(3 16 26/.08) 52%,rgb(3 16 26/.3) 100%)',
         }}
       />
+      </>)}
 
       <div className="nn-frame relative mx-auto grid items-center gap-12 lg:grid-cols-[minmax(0,30%)_minmax(150px,1fr)_minmax(0,46%)] lg:gap-10">
         <div className="max-w-[min(52ch,100%)]">

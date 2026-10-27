@@ -64,7 +64,17 @@ export function Hero({
     ? 'min-h-svh pb-10 md:pb-10 lg:pb-12'
     : size === 'lg'
       ? 'min-h-[min(84vh,760px)]'
-      : 'min-h-[52vh]';
+      /* No minimum height for the standard (md) hero - 2026-10-26.
+         It was min-h-[52vh] with justify-center. Once Community, Media and
+         Publications lost their lead paragraphs in October their copy was
+         shorter than that minimum, and justify-center split the spare height
+         ABOVE and BELOW the title: their eyebrows sat at y=208 against 151 on
+         every other page, and the gap under the title ran to 217-264px on
+         desktop and 391px on a phone (Community). Sized to its content, every
+         md hero now puts its eyebrow at the same height and ends the same
+         distance below its last line. Careers already did this by hand with
+         min-h-0; it no longer needs to. */
+      : '';
 
   return (
     <header

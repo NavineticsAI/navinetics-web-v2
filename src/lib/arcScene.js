@@ -187,9 +187,24 @@ export function drawArc(ctx, w, h, cam, state, palette) {
      name the two rotations, which is what principle 02 on the page talks
      about - "Collar and arc angles then set the approach trajectory". */
   ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+  /* LABELS STAY INSIDE THE CANVAS. The drawing scales with the canvas width,
+     but every label below sits at a fixed pixel offset from a projected point,
+     so on a phone (a 285-300px canvas) they ran off the right edge: the
+     sentence under TARGET rendered as "EVERY APPROACH MEETS HE" and ARC lost
+     half its A. Found by the layout audit 2026-10-26.
+
+     `put` draws left-aligned at x, unless that would cross the right edge, in
+     which case it slides the label left just far enough to fit. It never
+     moves a label that already fits, so desktop is unchanged. */
+  const EDGE = 4;
+  const put = (text, x, y) => {
+    const tw = ctx.measureText(text).width;
+    ctx.fillText(text, Math.max(EDGE, Math.min(x, w - tw - EDGE)), y);
+  };
+
   ctx.textAlign = 'left';
   ctx.fillStyle = palette.action;
-  ctx.fillText('TARGET', pf[0] + 22, pf[1] + 4);
+  put('TARGET', pf[0] + 22, pf[1] + 4);
 
   /* THE FIGURE STATES ITS OWN POINT - 2026-10-26.
      ---------------------------------------------------------------------
@@ -203,10 +218,20 @@ export function drawArc(ctx, w, h, cam, state, palette) {
      stated nowhere on the site. It is said here instead - inside the picture,
      where it cannot drift away from the thing it describes, and in six words
      rather than as a restored paragraph. */
-  ctx.font = '9px "IBM Plex Mono", ui-monospace, monospace';
+  /* Narrow canvases get the sentence on two lines at the 10px canvas-label
+     size used everywhere else, rather than one 9px line that cannot fit: at
+     phone width there are about 120px right of the focus, and the one-line
+     version needs about 150. 420px is where one line stops fitting. */
   ctx.fillStyle = palette.sub;
   ctx.globalAlpha = 0.9;
-  ctx.fillText('EVERY APPROACH MEETS HERE', pf[0] + 22, pf[1] + 18);
+  if (w < 420) {
+    ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+    put('EVERY APPROACH', pf[0] + 22, pf[1] + 19);
+    put('MEETS HERE', pf[0] + 22, pf[1] + 32);
+  } else {
+    ctx.font = '9px "IBM Plex Mono", ui-monospace, monospace';
+    put('EVERY APPROACH MEETS HERE', pf[0] + 22, pf[1] + 18);
+  }
   ctx.globalAlpha = 1;
   ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
   ctx.fillStyle = palette.action;
@@ -220,11 +245,11 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   ctx.textAlign = 'left';
   ctx.fillStyle = palette.sub;
   ctx.globalAlpha = 0.85;
-  ctx.fillText('ARC', pa[0] + 12, pa[1] + 4);
+  put('ARC', pa[0] + 12, pa[1] + 4);
 
   // The horizontal track the arc's feet ride on.
   const pcl = project([ARC_R * Math.cos(rad(205)), ARC_R * Math.sin(rad(205)), 0]);
-  ctx.fillText('COLLAR', pcl[0] - 4, pcl[1] + 16);
+  put('COLLAR', pcl[0] - 4, pcl[1] + 16);
   ctx.globalAlpha = 1;
   ctx.textAlign = 'left';
 }

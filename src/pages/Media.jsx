@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { videos } from '../data/media.js';
 import { Hero, Reveal, Section } from '../ui/index.js';
@@ -44,26 +43,33 @@ export default function Media() {
           take as its heading, since the eyebrow is a <span>. A plain "Media."
           went back on 2026-10-26 to restore that, without the old headline or
           its subtext. The guard stays; it is correct regardless. */}
-      <Hero eyebrow="Resources — Media" title="Media." />
+      {/* The title says what the page holds rather than repeating the
+          eyebrow. It read "Media." under "Resources - Media" - the same word
+          twice in a row - and then the band below opened with "Watch / In the
+          operating room", a second title for the same one clip. Now the clip's
+          own title is the page title, and the band carries only the clip. */}
+      <Hero eyebrow="Resources — Media" title="In the operating room." />
 
       {/* ── the video, up front ──────────────────────────────────────────── */}
       {featured && (
         <Section wide className="!bg-[var(--mv-bay)] text-nn-50">
-          <Reveal>
-            <div className="flex flex-col gap-3.5">
-              <div className="h-px w-full bg-[var(--mv-rule)]" aria-hidden="true" />
-              <span className="eyebrow text-sg-300">Watch</span>
-              <h2 className="text-d2">{featured.title}</h2>
-            </div>
-          </Reveal>
+          {/* No section heading: "Watch / In the operating room" was the
+              page's second title for the same clip, and is now the hero's
+              h1. */}
 
-          <Reveal className="mt-9 grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start">
-            {/* Capped by height and centred. These clips are vertical, and a
-                608 x 1080 video stretched to the width of this column is over
-                1,400px tall — the caption beside it would be off screen before
-                the video finished. */}
-            <figure className="m-0 flex justify-center overflow-hidden rounded-xl
-              border border-[var(--mv-rule-2)] bg-black">
+          {/* THE CAPTION COLUMN IS WITHDRAWN - 2026-10-26. To the right of the
+              video sat the "Surgical footage" note, the caption "A stereotactic
+              frame in use.", and the running time and pixel dimensions
+              ("0:53", "720 x 1280"). With it gone the clip is the whole
+              section, so the figure now hugs the video and centres in the
+              frame rather than filling a column beside an empty one - the
+              layout audit measured the old arrangement as 286px of black on
+              each side of a portrait clip.
+
+              The caption is not lost to assistive technology: it is still the
+              video's aria-label below. */}
+          <Reveal className="flex justify-center">
+            <figure className="m-0 w-fit overflow-hidden rounded-xl border border-[var(--mv-rule-2)] bg-black">
               <video
                 src={featured.src}
                 poster={featured.poster}
@@ -76,28 +82,6 @@ export default function Media() {
                 className="block h-auto max-h-[70svh] w-auto max-w-full"
               />
             </figure>
-            <figcaption className="flex flex-col gap-4">
-              {featured.note && (
-                <span className="w-fit rounded-sm border border-sg-300/35 bg-sg-300/10 px-2.5 py-1
-                  font-data text-[0.625rem] uppercase tracking-[0.12em] text-sg-300">
-                  {featured.note}
-                </span>
-              )}
-              <p className="text-[0.9375rem] leading-relaxed text-nn-200">{featured.caption}</p>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-data text-[0.625rem]
-                uppercase tracking-[0.12em] text-ink-3">
-                <span>{featured.length}</span>
-                <span>{featured.w} &times; {featured.h}</span>
-              </div>
-              {featured.page && (
-                <Link
-                  to={featured.page.to}
-                  className="w-fit text-[0.875rem] text-sg-300 underline-offset-4 hover:underline"
-                >
-                  Seen on {featured.page.label}
-                </Link>
-              )}
-            </figcaption>
           </Reveal>
 
           {/* THE OTHER TWO CLIPS ARE WITHDRAWN - 2026-10-26. A

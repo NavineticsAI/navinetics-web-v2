@@ -95,10 +95,13 @@ function useCanvas(cb) {
     let raf = 0;
     const paint = () => {
       const w = cv.clientWidth;
-      const h = +cv.dataset.h;
-      if (!w) return;
+      // A fixed height when one was given, otherwise the box the aspect
+      // ratio produced. Reading it here, on every paint, is what lets the
+      // drawing follow a width change on resize.
+      const h = cv.dataset.h ? +cv.dataset.h : cv.clientHeight;
+      if (!w || !h) return;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      if (cv.width !== Math.round(w * dpr)) {
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) {
         cv.width = Math.round(w * dpr);
         cv.height = Math.round(h * dpr);
       }
@@ -117,11 +120,15 @@ function useCanvas(cb) {
   return ref;
 }
 
+/* `height` fixes the canvas at a pixel height; omit it and give an
+   aspect-[..] class instead, and the canvas takes its height from its width.
+   useCanvas reads the drawn height from data-h when it is set and from the
+   laid-out box when it is not. */
 const Canvas = ({ inner, height, className, ...rest }) => (
   <canvas
     ref={inner}
     data-h={height}
-    style={{ height }}
+    style={height ? { height } : undefined}
     className={cn('mx-auto block w-full max-w-[740px]', className)}
     {...rest}
   />
@@ -203,10 +210,18 @@ function ArcFigure() {
 
   return (
     <Figure>
+      {/* SIZED TO MATCH THE VIDEO BELOW IT. This was a fixed 430px canvas
+          at every width: at 1440 it sat between a 672x262 localizer pair and
+          a 1238x696 video, three figures in one subsection at three unrelated
+          sizes. All three now share the 740px column. At lg and up this is
+          16:9 - exactly the video's shape, so the two read as a matched pair.
+          Below lg it is 10:9: the drawing is about 380x340 at unit scale and
+          is limited by WIDTH on a phone, so 16:9 there would shrink it to
+          about half, while 10:9 keeps it the size it was and drops the dead
+          space the fixed 430 left above and below it. */}
       <Canvas
         inner={ref}
-        height={430}
-        className="rounded"
+        className="aspect-[10/9] rounded lg:aspect-[16/9]"
         role="img"
         aria-label="Three-dimensional diagram of an arc-centered stereotactic frame. Every trajectory passes through one focus."
       />
@@ -753,7 +768,7 @@ function LocaliserFigure() {
       {/* Narrowed on instruction 2026-10-21: the pair used to fill the card's
           full width. max-w-2xl keeps both panels on one row and simply makes
           them smaller. */}
-      <div ref={ref} className="mx-auto grid max-w-2xl items-start gap-5 sm:grid-cols-2">
+      <div ref={ref} className="mx-auto grid max-w-[740px] items-start gap-5 sm:grid-cols-2">
         <div className="relative aspect-[1399/1124] overflow-hidden rounded-md bg-nn-950">
           <img
             src={localiserSrc}
@@ -848,7 +863,11 @@ function FrameVideo() {
       {/* Narrowed to max-w-2xl on 2026-10-21, then widened again on 2026-10-26
           to match the arc diagram above it: the two figures belong to the same
           subsection and reading at different widths made them look unrelated. */}
-      <div className="relative overflow-hidden rounded-md bg-white">
+      {/* The same 740px column as the arc diagram above and the localizer
+          pair in subsection A, so the three figures under "Stereotactic
+          Neurosurgery" share one width. Uncapped, this filled the card: at
+          1440 it was 1238x696, close to twice either of the other two. */}
+      <div className="relative mx-auto max-w-[740px] overflow-hidden rounded-md bg-white">
         <video
           ref={ref}
           src={frameVideo}

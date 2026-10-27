@@ -27,6 +27,11 @@ export function Button({
   size = 'md',
   to,
   href,
+  /* as="span": the button's look with no behaviour of its own, for a button
+     that sits inside something already clickable - a card that is one link.
+     A <Link>, <a> or <button> nested in a link is invalid HTML, and it splits
+     one destination across two tab stops. */
+  as,
   className,
   children,
   arrow = false,
@@ -56,6 +61,13 @@ export function Button({
     </>
   );
 
+  if (as === 'span') {
+    return (
+      <span className={classes} {...props}>
+        {content}
+      </span>
+    );
+  }
   if (to) {
     return (
       <Link to={to} className={classes} {...props}>

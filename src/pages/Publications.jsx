@@ -43,7 +43,10 @@ export default function Publications() {
         title="Highlighted research."
       />
 
-      <Section wide className="!pt-14 md:!pt-16">
+      {/* !pt-0 like Who We Are and Community: the hero's own bottom padding
+          is the gap. With section padding added on top the first heading sat
+          217px under the title. */}
+      <Section wide className="!pt-0">
         {publicationLines.map((line, i) => (
           <LineSection key={line} line={line} first={i === 0} />
         ))}
