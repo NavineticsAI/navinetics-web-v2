@@ -80,7 +80,7 @@ export default function Maven() {
                 the device's market status, especially on a website which
                 features commercially-available medical devices". With it gone,
                 the page's only remaining status signal is the small
-                "Pre-clinical research" stamp on the hero ring in
+                "For preclinical research" stamp on the hero ring in
                 ui/MavenHero.jsx, and the call to action beneath this comment
                 reads "Request a Quote".
 

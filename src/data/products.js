@@ -342,7 +342,7 @@ export const products = [
        Stated first rather than appended, because a reader who stops after one
        clause should still have the important half. */
     summary:
-      'A pre-clinical research device to measure neuronal activity and neurotransmitter concentration: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact, eliciting data collection supporting neuronal based experiments.',
+      'A preclinical research device to measure neuronal activity and neurotransmitter concentration: synchronized neurochemical and electrophysiological recording with stimulation, engineered to minimize stimulation artifact, eliciting data collection supporting neuronal based experiments.',
     /* Set under the product heading on the home page. NaviNetics' wording,
        from review on 2026-10-21 — the home page lost its other pre-clinical
        qualifier when the summary and the research card came off it. */

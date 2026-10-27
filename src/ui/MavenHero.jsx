@@ -345,11 +345,13 @@ export function MavenHero({ product }) {
             sm:top-[80%]"
         >
           <span className="font-data text-[0.625rem] uppercase tracking-[0.16em] text-sg-300">
-            {/* "For pre-clinical research", not "Pre-clinical research", on
-                NaviNetics' instruction 2026-10-22: the stamp now says what the
-                instrument is FOR rather than labelling the instrument itself.
+            {/* "For preclinical research" - 2026-10-22 asked for the FOR (the stamp
+                says what the instrument is for rather than labelling it), and
+                2026-10-27 settled the spelling: one word, no hyphen, as on the
+                home card ("For preclinical research only") and as FDA and the
+                cited papers write it. The site had spelled it both ways.
                 Rendered uppercase by the class above. */}
-            For pre-clinical research
+            For preclinical research
           </span>
         </div>
 
