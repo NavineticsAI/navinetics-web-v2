@@ -77,13 +77,44 @@ export default function Navbar() {
     if (openIdx == null) return;
     const update = () => measure(openIdx);
     update();
+    /* AND WHILE IT IS NARROWING. The panel was measured once, the moment the
+       page started to scroll - before the pill's 420ms max-width transition had
+       finished - and never again when it ended, so a dropdown opened mid-scroll
+       was left up to 128px from its menu item. Re-measure every frame while
+       that transition runs, and once more when it ends or is cancelled. */
+    const pill = pillRef.current;
+    let raf = 0;
+    const isPill = (e) => e.target === pill && e.propertyName === 'max-width';
+    const loop = () => { update(); raf = requestAnimationFrame(loop); };
+    const onRun = (e) => { if (isPill(e)) { cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); } };
+    const onEnd = (e) => { if (isPill(e)) { cancelAnimationFrame(raf); update(); } };
+    pill?.addEventListener('transitionrun', onRun);
+    pill?.addEventListener('transitionend', onEnd);
+    pill?.addEventListener('transitioncancel', onEnd);
     window.addEventListener('resize', update);
     window.addEventListener('scroll', update, { passive: true });
     return () => {
       window.removeEventListener('resize', update);
       window.removeEventListener('scroll', update);
+      pill?.removeEventListener('transitionrun', onRun);
+      pill?.removeEventListener('transitionend', onEnd);
+      pill?.removeEventListener('transitioncancel', onEnd);
+      cancelAnimationFrame(raf);
     };
   }, [openIdx, scrolled, measure]);
+
+  /* The phone menu closes on a tap outside it. It used to close only when the
+     address changed, on Escape or with the X, so a tap on the page left it open
+     and stuck over the content as the page scrolled. pointerdown, not click,
+     so it closes before a scroll gesture moves the page under it. */
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const onDown = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) setMobileOpen(false);
+    };
+    document.addEventListener('pointerdown', onDown);
+    return () => document.removeEventListener('pointerdown', onDown);
+  }, [mobileOpen]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -322,10 +353,17 @@ export default function Navbar() {
                 <div key={link.title} className="flex flex-col gap-1.5">
                   <span className="text-base font-semibold">{link.title}</span>
                   {link.items.map((it) => (
+                    /* onClick closes the menu even when the link is to the page
+                       already open - the address does not change then, so the
+                       pathname effect never fired and the menu stayed up.
+                       py-2.5: these were 20px-tall targets on a 26px pitch,
+                       which passes WCAG 2.5.8 only through its spacing
+                       exception; the menu button beside them is 44px. */
                     <Link
                       key={it.path}
                       to={it.path}
-                      className="border-l border-hairline pl-3 text-sm text-ink-2"
+                      onClick={() => setMobileOpen(false)}
+                      className="block border-l border-hairline py-2.5 pl-3 text-sm text-ink-2"
                     >
                       {it.title}
                     </Link>
@@ -333,7 +371,7 @@ export default function Navbar() {
                 </div>
               ))}
               <div className="mt-2 flex items-center justify-between">
-                <Button to="/contact" size="sm">
+                <Button to="/contact" size="sm" onClick={() => setMobileOpen(false)}>
                   Contact
                 </Button>
                 <ThemeToggle />

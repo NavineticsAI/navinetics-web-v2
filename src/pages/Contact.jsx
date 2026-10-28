@@ -147,7 +147,9 @@ export default function Contact() {
         lead="We make devices by listening to patients and physicians, then translating those conversations into safe, effective, high-quality products. Start the conversation."
       />
 
-      <Section wide>
+      {/* !pt-0: the hero's bottom padding is the gap - with section padding
+          on top as well, "Direct" sat 206px under the lead. */}
+      <Section wide className="!pt-0">
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <Reveal>
             <h2 className="text-2xl tracking-[-0.03em]">Direct</h2>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { art, channels, channelsIn, domains, expansion, modes } from '../data/maven.js';
+import { art, channels, domains, expansion } from '../data/maven.js';
 import { GROUND, R, VIEW, arcFlipped, arcPath, makeField, pt, sideOf, wirePath } from '../lib/mavenScene.js';
 import { usePrefersReducedMotion } from '../lib/motion.js';
 import { Eyebrow } from './Section.jsx';
@@ -44,11 +44,11 @@ export function MavenHero({ product }) {
   const hostRef = useRef(null);
   const fieldRef = useRef(null);
   const stageRef = useRef(null);
+  const stampRef = useRef(null);
   const asmRef = useRef(null);
   const deviceRef = useRef(null);
   const copyRef = useRef(null);
   const cueRef = useRef(null);
-  const stripRef = useRef(null);
   const wireRefs = useRef([]);
   const dotRefs = useRef([]);
   const nodeRefs = useRef([]);
@@ -174,7 +174,19 @@ export function MavenHero({ product }) {
            which is the opposite of the usual grow-into-place and reads far
            better against a headline. */
         const s = (narrow ? 0.92 : 1.14) - (narrow ? -0.08 : 0.14) * settle;
-        const dx = narrow ? 0 : 15 * rest;
+        /* 15 -> 33. At 15 the ring settled 107px right of the viewport
+           centre, which left the composition hugging the left: a 73px margin
+           on one side and 360px of dead space on the other, with the heading
+           almost touching the Neurochemistry arc.
+
+           33% of the stage width centres the art in the space to the RIGHT of
+           the copy column rather than in the viewport, which is what this
+           layout actually is - a text column and an object beside it. Checked
+           at 1440 and 1280: the gap between the heading and the ring and the
+           margin outside the ring come out within ~5px of each other at both,
+           because the copy column is a fixed max-w-xl and the stage is capped
+           at 760px, so the two scale together. */
+        const dx = narrow ? 0 : 33 * rest;
         /* Settled, the ring rides up to leave the foot of the screen for the
            four domains — the point of the whole opening is that the instrument
            and what it covers are legible at once, without scrolling. */
@@ -182,11 +194,27 @@ export function MavenHero({ product }) {
         stageRef.current.style.transform =
           `translate(${dx.toFixed(1)}%, ${dy.toFixed(1)}%) scale(${s.toFixed(3)})`;
         stageRef.current.style.opacity = String((narrow ? 0.34 : 0.62) + (narrow ? 0.66 : 0.38) * settle);
-      }
-      if (stripRef.current) {
-        const on = span(p, 0.62, 0.86);
-        stripRef.current.style.opacity = String(reduced ? 1 : on);
-        stripRef.current.style.transform = `translateY(${((1 - (reduced ? 1 : on)) * 16).toFixed(1)}px)`;
+
+        /* THE STAMP TRACKS THE RING. It is positioned against the section, not
+           against the stage, so it sat at the viewport centre while the stage
+           translated away from it - at dx 15 that was tolerable, at 33 the
+           label ended up under the gap between the heading and the ring
+           instead of under the instrument it labels.
+           `dx` is a percentage of the stage's own width, so it is converted
+           here rather than guessed.
+
+           `translate`, NOT `transform`. Tailwind v4's -translate-x-1/2 sets
+           the standalone CSS `translate` property, which composes with
+           `transform` rather than being replaced by it. Writing the offset to
+           `transform` therefore applied the -50% centring twice - once from the
+           class, once from here - and left the stamp exactly half its own width
+           (108px) left of the instrument at every viewport. Writing to
+           `translate` overrides the class's value instead of stacking on it,
+           and the class still centres the stamp before this first runs. */
+        if (stampRef.current) {
+          const px = (dx / 100) * stageRef.current.offsetWidth;
+          stampRef.current.style.translate = `calc(-50% + ${px.toFixed(1)}px) 0`;
+        }
       }
       if (deviceRef.current) {
         const k = 1 - span(p, 0, 0.5);
@@ -305,15 +333,25 @@ export function MavenHero({ product }) {
             an approval that has not been granted. This one carries no
             regulatory meaning at all, which is exactly the point. */}
         <div
+          ref={stampRef}
           /* Under the ring, not above it — at the top of the section it sat
              behind the fixed navbar and was unreadable. Here it reads as a
-             label on the instrument, which is what it is. */
+             label on the instrument, which is what it is.
+             The -translate-x-1/2 is the resting position; the scroll handler
+             replaces it with the same offset the stage carries, so the stamp
+             stays under the instrument. */
           className="pointer-events-none absolute left-1/2 top-[78%] z-[3] -translate-x-1/2
-            rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
+            whitespace-nowrap rounded-instr border border-sg-300/30 bg-nn-950/55 px-3 py-1.5 backdrop-blur-sm
             sm:top-[80%]"
         >
-          <span className="font-data text-[0.625rem] uppercase tracking-[0.16em] text-sg-300">
-            Pre-clinical research
+          <span className="font-data text-[0.6875rem] uppercase tracking-[0.16em] text-sg-300">
+            {/* "For preclinical research" - 2026-10-22 asked for the FOR (the stamp
+                says what the instrument is for rather than labelling it), and
+                2026-10-27 settled the spelling: one word, no hyphen, as on the
+                home card ("For preclinical research only") and as FDA and the
+                cited papers write it. The site had spelled it both ways.
+                Rendered uppercase by the class above. */}
+            For preclinical research
           </span>
         </div>
 
@@ -326,9 +364,12 @@ export function MavenHero({ product }) {
               : 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'
           }
           style={{
-            /* 70svh, not 84: the four domains sit under the ring on the same
-               screen, and they need the room. */
-            width: reduced ? 'min(660px, 100%)' : 'min(70svh, 760px, 92vw)',
+            /* BACK TO 84svh. It was 70 "because the four domains sit under
+               the ring on the same screen, and they need the room" - and that
+               strip was withdrawn on 2026-10-22, which left the foot of the
+               hero empty. The instrument now fills the space the cards used to
+               occupy. If the strip is ever restored, this goes back to 70. */
+            width: reduced ? 'min(660px, 100%)' : 'min(84svh, 760px, 92vw)',
             aspectRatio: '1 / 1',
           }}
         >
@@ -467,11 +508,9 @@ export function MavenHero({ product }) {
                   <span className="block text-[0.9375rem] font-semibold tracking-[-0.02em] text-nn-50">
                     {c.short}
                   </span>
-                  {c.sub && (
-                    <span className="block font-data text-[0.625rem] uppercase tracking-[0.14em] text-ink-3">
-                      {c.sub}
-                    </span>
-                  )}
+                  {/* The abbreviation under the name — DA, 5-HT, LFP — was
+                      here. Withdrawn 2026-10-21; `sub` is off the channel
+                      records in data/maven.js, where the reasoning is. */}
                 </span>
               </button>
             );
@@ -492,79 +531,103 @@ export function MavenHero({ product }) {
           <div className="nn-frame mx-auto w-full">
             <div className={reduced ? 'max-w-2xl' : 'max-w-lg'}>
               <Eyebrow className="!text-sg-300">{`Products — ${product.shortName}`}</Eyebrow>
-              <h1 className="mt-5 whitespace-pre-line text-d1 !tracking-[-0.045em]">{product.tagline}</h1>
-              {/* The name is an acronym and the deck expands it, so the page
-                  does too — the initial of each word set in the brand color,
-                  which is the only place on the site type is coloured mid-word
-                  and is worth it here because the word IS the product. */}
-              <p className="mt-6 max-w-prose text-lead leading-[1.55] tracking-[-0.015em] text-nn-200">
-                {expansion.map(([cap, rest]) => (
-                  <span key={cap + rest}>
-                    <b className="font-semibold text-sg-300">{cap}</b>
+              {/* THE ACROSTIC IS THE TITLE.
+                  ---------------------------------------------------------
+                  `expansion` in data/maven.js is five entries for a five-letter
+                  acronym, so set one line per entry the coloured capitals read
+                  M A V E N straight down the left edge - the heading spells the
+                  product while expanding it.
+
+                  There is no separate "MAVEN" above it. There was, briefly, on
+                  2026-10-26, and NaviNetics took it out as repetitive: the
+                  eyebrow already says "Products - MAVEN" and the initials spell
+                  it, so a third MAVEN in 64px said nothing the page had not.
+                  The name is still the first thing in the heading for anyone
+                  who is not looking at it - the visually hidden "MAVEN: " means
+                  a screen reader and a search engine read "MAVEN: Multifunctional
+                  Apparatus for Voltammetry, Electrophysiology and
+                  Neuromodulation."
+
+                  SIZE: AS LARGE AS FITS BESIDE THE RING, NOT A SCALE STEP. The
+                  band headings below are text-d1 (64px at 1440), and that is
+                  the size this was asked to match. It cannot reach it here:
+                  each line has to start on its capital, so "Electrophysiology
+                  and" can never wrap, and at 64px/600 that one line is 618px -
+                  past the ring's left edge at 1280 and below. 4.25vw is the
+                  largest fluid size that clears the ring by about 50px at 1024,
+                  1280 and 1440 alike (measured 2026-10-26), which puts it at
+                  about 61px on a 1440 screen against the bands' 64. The 1.75rem
+                  floor keeps that line inside the 327px phone column. Weight
+                  600 matches the bands; the capitals differ by colour alone. */}
+              <h1 className="mt-5 text-[clamp(1.75rem,4.25vw,3.8rem)] font-semibold leading-[1.1]
+                !tracking-[-0.04em] text-nn-50">
+                <span className="sr-only">{product.shortName}: </span>
+                {/* whitespace-nowrap: a line must never wrap, or the capital
+                    that starts the next row is no longer a capital. At 1280 and
+                    up "Electrophysiology and" is wider than the 512px copy
+                    column and broke as "Electrophysiology / and", so the
+                    initials read M-A-V-E-a-N - shipped in 3f6c9bc and caught by
+                    the animation audit. Held to one row, it runs past the
+                    column into the space before the ring, which it clears. */}
+                {expansion.map(([cap, rest], i) => (
+                  <span key={cap + rest} className="block whitespace-nowrap">
+                    <span className="text-sg-300">{cap}</span>
                     {rest}
+                    {i === expansion.length - 1 ? '.' : ''}
                   </span>
                 ))}
-                . A research platform that reads the brain&rsquo;s chemistry and its electrical
+              </h1>
+              {/* Held to the copy column (max-w-lg, set on the wrapper above)
+                  rather than max-w-prose: at prose width the second line ran
+                  out past the acrostic and finished against the green
+                  Neurochemistry arc. text-wrap: pretty stops "it." being left
+                  alone on the last line at 1440. */}
+              {/* min(32rem, 42vw), not a fixed max-w-lg. The title above
+                  scales with the viewport, so its longest line shrinks toward
+                  1024; this paragraph did not, and at 1024 its first line ran
+                  "...and its electrical" into the green Neurochemistry arc.
+                  42vw keeps it inside the title's measure all the way down to
+                  lg, and the 32rem cap is the old width from about 1220 up. */}
+              <p className="mt-6 lg:max-w-[min(32rem,42vw)] text-lead leading-[1.55] tracking-[-0.015em] text-nn-200 [text-wrap:pretty]">
+                A research platform that reads the brain&rsquo;s chemistry and its electrical
                 activity at the same instant, while stimulating it.
               </p>
-              <div className="mt-8 flex flex-wrap gap-x-4 gap-y-2">
-                {modes.map((m) => (
-                  <span
-                    key={m}
-                    className="rounded-instr bg-white/[0.06] px-2 py-1 font-data text-[0.625rem]
-                      uppercase tracking-[0.14em] text-nn-200"
-                  >
-                    {m}
-                  </span>
-                ))}
-              </div>
+              {/* THE TECHNIQUE PILLS ARE GONE — FSCV, MCSWV and Amperometry,
+                  set as three small capsules under the paragraph. Withdrawn
+                  2026-10-21. `modes` is still exported from data/maven.js and
+                  the first two are named in full in the Neurochemistry band's
+                  points, so nothing is lost by taking the abbreviations off
+                  the opening. */}
             </div>
           </div>
         </div>
 
-        {/* ── the four domains ─────────────────────────────────────────────
-            Arrives as the ring stops, on the same screen as the instrument it
-            belongs to. The ring names them round its rim, where they can only
-            be read a word at a time; this is the same four with room to say
-            what each one is. */}
-        <div
-          ref={stripRef}
-          className={
-            reduced
-              ? 'relative nn-frame mx-auto w-full'
-              : 'absolute inset-x-0 bottom-0 px-6 pb-9 opacity-0 lg:px-8'
-          }
-        >
-          {/* Two columns before lg and four after. Below lg the ring carries
-              no names of its own, so this is the only place the four are
-              written down — but the channel list under each has to go, or the
-              strip grows tall enough to stand on the instrument. */}
-          <div className="nn-frame mx-auto grid w-full grid-cols-2 gap-x-6 gap-y-4 border-t
-            border-[var(--mv-rule-2)] pt-4 sm:gap-x-8 lg:grid-cols-4 lg:gap-y-5 lg:pt-5">
-            {domains.map((d) => (
-              <div key={d.id} className="flex flex-col gap-1.5">
-                <span className="flex items-center gap-2">
-                  <i
-                    className="block h-1.5 w-1.5 shrink-0 rounded-full not-italic"
-                    style={{ background: `var(--mv-${d.tone})` }}
-                    aria-hidden="true"
-                  />
-                  <span
-                    className="font-data text-[0.5625rem] uppercase tracking-[0.14em] lg:text-[0.625rem]
-                      lg:tracking-[0.16em]"
-                    style={{ color: `var(--mv-${d.tone})` }}
-                  >
-                    {d.name}
-                  </span>
-                </span>
-                <p className="text-[0.75rem] leading-snug text-nn-200 lg:text-[0.8125rem]">{d.line}</p>
-                <p className="hidden text-[0.6875rem] leading-snug text-ink-3 lg:block">
-                  {channelsIn(d.id).map((c) => c.short).join(' · ')}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* THE FOUR DOMAIN CARDS ARE WITHDRAWN - off on NaviNetics'
+            instruction 2026-10-22. The strip under the ring carried the four
+            domain names, each with its colored dot and its channel list:
+
+              Neurochemistry       Dopamine / Serotonin / Adenosine / Other neurochemicals
+              Electrophysiology    LFP / Single-unit
+              Software & analysis  Intuitive GUI / Advanced analysis
+              Neuromodulation      Electrical stimulation
+
+            (their one-line descriptions had already gone on 2026-10-21.)
+
+            WHAT THIS COSTS, because the original note is worth repeating:
+            below the lg breakpoint the ring carries NO names of its own, so
+            this strip was the only place the four domains and their channels
+            were written down. On a phone the opening is now an unlabelled
+            instrument in an unlabelled ring. The names return at lg, set
+            around the rim, where they can only be read a word at a time.
+
+            ALSO: the ring is sized min(70svh, 760px, 92vw) rather than 84svh
+            specifically to leave this strip room - see the note on stageRef's
+            style below. With the strip gone that reasoning no longer holds and
+            the foot of the hero is now empty. Raising it back is a one-value
+            change, and it is a visual decision rather than this file's.
+
+            `domains` is still imported - the ring's own rim labels, wires and
+            tones all read from it. `channelsIn` was used only here. */}
 
         {!reduced && (
           <div

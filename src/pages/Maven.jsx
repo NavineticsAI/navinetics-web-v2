@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { getProduct } from '../data/products.js';
 import { bands } from '../data/maven.js';
@@ -62,13 +61,34 @@ export default function Maven() {
       <section className="border-t border-hairline-soft bg-canvas px-6 py-16 md:py-20 lg:px-8 lg:py-24">
         <div className="nn-frame mx-auto">
           <Reveal className="flex flex-col items-center gap-6 text-center">
-            <span className="eyebrow text-action">Where it stands</span>
-            <h2 className="text-d2">A research instrument.</h2>
-            <p className="max-w-prose text-lead leading-[1.55] text-ink-2">
-              MAVEN is used in preclinical research. Its purpose is to let the chemistry, the
-              electrophysiology and the stimulation be observed together, so the mechanisms behind
-              neuromodulation can be studied rather than inferred.
-            </p>
+            {/* THE STATUS STATEMENT IS WITHDRAWN. On NaviNetics' instruction
+                2026-10-21 this section lost its eyebrow ("Where it stands"),
+                its heading ("A research instrument.") and its paragraph:
+
+                  "MAVEN is used in preclinical research. Its purpose is to let
+                   the chemistry, the electrophysiology and the stimulation be
+                   observed together, so the mechanisms behind neuromodulation
+                   can be studied rather than inferred."
+
+                The buttons and the electrode-route line below are kept, so the
+                page still ends with somewhere to go.
+
+                READ THIS BEFORE THE SITE GOES PUBLIC. That paragraph was the
+                only statement of MAVEN's status anywhere on this page, and
+                Keystone Regulatory asked on 2026-09-02 for the OPPOSITE of
+                removing it — "I would prefer to have a more clear indication of
+                the device's market status, especially on a website which
+                features commercially-available medical devices". With it gone,
+                the page's only remaining status signal is the small
+                "For preclinical research" stamp on the hero ring in
+                ui/MavenHero.jsx, and the call to action beneath this comment
+                reads "Request a Quote".
+
+                That pairing — no status statement, and an invitation to buy —
+                is the thing the regulatory review was trying to prevent, and it
+                is not a judgement this file can make for NaviNetics. Restoring
+                the paragraph is three lines; the record of what it said is
+                above so it can be put back verbatim. */}
             {/* NO REGULATORY STATEMENT HERE — deliberately, and it is worth
                 knowing why it was removed rather than never written.
 
@@ -95,16 +115,15 @@ export default function Maven() {
               </Button>
             </div>
 
-            <p className="mt-4 max-w-prose text-[0.8125rem] leading-relaxed text-ink-3">
-              Sensing and stimulating electrodes are placed through the same stereotactic route as
-              the rest of our work — the{' '}
-              <Link to="/products/d1-stereotactic-frame" className="text-action underline-offset-4 hover:underline">
-                NRSS
-              </Link>
-              {/* "and NaviNetics AI", linked, came off here: that page is
-                  hidden and linked from nowhere (see data/technology.js). */}
-              .
-            </p>
+            {/* The closing line is withdrawn - 2026-10-26. It read "Sensing and
+                stimulating electrodes are placed through the same stereotactic
+                route as the rest of our work - the NRSS.", with NRSS linked to
+                /products/d1-stereotactic-frame.
+
+                WHAT GOES WITH IT: that link was the only route from this page
+                to the NRSS. The MAVEN page now links out to Contact and to
+                Publications and nowhere else - not to the frame its electrodes
+                are placed through, and not to /technology/neuromodulation. */}
           </Reveal>
         </div>
       </section>

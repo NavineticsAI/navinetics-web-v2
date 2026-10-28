@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { usePageMeta } from '../lib/meta.js';
 import { isPlaceholder, visibleProducts } from '../data/products.js';
 import { Button, Hero, ProductPlate, Reveal, Section } from '../ui/index.js';
@@ -16,10 +17,10 @@ function splitName(name) {
   return [name];
 }
 
-function ProductName({ name }) {
+function ProductName({ name, className }) {
   const [short, expansion] = splitName(name);
   return (
-    <h2 className="text-d2">
+    <h2 className={className ? 'text-d2 ' + className : 'text-d2'}>
       {short}
       {expansion && (
         <>
@@ -74,7 +75,16 @@ export default function Home() {
            closing clause lost "see through the table" with them; what is left
            is still the same one-route idea, and every clause is still true on
            its own page. */
-        lead="Contempory stereotactic frames design and development along with advanced neuromodulation instruments combine to advance the future for functional neurosurgery — designed with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: plan it, reach it, and measure what changed."
+        /* REWRITTEN 2026-10-26. This was the first sentence on the site and
+           it did not parse: "Contempory stereotactic frames design and
+           development along with advanced neuromodulation instruments combine
+           to advance the future for functional neurosurgery..." - a
+           misspelling, no subject, and a noun phrase doing a verb job.
+
+           "plan it" is dropped from the closing line too. The planning
+           software it referred to is hidden in data/technology.js, so the
+           home page was promising a capability no page on the site shows. */
+        lead="We design and develop contemporary stereotactic frames and advanced neuromodulation instruments for functional neurosurgery — with the clinicians who use them, out of the Neural Engineering Laboratories at Mayo Clinic. One route to a target: reach it, and measure what changed."
       >
         <div className="flex flex-wrap gap-3">
           {/* "Discover the NRSS" used an acronym that is first defined further
@@ -107,6 +117,24 @@ export default function Home() {
         <div className="grid gap-14 md:grid-cols-2 md:gap-8 lg:gap-12">
           {visibleProducts.filter((p) => !isPlaceholder(p)).map((product, i) => (
             <Reveal key={product.slug} delay={i * 0.06} className="flex flex-col">
+              {/* THE WHOLE CARD IS THE LINK - 2026-10-26. Only the Explore
+                  button used to be clickable, so a visitor clicking the
+                  picture or the product name - the two things most people
+                  click - got nothing. Now picture, name and button are one
+                  <Link>: one destination, one tab stop, one thing a screen
+                  reader announces. The button stays as the visible cue but is
+                  rendered as a span (Button as="span"), because a link inside
+                  a link is invalid HTML.
+
+                  Hover acts on the whole card: the picture eases in, the name
+                  takes the action colour, and the button lifts as if it were
+                  hovered itself. focus-visible draws the ring round the card,
+                  so keyboard users see the same target a pointer does. */}
+              <Link
+                to={product.path}
+                className="group/card flex flex-1 flex-col rounded-2xl outline-none
+                  focus-visible:ring-[3px] focus-visible:ring-action-soft focus-visible:ring-offset-4"
+              >
               {/* `tone` is forwarded because these are cut-outs with transparent
                   backgrounds and each record says which ground it needs. 4:3
                   rather than square, on review — two square plates side by
@@ -116,6 +144,7 @@ export default function Home() {
                 alt={product.heroAlt}
                 tone={product.heroTone}
                 className="aspect-[4/3] w-full"
+                imgClassName="group-hover/card:scale-[1.03]"
               />
               {/* Button to the right of the title, top-aligned so both sit on
                   the same line across the two cards whatever the title's
@@ -129,15 +158,25 @@ export default function Home() {
                       review. For the NRSS the two fields are the same string.
                       The acronym-first layout is this page's only; the records
                       and every other page keep the names as written. */}
-                  <ProductName name={product.name} />
+                  <ProductName
+                    name={product.name}
+                    className="transition-colors duration-200 group-hover/card:text-action"
+                  />
                   {product.useNote && (
                     <p className="mt-3 text-lead text-ink-2">{product.useNote}</p>
                   )}
                 </div>
-                <Button to={product.path} size="lg" arrow className="self-start xl:shrink-0">
+                <Button
+                  as="span"
+                  size="lg"
+                  arrow
+                  className="self-start xl:shrink-0 group-hover/card:-translate-y-px
+                    group-hover/card:bg-action-hi group-hover/card:shadow-e2"
+                >
                   Explore {product.shortName}
                 </Button>
               </div>
+              </Link>
             </Reveal>
           ))}
         </div>

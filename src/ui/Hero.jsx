@@ -26,23 +26,41 @@ export function Hero({
 }) {
   const reduced = usePrefersReducedMotion();
   const ref = useRef(null);
+  const crossRef = useRef(null);
   const dark = tone === 'dark';
+  /* A mouse, not a finger. The crosshair rested at 50%/50% until the pointer
+     moved, and on a touch screen a tap never moves it - so on a phone its
+     horizontal line ran through the first line of the lead like a
+     strikethrough and its vertical cut every line of the heading and lead for
+     the whole visit. It is only for a fine pointer that can hover. */
+  const fine = typeof window !== 'undefined'
+    && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   /* Drives the crosshair only. It used to also feed a coordinate readout,
      which has been removed — see the note at the foot of this component. */
   useEffect(() => {
     const el = ref.current;
-    if (!el || !targeting || reduced) return;
+    if (!el || !targeting || reduced || !fine) return;
     const onMove = (e) => {
       const r = el.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width;
       const py = (e.clientY - r.top) / r.height;
       el.style.setProperty('--px', `${(px * 100).toFixed(2)}%`);
       el.style.setProperty('--py', `${(py * 100).toFixed(2)}%`);
+      if (crossRef.current) crossRef.current.style.opacity = '1';
     };
+    /* Hidden until the mouse is over the hero, and again when it leaves -
+       otherwise it sat at the centre like a stray text cursor before the first
+       move, and froze wherever the pointer left (onto the navbar, half the
+       ring under it). */
+    const onLeave = () => { if (crossRef.current) crossRef.current.style.opacity = '0'; };
     el.addEventListener('pointermove', onMove, { passive: true });
-    return () => el.removeEventListener('pointermove', onMove);
-  }, [targeting, reduced]);
+    el.addEventListener('pointerleave', onLeave);
+    return () => {
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerleave', onLeave);
+    };
+  }, [targeting, reduced, fine]);
 
   const step = (i) => ({
     initial: reduced ? { opacity: 0 } : { opacity: 0, y: 22 },
@@ -64,7 +82,17 @@ export function Hero({
     ? 'min-h-svh pb-10 md:pb-10 lg:pb-12'
     : size === 'lg'
       ? 'min-h-[min(84vh,760px)]'
-      : 'min-h-[52vh]';
+      /* No minimum height for the standard (md) hero - 2026-10-26.
+         It was min-h-[52vh] with justify-center. Once Community, Media and
+         Publications lost their lead paragraphs in October their copy was
+         shorter than that minimum, and justify-center split the spare height
+         ABOVE and BELOW the title: their eyebrows sat at y=208 against 151 on
+         every other page, and the gap under the title ran to 217-264px on
+         desktop and 391px on a phone (Community). Sized to its content, every
+         md hero now puts its eyebrow at the same height and ends the same
+         distance below its last line. Careers already did this by hand with
+         min-h-0; it no longer needs to. */
+      : '';
 
   return (
     <header
@@ -101,8 +129,12 @@ export function Hero({
       </div>
 
       {/* targeting crosshair */}
-      {targeting && !reduced && (
-        <div className="pointer-events-none absolute inset-0 z-[1]" aria-hidden="true">
+      {targeting && !reduced && fine && (
+        <div
+          ref={crossRef}
+          className="pointer-events-none absolute inset-0 z-[1] opacity-0 transition-opacity duration-200"
+          aria-hidden="true"
+        >
           <i
             className="absolute left-0 right-0 h-px bg-[var(--retic)]"
             style={{ top: 'var(--py,50%)' }}
@@ -126,15 +158,22 @@ export function Hero({
             <Eyebrow className={dark ? '!text-sg-300' : undefined}>{eyebrow}</Eyebrow>
           </motion.div>
         )}
-        <motion.h1
-          {...step(1)}
-          className={cn(
-            'mt-5 whitespace-pre-line',
-            size === 'lg' ? 'text-hero !tracking-[-0.045em]' : 'text-d1',
-          )}
-        >
-          {title}
-        </motion.h1>
+        {/* GUARDED. `lead` and `eyebrow` were already optional but this was
+            not, so a hero with no title rendered an empty <h1> that still
+            carried its top margin and its hero line-height - a tall blank gap
+            above the first section. /resources/media is title-less as of
+            2026-10-26. */}
+        {title && (
+          <motion.h1
+            {...step(1)}
+            className={cn(
+              'mt-5 whitespace-pre-line',
+              size === 'lg' ? 'text-hero !tracking-[-0.045em]' : 'text-d1',
+            )}
+          >
+            {title}
+          </motion.h1>
+        )}
         {lead && (
           <motion.p
             {...step(2)}

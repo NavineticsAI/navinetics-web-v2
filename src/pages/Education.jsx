@@ -109,7 +109,7 @@ export function EducationTopics({ topics: list }) {
           {list.length > 1 && <Rail topics={list} active={active} progress={progress} />}
           <div>
             {list.map((t) => (
-              <Topic key={t.id} t={t} />
+              <Topic key={t.id} t={t} showNumber={list.length > 1} />
             ))}
           </div>
         </div>
@@ -171,12 +171,19 @@ function Rail({ topics: list, active, progress }) {
 }
 
 /* ── one topic ──────────────────────────────────────────────────────────── */
-function Topic({ t }) {
+function Topic({ t, showNumber = true }) {
   return (
     <section id={t.id} className="scroll-mt-28 pb-24">
       <Reveal>
         <div className="flex items-center gap-3.5 border-b border-ink pb-3">
-          <span className="font-data text-[0.8125rem] font-semibold tracking-[0.08em] text-action">{t.n}</span>
+          {/* The ordinal only means something in a numbered series.
+              Embedded into a technology page, a single topic brought its
+              "02" with it and printed it three lines under that page own
+              principle 02 - two numbering schemes colliding. The rail is
+              already suppressed for a single topic; this follows it. */}
+          {showNumber && (
+            <span className="font-data text-[0.8125rem] font-semibold tracking-[0.08em] text-action">{t.n}</span>
+          )}
           {/* Not text-d2: five of these on one page at 2.75rem would compete
               with the hero. There is no d3 in the scale, so this is explicit. */}
           <h2 className="text-[clamp(1.5rem,3vw,2rem)] tracking-[-0.03em]">{t.title}</h2>
@@ -184,7 +191,7 @@ function Topic({ t }) {
       </Reveal>
 
       <Reveal>
-        <p className="mt-6 max-w-[40ch] text-lead leading-[1.45] tracking-[-0.018em]">{t.definition}</p>
+        {t.definition && <p className="mt-6 max-w-[40ch] text-lead leading-[1.45] tracking-[-0.018em]">{t.definition}</p>}
         {t.body && <p className="mt-5 max-w-prose leading-[1.72] text-ink-2">{t.body}</p>}
       </Reveal>
 
@@ -287,7 +294,10 @@ function Topic({ t }) {
         const shots = figures.length > 0 && all.length === 1 ? [] : all;
         const paired = shots.length > 0 && shots.length < 3;
 
-        const deep = (
+        /* `t.deep` is optional. Unguarded, `t.deep.label` below is a
+           TypeError that takes the whole page down rather than leaving one
+           panel out - stereotaxy has had no deep-dive since 2026-10-21. */
+        const deep = t.deep && (
           /* A chevron, because without one this reads as a card rather than as
              something you can open. */
           <details className="group overflow-hidden rounded-lg border border-hairline-soft bg-surface">
@@ -306,7 +316,7 @@ function Topic({ t }) {
         if (!paired) {
           return (
             <>
-              <Reveal className="mt-6">{deep}</Reveal>
+              {deep && <Reveal className="mt-6">{deep}</Reveal>}
               {shots.length > 0 && (
                 <Reveal>
                   <div className="mt-10 grid items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -348,7 +358,7 @@ function Part({ part }) {
         </div>
         {/* Authored with blank lines between paragraphs rather than as an
             array — it reads as prose in the data file, which is what it is. */}
-        {part.body.split('\n\n').map((para) => (
+        {part.body?.split('\n\n').map((para) => (
           <p key={para.slice(0, 40)} className="mt-5 max-w-prose leading-[1.72] text-ink-2">
             {para}
           </p>

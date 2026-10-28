@@ -139,9 +139,16 @@ export const principles = [
   {
     title: 'Design by listening',
     body:
-      /* See data/disciplines.js — same sentence, same reason for the change. */
-      'A co-founder are experienced stereotacticians that listen to neurosurgeons and '
-      + 'patients to improve the surgical experience.',
+      /* REWRITTEN 2026-10-26: "A co-founder are experienced stereotacticians
+         that listen to..." - singular subject, plural verb, and "that" for
+         people. "include" rather than a count: how many of the four are
+         stereotacticians is not stated in anything NaviNetics has supplied,
+         and this sentence should not be where it gets decided.
+
+         (This comment used to point at a twin sentence in
+         data/disciplines.js. There is no longer one - only this copy.) */
+      'Our co-founders include experienced stereotacticians who listen to neurosurgeons '
+      + 'and patients to improve the surgical experience.',
   },
   {
     title: 'Quality and simplicity',
@@ -151,6 +158,6 @@ export const principles = [
   {
     title: 'Publish the evidence',
     body:
-      'The methods behind these devices can be founded in the peer-reviewed journals.',
+      'The methods behind these devices can be found in the peer-reviewed journals.',
   },
 ];

@@ -120,7 +120,10 @@ export default function Founders() {
         lead="Decades of expertise in neurosurgery, technology development and medical device innovation."
       />
 
-      <Section wide>
+      {/* !pt-0: the hero's bottom padding is the gap, as on Who We Are -
+          with section padding on top as well, the first portrait sat 206px
+          under the lead. */}
+      <Section wide className="!pt-0">
         <div className="flex flex-col gap-24 lg:gap-32">
           {founders.map((f, i) => (
             <Reveal

@@ -64,14 +64,24 @@ export const detail = detailArt;
 export const DETAIL = { w: 759, h: 1134 };
 
 /**
- * The four explanations, each with an abstract ground and a figure.
+ * The four explanations, each with a figure. Two of them - "Arc-centered."
+ * and "Down the trajectory." - also carry an abstract animated ground;
+ * "Anchored to the skull." and "Room to work." lost theirs on review.
  *
  * Copy is paraphrased from the product record's own `sequence`, `highlights`
  * and `detail` — nothing here says more than the existing site already does.
  */
 export const bands = [
   {
-    scene: 'anchor',
+    /* NO SCENE - the 'anchor' animation came off on the animation audit,
+       2026-10-27. Its own header in lib/d1Scenes.js describes it: "Screws come
+       in from three directions and tighten". That is the fitting detail
+       NaviNetics had already cut from this band's copy, and it showed THREE
+       screws, a count the site never states. Nothing in it showed what the
+       lead now says - that the key replaces the baseframe and keeps the
+       mechanics off the face - and on a phone its lines crossed three lines
+       of the lead under a scrim of about 0.13: the same unlabelled-callout
+       look "Room to work." was removed for. */
     ground: 'bay',
     tone: 'chem',
     eyebrow: 'New mechanism',
@@ -133,7 +143,11 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
-    lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
+    /* "collar" was used twice on the whole site and defined neither time.
+       One clause, so a reader is not left to infer which rotation is
+       which. */
+    lead: 'Once the arc and collar angles are set — the collar turning about the '
+    + 'vertical axis, the arc swinging over it — a mechanical microdrive attaches to advance DBS '
     + 'leads and micro-recording electrodes to the target.',
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
@@ -142,7 +156,13 @@ export const bands = [
     },
   },
   {
-    scene: 'access',
+    /* NO SCENE - the 'access' animation came off on NaviNetics' instruction
+       2026-10-26. It drew pale blocks floating around the frame cut-out, which
+       on this light ground read as empty callouts rather than as access to the
+       field; the layout audit found the same three blocks (x 112-312,
+       y ~3344-3519 on phone) and called them that. ScienceBand renders a band
+       with no scene as copy and figure only. 'access' itself is still in
+       lib/d1Scenes.js and unreferenced. */
     ground: 'light',
     tone: 'soft',
     eyebrow: 'Access',

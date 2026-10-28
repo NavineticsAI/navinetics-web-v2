@@ -221,13 +221,61 @@ JOBS=[
   # a lower eye line forces a smaller crop on everyone. Two boxes run a little
   # past an edge and are edge-replicated — see crop_pad.
   #
+  # ...BUT 29% PUT THREE OF THE FOUR CROWNS ON THE TOP EDGE. At 170px
+  # interocular a crown sits about 28% of the frame above the pupils, so an eye
+  # line at 29% leaves almost nothing over the head, and on /company/our-founders
+  # Lee, Bennet and Goerss all touched or lost the top of the head (reported
+  # 2026-10-26). The boxes below are still the measured ones - they encode the
+  # face size - and EYE_SHIFT moves every one of them up by the same fraction
+  # of its own height, which lowers the eye line without changing anyone's face
+  # size. See EYE_SHIFT.
+  #
+  # SOLVED BOXES - 2026-10-26. The boxes above were documented as 170px / 29%,
+  # but measured on the outputs they were not: interocular ran 140 (Oh) to 171
+  # (Goerss), the eye line 30% (Bennet) to 40% (Oh), and three faces sat 37px
+  # right of centre while Oh sat 23px left. On the page that read exactly as
+  # reported - Oh zoomed out and off-centre, Bennet's eyes high, and Lee's hair
+  # cut by the top edge.
+  #
+  # Each box is now SOLVED from that subject's measured pupils (see the
+  # MEASURED table in the commit that made this change) to one target:
+  # interocular 160px of the 1200px output, pupil midpoint at x=600, eye line at
+  # 374/960 = 39%. Why not 170: Lee has the most hair above the eyes of the four
+  # (about 2.05 x interocular from pupils to crown), and at 170 with any eye
+  # line that still reads as a headshot his crown leaves the frame. 160 / 39% is
+  # the largest face that keeps air over every head - about 23px over Lee's in
+  # the 480px card, the tightest of the four.
+  #
+  # Goerss's box starts 51 rows above his file; crop_pad repeats his top row,
+  # which is plain window sky. Re-measure the outputs after any change here -
+  # a box that is merely documented as centred is how this went wrong.
+  #
   # name, source, pre-crop, eye (.25 = passthrough), face x (.5 = the box is
   # already centred on the face), output size, grade, jpeg quality
-  ('kendall-lee-150-500x400-1.jpg', ('orig','dr_lee_enhanced_final.png'), (345,144,1849,1347), .25,.5,(1200,960), False, 92),
-  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (392,171,1338,928),  .25,.5,(1200,960), False, 92),
-  ('yoonbae-oh.jpg',                ('orig','oh_enhanced_gpt.png'),       (400,86,1445,922),   .25,.5,(1200,960), False, 92),
-  ('stephan-goerss-150.jpg',        ('orig','steve_enhanced_gpt.png'),    (442,19,1218,640),   .25,.5,(1200,960), False, 92),
+  ('kendall-lee-150-500x400-1.jpg', ('orig','dr_lee_enhanced_final.png'), (430,49,1855,1189), .25,.5,(1200,960), False, 92),
+  ('kevin-bennet.jpg',              ('orig','kevin_enhanced_gpt.png'),    (451,73,1339,783),  .25,.5,(1200,960), False, 92),
+  ('yoonbae-oh.jpg',                ('orig','oh_enhanced_gpt.png'),       (445,77,1359,808),   .25,.5,(1200,960), False, 92),
+  ('stephan-goerss-150.jpg',        ('orig','steve_enhanced_gpt.png'),    (437,-51,1268,614),   .25,.5,(1200,960), False, 92),
 ]
+
+# HEADROOM. Every box moves UP by this fraction of its own height before it is
+# cut, so the eye line lands at 29% + EYE_SHIFT = 36% instead of 29%, and the
+# face size (170px interocular) is unchanged because the box height is.
+#
+# Goerss's box then starts 25px above the top of his file. That is the "lower
+# eye line forces a smaller crop" ceiling the JOBS comment describes, and it is
+# crossed here deliberately: those 25 rows are filled by crop_pad, which
+# repeats the file's top row, and his top row is plain window sky - the crown
+# sits about 12px below it. Repeating sky is invisible; shrinking all four faces
+# to avoid it was the alternative, and smaller faces in the same card read as a
+# worse crop than a few rows of sky. Lee's box, which used to run 67px past the
+# BOTTOM of his file, now ends inside it.
+#
+# 0.07 is chosen to leave visible air over the tallest head (Bennet's) in the
+# 4:5 card on the founders page, which shows the full height of these 5:4
+# files. Set it to 0 to get the 29% crops back exactly.
+EYE_SHIFT = 0.0   # superseded - see SOLVED BOXES above JOBS
+
 
 def main():
     ap=argparse.ArgumentParser()
@@ -253,7 +301,10 @@ def main():
         print('pass --originals /path/to/them, or --only <name> to rebuild one',file=sys.stderr); return 1
     for name,(kind,fn),pre,eye,fx,size,full,q in jobs:
         im=Image.open(os.path.join(a.originals if kind=='orig' else SRCDIR,fn)).convert('RGB')
-        if pre: im=crop_pad(im,pre)
+        if pre:
+            l,t,r,b=pre
+            dh=round(EYE_SHIFT*(b-t))
+            im=crop_pad(im,(l,t-dh,r,b-dh))
         im=reframe(im,eye,fx)
         if size: im=im.resize(size,Image.LANCZOS)
         if full:

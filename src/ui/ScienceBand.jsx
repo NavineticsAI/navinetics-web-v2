@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { cn } from '../lib/cn.js';
 import { usePrefersReducedMotion } from '../lib/motion.js';
 import { Eyebrow, Reveal } from './Section.jsx';
@@ -37,14 +37,40 @@ export function ScienceBand({
 }) {
   const light = ground === 'light';
   const reduced = usePrefersReducedMotion();
+  /* A light-ground band turns dark in dark theme (bg-canvas follows it), but
+     the scene and the eyebrow tint were chosen from `light` alone, so on a
+     dark page they kept the ink meant for a pale one: dark lines on dark, and
+     an eyebrow at about 3.1:1. `inkLight` is whether the band is ACTUALLY pale
+     right now.
+
+     Read from the data-theme attribute, not useTheme(): EduFigures measured
+     that the hook's value can change before the stylesheet does, and the
+     canvas then repaints with the old theme's colours. */
+  const [dark, setDark] = useState(
+    () => typeof document !== 'undefined' && document.documentElement.dataset.theme === 'dark',
+  );
+  useEffect(() => {
+    const read = () => setDark(document.documentElement.dataset.theme === 'dark');
+    read();
+    const mo = new MutationObserver(read);
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => mo.disconnect();
+  }, []);
+  const inkLight = light && !dark;
   const canvasRef = useRef(null);
+  /* A band may carry no scene. The NRSS "Room to work." band lost its
+     animation on 2026-10-26, and `builders[scene](light)` below was called
+     unconditionally - an absent scene was a TypeError that took the whole page
+     down, not a still band. With no scene there is no canvas, no scrim and no
+     animation loop; the band is copy and figure on its ground. */
+  const animated = Boolean(scene && builders[scene]);
 
   useEffect(() => {
     const cv = canvasRef.current;
-    if (!cv) return undefined;
+    if (!cv || !animated) return undefined;
 
     const ctx = cv.getContext('2d');
-    const draw = builders[scene](light);
+    const draw = builders[scene](inkLight);
     let w = 0;
     let h = 0;
     let visible = false;
@@ -95,7 +121,7 @@ export function ScienceBand({
       io.disconnect();
       ro.disconnect();
     };
-  }, [scene, builders, light, reduced]);
+  }, [scene, builders, inkLight, reduced, animated]);
 
   return (
     <section
@@ -112,13 +138,21 @@ export function ScienceBand({
       )}
       /* The tint is the domain's own color, in the variant that survives the
          ground it is standing on — see the note beside the tokens. */
-      style={{ '--tint': `var(--mv-${tone}${light ? '-ink' : ''})` }}
+      style={{ '--tint': `var(--mv-${tone}${inkLight ? '-ink' : ''})` }}
     >
+      {animated && (<>
       {/* Capped, not inset-0: when the layout stacks this section runs past
           2500px, and a canvas spanning it repaints four megapixels a frame. */}
       <canvas
         ref={canvasRef}
-        className="absolute inset-x-0 top-1/2 h-full max-h-[1040px] w-full -translate-y-1/2"
+        /* hidden below lg - 2026-10-27. Below lg the copy and figure stack
+           and the empty middle column the scene was drawn for is gone, but the
+           canvas still spanned the full width behind the stacked copy, so on a
+           phone every band drew through its text or hid behind its figure. A
+           hidden canvas measures 0x0, which the w > 4 check in `frame` already
+           skips, and drawing resumes at lg. This also stills Surgical Tables'
+           two bands on phones. */
+        className="absolute inset-x-0 top-1/2 hidden h-full max-h-[1040px] w-full -translate-y-1/2 lg:block"
         aria-hidden="true"
       />
       {/* Holds the copy readable, and lifts almost clear through the middle so
@@ -126,7 +160,7 @@ export function ScienceBand({
           The middle stop is low on purpose: at .22 the animation measured 13%
           of the canvas lit and was still invisible on the page. */}
       <div
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 hidden lg:block"
         aria-hidden="true"
         style={{
           /* Explicit stop tokens rather than rgb(from var(--canvas) …): the
@@ -140,6 +174,7 @@ export function ScienceBand({
               + 'rgb(3 16 26/.08) 52%,rgb(3 16 26/.3) 100%)',
         }}
       />
+      </>)}
 
       <div className="nn-frame relative mx-auto grid items-center gap-12 lg:grid-cols-[minmax(0,30%)_minmax(150px,1fr)_minmax(0,46%)] lg:gap-10">
         <div className="max-w-[min(52ch,100%)]">

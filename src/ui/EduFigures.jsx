@@ -24,10 +24,17 @@ function Figure({ title, hint, children, caption }) {
   return (
     <figure className="mt-9">
       <div className="overflow-hidden rounded-lg border border-hairline bg-surface">
-        <div className="flex flex-wrap items-center gap-3 border-b border-hairline-soft bg-surface-2 px-5 py-3">
-          <span className="text-sm font-semibold">{title}</span>
-          {hint && <span className="eyebrow ml-auto text-ink-3">{hint}</span>}
-        </div>
+        {/* THE HEADER BAR IS OPTIONAL. It used to render unconditionally, so a
+            figure with no title still drew the bar, its bottom border and its
+            padding - a grey empty strip above the picture. Three of the
+            stereotaxy figures lost their titles on 2026-10-21 and need the bar
+            to go with them. */}
+        {(title || hint) && (
+          <div className="flex flex-wrap items-center gap-3 border-b border-hairline-soft bg-surface-2 px-5 py-3">
+            {title && <span className="text-sm font-semibold">{title}</span>}
+            {hint && <span className="eyebrow ml-auto text-ink-3">{hint}</span>}
+          </div>
+        )}
         <div className="px-5 py-5">{children}</div>
       </div>
       {caption && <figcaption className="mt-3 max-w-prose text-xs text-ink-3">{caption}</figcaption>}
@@ -88,10 +95,13 @@ function useCanvas(cb) {
     let raf = 0;
     const paint = () => {
       const w = cv.clientWidth;
-      const h = +cv.dataset.h;
-      if (!w) return;
+      // A fixed height when one was given, otherwise the box the aspect
+      // ratio produced. Reading it here, on every paint, is what lets the
+      // drawing follow a width change on resize.
+      const h = cv.dataset.h ? +cv.dataset.h : cv.clientHeight;
+      if (!w || !h) return;
       const dpr = Math.min(2, window.devicePixelRatio || 1);
-      if (cv.width !== Math.round(w * dpr)) {
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) {
         cv.width = Math.round(w * dpr);
         cv.height = Math.round(h * dpr);
       }
@@ -110,11 +120,15 @@ function useCanvas(cb) {
   return ref;
 }
 
+/* `height` fixes the canvas at a pixel height; omit it and give an
+   aspect-[..] class instead, and the canvas takes its height from its width.
+   useCanvas reads the drawn height from data-h when it is set and from the
+   laid-out box when it is not. */
 const Canvas = ({ inner, height, className, ...rest }) => (
   <canvas
     ref={inner}
     data-h={height}
-    style={{ height }}
+    style={height ? { height } : undefined}
     className={cn('mx-auto block w-full max-w-[740px]', className)}
     {...rest}
   />
@@ -158,93 +172,59 @@ function Segmented({ options, value, onChange }) {
 }
 
 /* ══ 02 · arc-centered targeting, in three dimensions ═════════════════════ */
+/* The frozen view and angles.
+
+   This figure was INTERACTIVE and is now static, on NaviNetics' instruction
+   2026-10-21: "remove sliders and title bar from interactive, make it static,
+   clear, explaining figure". What came off:
+
+     · two sliders, Arc (-80..80) and Collar (-90..90)
+     · a "Show other trajectories" checkbox
+     · pointer drag and arrow-key control of the camera
+     · a slow idle drift, which existed so a reader would discover the drag
+     · the title bar "Arc-centered targeting", the hint "Drag to turn - move
+       the angles", and the caption "Schematic, and interactive. Whatever the
+       two angles are, the trajectory ends at the same point - which is the
+       property the whole instrument is built around."
+
+   The angles are frozen at the values the sliders used to open on, and the
+   other trajectories stay ON: they are the entire argument of the figure,
+   since what it exists to show is that every one of them ends at the same
+   focus. With the caption gone that point is now made only by the picture.
+
+   drawArc is untouched and still takes the same three arguments, so restoring
+   the controls means putting the state and handlers back around it. */
+/* zoom was 1, which drew the instrument at about a quarter of the figure's
+   width with the rest white. It no longer has to share the box with sliders
+   or a caption, so it takes the room. */
+const ARC_VIEW = { az: -0.52, el: 0.24, dist: 430, zoom: 1.5 };
+const ARC_SET = { arc: -30, collar: 34, ghosts: true };
+
 function ArcFigure() {
   const pal = usePalette();
-  const reduced = usePrefersReducedMotion();
-  const [arc, setArc] = useState(-30);
-  const [collar, setCollar] = useState(34);
-  const [ghosts, setGhosts] = useState(true);
-  const [cam, setCam] = useState({ az: -0.52, el: 0.24, dist: 430, zoom: 1 });
-  const touched = useRef(false);
-
-  /* A slow drift until someone takes hold of it. Without it the figure reads
-     as a flat diagram and nobody discovers it can be turned. */
-  useEffect(() => {
-    if (reduced) return undefined;
-    let raf = 0;
-    const t0 = performance.now();
-    const tick = (t) => {
-      if (!touched.current) {
-        const k = (t - t0) / 1000;
-        setCam((c) => ({ ...c, az: -0.52 + Math.sin(k * 0.22) * 0.3, el: 0.24 + Math.sin(k * 0.15) * 0.06 }));
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [reduced]);
 
   const ref = useCanvas(useCallback(
-    (ctx, w, h) => { if (pal) drawArc(ctx, w, h, cam, { arc, collar, ghosts }, pal); },
-    [pal, cam, arc, collar, ghosts],
+    (ctx, w, h) => { if (pal) drawArc(ctx, w, h, ARC_VIEW, ARC_SET, pal); },
+    [pal],
   ));
 
-  const drag = useRef(null);
-  const onDown = (e) => {
-    touched.current = true;
-    drag.current = { x: e.clientX, y: e.clientY, az: cam.az, el: cam.el };
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-  const onMove = (e) => {
-    const d = drag.current;
-    if (!d) return;
-    setCam((c) => ({
-      ...c,
-      az: d.az + (e.clientX - d.x) * 0.008,
-      el: Math.max(-0.5, Math.min(1.1, d.el - (e.clientY - d.y) * 0.006)),
-    }));
-  };
-  const onUp = () => { drag.current = null; };
-  const onKey = (e) => {
-    const step = 0.12;
-    const map = { ArrowLeft: ['az', -step], ArrowRight: ['az', step], ArrowUp: ['el', step], ArrowDown: ['el', -step] };
-    const m = map[e.key];
-    if (!m) return;
-    e.preventDefault();
-    touched.current = true;
-    setCam((c) => ({ ...c, [m[0]]: m[0] === 'el' ? Math.max(-0.5, Math.min(1.1, c.el + m[1])) : c.az + m[1] }));
-  };
-
-  const deg = (v) => `${v < 0 ? '−' : ''}${Math.abs(v)}°`;
-
   return (
-    <Figure
-      title="Arc-centered targeting"
-      hint="Drag to turn · move the angles"
-      caption="Schematic, and interactive. Whatever the two angles are, the trajectory ends at the same
-        point — which is the property the whole instrument is built around."
-    >
+    <Figure>
+      {/* SIZED TO MATCH THE VIDEO BELOW IT. This was a fixed 430px canvas
+          at every width: at 1440 it sat between a 672x262 localizer pair and
+          a 1238x696 video, three figures in one subsection at three unrelated
+          sizes. All three now share the 740px column. At lg and up this is
+          16:9 - exactly the video's shape, so the two read as a matched pair.
+          Below lg it is 10:9: the drawing is about 380x340 at unit scale and
+          is limited by WIDTH on a phone, so 16:9 there would shrink it to
+          about half, while 10:9 keeps it the size it was and drops the dead
+          space the fixed 430 left above and below it. */}
       <Canvas
         inner={ref}
-        height={360}
-        className="cursor-grab touch-none rounded active:cursor-grabbing focus:outline-none focus-visible:ring-[3px] focus-visible:ring-action-soft"
+        className="aspect-[10/9] rounded lg:aspect-[16/9]"
         role="img"
-        tabIndex={0}
         aria-label="Three-dimensional diagram of an arc-centered stereotactic frame. Every trajectory passes through one focus."
-        onPointerDown={onDown}
-        onPointerMove={onMove}
-        onPointerUp={onUp}
-        onPointerCancel={onUp}
-        onKeyDown={onKey}
       />
-      <div className="mt-4 flex flex-wrap items-center gap-x-7 gap-y-4">
-        <Slider label="Arc" min={-80} max={80} value={arc} onChange={setArc} format={deg} />
-        <Slider label="Collar" min={-90} max={90} value={collar} onChange={setCollar} format={deg} />
-        <label className="flex items-center gap-2.5 text-sm text-ink-2">
-          <input type="checkbox" checked={ghosts} onChange={(e) => setGhosts(e.target.checked)} />
-          Show other trajectories
-        </label>
-      </div>
     </Figure>
   );
 }
@@ -764,24 +744,30 @@ function LocaliserFigure() {
     };
   }, [reduced]);
 
+  /* NO TITLE, NO HINT, NO CAPTION, on NaviNetics' instruction 2026-10-21.
+     What came off: the title 'The localizer, and the slice it produces', the
+     'Scroll' hint, and the caption 'The rods cross every axial plane at nine
+     points. Where those nine points land in the image is what ties the picture
+     to the frame - which is how a target seen on a scan becomes three numbers
+     on an instrument.'
+
+     The scroll-driven behaviour is KEPT: the plane still descends and the
+     slice still resolves as you scroll past. Only the word that advertised it
+     is gone, so the figure now animates without announcing that it will. */
   const ease = (v) => v * v * (3 - 2 * v);
   const drop = ease(Math.min(1, p / 0.62));                 // the plane arriving
-  const land = ease(Math.max(0, Math.min(1, (p - 0.5) / 0.5))); // the slice resolving
   const cy = PLANE.from + (PLANE.to - PLANE.from) * drop;
 
   return (
-    <Figure
-      title="The localizer, and the slice it produces"
-      hint="Scroll"
-      caption="The rods cross every axial plane at nine points. Where those nine points land in the
-        image is what ties the picture to the frame — which is how a target seen on a scan becomes
-        three numbers on an instrument."
-    >
+    <Figure>
       {/* Both panels take the render's aspect so they end up the same size.
           The render fills its box exactly, which is what keeps the plane
           overlay aligned to it; the slice is nearly square, so it sits
           letterboxed on the same dark ground and the bars do not show. */}
-      <div ref={ref} className="grid items-start gap-5 sm:grid-cols-2">
+      {/* Narrowed on instruction 2026-10-21: the pair used to fill the card's
+          full width. max-w-2xl keeps both panels on one row and simply makes
+          them smaller. */}
+      <div ref={ref} className="mx-auto grid max-w-[740px] items-start gap-5 sm:grid-cols-2">
         <div className="relative aspect-[1399/1124] overflow-hidden rounded-md bg-nn-950">
           <img
             src={localiserSrc}
@@ -796,12 +782,15 @@ function LocaliserFigure() {
           >
             <ellipse
               cx={RING.cx} cy={cy} rx={RING.rx} ry={RING.ry}
-              fill="none" stroke="var(--color-action-hi)" strokeWidth="4"
+              /* A fixed light blue and a heavier line. The render is dark in
+                 both themes, so the theme's action colour went low-contrast on
+                 it, and at strokeWidth 4 the plane was a hairline at card size. */
+              fill="none" stroke="#82bad9" strokeWidth="10"
               opacity={0.35 + drop * 0.55}
             />
             <ellipse
               cx={RING.cx} cy={cy} rx={RING.rx} ry={RING.ry}
-              fill="var(--color-action-hi)" opacity={0.06 + drop * 0.08}
+              fill="#82bad9" opacity={0.06 + drop * 0.08}
             />
           </svg>
         </div>
@@ -812,7 +801,11 @@ function LocaliserFigure() {
             alt="The axial CT slice at that plane, with the nine localizer fiducials around the skull."
             loading="lazy" width="1280" height="1260"
             className="block h-full w-full object-contain"
-            style={{ opacity: 0.12 + land * 0.88, filter: `blur(${(1 - land) * 7}px)` }}
+            /* No fade or blur-in - 2026-10-27. For the first half of the scroll
+               the slice sat at opacity 0.12 behind a 7px blur: a navy box with a
+               faint oval, which reads as an image failing to load rather than as
+               a slice resolving. The plane still descends on the render beside
+               it; the slice is simply always readable. */
           />
         </div>
       </div>
@@ -834,13 +827,20 @@ function FrameVideo() {
   const ref = useRef(null);
   const reduced = usePrefersReducedMotion();
   const [playing, setPlaying] = useState(false);
+  /* A pause the visitor chose survives scrolling away and back. The in-view
+     watcher below called el.play() every time the video came back into view,
+     so Pause only lasted until the next scroll - which undoes the one control
+     auto-playing video is required to give (WCAG 2.2.2). */
+  const userPaused = useRef(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el || reduced) return undefined;
     const io = new IntersectionObserver(
       ([e]) => {
-        if (e.isIntersecting) el.play().then(() => setPlaying(true)).catch(() => {});
+        if (e.isIntersecting) {
+          if (!userPaused.current) el.play().then(() => setPlaying(true)).catch(() => {});
+        }
         else { el.pause(); setPlaying(false); }
       },
       { threshold: 0.25 },
@@ -852,18 +852,36 @@ function FrameVideo() {
   const toggle = () => {
     const el = ref.current;
     if (!el) return;
+    userPaused.current = !el.paused;
     if (el.paused) el.play().then(() => setPlaying(true)).catch(() => {});
     else { el.pause(); setPlaying(false); }
   };
 
   return (
     <Figure
-      title="The instrument, turned"
-      hint="A render, not a photograph"
-      caption="Arc, collar, instrument carrier and a probe on its trajectory. The head is a model —
-        the amber is there so the probe can be seen going where it goes."
+      /* 'The instrument, turned' on NaviNetics' instruction 2026-10-21. The
+         hint ('A render, not a photograph') and the caption ('Arc, collar,
+         instrument carrier and a probe on its trajectory. The head is a model
+         - the amber is there so the probe can be seen going where it goes.')
+         came off with it.
+
+         RAISED AND DECIDED. The hint was the only thing on the page telling a
+         reader this is a render rather than footage of a real device, and the
+         figure now carries the product's name instead. That was put to
+         NaviNetics on 2026-10-26 with the option of restoring the note, and
+         they chose to leave it off. Recorded here because the page is inside
+         Keystone Regulatory's review scope and this is the kind of thing an
+         FDA inspector with a screenshot would ask about. */
+      title="NRSS"
     >
-      <div className="relative overflow-hidden rounded-md bg-white">
+      {/* Narrowed to max-w-2xl on 2026-10-21, then widened again on 2026-10-26
+          to match the arc diagram above it: the two figures belong to the same
+          subsection and reading at different widths made them look unrelated. */}
+      {/* The same 740px column as the arc diagram above and the localizer
+          pair in subsection A, so the three figures under "Stereotactic
+          Neurosurgery" share one width. Uncapped, this filled the card: at
+          1440 it was 1238x696, close to twice either of the other two. */}
+      <div className="relative mx-auto max-w-[740px] overflow-hidden rounded-md bg-white">
         <video
           ref={ref}
           src={frameVideo}
@@ -880,7 +898,9 @@ function FrameVideo() {
         <button
           type="button"
           onClick={toggle}
-          aria-pressed={playing}
+          /* No aria-pressed. The label already changes between Play and Pause,
+             and announcing it as a toggle that is "pressed" while playing as
+             well made a screen reader say both. */
           className="eyebrow absolute bottom-3 right-3 rounded-full border border-hairline bg-surface px-3 py-1.5 text-ink-2 transition-colors hover:text-action"
         >
           {playing ? 'Pause' : 'Play'}

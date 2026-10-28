@@ -186,19 +186,27 @@ export const founders = ['K.H. Lee', 'K.E. Bennet', 'S.J. Goerss', 'Y. Oh'];
  * that all three technology lines show, so the third has to come from a list
  * that does not depend on the data. Keep in step with data/technology.js.
  */
-export const publicationLines = ['Stereotactic Devices', 'Neuromodulation', 'NaviNetics AI'];
+/* 'NaviNetics AI' is withdrawn - 2026-10-26. It was listed deliberately with
+   no papers under it ("A line with nothing under it is a fact about the
+   record"), but that page is itself hidden, so the heading announced a line of
+   work the site no longer presents anywhere. Putting the string back restores
+   the section and its blurb below. */
+export const publicationLines = ['Stereotactic Devices', 'Neuromodulation'];
 
-export const publicationLineBlurbs = {
-  'Stereotactic Devices':
-    'Getting a probe to a target: frame geometry, image guidance, and what happened '
-    + 'when the system was taken from the bench into an operating room.',
-  Neuromodulation:
-    'Measuring what the brain is doing chemically while it is being stimulated — the '
-    + 'sensing work the founders’ laboratory has run since 2018.',
-  'NaviNetics AI':
-    'Planning and targeting software. No peer-reviewed work has been published under '
-    + 'this line yet.',
-};
+/* `publicationLineBlurbs` is gone - 2026-10-26. Both entries were withdrawn,
+   the Stereotactic Devices one first and the Neuromodulation one with it, so
+   the object had nothing left in it. They read:
+
+     Stereotactic Devices - "Getting a probe to a target: frame geometry, image
+     guidance, and what happened when the system was taken from the bench into
+     an operating room."
+
+     Neuromodulation - "Measuring what the brain is doing chemically while it
+     is being stimulated - the sensing work the founders' laboratory has run
+     since 2018."
+
+   Each line on /resources/publications is now its heading and its paper count.
+   The 'NaviNetics AI' entry had already gone with its section. */
 
 /** doi.org rather than the publisher’s own URL: it outlives site redesigns. */
 export const doiLink = (p) => `https://doi.org/${p.doi}`;

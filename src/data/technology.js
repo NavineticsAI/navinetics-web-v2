@@ -68,16 +68,39 @@ export const technologies = [
         body: 'Fixation to the skull establishes a three-dimensional coordinate system, providing the link between imaging data and patient anatomy.',
       },
       {
+        /* "The center-of-arc principle", kept on NaviNetics' decision
+           2026-10-26 after being briefly renamed to "Arc-centered targeting".
+
+           KNOWN AND ACCEPTED: this is the only use of "center-of-arc" on the
+           site. Everywhere else says "arc-centered" - the product record's
+           Classification field, the 510(k)-style description ("Classified as
+           an arc centered stereotactic device"), the NRSS page heading, the
+           summary above, the engineering discipline, and the education topic
+           that renders a few lines BELOW this one as "The arc-centered
+           principle". So this page names the same principle two ways within
+           one screen, deliberately.
+
+           It is kept because it pairs with its own body text, which calls the
+           focus "the iso-center" - and because the phrase is standard in the
+           stereotactic literature. If the two names are ever reconciled, note
+           that "arc-centered" is the one that appears in the regulated-sounding
+           copy and is the likelier controlled term; check with NaviNetics
+           before changing that rather than this. */
         title: 'The center-of-arc principle',
         // "Collar", not "ring" — the review retired ring terminology, and the
         // education and software pages already say collar. A surgeon dialling
         // coordinates needs one word for the axis across the whole site.
         body: 'X, Y and Z place the target at the focus — the iso-center — of the arc. Collar and arc angles then set the approach trajectory to it.',
       },
-      {
-        title: 'Localizers tie it to the image',
-        body: 'MR and CT localizers, and X-ray reticles, register the imaging volume to the frame so that a planned coordinate and a delivered coordinate are the same thing.',
-      },
+      /* THE THIRD PRINCIPLE IS WITHDRAWN - 'Localizers tie it to the image',
+         whose body read: "MR and CT localizers, and X-ray reticles, register
+         the imaging volume to the frame so that a planned coordinate and a
+         delivered coordinate are the same thing."
+
+         Off on NaviNetics' instruction 2026-10-21. Worth recording that its
+         closing clause was the strongest unbacked assertion on the page: a
+         planned and a delivered coordinate being "the same thing" is an
+         accuracy claim with no figure behind it. */
     ],
     /* The tables came off this list. It renders as "the devices this technology
        is built into", and arc-centered stereotactic targeting is not built into
@@ -94,6 +117,10 @@ export const technologies = [
     teaches: ['stereotaxy'],
     readMore: [
       { label: 'Published accuracy and validation work', to: '/resources/publications' },
+      /* The product this page explains. With "Applied in" withdrawn on
+         2026-10-21 the page linked only to Publications and never back to the
+         frame it describes; the NRSS page links here, so this closes the loop. */
+      { label: 'The NRSS', to: '/products/d1-stereotactic-frame' },
     ],
   },
 
@@ -104,7 +131,11 @@ export const technologies = [
     eyebrow: 'Technology — Neuromodulation',
     tagline: 'Measuring what\nstimulation changes.',
     summary:
-      'Recording neurochemical and electrophysiological activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
+      /* "and electrophysiological" came out 2026-10-26. The band that
+         supported it was removed, so the lead promised a second half the
+         page never developed - after this sentence the word survived only
+         inside a cited paper title. */
+      'Recording neurochemical activity during stimulation, so the effect of deep brain stimulation can be observed rather than inferred.',
     /* The MAVEN unit's own artwork. This replaced a journal figure that was
        standing in as a product shot — see the note in data/products.js. */
     hero: mavenDevice,

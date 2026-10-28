@@ -89,7 +89,9 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   const project = makeProject(cam, w, h);
   const segs = [];
 
-  headWire(segs, palette.soft);
+  /* The head reads as what the instrument is placed on. At palette.soft it
+     was faint to the point of looking like a rendering artifact. */
+  headWire(segs, palette.line);
 
   // the horizontal track the arc's feet ride on — this is what the collar turns
   for (let j = 0; j < 72; j++) {
@@ -104,9 +106,16 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   const arcPoint = (deg) => carrier(deg, state.collar);
 
   if (state.ghosts) {
-    for (let d = -75; d <= 75; d += 25) {
+    /* Step 25 -> 18: seven spokes read as a handful of chosen angles, ten read
+       as a family, which is what the label beside the focus now claims. */
+    for (let d = -81; d <= 81; d += 18) {
       if (Math.abs(d - state.arc) < 8) continue;
-      segs.push({ a: arcPoint(d), b: [0, 0, 0], c: palette.sub, w: 1, o: 0.32, dash: true });
+      /* These are the figure's whole argument - every approach angle ending
+         at the same focus - and at 0.32 on a 2-3px dash they were all but
+         invisible in print and on a bright screen. The caption that used to
+         say it in words came off on 2026-10-21, so they now have to carry the
+         point alone. */
+      segs.push({ a: arcPoint(d), b: [0, 0, 0], c: palette.sub, w: 1.4, o: 0.7, dash: true });
     }
   }
 
@@ -171,9 +180,90 @@ export function drawArc(ctx, w, h, cam, state, palette) {
   ctx.fillStyle = palette.action;
   ctx.beginPath(); ctx.arc(pc[0], pc[1], 2.6, 0, TAU); ctx.fill();
 
+  /* LABELS. The figure lost its title bar and its caption on 2026-10-21, so
+     everything it has to say it has to say here. ENTRY used to sit at
+     (pc + 13, pc - 9), which put it straight on top of the arc band and made
+     both unreadable; it is right-aligned off the carrier now. ARC and COLLAR
+     name the two rotations, which is what principle 02 on the page talks
+     about - "Collar and arc angles then set the approach trajectory". */
+  ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+  /* LABELS STAY INSIDE THE CANVAS. The drawing scales with the canvas width,
+     but every label below sits at a fixed pixel offset from a projected point,
+     so on a phone (a 285-300px canvas) they ran off the right edge: the
+     sentence under TARGET rendered as "EVERY APPROACH MEETS HE" and ARC lost
+     half its A. Found by the layout audit 2026-10-26.
+
+     `put` draws left-aligned at x, unless that would cross the right edge, in
+     which case it slides the label left just far enough to fit. It never
+     moves a label that already fits, so desktop is unchanged. */
+  const EDGE = 4;
+  const put = (text, x, y) => {
+    const tw = ctx.measureText(text).width;
+    ctx.fillText(text, Math.max(EDGE, Math.min(x, w - tw - EDGE)), y);
+  };
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = palette.action;
+  put('TARGET', pf[0] + 22, pf[1] + 4);
+
+  /* THE FIGURE STATES ITS OWN POINT - 2026-10-26.
+     ---------------------------------------------------------------------
+     The sentence that used to carry it, "Every approach the arc allows meets
+     the same point.", was deleted from the NRSS page lead by a reviewer on
+     2026-10-23 and published automatically. The figure's own caption
+     ("Schematic, and interactive. Whatever the two angles are, the trajectory
+     ends at the same point...") had already been withdrawn on 2026-10-21.
+
+     So the one idea this drawing exists to show was, between those two edits,
+     stated nowhere on the site. It is said here instead - inside the picture,
+     where it cannot drift away from the thing it describes, and in six words
+     rather than as a restored paragraph. */
+  /* Narrow canvases get the sentence on two lines at the 10px canvas-label
+     size used everywhere else, rather than one 9px line that cannot fit: at
+     phone width there are about 120px right of the focus, and the one-line
+     version needs about 150. 420px is where one line stops fitting. */
+  ctx.fillStyle = palette.sub;
+  ctx.globalAlpha = 0.9;
+  if (w < 420) {
+    ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
+    put('EVERY APPROACH', pf[0] + 22, pf[1] + 19);
+    put('MEETS HERE', pf[0] + 22, pf[1] + 32);
+  } else {
+    ctx.font = '9px "IBM Plex Mono", ui-monospace, monospace';
+    put('EVERY APPROACH MEETS HERE', pf[0] + 22, pf[1] + 18);
+  }
+  ctx.globalAlpha = 1;
   ctx.font = '10px "IBM Plex Mono", ui-monospace, monospace';
   ctx.fillStyle = palette.action;
-  ctx.fillText('TARGET', pf[0] + 22, pf[1] + 4);
+
+  ctx.textAlign = 'right';
   ctx.fillStyle = palette.sub;
-  ctx.fillText('ENTRY', pc[0] + 13, pc[1] - 9);
+  ctx.fillText('ENTRY', pc[0] - 14, pc[1] - 4);
+
+  // The arc band, named where it is clear of the carrier and the graduations.
+  const pa = project(arcPoint(72));
+  ctx.textAlign = 'left';
+  ctx.fillStyle = palette.sub;
+  ctx.globalAlpha = 0.85;
+  /* Outside the arc when it fits, otherwise just INSIDE it. `put` used to slide
+     the label left until it fitted, which on 360-560px canvases landed it on
+     the arc line itself - the same grey - so 16-23% of it merged with the
+     line. Right-aligned 10px inside the arc it clears every line by about 7px
+     up to 770px wide; from there up it sits outside as before. */
+  {
+    const tw = ctx.measureText('ARC').width;
+    if (pa[0] + 12 + tw + EDGE <= w) {
+      ctx.fillText('ARC', pa[0] + 12, pa[1] + 4);
+    } else {
+      ctx.textAlign = 'right';
+      ctx.fillText('ARC', pa[0] - 10, pa[1] + 4);
+      ctx.textAlign = 'left';
+    }
+  }
+
+  // The horizontal track the arc's feet ride on.
+  const pcl = project([ARC_R * Math.cos(rad(205)), ARC_R * Math.sin(rad(205)), 0]);
+  put('COLLAR', pcl[0] - 4, pcl[1] + 16);
+  ctx.globalAlpha = 1;
+  ctx.textAlign = 'left';
 }
