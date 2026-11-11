@@ -74,10 +74,19 @@ const QUALITY = 0.9;
    sharper and quieter than tracing 1030 directly: the sample noise averages
    away in the downscale instead of needing a denoiser. */
 const ENCODE_SCALE = 0.7;
-/* width, height, primary spp, hemisphere rays, reflection rays, name, yaw, pitch */
+/* width, height, primary spp, hemisphere rays, reflection rays, name, yaw,
+   pitch, fit, clip — see trace.mjs.
+
+   THE HERO IS CROPPED, 2026-11-11. It used to frame the whole assembly at
+   1700 x 2430, and the microdrive rod made it a tall, narrow picture the page
+   shows at about 40%: the engraved arc and collar scales came out a few pixels
+   high, and blue on the dark ground. Now it fits the BODY, lets the top 30% of
+   the rod run off the picture the way NaviNetics' own product photograph
+   does, and is nearly square, so the frame is drawn about 1.5x larger at the
+   same height. Yaw 35 / pitch -22 faces the ARC ANGLE plate and its scale. */
 const VIEWS = [
-  [1700, 2430, 6, 48, 18, 'hero', 38, -18],
-  [1300, 1750, 6, 44, 16, 'detail', -34, -6],
+  [2000, 1900, 6, 48, 18, 'hero', 35, -22, 'crop', 0.3],
+  [1300, 1750, 6, 44, 16, 'detail', -34, -6, 'tight', 0],
 ];
 
 

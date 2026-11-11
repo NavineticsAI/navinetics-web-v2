@@ -34,7 +34,7 @@ export function D1Hero() {
       >
         {/* Source order puts the instrument first so it is fetched first; on a
             wide screen it belongs on the right, which is what `order` does. */}
-        <div className="order-first lg:order-last lg:justify-self-center">
+        <div className="order-first lg:order-last lg:flex lg:w-full lg:justify-center">
           <img
             src={hero}
             width={FRAME.w}
@@ -45,11 +45,18 @@ export function D1Hero() {
             decoding="async"
             alt="The NRSS: an anodized blue arc-centered head frame with two curved rails, a
               targeting stage, and a bare-steel mechanical microdrive rising from its center."
-            /* Sized by HEIGHT once there is a column to stand in. The render is
-               tall and narrow, so capping its width instead puts the wheels
-               through the bottom of a laptop viewport. */
-            className="mx-auto block h-auto w-full max-w-[15rem] sm:max-w-[18rem]
-              lg:h-[68svh] lg:w-auto lg:max-w-none xl:h-[74svh]"
+            /* Capped by the column AND by the viewport height, whichever bites
+               first: the render is nearly square now (it used to be tall and
+               narrow, sized by height alone). The engraved arc and collar
+               scales are the reason for the size — at the old 40% they were a
+               few pixels high — so it takes all the room the column gives,
+               and the full width on a phone. */
+            /* The render crops the microdrive rod at its top edge, which on
+               the page is mid-air below the navbar; the mask fades it out
+               over the top 14% instead of slicing it off. */
+            className="mx-auto block h-auto w-full max-w-[28rem]
+              [mask-image:linear-gradient(to_bottom,transparent,#000_14%)]
+              lg:w-auto lg:max-w-full lg:max-h-[74svh] xl:max-h-[78svh]"
           />
         </div>
 

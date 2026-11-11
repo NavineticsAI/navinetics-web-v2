@@ -12,7 +12,7 @@
  * invert numerically: nearest point on a coarse grid, then Newton.
  */
 import { readdirSync, writeFileSync } from 'node:fs';
-import { parse, args, ref, str, nums, placement, mul, invert as inv4, apply, IDENT } from './step.mjs';
+import { parse, args, ref, refs, str, nums, placement, mul, invert as inv4, apply, IDENT } from './step.mjs';
 import { dir } from '../lib/paths.mjs';
 
 const ROOT = dir('../../', import.meta.url);
@@ -39,6 +39,44 @@ const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const crs = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 const nrm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
 const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+
+/* ── engraving: the faces the CAD fills black ─────────────────────────────────
+   The scale numerals, the ticks and the lettering are cut into the arc and the
+   collar, and the CAD says exactly which faces they are: 3,672 ADVANCED_FACEs
+   carry a black SURFACE_STYLE_FILL_AREA, and nothing else in the file does.
+   The tessellator used to ignore styling, so the engraving was traced in the
+   anodised blue around it: a faint relief at 1:1, and gone at the size the
+   page shows the hero. On the instrument the engraving is filled white — see
+   NaviNetics' photographs — so these faces get a group, and a material, of
+   their own.
+
+   The fill colour specifically, not the first colour found: a style can carry
+   an edge (curve) colour as well, and black edges are common in exports. */
+const fillOf = (id, depth = 0) => {
+  const e = E.get(id);
+  if (!e || depth > 10) return null;
+  if (e.t === 'FILL_AREA_STYLE_COLOUR') {
+    const c = E.get(ref(args(e.a)[1]));
+    return c?.t === 'COLOUR_RGB' ? nums(c.a).slice(0, 3) : null;
+  }
+  for (const r of refs(e.a)) {
+    if (/STYLE|FILL|SURFACE_SIDE|PRESENTATION/.test(E.get(r)?.t || '')) {
+      const c = fillOf(r, depth + 1);
+      if (c) return c;
+    }
+  }
+  return null;
+};
+const ENGRAVED = new Set();
+for (const [, e] of E) {
+  if (e.t !== 'STYLED_ITEM') continue;
+  const a = args(e.a);
+  const face = ref(a[2]);
+  if (E.get(face)?.t !== 'ADVANCED_FACE') continue;
+  const c = refs(a[1]).map((s) => fillOf(s)).find(Boolean);
+  if (c && c[0] < 0.05 && c[1] < 0.05 && c[2] < 0.05) ENGRAVED.add(face);
+}
+console.log(`engraved faces: ${ENGRAVED.size.toLocaleString()}`);
 
 /* ── assembly (as before) ─────────────────────────────────────────────────── */
 const pdName = new Map();
@@ -412,7 +450,10 @@ const FAMILY = [
   ['stage', /^20186-(1-1|2|5|6|12|13|14|16A|17-1|28-\d|31|32|34)_/],
   ['base', /^20186-(3-1|4)_/],
 ];
-const GNAMES = ['arc', 'rails', 'drive', 'stage', 'base', 'fastener'];
+/* 'engraving' is never a part's group: it is assigned face by face, from
+   ENGRAVED above, over whatever group the part itself is in. */
+const GNAMES = ['arc', 'rails', 'drive', 'stage', 'base', 'fastener', 'engraving'];
+const ENGRAVING = GNAMES.indexOf('engraving');
 const groupOf = (name) => {
   if (STOCK.test(name) || /_(9\d{4}A\d+|1\d{7}_)/.test(name)) return GNAMES.indexOf('fastener');
   for (const [g, re] of FAMILY) if (re.test(name)) return GNAMES.indexOf(g);
@@ -424,12 +465,14 @@ for (const inst of insts) {
   ACTIVE_TOL = groupOf(inst.name) === GNAMES.indexOf('fastener') ? FASTENER_TOL : TOL;
   const items = (E.get(inst.brep).a.match(/#\d+/g) || []).map((r) => +r.slice(1));
   const V = []; const F = [];
+  const G = [];   // per vertex: 1 if its face is engraved
   for (const it of items) {
     if (T(it) !== 'MANIFOLD_SOLID_BREP') continue;
     const shell = ref(A(it)[1]);
     for (const f of (E.get(shell).a.match(/#\d+/g) || []).map((r) => +r.slice(1))) {
       if (T(f) !== 'ADVANCED_FACE') continue;
       const fa = A(f);
+      const engraved = ENGRAVED.has(f) ? 1 : 0;
       const surfId = ref(fa[fa.length - 2]);
       const flip = /\.F\./.test(fa[fa.length - 1] || '');
       let S;
@@ -501,6 +544,7 @@ for (const inst of insts) {
           ];
           if (flip) n = scl(n, -1);
           V.push(p3[0], p3[1], p3[2], n[0], n[1], n[2]);
+          G.push(engraved);
         }
         F.push(V.length / 6 - 3);
         nTri++;
@@ -508,7 +552,7 @@ for (const inst of insts) {
       for (const [i, j, k] of tris) emit(poly[i], poly[j], poly[k], 0);
     }
   }
-  if (F.length) parts.push({ name: inst.name, V: Float32Array.from(V) });
+  if (F.length) parts.push({ name: inst.name, V: Float32Array.from(V), G: Uint8Array.from(G) });
 }
 
 console.log(`instances ${insts.length}, triangles ${nTri.toLocaleString()}, failed faces ${nFail}`);
@@ -521,10 +565,12 @@ for (const p of parts) {
   let sy = 0;
   for (let i = 1; i < p.V.length; i += 6) sy += p.V[i];
   if (sy / (p.V.length / 6) <= 0) continue;   // accessory tray
-  keep.push({ g, V: p.V });
+  keep.push({ g, V: p.V, G: p.G });
 }
 const total = keep.reduce((s, p) => s + p.V.length / 18, 0);
 console.log(`kept ${keep.length} instances, ${total.toLocaleString()} triangles`);
+const engTri = keep.reduce((s, p) => s + p.G.reduce((n, x) => n + x, 0), 0) / 3;
+console.log(`engraved ${engTri.toLocaleString()} triangles, in ${keep.filter((p) => p.G.some(Boolean)).length} instances`);
 
 /* Binary, not JSON: the same mesh as JSON is 275 MB and takes longer to parse
    than it took to build. This file is scratch — only the renders ship. */
@@ -535,7 +581,7 @@ let o = 4;
 for (const p of keep) {
   for (let i = 0; i < p.V.length; i += 6) {
     for (let c = 0; c < 6; c++) { out.writeFloatLE(p.V[i + c], o); o += 4; }
-    out.writeUInt8(p.g, o); o += 1;
+    out.writeUInt8(p.G[i / 6] ? ENGRAVING : p.g, o); o += 1;
   }
 }
 writeFileSync(WORK + 'mesh.bin', out);

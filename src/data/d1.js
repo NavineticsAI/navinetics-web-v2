@@ -53,9 +53,11 @@ import framePoster from '../assets/education/02.1.web.poster.webp';
 import { asset } from '../lib/asset.js';
 
 
-/** The one render: traced at 1700 × 2430 and encoded down to this. */
+/** The one render: traced at 2000 × 1900, cropped to its own alpha and
+    encoded down to this. Nearly square since 2026-11-11 — see the note on
+    VIEWS in tools/d1-frame.mjs for why the hero is cropped now. */
 export const hero = heroArt;
-export const FRAME = { w: 1027, h: 1565 };
+export const FRAME = { w: 1198, h: 1310 };
 
 /* The same object from the other side, for the closing band. Not a second
    asset in any meaningful sense — same mesh, same studio, same tracer, one
