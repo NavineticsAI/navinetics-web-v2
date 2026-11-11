@@ -21,25 +21,21 @@ import { Button, Field, Hero, Reveal, Section, Switch } from '../ui/index.js';
 const ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT || '';
 const INBOX = 'info@navinetics.com';
 
-/**
- * A device company needs the complaint path to be a route a person can find,
- * not a line in a footer. Keeping it in the same list as sales enquiries means
- * it cannot be missed and cannot be mistaken for one.
- */
-const REASONS = [
-  'NRSS inquiry',
-  /* 'Surgical tables inquiry' removed with the range itself, pending FDA
-     registration — see data/products.js. Offering it as a reason to write
-     in is offering the product. */
-  'Neuromodulation research',
-  'Distribution and partnerships',
-  'Product complaint or device issue',
-  'Press and media',
-  'Careers',
-  'Something else',
-];
+/* THE "I'M REACHING OUT ABOUT" LIST IS WITHDRAWN - 2026-11-11, together
+   with the device-problem box beside the form. Its options were 'NRSS
+   inquiry', 'Neuromodulation research', 'Distribution and partnerships',
+   'Product complaint or device issue', 'Press and media', 'Careers' and
+   'Something else' ('Surgical tables inquiry' had already gone with the
+   range). Choosing the complaint option showed: "Please include the device,
+   the approximate date, and what happened. Do not include patient names or
+   other identifying details."
 
-const COMPLAINT = 'Product complaint or device issue';
+   The reason still travels, unseen, in the email's subject: a button that
+   links here with ?reason= (Request a Quote on the NRSS and MAVEN pages)
+   names it, so the inbox can tell a quote request from a general message.
+   Anything else arrives as a general inquiry - with no list to change it,
+   the old default would have filed every message as an NRSS inquiry. */
+const GENERAL = 'General inquiry';
 
 const details = [
   { Icon: Mail, label: 'Email', value: INBOX, href: `mailto:${INBOX}` },
@@ -52,18 +48,14 @@ export default function Contact() {
     title: 'Contact',
     description:
       'Get in touch with NaviNetics about the NaviNetics Reusable Stereotactic System (NRSS), '
-      + 'neuromodulation research, distribution, careers, or to report a product issue.',
+      + 'neuromodulation research, distribution or careers.',
   });
 
-  /* Product pages link here with ?reason=… so the form arrives set to the
-     right enquiry — "Request a quote" on the D1 page should not land a visitor
-     on a generic form they have to re-classify themselves. */
+  /* Product pages link here with ?reason=… and the message's subject says
+     which enquiry it is. Every ?reason= value used anywhere on the site
+     should appear here: a key that is missing does not fail loudly, it just
+     files the message as a general inquiry. */
   const [params] = useSearchParams();
-  /* Every ?reason= value used anywhere on the site must appear here. A key that
-     is missing does not fail loudly — it silently falls through to REASONS[0],
-     so the partners page's "Enquire about distribution" landed a distributor on
-     an NRSS enquiry form. Keys map to the REASONS list by name, not index, so
-     reordering that list cannot quietly re-point them. */
   const PRESET = {
     d1: 'NRSS inquiry',
     nrss: 'NRSS inquiry',
@@ -71,11 +63,10 @@ export default function Contact() {
     distribution: 'Distribution and partnerships',
     press: 'Press and media',
     careers: 'Careers',
-    complaint: COMPLAINT,
   };
   const [form, setForm] = useState({
     name: '', email: '', organization: '',
-    reason: PRESET[params.get('reason')] ?? REASONS[0],
+    reason: PRESET[params.get('reason')] ?? GENERAL,
     message: '',
   });
   const [updates, setUpdates] = useState(false);
@@ -137,8 +128,6 @@ export default function Contact() {
     }
   };
 
-  const isComplaint = form.reason === COMPLAINT;
-
   return (
     <>
       <Hero
@@ -178,17 +167,18 @@ export default function Contact() {
               ))}
             </dl>
 
-            {/* A complaint route stated in plain words, separate from sales. */}
-            <div className="mt-10 rounded-md border border-hairline-soft bg-surface p-5">
-              <h3 className="text-sm font-semibold">Reporting a problem with a device</h3>
-              <p className="mt-2 text-sm text-ink-2">
-                If a NaviNetics device did not perform as expected, tell us. Choose
-                “{COMPLAINT}” in the form, or email{' '}
-                <a href={`mailto:${INBOX}`} className="font-semibold text-action">{INBOX}</a>{' '}
-                with the device, the date, and what happened. If a patient or user has been
-                harmed, contact us by phone as well so we see it the same day.
-              </p>
-            </div>
+            {/* THE DEVICE-PROBLEM BOX IS WITHDRAWN - 2026-11-11. Under the
+                contact details sat "Reporting a problem with a device": "If a
+                NaviNetics device did not perform as expected, tell us. Choose
+                “Product complaint or device issue” in the form, or email
+                info@navinetics.com with the device, the date, and what
+                happened. If a patient or user has been harmed, contact us by
+                phone as well so we see it the same day."
+
+                NOTE: that was the site's only stated route for a device
+                complaint, and NaviNetics never confirmed it (ticket NAV-011).
+                A complaint route belongs to their quality system: if one comes
+                back, its wording should come from them. */}
           </Reveal>
 
           <Reveal delay={0.08}>
@@ -266,19 +256,6 @@ export default function Contact() {
                     placeholder="Hospital, clinic or company"
                     autoComplete="organization"
                   />
-                  <Field as="select" label="I'm reaching out about" value={form.reason} onChange={set('reason')}>
-                    {REASONS.map((r) => (
-                      <option key={r}>{r}</option>
-                    ))}
-                  </Field>
-
-                  {isComplaint && (
-                    <p className="rounded-md border border-warn bg-warn-soft p-4 text-sm text-ink-2">
-                      Please include the device, the approximate date, and what happened. Do not
-                      include patient names or other identifying details.
-                    </p>
-                  )}
-
                   <Field
                     as="textarea"
                     label="Message"

@@ -90,10 +90,18 @@ export const bands = [
        differentiator, promoted from ~800 words into the teaching material where
        a surgeon evaluating this page would never reach it — and it is the model
        for differentiating without a competitive claim, comparing against a
-       historical category rather than a company. */
-    lead: 'Replacing a traditional stereotactic baseframe is the Skull Anchor Key. This design '
-    + 'removes all of the mechanics away from the patient’s face, improving the patients’ and '
-    + 'clinicians’ experience.',
+       historical category rather than a company.
+
+       REWORDED 2026-11-11 for readability, same points and no new claim. It
+       read: "Replacing a traditional stereotactic baseframe is the Skull
+       Anchor Key. This design removes all of the mechanics away from the
+       patient’s face, improving the patients’ and clinicians’ experience." -
+       Steve Goerss's wording from the shared document (15 and 23 Oct), with
+       its ending from a signed-out reviewer (21 Oct). "Our" is Aditya
+       Kulkarni's, from his own edit to this row on 11 Nov. */
+    lead: 'Our Skull Anchor Key replaces a traditional stereotactic baseframe. It moves all of '
+    + 'the mechanics away from the patient’s face, improving the experience for patients and '
+    + 'clinicians.',
     figure: {
       src: headArt,
       w: 444, h: 1042,
@@ -146,8 +154,9 @@ export const bands = [
     /* Steve Goerss's wording from the 19 Oct review, restored 2026-11-11.
        PR #10 had added "the collar turning about the vertical axis, the arc
        swinging over it", which contradicts the convention NaviNetics
-       confirmed in lib/stereo.js: the collar turns about the left-right
-       axis. Define "collar" only in wording NaviNetics supplies. */
+       confirmed in src/lib/stereo.js: the collar turns about the
+       left-right axis. Define "collar" only in wording NaviNetics
+       supplies. */
     lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
     + 'leads and micro-recording electrodes to the target.',
     figure: {
