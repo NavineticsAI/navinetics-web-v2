@@ -143,11 +143,12 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
-    /* "collar" was used twice on the whole site and defined neither time.
-       One clause, so a reader is not left to infer which rotation is
-       which. */
-    lead: 'Once the arc and collar angles are set — the collar turning about the '
-    + 'vertical axis, the arc swinging over it — a mechanical microdrive attaches to advance DBS '
+    /* Steve Goerss's wording from the 19 Oct review, restored 2026-11-11.
+       PR #10 had added "the collar turning about the vertical axis, the arc
+       swinging over it", which contradicts the convention NaviNetics
+       confirmed in lib/stereo.js: the collar turns about the left-right
+       axis. Define "collar" only in wording NaviNetics supplies. */
+    lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
     + 'leads and micro-recording electrodes to the target.',
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
