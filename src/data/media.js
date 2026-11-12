@@ -128,7 +128,7 @@ export const images = [
     id: 'nrss-hero',
     title: 'NRSS, three-quarter view',
     src: d1Hero, w: 1790, h: 2466, category: 'Devices', page: P.d1,
-    caption: 'The frame ray traced from its own assembly CAD, in the anodized blue the '
+    caption: 'The frame rendered from its assembly CAD, in the anodized blue the '
       + 'instrument is finished in.',
   },
   {
