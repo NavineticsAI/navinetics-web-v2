@@ -69,10 +69,11 @@ src/assets/maven/detail.png
 # turns it into the turntable in src/assets/d1/turn/, and those renders are
 # committed. Keep the STEP wherever the CAD lives.
 src/assets/d1/*.STEP
-# The hero render masters from the Blender Cycles job: a 3.7 MB RGBA PNG and its
-# preview on the page colour. The page ships nrss-hero.webp, cropped and
-# encoded from the master; keep the masters wherever the CAD lives.
-src/assets/d1/NRSS_hero_*.png
+# The files the Blender Cycles job delivered, under their delivered names: the
+# hero's 3.7 MB RGBA PNG master and its preview, and the axis-motion clip. The
+# page ships what is made from them under its own names (nrss-hero.webp,
+# axis-motion.mp4); keep the deliveries wherever the CAD lives.
+src/assets/d1/NRSS_*
 
 # Scratch for tools/d1-frame.mjs: the tessellated mesh and the PNG frames it
 # renders before they are cropped and encoded. Only the WebPs are committed.

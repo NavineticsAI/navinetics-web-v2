@@ -50,12 +50,17 @@ import detailArt from '../assets/d1/detail.webp';
    black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
    band's own dark ground, like the traced images do. */
 import headArt from '../assets/d1/head.webp';
-/* The arc-centered band's figure is the existing video of the instrument
-   turning on a head model with a probe on its trajectory — which is precisely
-   what arc-centered means, and no still can show it. Same encode the education
-   page uses; there is no second copy. */
-import frameVideo from '../assets/education/02.1.web.mp4';
-import framePoster from '../assets/education/02.1.web.poster.webp';
+/* The arc-centered band's figure is the axis-motion clip from the same Blender
+   job as the hero, replacing the education page's head-model turntable here on
+   2026-11-12 (the education page keeps that one). It is the delivered file
+   byte for byte (NRSS_axis_motion_preview_on_03101A.mp4, gitignored beside it):
+   H.264 High 4.0, 1200 × 1300, 30 fps, 15 s, 6.1 MB, moov first so it streams.
+   A browser re-encode through tools/education-video.mjs got it to 1.4 MB and
+   went blocky the moment anything moved, smearing the engraving, so it ships
+   as delivered. preload="none" means none of it loads until the band is on
+   screen. The poster is its first frame. */
+import axisVideo from '../assets/d1/axis-motion.mp4';
+import axisPoster from '../assets/d1/axis-motion.poster.webp';
 import { asset } from '../lib/asset.js';
 
 
@@ -139,17 +144,19 @@ export const bands = [
     lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, and '
     + 'two angles of rotation set how you reach it.',
     figure: {
-      video: frameVideo,
-      poster: framePoster,
-      w: 1280, h: 720,
-      /* One-third speed, on review — half was asked to go slower still. The
-         master is only 15 fps (see tools/education-video.mjs), so this already
-         shows five frames a second; much below it the turn reads as a series of
-         stills, and the cure for that is a higher-rate render, not a lower
-         rate here. */
-      rate: 0.33,
-      alt: 'The stereotactic frame on a head model, turning, with a probe held on its trajectory '
-        + 'as the arc moves around it.',
+      video: axisVideo,
+      poster: axisPoster,
+      w: 1200, h: 1300,
+      /* Rendered on the hero's own ground (#03101A), so it goes on a plate of
+         that colour rather than white: the clip's background and the plate
+         meet without an edge. Portrait, so it is capped like the cut-outs and
+         centred; the plate keeps the column's width either side of it. */
+      plate: 'bay',
+      cap: 'plate',
+      /* No `rate`. The head-model clip ran at a third of its speed because it
+         was a 15 fps turntable; this one is 30 fps and paced by the render. */
+      alt: 'The NRSS rendered from its assembly CAD, moving through its axes: the stage '
+        + 'shifting, and the microdrive swinging along the arc to new trajectories.',
     },
   },
   {
