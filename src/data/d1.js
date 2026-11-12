@@ -91,8 +91,8 @@ export const bands = [
        a surgeon evaluating this page would never reach it — and it is the model
        for differentiating without a competitive claim, comparing against a
        historical category rather than a company. */
-    lead: 'Replacing a traditional stereotactic baseframe is the Skull Anchor Key. This design '
-    + 'removes all of the mechanics away from the patient’s face, improving the patients’ and '
+    lead: 'Our skull anchor key replaces a traditional stereotactic baseframe. This design removes '
+    + 'all of the mechanics away from the patient’s face, improving the patients’ and '
     + 'clinicians’ experience.',
     figure: {
       src: headArt,
