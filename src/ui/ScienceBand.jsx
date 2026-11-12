@@ -224,11 +224,17 @@ export function ScienceBand({
 
                   `bare` is for the ones that are not: a cut-out object with its
                   own alpha, which wants the band's ground behind it and reads
-                  as mounted on a card if you give it a plate. */}
+                  as mounted on a card if you give it a plate.
+
+                  `plate: 'bay'` is for a figure rendered on the bay's own dark
+                  ground: a plate of that colour, unpadded, so the figure's
+                  background runs straight into it with no edge. */}
               <div className={cn(
                 figure.bare
                   ? 'overflow-visible'
-                  : 'overflow-hidden rounded-xl border bg-white p-3 shadow-e3 sm:p-5',
+                  : figure.plate === 'bay'
+                    ? 'overflow-hidden rounded-xl border bg-[var(--mv-bay)] shadow-e3'
+                    : 'overflow-hidden rounded-xl border bg-white p-3 shadow-e3 sm:p-5',
                 figure.bare ? '' : light ? 'border-hairline' : 'border-nn-300/25',
               )}>
                 {figure.video ? (
@@ -288,6 +294,12 @@ const BARE_CAP = {
  */
 function BandVideo({ figure, reduced }) {
   const ref = useRef(null);
+  /* A landscape clip fills its plate. A portrait one filling the column would
+     stand far taller than the figures either side, so with a `cap` it is held
+     to that height and centred, the same as a cut-out image. */
+  const fit = figure.cap
+    ? cn('mx-auto block h-auto w-auto max-w-full', BARE_CAP[figure.cap])
+    : 'block h-auto w-full';
 
   useEffect(() => {
     const el = ref.current;
@@ -319,7 +331,7 @@ function BandVideo({ figure, reduced }) {
         height={figure.h}
         loading="lazy"
         decoding="async"
-        className="block h-auto w-full"
+        className={fit}
       />
     );
   }
@@ -335,7 +347,7 @@ function BandVideo({ figure, reduced }) {
       playsInline
       preload="none"
       aria-label={figure.alt}
-      className="block h-auto w-full"
+      className={fit}
     />
   );
 }
