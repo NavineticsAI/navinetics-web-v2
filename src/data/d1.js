@@ -4,14 +4,13 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  *
- * WHERE THE PICTURES COME FROM. Neither is photography. Both are the assembly
- * CAD — 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file — rendered
- * offline: the hero in Blender Cycles, and the "Room to work." detail by
- * tools/d1/trace.mjs, which tessellates it to 1.7M triangles and ray traces
- * it (a BVH, a cosine-weighted hemisphere per pixel for real occlusion,
- * GGX-sampled reflections, an analytic studio environment). The STEP is
- * gitignored and never reaches the browser; what ships is pictures of a mesh,
- * which cannot be turned back into geometry. No dimension, travel,
+ * WHERE THE PICTURES COME FROM. None is photography. The hero, the
+ * "Room to work." figure and the "Arc-centered." clip are the assembly CAD —
+ * 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file — rendered offline in
+ * Blender Cycles, from one scene with one studio. (tools/d1/trace.mjs, the
+ * in-repo tracer that made the earlier renders, still works but no longer
+ * feeds the page.) The STEP is gitignored and never reaches the browser; what
+ * ships is pictures of a mesh, which cannot be turned back into geometry. No dimension, travel,
  * angle or tolerance from that file appears anywhere on the page.
  *
  * ONE RENDER, STILL. The hero does not rotate, settle or arrive. It is simply
@@ -43,9 +42,16 @@
    2600 RGBA master (NRSS_hero_2400x2600.png, gitignored like the STEP),
    cropped to its own alpha and encoded at full resolution as WebP q90 —
    1790 × 2466, about 195 kB. It replaced tools/d1-frame.mjs's traced hero on
-   2026-11-11; "Room to work." below still uses that tool's detail render. */
+   2026-11-11; "Room to work." moved to the same Blender scene on 2026-11-12. */
 import heroArt from '../assets/d1/nrss-hero.webp';
-import detailArt from '../assets/d1/detail.webp';
+/* "Room to work." shows the same Blender scene from a mirrored camera, so the
+   instrument is seen from its other side; the engraving reads the right way
+   round because it is a second render, not a flipped one. The 2400 × 2600
+   master (NRSS_hero_mirrored_2400x2600.png, gitignored) is cropped to its
+   alpha and encoded at 1000 × 1392, about 120 kB: the band caps it near 480 px
+   high, so the hero's full resolution would only cost bytes. 2026-11-12,
+   replacing tools/d1-frame.mjs's traced detail.webp. */
+import detailArt from '../assets/d1/nrss-mirrored.webp';
 /* Supplied photography, not a render: the frame fitted to a head model. The
    black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
    band's own dark ground, like the traced images do. */
@@ -70,10 +76,10 @@ export const hero = heroArt;
 export const FRAME = { w: 1790, h: 2466 };
 
 /* The same object from the other side, for the closing band. Not a second
-   asset in any meaningful sense — same mesh, same studio, same tracer, one
+   asset in any meaningful sense — same mesh, same studio, same renderer, one
    more camera. */
 export const detail = detailArt;
-export const DETAIL = { w: 759, h: 1134 };
+export const DETAIL = { w: 1000, h: 1392 };
 
 /**
  * The four explanations, each with a figure. Two of them - "Arc-centered."
@@ -201,7 +207,10 @@ export const bands = [
     + 'field.',
     figure: {
       src: detailArt,
-      w: 759, h: 1134,
+      w: DETAIL.w, h: DETAIL.h,
+      /* Cropped like the hero: the microdrive rod runs off the top edge, so
+         it fades out there instead of ending in a cut. */
+      fadeTop: true,
       /* A tall cut-out with its own alpha, so it goes unplated. On a plate it
          filled the column and stood about 840px high, well over twice the
          plated figures above it; reduced on review to match them, so it takes

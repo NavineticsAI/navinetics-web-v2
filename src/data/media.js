@@ -47,7 +47,7 @@
 import { asset } from '../lib/asset.js';
 
 import d1Hero from '../assets/d1/nrss-hero.webp';
-import d1Detail from '../assets/d1/detail.webp';
+import d1Detail from '../assets/d1/nrss-mirrored.webp';
 import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
 import swFusion from '../assets/software/fusion.webp';
@@ -134,7 +134,7 @@ export const images = [
   {
     id: 'nrss-detail',
     title: 'NRSS from the opposite side',
-    src: d1Detail, w: 759, h: 1134, category: 'Devices', page: P.d1,
+    src: d1Detail, w: 1000, h: 1392, category: 'Devices', page: P.d1,
     caption: 'The same model and the same studio, one camera further round.',
   },
   {

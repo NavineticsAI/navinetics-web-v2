@@ -254,9 +254,15 @@ export function ScienceBand({
                        usually tall and narrow, and filling the column with one
                        makes it two thousand pixels high — so it is capped by
                        height and centered instead. */
-                    className={figure.bare
-                      ? cn('mx-auto block h-auto w-auto max-w-full', BARE_CAP[figure.cap ?? 'tall'])
-                      : 'block h-auto w-full'}
+                    className={cn(
+                      figure.bare
+                        ? cn('mx-auto block h-auto w-auto max-w-full', BARE_CAP[figure.cap ?? 'tall'])
+                        : 'block h-auto w-full',
+                      /* `fadeTop`: a render cropped through the object at its
+                         top edge (the microdrive rod) fades out over the top
+                         5% instead of stopping in a hard line — as the hero. */
+                      figure.fadeTop && '[mask-image:linear-gradient(to_bottom,transparent,#000_5%)]',
+                    )}
                   />
                 )}
               </div>

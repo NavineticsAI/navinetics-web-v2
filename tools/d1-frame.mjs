@@ -8,10 +8,11 @@
  * the site loads; if the CAD is absent the tool says so and stops rather than
  * writing anything.
  *
- * SINCE 2026-11-11 THE SITE USES ONLY detail.webp FROM HERE. The hero is
- * nrss-hero.webp, a Blender Cycles render of the same STEP (see data/d1.js).
- * This tool still writes hero.webp, which nothing imports; delete it after a
- * run rather than committing it.
+ * THE SITE NO LONGER USES EITHER OUTPUT. The hero (2026-11-11) and the
+ * "Room to work." figure (2026-11-12) are Blender Cycles renders of the same
+ * STEP: nrss-hero.webp and nrss-mirrored.webp (see data/d1.js). This tool
+ * still writes hero.webp and detail.webp, which nothing imports; delete them
+ * after a run rather than committing them.
  *
  * TWO PICTURES, RAY TRACED. This went through a rasterised 36-frame turntable
  * and then a traced 32-frame one, and rotation was the wrong thing to buy both
