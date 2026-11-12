@@ -105,12 +105,15 @@ export const bands = [
        historical category rather than a company.
 
        REWORDED 2026-11-11 for readability, same points and no new claim. It
-       read: "Replacing a traditional stereotactic baseframe is the Skull
-       Anchor Key. This design removes all of the mechanics away from the
+       read: "Our skull anchor key replaces a traditional stereotactic
+       baseframe. This design removes all of the mechanics away from the
        patient’s face, improving the patients’ and clinicians’ experience." -
-       Steve Goerss's wording from the shared document (15 and 23 Oct), with
-       its ending from a signed-out reviewer (21 Oct). "Our" is Aditya
-       Kulkarni's, from his own edit to this row on 11 Nov. */
+       Aditya Kulkarni's edit in the shared document (11 Nov, published
+       12 Nov) to Steve Goerss's wording (15 and 23 Oct), whose ending came
+       from a signed-out reviewer (21 Oct). Steve's opened: "Replacing a
+       traditional stereotactic baseframe is the Skull Anchor Key." This
+       keeps Aditya's "Our", and capitalizes the name as the rest of the
+       site does. */
     lead: 'Our Skull Anchor Key replaces a traditional stereotactic baseframe. It moves all of '
     + 'the mechanics away from the patient’s face, improving the experience for patients and '
     + 'clinicians.',
