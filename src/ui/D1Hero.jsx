@@ -14,11 +14,10 @@ import { getProduct } from '../data/products.js';
  * canvas — the hero is an <img> in a grid, so it is pixel-exact rather than
  * resampled, and it is as cheap as a hero can be.
  *
- * WHAT IS BEING DRAWN. Not a model — a picture of one. tools/d1-frame.mjs
- * tessellates the assembly CAD to 1.7M triangles and ray traces it: real
- * occlusion from a cosine-weighted hemisphere per pixel, GGX reflections, and
- * an anodized blue measured off NaviNetics' own photographs. No geometry goes
- * over the wire and no WebGL is needed.
+ * WHAT IS BEING DRAWN. Not a model — a picture of one: a Blender Cycles
+ * render of the assembly CAD, with the engraved scales in white as on the
+ * instrument and the anodized blue matched to NaviNetics' own photograph (see
+ * data/d1.js). No geometry goes over the wire and no WebGL is needed.
  *
  * NOTHING IS LABELED, deliberately — see the notice in data/d1.js.
  */
@@ -53,9 +52,10 @@ export function D1Hero() {
                and the full width on a phone. */
             /* The render crops the microdrive rod at its top edge, which on
                the page is mid-air below the navbar; the mask fades it out
-               over the top 14% instead of slicing it off. */
+               instead of slicing it off. Only the top 5%: the drive's
+               adjustment knobs sit just under it and must stay crisp. */
             className="mx-auto block h-auto w-full max-w-[28rem]
-              [mask-image:linear-gradient(to_bottom,transparent,#000_14%)]
+              [mask-image:linear-gradient(to_bottom,transparent,#000_5%)]
               lg:w-auto lg:max-w-full lg:max-h-[74svh] xl:max-h-[78svh]"
           />
         </div>

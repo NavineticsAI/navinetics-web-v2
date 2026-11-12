@@ -4,13 +4,14 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  *
- * WHERE THE PICTURE COMES FROM. The hero is not photography. It is the
- * assembly CAD — 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file —
- * tessellated to 1.7M triangles and then ray traced offline by
- * tools/d1/trace.mjs: a BVH, a cosine-weighted hemisphere per pixel for real
- * occlusion, GGX-sampled reflections, and an analytic studio environment. The
- * STEP is gitignored and never reaches the browser; what ships is one picture
- * of a mesh, which cannot be turned back into geometry. No dimension, travel,
+ * WHERE THE PICTURES COME FROM. Neither is photography. Both are the assembly
+ * CAD — 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file — rendered
+ * offline: the hero in Blender Cycles, and the "Room to work." detail by
+ * tools/d1/trace.mjs, which tessellates it to 1.7M triangles and ray traces
+ * it (a BVH, a cosine-weighted hemisphere per pixel for real occlusion,
+ * GGX-sampled reflections, an analytic studio environment). The STEP is
+ * gitignored and never reaches the browser; what ships is pictures of a mesh,
+ * which cannot be turned back into geometry. No dimension, travel,
  * angle or tolerance from that file appears anywhere on the page.
  *
  * ONE RENDER, STILL. The hero does not rotate, settle or arrive. It is simply
@@ -38,7 +39,12 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import heroArt from '../assets/d1/hero.webp';
+/* The hero is a Blender Cycles render of the same STEP: 192 samples, a 2400 ×
+   2600 RGBA master (NRSS_hero_2400x2600.png, gitignored like the STEP),
+   cropped to its own alpha and encoded at full resolution as WebP q90 —
+   1790 × 2466, about 195 kB. It replaced tools/d1-frame.mjs's traced hero on
+   2026-11-11; "Room to work." below still uses that tool's detail render. */
+import heroArt from '../assets/d1/nrss-hero.webp';
 import detailArt from '../assets/d1/detail.webp';
 /* Supplied photography, not a render: the frame fitted to a head model. The
    black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
@@ -53,11 +59,10 @@ import framePoster from '../assets/education/02.1.web.poster.webp';
 import { asset } from '../lib/asset.js';
 
 
-/** The one render: traced at 2000 × 1900, cropped to its own alpha and
-    encoded down to this. Nearly square since 2026-11-11 — see the note on
-    VIEWS in tools/d1-frame.mjs for why the hero is cropped now. */
+/** The one render, at its encoded size. The microdrive rod runs off the top
+    edge on purpose; D1Hero fades it out. */
 export const hero = heroArt;
-export const FRAME = { w: 1198, h: 1310 };
+export const FRAME = { w: 1790, h: 2466 };
 
 /* The same object from the other side, for the closing band. Not a second
    asset in any meaningful sense — same mesh, same studio, same tracer, one
