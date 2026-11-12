@@ -53,7 +53,9 @@ export function D1Hero() {
             /* The render crops the microdrive rod at its top edge, which on
                the page is mid-air below the navbar; the mask fades it out
                instead of slicing it off. Only the top 5%: the drive's
-               adjustment knobs sit just under it and must stay crisp. */
+               adjustment knobs sit just under it and must stay crisp. No
+               -webkit-mask-image by hand: the build's Lightning CSS emits it
+               beside mask-image for this class (checked in dist/). */
             className="mx-auto block h-auto w-full max-w-[28rem]
               [mask-image:linear-gradient(to_bottom,transparent,#000_5%)]
               lg:w-auto lg:max-w-full lg:max-h-[74svh] xl:max-h-[78svh]"

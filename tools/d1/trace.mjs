@@ -52,7 +52,15 @@ const FIT = process.argv[10] || 'tight';
    scales below legibility at the size the page shows the hero. NaviNetics'
    own product photograph crops it the same way. The fitted box is centred,
    so the camera's principal point moves off the image centre (OX, OY). */
-const CLIP = +(process.argv[11] || 0);
+const CLIP = Number(process.argv[11] || 0);
+/* A fraction of the height, so [0, 1). At 1 or more nothing is left below the
+   cut to fit, and a non-number poisons every comparison: either way FOC, OX
+   and OY come out NaN or Infinity and the trace renders nothing useful after
+   minutes of work. Refuse it here instead. */
+if (!Number.isFinite(CLIP) || CLIP < 0 || CLIP >= 1) {
+  console.error(`  CLIP must be a fraction in [0, 1); got "${process.argv[11]}"`);
+  process.exit(1);
+}
 
 /* ── mesh ─────────────────────────────────────────────────────────────────── */
 const raw = readFileSync(`${WORK}mesh.bin`);
@@ -304,6 +312,12 @@ if (FIT === 'crop') {
     if (P[i * 2 + 1] > top) continue;
     if (P[i * 2] < x0) x0 = P[i * 2];
     if (P[i * 2] > x1) x1 = P[i * 2];
+  }
+  /* A valid CLIP can still leave a degenerate box, if the view sees the
+     object edge-on; check the result rather than trace with it. */
+  if (!(x1 > x0 && top > y0)) {
+    console.error(`  crop fit is empty at CLIP ${CLIP}: x ${x0}..${x1}, y ${y0}..${top}`);
+    process.exit(1);
   }
   FOC = Math.min(W / ((x1 - x0) * 1.06), H / ((top - y0) * 1.04));
   OX = FOC * (x0 + x1) / 2;
