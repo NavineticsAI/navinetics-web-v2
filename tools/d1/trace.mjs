@@ -45,6 +45,22 @@ const PITCH = (+(process.argv[9] ?? -18)) * Math.PI / 180;
    same scale — fit each frame to itself and the object visibly breathes as it
    turns. */
 const FIT = process.argv[10] || 'tight';
+/* 'crop' frames the BODY and lets the top of the view run off the picture:
+   CLIP is the fraction of the object's projected height, from the top, left
+   out of the fit. The microdrive rod is a third of the assembly's height and
+   almost none of its interest, and fitting it shrank the arc and collar
+   scales below legibility at the size the page shows the hero. NaviNetics'
+   own product photograph crops it the same way. The fitted box is centred,
+   so the camera's principal point moves off the image centre (OX, OY). */
+const CLIP = Number(process.argv[11] || 0);
+/* A fraction of the height, so [0, 1). At 1 or more nothing is left below the
+   cut to fit, and a non-number poisons every comparison: either way FOC, OX
+   and OY come out NaN or Infinity and the trace renders nothing useful after
+   minutes of work. Refuse it here instead. */
+if (!Number.isFinite(CLIP) || CLIP < 0 || CLIP >= 1) {
+  console.error(`  CLIP must be a fraction in [0, 1); got "${process.argv[11]}"`);
+  process.exit(1);
+}
 
 /* ── mesh ─────────────────────────────────────────────────────────────────── */
 const raw = readFileSync(`${WORK}mesh.bin`);
@@ -279,7 +295,34 @@ if (FIT === 'spin') {
     fy = Math.max(fy, Math.abs(v[1]) / w);
   }
 }
-const FOC = Math.min((W * 0.5) / (fx * 1.075), (H * 0.5) / (fy * 1.045));
+let FOC = Math.min((W * 0.5) / (fx * 1.075), (H * 0.5) / (fy * 1.045));
+let OX = 0; let OY = 0;
+if (FIT === 'crop') {
+  let x0 = Infinity; let x1 = -Infinity; let y0 = Infinity; let y1 = -Infinity;
+  const P = new Float32Array(NV * 2);
+  for (let i = 0; i < NV; i++) {
+    const v = toView([pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]]);
+    const w = DIST - v[2];
+    P[i * 2] = v[0] / w; P[i * 2 + 1] = v[1] / w;
+    if (P[i * 2 + 1] < y0) y0 = P[i * 2 + 1];
+    if (P[i * 2 + 1] > y1) y1 = P[i * 2 + 1];
+  }
+  const top = y1 - CLIP * (y1 - y0);
+  for (let i = 0; i < NV; i++) {
+    if (P[i * 2 + 1] > top) continue;
+    if (P[i * 2] < x0) x0 = P[i * 2];
+    if (P[i * 2] > x1) x1 = P[i * 2];
+  }
+  /* A valid CLIP can still leave a degenerate box, if the view sees the
+     object edge-on; check the result rather than trace with it. */
+  if (!(x1 > x0 && top > y0)) {
+    console.error(`  crop fit is empty at CLIP ${CLIP}: x ${x0}..${x1}, y ${y0}..${top}`);
+    process.exit(1);
+  }
+  FOC = Math.min(W / ((x1 - x0) * 1.06), H / ((top - y0) * 1.04));
+  OX = FOC * (x0 + x1) / 2;
+  OY = FOC * (y0 + top) / 2;
+}
 console.log(`camera: dist ${DIST}, focal ${FOC.toFixed(0)}px on ${W}x${H}`);
 
 /* ── render ───────────────────────────────────────────────────────────────── */
@@ -293,7 +336,7 @@ console.time('trace');
 
 const shared = {
   posSAB, nrmSAB, grpSAB, idxSAB, boundsSAB, metaSAB, imgSAB, rowSAB,
-  W, H, SPP, DIFF, SPEC, DIST, FOC, YAW, PITCH, NT,
+  W, H, SPP, DIFF, SPEC, DIST, FOC, YAW, PITCH, NT, OX, OY,
 };
 await Promise.all(Array.from({ length: NW }, (_, id) => new Promise((res, rej) => {
   const wk = new Worker(new URL('./trace-worker.mjs', import.meta.url), {

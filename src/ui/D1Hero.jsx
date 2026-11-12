@@ -14,11 +14,10 @@ import { getProduct } from '../data/products.js';
  * canvas — the hero is an <img> in a grid, so it is pixel-exact rather than
  * resampled, and it is as cheap as a hero can be.
  *
- * WHAT IS BEING DRAWN. Not a model — a picture of one. tools/d1-frame.mjs
- * tessellates the assembly CAD to 1.7M triangles and ray traces it: real
- * occlusion from a cosine-weighted hemisphere per pixel, GGX reflections, and
- * an anodized blue measured off NaviNetics' own photographs. No geometry goes
- * over the wire and no WebGL is needed.
+ * WHAT IS BEING DRAWN. Not a model — a picture of one: a Blender Cycles
+ * render of the assembly CAD, with the engraved scales in white as on the
+ * instrument and the anodized blue matched to NaviNetics' own photograph (see
+ * data/d1.js). No geometry goes over the wire and no WebGL is needed.
  *
  * NOTHING IS LABELED, deliberately — see the notice in data/d1.js.
  */
@@ -34,7 +33,7 @@ export function D1Hero() {
       >
         {/* Source order puts the instrument first so it is fetched first; on a
             wide screen it belongs on the right, which is what `order` does. */}
-        <div className="order-first lg:order-last lg:justify-self-center">
+        <div className="order-first lg:order-last lg:flex lg:w-full lg:justify-center">
           <img
             src={hero}
             width={FRAME.w}
@@ -45,11 +44,21 @@ export function D1Hero() {
             decoding="async"
             alt="The NRSS: an anodized blue arc-centered head frame with two curved rails, a
               targeting stage, and a bare-steel mechanical microdrive rising from its center."
-            /* Sized by HEIGHT once there is a column to stand in. The render is
-               tall and narrow, so capping its width instead puts the wheels
-               through the bottom of a laptop viewport. */
-            className="mx-auto block h-auto w-full max-w-[15rem] sm:max-w-[18rem]
-              lg:h-[68svh] lg:w-auto lg:max-w-none xl:h-[74svh]"
+            /* Capped by the column AND by the viewport height, whichever bites
+               first: the render is nearly square now (it used to be tall and
+               narrow, sized by height alone). The engraved arc and collar
+               scales are the reason for the size — at the old 40% they were a
+               few pixels high — so it takes all the room the column gives,
+               and the full width on a phone. */
+            /* The render crops the microdrive rod at its top edge, which on
+               the page is mid-air below the navbar; the mask fades it out
+               instead of slicing it off. Only the top 5%: the drive's
+               adjustment knobs sit just under it and must stay crisp. No
+               -webkit-mask-image by hand: the build's Lightning CSS emits it
+               beside mask-image for this class (checked in dist/). */
+            className="mx-auto block h-auto w-full max-w-[28rem]
+              [mask-image:linear-gradient(to_bottom,transparent,#000_5%)]
+              lg:w-auto lg:max-w-full lg:max-h-[74svh] xl:max-h-[78svh]"
           />
         </div>
 
