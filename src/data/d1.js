@@ -4,13 +4,13 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * CLAIMS NOTICE
  *
- * WHERE THE PICTURE COMES FROM. The hero is not photography. It is the
- * assembly CAD — 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file —
- * tessellated to 1.7M triangles and then ray traced offline by
- * tools/d1/trace.mjs: a BVH, a cosine-weighted hemisphere per pixel for real
- * occlusion, GGX-sampled reflections, and an analytic studio environment. The
- * STEP is gitignored and never reaches the browser; what ships is one picture
- * of a mesh, which cannot be turned back into geometry. No dimension, travel,
+ * WHERE THE PICTURES COME FROM. None is photography. The hero, the
+ * "Room to work." figure and the "Arc-centered." clip are the assembly CAD —
+ * 20186_D003 REV2, a 73 MB SolidWorks AP214 STEP file — rendered offline in
+ * Blender Cycles, from one scene with one studio. (tools/d1/trace.mjs, the
+ * in-repo tracer that made the earlier renders, still works but no longer
+ * feeds the page.) The STEP is gitignored and never reaches the browser; what
+ * ships is pictures of a mesh, which cannot be turned back into geometry. No dimension, travel,
  * angle or tolerance from that file appears anywhere on the page.
  *
  * ONE RENDER, STILL. The hero does not rotate, settle or arrive. It is simply
@@ -38,30 +38,48 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import heroArt from '../assets/d1/hero.webp';
-import detailArt from '../assets/d1/detail.webp';
+/* The hero is a Blender Cycles render of the same STEP: 192 samples, a 2400 ×
+   2600 RGBA master (NRSS_hero_2400x2600.png, gitignored like the STEP),
+   cropped to its own alpha and encoded at full resolution as WebP q90 —
+   1790 × 2466, about 195 kB. It replaced tools/d1-frame.mjs's traced hero on
+   2026-11-11; "Room to work." moved to the same Blender scene on 2026-11-12. */
+import heroArt from '../assets/d1/nrss-hero.webp';
+/* "Room to work." shows the same Blender scene from a mirrored camera, so the
+   instrument is seen from its other side; the engraving reads the right way
+   round because it is a second render, not a flipped one. The 2400 × 2600
+   master (NRSS_hero_mirrored_2400x2600.png, gitignored) is cropped to its
+   alpha and encoded at 1000 × 1392, about 120 kB: the band caps it near 480 px
+   high, so the hero's full resolution would only cost bytes. 2026-11-12,
+   replacing tools/d1-frame.mjs's traced detail.webp. */
+import detailArt from '../assets/d1/nrss-mirrored.webp';
 /* Supplied photography, not a render: the frame fitted to a head model. The
    black studio ground is keyed out by tools/d1-photo.mjs so it sits on the
    band's own dark ground, like the traced images do. */
 import headArt from '../assets/d1/head.webp';
-/* The arc-centered band's figure is the existing video of the instrument
-   turning on a head model with a probe on its trajectory — which is precisely
-   what arc-centered means, and no still can show it. Same encode the education
-   page uses; there is no second copy. */
-import frameVideo from '../assets/education/02.1.web.mp4';
-import framePoster from '../assets/education/02.1.web.poster.webp';
+/* The arc-centered band's figure is the axis-motion clip from the same Blender
+   job as the hero, replacing the education page's head-model turntable here on
+   2026-11-12 (the education page keeps that one). It is the delivered file
+   byte for byte (NRSS_axis_motion_preview_on_03101A.mp4, gitignored beside it):
+   H.264 High 4.0, 1200 × 1300, 30 fps, 15 s, 6.1 MB, moov first so it streams.
+   A browser re-encode through tools/education-video.mjs got it to 1.4 MB and
+   went blocky the moment anything moved, smearing the engraving, so it ships
+   as delivered. preload="none" means none of it loads until the band is on
+   screen. The poster is its first frame. */
+import axisVideo from '../assets/d1/axis-motion.mp4';
+import axisPoster from '../assets/d1/axis-motion.poster.webp';
 import { asset } from '../lib/asset.js';
 
 
-/** The one render: traced at 1700 × 2430 and encoded down to this. */
+/** The one render, at its encoded size. The microdrive rod runs off the top
+    edge on purpose; D1Hero fades it out. */
 export const hero = heroArt;
-export const FRAME = { w: 1027, h: 1565 };
+export const FRAME = { w: 1790, h: 2466 };
 
 /* The same object from the other side, for the closing band. Not a second
-   asset in any meaningful sense — same mesh, same studio, same tracer, one
+   asset in any meaningful sense — same mesh, same studio, same renderer, one
    more camera. */
 export const detail = detailArt;
-export const DETAIL = { w: 759, h: 1134 };
+export const DETAIL = { w: 1000, h: 1392 };
 
 /**
  * The four explanations, each with a figure. Two of them - "Arc-centered."
@@ -90,10 +108,21 @@ export const bands = [
        differentiator, promoted from ~800 words into the teaching material where
        a surgeon evaluating this page would never reach it — and it is the model
        for differentiating without a competitive claim, comparing against a
-       historical category rather than a company. */
-    lead: 'Our skull anchor key replaces a traditional stereotactic baseframe. This design removes '
-    + 'all of the mechanics away from the patient’s face, improving the patients’ and '
-    + 'clinicians’ experience.',
+       historical category rather than a company.
+
+       REWORDED 2026-11-11 for readability, same points and no new claim. It
+       read: "Our skull anchor key replaces a traditional stereotactic
+       baseframe. This design removes all of the mechanics away from the
+       patient’s face, improving the patients’ and clinicians’ experience." -
+       Aditya Kulkarni's edit in the shared document (11 Nov, published
+       12 Nov) to Steve Goerss's wording (15 and 23 Oct), whose ending came
+       from a signed-out reviewer (21 Oct). Steve's opened: "Replacing a
+       traditional stereotactic baseframe is the Skull Anchor Key." This
+       keeps Aditya's "Our", and capitalizes the name as the rest of the
+       site does. */
+    lead: 'Our Skull Anchor Key replaces a traditional stereotactic baseframe. It moves all of '
+    + 'the mechanics away from the patient’s face, improving the experience for patients and '
+    + 'clinicians.',
     figure: {
       src: headArt,
       w: 444, h: 1042,
@@ -124,17 +153,19 @@ export const bands = [
     lead: 'An arc-centered stereotactic device: three linear degrees of freedom set the target, and '
     + 'two angles of rotation set how you reach it.',
     figure: {
-      video: frameVideo,
-      poster: framePoster,
-      w: 1280, h: 720,
-      /* One-third speed, on review — half was asked to go slower still. The
-         master is only 15 fps (see tools/education-video.mjs), so this already
-         shows five frames a second; much below it the turn reads as a series of
-         stills, and the cure for that is a higher-rate render, not a lower
-         rate here. */
-      rate: 0.33,
-      alt: 'The stereotactic frame on a head model, turning, with a probe held on its trajectory '
-        + 'as the arc moves around it.',
+      video: axisVideo,
+      poster: axisPoster,
+      w: 1200, h: 1300,
+      /* Rendered on the hero's own ground (#03101A), so it goes on a plate of
+         that colour rather than white: the clip's background and the plate
+         meet without an edge. Portrait, so it is capped like the cut-outs and
+         centred; the plate keeps the column's width either side of it. */
+      plate: 'bay',
+      cap: 'plate',
+      /* No `rate`. The head-model clip ran at a third of its speed because it
+         was a 15 fps turntable; this one is 30 fps and paced by the render. */
+      alt: 'The NRSS rendered from its assembly CAD, moving through its axes: the stage '
+        + 'shifting, and the microdrive swinging along the arc to new trajectories.',
     },
   },
   {
@@ -143,11 +174,13 @@ export const bands = [
     tone: 'stim',
     eyebrow: 'Advancement',
     title: 'Down the\ntrajectory.',
-    /* "collar" was used twice on the whole site and defined neither time.
-       One clause, so a reader is not left to infer which rotation is
-       which. */
-    lead: 'Once the arc and collar angles are set — the collar turning about the '
-    + 'vertical axis, the arc swinging over it — a mechanical microdrive attaches to advance DBS '
+    /* Steve Goerss's wording from the 19 Oct review, restored 2026-11-11.
+       PR #10 had added "the collar turning about the vertical axis, the arc
+       swinging over it", which contradicts the convention NaviNetics
+       confirmed in src/lib/stereo.js: the collar turns about the
+       left-right axis. Define "collar" only in wording NaviNetics
+       supplies. */
+    lead: 'Once the arc and collar values are set, a mechanical microdrive attaches to advance DBS '
     + 'leads and micro-recording electrodes to the target.',
     figure: {
       src: asset('/microdrive-image-1024x797.png'),
@@ -174,7 +207,10 @@ export const bands = [
     + 'field.',
     figure: {
       src: detailArt,
-      w: 759, h: 1134,
+      w: DETAIL.w, h: DETAIL.h,
+      /* Cropped like the hero: the microdrive rod runs off the top edge, so
+         it fades out there instead of ending in a cut. */
+      fadeTop: true,
       /* A tall cut-out with its own alpha, so it goes unplated. On a plate it
          filled the column and stood about 840px high, well over twice the
          plated figures above it; reduced on review to match them, so it takes

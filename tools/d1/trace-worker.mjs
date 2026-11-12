@@ -4,7 +4,7 @@ import { workerData, parentPort } from 'node:worker_threads';
 
 const {
   posSAB, nrmSAB, grpSAB, idxSAB, boundsSAB, metaSAB, imgSAB, rowSAB,
-  W, H, SPP, DIFF, SPEC, DIST, FOC, YAW, PITCH, id,
+  W, H, SPP, DIFF, SPEC, DIST, FOC, YAW, PITCH, id, OX = 0, OY = 0,
 } = workerData;
 
 const pos = new Float32Array(posSAB);
@@ -31,20 +31,46 @@ const rnd = () => {
 /* Measured off NaviNetics' photographs: body #2e6ab1, shadow #102045,
    highlight #70b2e5, and roughly half the frame bare metal. Anodised
    aluminium is a metal under a coloured oxide, so it gets a coloured F0 and a
-   little diffuse; the bare parts are near-pure metal. */
+   little diffuse; the bare parts are near-pure metal.
+
+   RE-MATCHED 2026-11-11 to NaviNetics' product photograph of the frame,
+   sampled rather than eyeballed: blue mid-tone (5, 51, 122), upper quartile
+   (21, 80, 152), shadow (6, 23, 65) — a deep royal blue with almost no red.
+   The first values ran too cyan in the highlights (51, 124, 192), so the red
+   and green of F0 came down, and with the brighter studio below the render
+   now lands at (11, 39, 172) / (38, 101, 209): the photograph's hue, a little
+   more saturated. */
 const MAT = [
-  /* arc      */ { f0: [0.075, 0.255, 0.575], alb: [0.020, 0.075, 0.190], rough: 0.235, metal: 0.88 },
-  /* rails    */ { f0: [0.075, 0.255, 0.575], alb: [0.020, 0.075, 0.190], rough: 0.245, metal: 0.88 },
+  /* arc      */ { f0: [0.016, 0.082, 0.400], alb: [0.003, 0.028, 0.150], rough: 0.235, metal: 0.88 },
+  /* rails    */ { f0: [0.016, 0.082, 0.400], alb: [0.003, 0.028, 0.150], rough: 0.245, metal: 0.88 },
   /* drive    */ { f0: [0.560, 0.575, 0.590], alb: [0.030, 0.031, 0.032], rough: 0.175, metal: 0.97 },
-  /* stage    */ { f0: [0.070, 0.240, 0.545], alb: [0.018, 0.070, 0.180], rough: 0.255, metal: 0.88 },
-  /* base     */ { f0: [0.058, 0.195, 0.450], alb: [0.014, 0.055, 0.140], rough: 0.290, metal: 0.88 },
+  /* stage    */ { f0: [0.015, 0.077, 0.380], alb: [0.003, 0.026, 0.140], rough: 0.255, metal: 0.88 },
+  /* base     */ { f0: [0.012, 0.065, 0.330], alb: [0.002, 0.022, 0.120], rough: 0.290, metal: 0.88 },
   /* fastener */ { f0: [0.585, 0.600, 0.615], alb: [0.032, 0.033, 0.034], rough: 0.265, metal: 0.97 },
+  /* engraving: the white fill in the scale numerals, ticks and lettering.
+     Paint, not metal: a dielectric F0 and a high diffuse albedo, matte, so
+     it reads as a flat white mark at any angle instead of taking the blue
+     reflection around it. Assigned per face by tessellate.mjs from the CAD's
+     own black face fill. */
+  /* `fill`: the paint sits flush with the surface, but the CAD models the
+     engraving as an open groove, and a groove floor traced honestly is lit
+     only through its own narrow walls — the first pass drew every tick and
+     numeral DARK. So a fill face takes the sky unoccluded, as a flush fill
+     would. */
+  /* engraving */ { f0: [0.040, 0.040, 0.040], alb: [0.82, 0.84, 0.86], rough: 0.55, metal: 0, fill: true },
 ];
 
 /* ── the studio ───────────────────────────────────────────────────────────── */
-/* Three large softboxes and a graded sky. Large and dim, not small and
+/* Three large softboxes and a graded sky. Large and soft, not small and
    bright: it is what gives a curved anodised surface a long gradient instead
-   of a hot dot, and it is why this resolves without a denoiser. */
+   of a hot dot, and it is why this resolves without a denoiser.
+
+   A BRIGHT STUDIO since 2026-11-11. The sky used to be near-black below and
+   dim above, and anodised metal is mostly reflection, so the frame reflected
+   darkness: dark navy on the page's dark ground, its shadowed side lost in
+   it. NaviNetics' photograph is shot in a white studio and reads as vivid
+   royal blue for exactly that reason. The fill and rim lamps were raised
+   with it. */
 /* Intensities are set so that a lit anodised face lands on the measured body
    colour rather than on whatever looked bright: #2e6ab1 is linear
    (0.025, 0.156, 0.55), so the environment seen through the specular lobe has
@@ -52,20 +78,20 @@ const MAT = [
    surface saturated to cyan. */
 const LAMPS = [
   { d: [-0.42, 0.80, 0.44], r: 0.42, c: [2.70, 2.78, 2.92] },  // key, upper left front
-  { d: [0.86, 0.16, 0.34], r: 0.50, c: [0.62, 0.67, 0.80] },   // fill, right
-  { d: [0.05, -0.30, -0.92], r: 0.38, c: [0.90, 1.00, 1.26] }, // rim, behind
+  { d: [0.86, 0.16, 0.34], r: 0.50, c: [1.30, 1.40, 1.66] },   // fill, right
+  { d: [0.05, -0.30, -0.92], r: 0.38, c: [1.35, 1.50, 1.89] }, // rim, behind
 ];
 for (const L of LAMPS) {
   const n = Math.hypot(L.d[0], L.d[1], L.d[2]);
   L.d = [L.d[0] / n, L.d[1] / n, L.d[2] / n];
 }
 function env(dx, dy, dz, out) {
-  // graded sky: cool above, near-black below, so the object has somewhere dark
-  // to sit and the chrome has something to reflect
+  // graded sky: a white studio, cool and bright above, softer below, so the
+  // anodised blue and the chrome both have something light to reflect
   const t = dy * 0.5 + 0.5;
-  let r = 0.022 + 0.090 * t * t;
-  let g = 0.028 + 0.115 * t * t;
-  let b = 0.038 + 0.155 * t * t;
+  let r = 0.20 + 0.42 * t * t;
+  let g = 0.22 + 0.45 * t * t;
+  let b = 0.25 + 0.50 * t * t;
   for (const L of LAMPS) {
     const c = dx * L.d[0] + dy * L.d[1] + dz * L.d[2];
     if (c <= 1 - L.r) continue;
@@ -185,7 +211,7 @@ function shade(ox, oy, oz, dx, dy, dz, rgb) {
     const wx = B[0] * lx + B[3] * ly + nx * lz;
     const wy = B[1] * lx + B[4] * ly + ny * lz;
     const wz = B[2] * lx + B[5] * ly + nz * lz;
-    if (trace(hx, hy, hz, wx, wy, wz, 1e9, false)) {
+    if (!m.fill && trace(hx, hy, hz, wx, wy, wz, 1e9, false)) {
       /* it hit the object: one bounce of its own colour, lit by an
          unoccluded estimate. Cheap, and at this albedo the error is under a
          percent of the pixel. */
@@ -286,8 +312,9 @@ for (;;) {
       seed(x * 73856093 + 1, y * 19349663 + 1);
       let r = 0; let g = 0; let b = 0; let a = 0;
       for (let s = 0; s < SPP; s++) {
-        const jx = (x + rnd()) - W / 2;
-        const jy = (H / 2) - (y + rnd());
+        // OX/OY: the principal point, off centre in trace.mjs's 'crop' fit
+        const jx = (x + rnd()) - W / 2 + OX;
+        const jy = (H / 2) - (y + rnd()) + OY;
         camRay(jx, jy, dir);
         if (shade(eye[0], eye[1], eye[2], dir[0], dir[1], dir[2], rgb)) {
           r += rgb[0]; g += rgb[1]; b += rgb[2]; a += 1;

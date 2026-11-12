@@ -46,8 +46,8 @@
  */
 import { asset } from '../lib/asset.js';
 
-import d1Hero from '../assets/d1/hero.webp';
-import d1Detail from '../assets/d1/detail.webp';
+import d1Hero from '../assets/d1/nrss-hero.webp';
+import d1Detail from '../assets/d1/nrss-mirrored.webp';
 import d1Head from '../assets/d1/head.webp';
 import mavenDevice from '../assets/maven/device.webp';
 import swFusion from '../assets/software/fusion.webp';
@@ -127,14 +127,14 @@ export const images = [
   {
     id: 'nrss-hero',
     title: 'NRSS, three-quarter view',
-    src: d1Hero, w: 1027, h: 1565, category: 'Devices', page: P.d1,
-    caption: 'The frame ray traced from its own assembly CAD, in the anodized blue the '
+    src: d1Hero, w: 1790, h: 2466, category: 'Devices', page: P.d1,
+    caption: 'The frame rendered from its assembly CAD, in the anodized blue the '
       + 'instrument is finished in.',
   },
   {
     id: 'nrss-detail',
     title: 'NRSS from the opposite side',
-    src: d1Detail, w: 759, h: 1134, category: 'Devices', page: P.d1,
+    src: d1Detail, w: 1000, h: 1392, category: 'Devices', page: P.d1,
     caption: 'The same model and the same studio, one camera further round.',
   },
   {
