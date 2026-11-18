@@ -4,7 +4,7 @@ import { usePageMeta } from '../lib/meta.js';
 import { numbers, principles, timeline } from '../data/company.js';
 import { isPlaceholder, visibleProducts } from '../data/products.js';
 import { asset } from '../lib/asset.js';
-import { Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
+import { Button, Card, Hero, Reveal, Section, SectionHead } from '../ui/index.js';
 import { Timeline } from '../ui/Timeline.jsx';
 
 /**
@@ -211,6 +211,33 @@ export default function WhoWeAre() {
       {/* The "Come and find us." closing band — downtown Rochester, with
           buttons to /company/community and /resources/careers — was removed
           on review. */}
+
+      {/* ── research integrity ──────────────────────────────────────────────
+          REQUIRED BY THE GRANT, 2026-11-18: NaviNetics must publish its
+          Financial Conflict of Interest policy on its website (PHS/NIH-funded
+          research). navinetics.com carries it at the foot of its Who We Are
+          page, so it goes in the same place here, with the same paragraph and
+          button label. The PDF is hosted with the site (public/pdf/) rather
+          than linked to the WordPress upload, so the link survives that site
+          being retired. Do not remove this section without asking. */}
+      <Section band>
+        <Reveal className="flex max-w-3xl flex-col items-start gap-5">
+          <h2 className="text-d2">Research Integrity</h2>
+          <p className="text-sm leading-relaxed text-ink-2 sm:text-base">
+            At NaviNetics we are committed to maintaining the highest standards of research
+            integrity. Our researchers adhere to rigorous, honest, and responsible practices,
+            ensuring the credibility and impact of our work. We promote transparency,
+            accountability, and ethical conduct across all research activities.
+          </p>
+          <Button
+            href={asset('/pdf/QUAL5034-NaviNetics-Financial-Conflict-of-Interest-Policy-rev-A.pdf')}
+            target="_blank"
+            rel="noopener"
+          >
+            Financial Conflict of Interest Policy
+          </Button>
+        </Reveal>
+      </Section>
     </>
   );
 }
