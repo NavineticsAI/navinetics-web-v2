@@ -119,6 +119,26 @@ export default function D1() {
             </p>
           )}
 
+          {/* THE INSTRUCTIONS FOR USE, 2026-11-18, on NaviNetics' instruction:
+              this sentence verbatim, with the IFU it names linked as a PDF
+              hosted with the site (public/pdf/). The link is to LABL3001
+              rev K, the current revision; when the IFU is revised, replace
+              the file and the revision in its name together. */}
+          <p className="max-w-prose text-sm leading-relaxed text-ink-2">
+            Please refer to the{' '}
+            <a
+              href={asset('/pdf/LABL3001-NaviNetics-Reusable-Stereotactic-System-Instructions-for-Use-rev-K.pdf')}
+              target="_blank"
+              rel="noopener"
+              className="font-semibold text-action underline decoration-1 underline-offset-2 hover:decoration-2"
+            >
+              NaviNetics Reusable Stereotactic System Instructions for Use
+            </a>{' '}
+            for complete information on intended use, intended users, target patient
+            population, training recommendations, cleaning and sterilization information, system
+            use instructions, and warnings and precautions.
+          </p>
+
           <div className="mt-2 flex flex-wrap justify-center gap-3">
             {/* A quote route, which navinetics.com already has as a "Quote
                 Request" block and this site had dropped. The reason is passed
