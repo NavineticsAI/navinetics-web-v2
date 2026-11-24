@@ -1,136 +1,105 @@
-# Publishing the replacement site to navinetics.com
+# Public launch runbook: navinetics.com
 
-> **STATUS: IN PROGRESS - NOT READY FOR REVIEW OR DEPLOYMENT**
+> **STATUS: IN PROGRESS**
 >
-> This is a launch-plan branch. The repository configuration is prepared, but
-> the public cutover must not proceed until the required WordPress, DNS and
-> GoDaddy setup details below are confirmed.
+> Not ready for review or deployment until every item in **Required from
+> NaviNetics** is complete. This runbook does not change DNS or deploy the
+> website.
 
-## Required from NaviNetics before cutover
+## Required from NaviNetics
 
-Do not mark this branch ready until all of these are known:
+| # | Required item | What to provide or confirm |
+|---|---|---|
+| 1 | GoDaddy DNS access | A person who can sign in and edit DNS for `navinetics.com` |
+| 2 | Current DNS export | Screenshot/export of `@`, `www`, MX, TXT, SPF, DKIM, DMARC, CAA and verification records |
+| 3 | Web DNS records | Confirm the current web A/CNAME records and which one serves `@` and `www` |
+| 4 | Nameservers | Confirm nameservers or provide the nameserver values shown in GoDaddy |
+| 5 | WordPress full backup | Hosting-provider backup plus the WordPress **All content** export |
+| 6 | WordPress admin access | Admin login or person who can sign in at `https://navinetics.com/wp-admin/` |
+| 7 | GitHub access | Repository administration plus permission to configure Pages and merge the launch branch |
+| 8 | Cutover approval | Agreed date/time and a named rollback owner |
+| 9 | Public behavior | Confirm `navinetics.com` and `www.navinetics.com` both serve the new site |
+| 10 | WordPress disposition | Decide: keep as parked backup or close/retire after verification |
 
-1. **WordPress backup confirmed**
-   - A full backup/export exists and was downloaded or stored outside
-     WordPress.
-2. **GoDaddy DNS access confirmed**
-   - A named person can sign in to the account that controls
-     `navinetics.com`.
-3. **Complete current DNS records recorded**
-   - A screenshot/export of the GoDaddy `@`, `www`, MX, TXT, SPF, DKIM,
-     DMARC, CAA and verification records is available.
-4. **Web hosting record confirmed**
-   - The current `@` A record and `www` record are identified before they are
-     replaced.
-5. **Nameservers confirmed**
-   - The nameservers remain `ns51.domaincontrol.com` and
-     `ns52.domaincontrol.com`, or the actual production nameservers are
-     provided.
-6. **GitHub Pages access confirmed**
-   - Someone with repository administration can set the custom domain,
-     configure HTTPS and approve the deployment.
-7. **Cutover window approved**
-   - A date/time, rollback owner and expected downtime/propagation window
-     are agreed.
-8. **Final public behavior confirmed**
-   - The team confirms that `navinetics.com` and `www.navinetics.com` must
-     both serve the replacement site.
-9. **WordPress disposition confirmed**
-   - Decide whether WordPress remains parked as a backup or is closed after
-     successful verification.
+Do not proceed until all ten rows are complete.
 
-This replaces the WordPress/public pages at `navinetics.com` with the new React
-site. It is a DNS cutover. It does not publish the replacement branch or change
-WordPress content on its own.
+## Known current setup
 
-## Current status
+- WordPress site: `https://navinetics.com`
+- Current apex A record: `104.245.201.220`
+- Current nameserver names: `ns51.domaincontrol.com` and
+  `ns52.domaincontrol.com`
+- DNS is managed in GoDaddy, not the WordPress dashboard.
+- Existing email DNS, if any, must not be removed or changed.
 
-**Complete in the repository**
+## Repository status
 
-- Root deployment path is `/`.
-- Canonicals and sitemap use `https://navinetics.com`.
+Complete:
+
+- Deployment uses `/` as the production base path.
+- Canonical, Open Graph, robots and sitemap values use `navinetics.com`.
 - `public/CNAME` contains `navinetics.com`.
-- Old WordPress routes redirect to the replacement routes.
-- Production build, route test, build check and lint have been run.
+- Existing WordPress routes are mapped to replacement routes.
+- Production build, route tests, build checks and lint have passed.
 
-**Not complete**
+Not complete:
 
-- DNS has not been changed.
-- GitHub Pages has not been configured with the final custom domain.
-- HTTPS must be enabled after DNS verifies.
-- The public WordPress site is still live.
+- DNS update
+- GitHub custom-domain setting
+- HTTPS enforcement
+- Public cutover
+- Public verification
 
-## What access is required
+## Access locations
 
-The person doing the cutover needs:
+### WordPress
 
-- GoDaddy account access for `navinetics.com`.
-- Permission to merge and deploy in the GitHub repository.
-- A WordPress full backup. This is optional for DNS safety but strongly
-  recommended before the public WordPress site is replaced.
+Open `https://navinetics.com/wp-admin/`.
 
-The required DNS work is in GoDaddy, not in the WordPress dashboard.
+Required for:
 
-## Step 1: Back up WordPress
+- confirming WordPress administrator access
+- exporting content
+- making any WordPress-side decision
 
-Log in at `https://navinetics.com/wp-admin/`.
+WordPress is **not** where the DNS cutover is made.
 
-1. Open **Tools**.
-2. Open **Export**.
-3. Export **All content**.
-4. Save the exported file outside WordPress.
+### GoDaddy
 
-Before DNS changes, also record or export WordPress media/uploads, database and
-configuration if the current hosting provider provides backup tools. The
-exported content alone is not a full server backup.
-
-## Step 2: Back up DNS
-
-Log in to GoDaddy.
-
-1. Open **My Products**.
-2. Find **navinetics.com** under **Domains**.
-3. Open **DNS** or **Manage DNS**.
-4. Open the **Records** table.
-5. Export or take screenshots of every current record.
+1. Sign in to GoDaddy.
+2. Open **My Products**.
+3. Open **Domains**.
+4. Select `navinetics.com`.
+5. Open **DNS** or **Manage DNS**.
+6. Use the **Records** section.
 
 Do not change nameservers.
 
-Keep every MX, TXT, SPF, DKIM, DMARC, CAA and domain-verification record.
-Only replace records that send web traffic to `104.245.201.220`.
-
-## Step 3: Merge and deploy the code
-
-Merge `public-launch-configuration` into `main`.
-
-After merge, GitHub Actions must show:
-
-- `Deploy website to GitHub Pages`: completed successfully.
-
-Do not continue until the GitHub Pages deployment succeeds.
-
-## Step 4: Configure GitHub Pages
-
-In GitHub:
+### GitHub
 
 1. Open `NavineticsAI/navinetics-web-v2`.
 2. Open **Settings**.
 3. Open **Pages**.
-4. Set **Custom domain** to `navinetics.com`.
-5. Save.
-6. Wait for the DNS check.
-7. Enable **Enforce HTTPS** after the check passes.
+4. Set the custom domain and HTTPS after DNS is prepared.
 
-The `public/CNAME` file in the deployed branch also declares
-`navinetics.com`.
+## Backups
 
-## Step 5: Change GoDaddy DNS
+Before the cutover:
 
-In GoDaddy **My Products -> Domains -> navinetics.com -> DNS -> Records**:
+1. In WordPress, open **Tools -> Export**.
+2. Export **All content**.
+3. Download the export outside WordPress.
+4. Use the hosting backup tool to make or confirm a full site/database/media
+   backup.
+5. In GoDaddy, export or screenshot every current DNS record.
+6. Record the original `@`, `www`, MX, TXT, SPF, DKIM, DMARC and CAA values.
 
-1. Add or edit the `@` A record.
-2. Replace the old WordPress web A record for `@`.
-3. Create four `@` A records with these values:
+## DNS values
+
+Replace only the records that point `@` or `www` to the WordPress web server.
+Keep all email and verification records.
+
+Add four `@` A records:
 
 ```text
 185.199.108.153
@@ -139,17 +108,18 @@ In GoDaddy **My Products -> Domains -> navinetics.com -> DNS -> Records**:
 185.199.111.153
 ```
 
-4. For `www`, remove the existing web A/CNAME record and add:
+Set `www`:
 
 ```text
 Type: CNAME
 Name: www
 Value: navineticsai.github.io
+TTL: 600 or lower during cutover
 ```
 
-Do not use `www.navinetics.com` as the CNAME value.
+Do not set `www.navinetics.com` as the CNAME value.
 
-Optional IPv6 records are:
+Optional IPv6 `@` values:
 
 ```text
 2606:50c0:8000::153
@@ -158,27 +128,40 @@ Optional IPv6 records are:
 2606:50c0:8000::156
 ```
 
-Set A/CNAME TTL to 600 seconds or lower during cutover. Restore a normal TTL
-after the site is stable.
+## Cutover order
 
-## Step 6: Wait for DNS
+1. Merge `public-launch-configuration` into `main`.
+2. Confirm the `Deploy website to GitHub Pages` workflow succeeds.
+3. In GitHub Pages, enter `navinetics.com` as the custom domain.
+4. In GoDaddy, add the four apex A records.
+5. In GoDaddy, replace `www` with the GitHub Pages CNAME.
+6. Remove only the old WordPress web A record that points `@` to
+   `104.245.201.220`.
+7. Wait for DNS propagation.
+8. Wait for GitHub's DNS check to pass.
+9. Enable **Enforce HTTPS**.
+10. Run the verification checklist below.
 
-On a person’s machine, run:
+Do not enable HTTPS or remove the WordPress backup until DNS verification
+passes.
+
+## Verify DNS
+
+Run:
 
 ```powershell
 Resolve-DnsName navinetics.com -Type A
 Resolve-DnsName www.navinetics.com -Type CNAME
 ```
 
-The `A` results must include the four GitHub addresses. The `www` result must
-point to `navineticsai.github.io`.
+Expected:
 
-Wait until GoDaddy and GitHub both show the new DNS values. Propagation may take
-time.
+- Apex: all four GitHub Pages A addresses
+- `www`: `navineticsai.github.io`
 
-## Step 7: Verify before public release
+## Verify public routes
 
-Open these URLs and confirm HTTP 200 plus valid HTTPS:
+The following must return HTTP 200 with valid HTTPS:
 
 - `https://navinetics.com/`
 - `https://navinetics.com/company/who-we-are`
@@ -190,7 +173,7 @@ Open these URLs and confirm HTTP 200 plus valid HTTPS:
 - `https://navinetics.com/pdf/LABL3001-NaviNetics-Reusable-Stereotactic-System-Instructions-for-Use-rev-K.pdf`
 - `https://navinetics.com/pdf/QUAL5034-NaviNetics-Financial-Conflict-of-Interest-Policy-rev-A.pdf`
 
-Test old WordPress URLs:
+These old WordPress URLs must redirect to the replacement site:
 
 - `/who-we-are/`
 - `/who-we-are/our-founders/`
@@ -201,29 +184,25 @@ Test old WordPress URLs:
 - `/resources/publications/`
 - `/investment-opportunities/`
 
-Each old route should open the replacement page rather than WordPress.
+## Final acceptance
 
-## Step 8: Final confirmation
+Before release:
 
-Confirm:
-
-- `http://navinetics.com` redirects to `https://navinetics.com`.
-- `http://www.navinetics.com` redirects to `https://navinetics.com`.
-- The HTTPS certificate is valid.
 - Email MX records are unchanged.
-- The FCOI policy and LABL 3001 PDF open.
-- Search, publications, careers and contact routes work.
-- No assets or canonical URLs point to `navineticsai.github.io/navinetics-web-v2`.
+- `http://navinetics.com` redirects to HTTPS.
+- `http://www.navinetics.com` redirects to HTTPS.
+- The HTTPS certificate is valid.
+- FCOI and LABL 3001 PDFs open.
+- Careers, publications and contact routes work.
+- Canonical URLs and assets use `navinetics.com`, not the GitHub review subpath.
+- The WordPress disposition is confirmed.
 
 ## Rollback
 
-Keep the WordPress backup and DNS export until final release is verified.
+Keep backups and DNS exports until final verification is stable.
 
-To roll back:
-
-1. Restore the WordPress `@` A record.
+1. Restore the previous WordPress `@` A record.
 2. Restore the previous `www` record.
 3. Remove the GitHub Pages A/CNAME records.
-4. Restore original DNS TTL values.
-5. Remove the custom domain in GitHub Pages if necessary.
-
+4. Restore the original DNS TTL values.
+5. Remove the GitHub custom domain if needed.
