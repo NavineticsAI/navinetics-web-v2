@@ -8,7 +8,7 @@ const SUFFIX = 'NaviNetics';
  * values — both must be absolute, so a relative path is not an option.
  * Change this and index.html together if the domain moves.
  */
-const ORIGIN = 'https://navineticsai.github.io';
+const ORIGIN = 'https://navinetics.com';
 
 function upsert(selector, make, attr, content) {
   if (!content) return;

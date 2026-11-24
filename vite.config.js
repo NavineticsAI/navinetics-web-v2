@@ -12,7 +12,7 @@ import react from '@vitejs/plugin-react'
 // import.meta.env.BASE_URL (see src/App.jsx), so this string is the single
 // place the deployment path is declared.
 //
-// Deploying to a custom domain instead? Set this to '/' and add public/CNAME.
+// The production domain is navinetics.com, served from the root path.
 /* The review build's footer carries exactly what Kevin Bennet asked for and
    nothing else: "Pages have no page identifiers, version or date."
 
@@ -50,7 +50,7 @@ export default defineConfig({
        whole project by default, so a save there reloaded the page. */
     watch: { ignored: ['**/copy/**'] },
   },
-  base: '/navinetics-web-v2/',
+  base: '/',
   plugins: [react(), spaFallback(), perfBeacon()],
 })
 
@@ -92,7 +92,7 @@ function perfBeacon() {
     const c = navigator.connection || {};
     const nav = performance.getEntriesByType('navigation')[0] || {};
     const body = JSON.stringify({
-      path: location.pathname.replace(${JSON.stringify('/navinetics-web-v2')}, '') || '/',
+      path: location.pathname || '/',
       ua: /iPhone|iPad/.test(navigator.userAgent) ? 'iOS'
         : /Android/.test(navigator.userAgent) ? 'Android' : 'desktop',
       w: innerWidth, h: innerHeight, dpr: devicePixelRatio,

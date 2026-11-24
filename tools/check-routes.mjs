@@ -27,10 +27,9 @@ import { dir } from './lib/paths.mjs';
 const ROOT = dir('../', import.meta.url);
 const DIR = `${ROOT}tools/.routes/`;
 const PORT = 9541;
-/* The deployed base, not the server root. Checking '/' when the site is served
-   from a sub-path exercises a URL shape that does not exist in production —
-   which is exactly how the missing Router basename survived this check. */
-const BASE = (process.argv[2] || 'http://localhost:4319') + '/navinetics-web-v2';
+/* The public site is deployed at the domain root. Keep this as the server root
+   so route checks exercise the same URL shape as navinetics.com. */
+const BASE = process.argv[2] || 'http://localhost:4319';
 const CHROME = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
@@ -43,6 +42,7 @@ const ROUTES = [
   '/products/d1-stereotactic-frame', '/products/carbon-fiber-surgical-tables',
   '/products/maven-neuromodulation',
   '/technology/stereotactic-devices', '/technology/neuromodulation', '/technology/navinetics-ai',
+  '/technology/education',
   '/resources/media', '/resources/careers', '/resources/publications',
   '/contact', '/products/does-not-exist',
 ];
