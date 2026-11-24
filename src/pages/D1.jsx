@@ -3,7 +3,7 @@ import { getProduct } from '../data/products.js';
 import { bands } from '../data/d1.js';
 import { asset } from '../lib/asset.js';
 import * as D1_SCENES from '../lib/d1Scenes.js';
-import { Button, Reveal, Section } from '../ui/index.js';
+import { Button, Reveal, Section, SectionHead } from '../ui/index.js';
 import { D1Hero } from '../ui/D1Hero.jsx';
 import { ScienceBand } from '../ui/ScienceBand.jsx';
 
@@ -13,6 +13,38 @@ const BUILDERS = {
   drive: D1_SCENES.makeDrive,
   access: D1_SCENES.makeAccess,
 };
+
+const TESTIMONIALS = [
+  {
+    name: 'Dr. Erich Fonoff',
+    role: 'Neurosurgeon, Professor (Livre-Docente) at the University of São Paulo School of Medicine, and Director of Instituto Parkinson Hoje, São Paulo, Brazil',
+    image: asset('/erich-fonoff.jpg'),
+    imagePosition: '50% 50%',
+    quote: [
+      'The NaviNetics stereotactic system unequivocally represents a solid and well-founded evolution in contemporary stereotaxy and, by extension, in traditional neurosurgical techniques. Far from proposing the replacement of established stereotactic systems, the device offers a conceptual and operational refinement, preserving the precision inherent to classic arc-based stereotactic systems while eliminating relevant practical limitations of those devices.',
+      'One of the main innovations lies in replacing the traditional circular halo with a compact, skull-mounted system built around a "key" structure, combined with a tower that organizes and centralizes the coordinate system. This configuration allows the procedure to be performed around and in front of the system, keeping the skull free of bulky structures. As a result, access to the face and the lateral regions of the head is improved. In addition, the absence of the stereotactic arc makes it easier to extend the surgical field to the thoracic region, particularly in single-stage procedures. This feature is especially advantageous in surgeries under general anesthesia, as it allows the procedure to continue seamlessly, from electrode implantation through tunneling to pulse generator implantation, without the need for a new surgical preparation or new sterile draping.',
+      'The system also offers relevant advantages in awake procedures. The absence of the classic stereotactic arc significantly increases patient comfort, reducing the physical discomfort and psychological stress associated with rigid head fixation, as the head can remain free without compromising safety. It also provides better access to the face during surgery, which is very important for intraoperative neurological assessment. This favors more direct and natural interaction between the neurologist and the patient, allowing a more accurate evaluation of motor responses, speech, and other key clinical parameters during electrode placement.',
+      'Beyond the technical and operational aspects, the concept of "arc-free" stereotactic surgery contributes to a broader perception of reduced invasiveness. Although deep brain stimulation remains a complex neurosurgical procedure, eliminating a bulky external device significantly changes how the procedure is perceived and experienced by the patient. Patients report a lower sense of mechanical restraint, less visual impact, and less contact with potentially intimidating external structures. Together, these factors help reduce anxiety and perceived distress, both before and during the procedure.',
+      'In this context, the traditional perception of deep brain stimulation as a highly uncomfortable procedure, often associated with rigid structures and prolonged wakefulness, tends to be gradually replaced by a more patient-centered experience, with a lighter burden of suffering and closer alignment with contemporary principles of minimally invasive care. This is a relevant benefit, even if it is sometimes underestimated.',
+      'From a surgical workflow standpoint, the system offers clear advantages by simplifying operative logistics without compromising precision. The results presented demonstrate accuracy within established standards, showing that this more streamlined approach does not entail a loss of clinical performance. Moreover, the good results obtained even without microelectrode recording in selected cases suggest the feasibility of more efficient and less complex surgical protocols.',
+      'In practical terms, this innovation stands out for addressing concrete demands of clinical practice: greater efficiency, an improved patient experience, and maintained technical reliability. It is particularly attractive for centers seeking to optimize their deep brain stimulation workflows without substantial investment in highly complex infrastructure.',
+      'The concept presented is therefore consistent and promising. By increasing procedural comfort without compromising precision, this system has the potential to contribute significantly to the evolution of deep brain stimulation practice.',
+      'Overall, it can be considered a pragmatic and well-targeted advance, one that respects the fundamentals of classic stereotaxy while adapting them to the demands of contemporary functional neurosurgery, promoting greater patient comfort and reinforcing the perception of a less invasive procedure.',
+    ],
+  },
+  {
+    name: 'Dr. Wilson Morikawa Jr.',
+    role: 'Neurosurgeon, São Paulo, Brazil',
+    image: asset('/wilson-morikawa.jpg'),
+    imagePosition: '50% 32%',
+    quote: [
+      'I recently had the opportunity to use the NaviNetics stereotactic system, and the experience was very positive. What stands out right away is the design of the frame, which is quite different from what we are used to. The key advantage is that the patient does not have a halo "in their face" and does not see the structure the whole time, which completely changes the game in terms of comfort. The surgical experience is much lighter for the patient, reducing the stress of feeling "trapped" in the equipment.',
+      'On the technical side, the Key fixation system introduces an innovative approach based on anchoring with percutaneous screws directly into the cranial vault. Although it requires a more careful installation step, with absolute rigor regarding screw angulation and depth, it is easily understood and can be replicated by any functional neurosurgeon. The mechanical stability achieved makes the system comparable to the traditional stereotactic halo in terms of rigidity and precision.',
+      'For neurosurgeons already experienced in DBS procedures and classic stereotaxy, handling the system is extremely intuitive. Although these are new technologies, the coordinate logic and the workflow are familiar, requiring only an additional technical refinement that is quickly absorbed.',
+      'In short, the NaviNetics and Key set is not just a new piece of equipment, but a tactical enhancement that offers a high-performance, safe, and much more patient-friendly alternative to conventional methods.',
+    ],
+  },
+];
 
 /**
  * D1 Stereotactic Frame.
@@ -90,6 +122,47 @@ export default function D1() {
               />
             </div>
           </Reveal>
+        </div>
+      </Section>
+
+      <Section wide>
+        <SectionHead
+          align="center"
+          title="Neurosurgeon testimonials"
+        />
+        <div className="mt-10 space-y-6">
+          {TESTIMONIALS.map((testimonial) => (
+            <Reveal key={testimonial.name}>
+              <article className="grid gap-6 rounded-lg border border-hairline-soft bg-surface p-6 md:grid-cols-[200px_minmax(0,1fr)] md:p-8">
+                <div className="flex items-start gap-4 md:flex-col">
+                  <div className="h-20 w-20 shrink-0 overflow-hidden rounded-full border border-hairline-soft bg-sunk md:h-40 md:w-40">
+                    <img
+                      src={testimonial.image}
+                      alt={`Portrait of ${testimonial.name}`}
+                      loading="lazy"
+                      style={{ objectPosition: testimonial.imagePosition }}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold leading-tight tracking-[-0.025em]">
+                      {testimonial.name}
+                    </h3>
+                    <p className="mt-2 text-xs leading-relaxed text-ink-3">
+                      {testimonial.role}
+                    </p>
+                  </div>
+                </div>
+                <blockquote className="border-t border-hairline-soft pt-5 text-sm leading-[1.72] text-ink-2 md:border-l md:border-t-0 md:pt-0 md:pl-8 md:text-[0.9375rem]">
+                  {testimonial.quote.map((paragraph) => (
+                    <p key={paragraph.slice(0, 48)} className="mb-4 last:mb-0">
+                      {paragraph}
+                    </p>
+                  ))}
+                </blockquote>
+              </article>
+            </Reveal>
+          ))}
         </div>
       </Section>
 
