@@ -1,0 +1,31 @@
+# NaviNetics static React deployment
+# Redirect WordPress URLs that were publicly indexed before the replacement.
+RewriteEngine On
+
+RewriteRule ^about-us/?$ /company/who-we-are [R=301,L,NE]
+RewriteRule ^who-we-are/?$ /company/who-we-are [R=301,L,NE]
+RewriteRule ^who-we-are/our-founders/?$ /company/our-founders [R=301,L,NE]
+RewriteRule ^who-we-are/community/?$ /company/community [R=301,L,NE]
+RewriteRule ^what-we-do/navinetics-frame-system/?$ /products/d1-stereotactic-frame [R=301,L,NE]
+RewriteRule ^what-we-do/neuromodulation/?$ /products/maven-neuromodulation [R=301,L,NE]
+RewriteRule ^careers/?$ /resources/careers [R=301,L,NE]
+RewriteRule ^resources/education/?$ /technology/education [R=301,L,NE]
+RewriteRule ^investment-opportunities/?$ /contact [R=301,L,NE]
+
+# Serve real files normally. Send React routes and refresh/bookmark URLs to index.
+RewriteCond %{REQUEST_URI} !^/wp-admin
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+# Cache immutable built assets; public images/PDFs change only on release.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/pdf "access plus 7 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+</IfModule>
