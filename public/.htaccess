@@ -1,31 +1,89 @@
-# NaviNetics static React deployment
-# Redirect WordPress URLs that were publicly indexed before the replacement.
+# navinetics.com: Apache rules for the static site (npm run build:live).
+#
+# Uploaded with dist/ into the web root, replacing WordPress's .htaccess.
+# Kept to directives WordPress hosting already allows (mod_rewrite, AddType,
+# ErrorDocument, AddType) plus optional modules wrapped in <IfModule>, so a host that
+# lacks one skips it instead of answering every request with a 500.
+# Runbook: documentation/dev/shubham/website/16-public-launch.md
+
 RewriteEngine On
+RewriteBase /
 
-RewriteRule ^about-us/?$ /company/who-we-are [R=301,L,NE]
-RewriteRule ^who-we-are/?$ /company/who-we-are [R=301,L,NE]
-RewriteRule ^who-we-are/our-founders/?$ /company/our-founders [R=301,L,NE]
-RewriteRule ^who-we-are/community/?$ /company/community [R=301,L,NE]
-RewriteRule ^what-we-do/navinetics-frame-system/?$ /products/d1-stereotactic-frame [R=301,L,NE]
-RewriteRule ^what-we-do/neuromodulation/?$ /products/maven-neuromodulation [R=301,L,NE]
-RewriteRule ^careers/?$ /resources/careers [R=301,L,NE]
-RewriteRule ^resources/education/?$ /technology/education [R=301,L,NE]
-RewriteRule ^investment-opportunities/?$ /contact [R=301,L,NE]
+# 0. The site has no PHP. Nothing ending in .php runs, including anything left
+#    in the WordPress uploads copied across so old PDF links keep working.
+RewriteRule \.(php[0-9]?|phtml|phar)$ - [F,L,NC]
 
-# Serve real files normally. Send React routes and refresh/bookmark URLs to index.
-RewriteCond %{REQUEST_URI} !^/wp-admin
+# 1. One address: https://navinetics.com. WordPress did this before; without
+#    it http:// and www. would each serve a second copy of the site.
+#    /.well-known/ is left alone so the host can renew the SSL certificate.
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteCond %{HTTP_HOST} ^www\.navinetics\.com$ [NC]
+RewriteRule ^ https://navinetics.com%{REQUEST_URI} [R=301,L,NE]
+
+RewriteCond %{REQUEST_URI} !^/\.well-known/
+RewriteCond %{HTTP_HOST} ^navinetics\.com$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://navinetics.com%{REQUEST_URI} [R=301,L,NE]
+
+# 2. Old WordPress pages, permanently moved. Every URL in the WordPress
+#    sitemap (25 Nov 2026); the same list as `redirects` in src/data/nav.js.
+RewriteRule ^about-us/?$ /company/who-we-are [R=301,L]
+RewriteRule ^who-we-are/?$ /company/who-we-are [R=301,L]
+RewriteRule ^who-we-are/our-founders/?$ /company/our-founders [R=301,L]
+RewriteRule ^who-we-are/community/?$ /company/community [R=301,L]
+RewriteRule ^what-we-do/?$ /products/d1-stereotactic-frame [R=301,L]
+RewriteRule ^what-we-do/navinetics-frame-system/?$ /products/d1-stereotactic-frame [R=301,L]
+RewriteRule ^what-we-do/neuromodulation/?$ /products/maven-neuromodulation [R=301,L]
+RewriteRule ^system_category/(reusable|single-use)/?$ /products/d1-stereotactic-frame [R=301,L]
+RewriteRule ^careers/?$ /resources/careers [R=301,L]
+RewriteRule ^resources/?$ /resources/publications [R=301,L]
+RewriteRule ^resources/education/?$ /technology/education [R=301,L]
+RewriteRule ^category/publications/?$ /resources/publications [R=301,L]
+RewriteRule ^investment-opportunities/?$ /contact [R=301,L]
+RewriteRule ^(search|author/[^/]+)/?$ / [R=301,L]
+RewriteRule ^wp-content/uploads/(QUAL5034-NaviNetics-Financial-Conflict-of-Interest-Policy-rev-A\.pdf)$ /pdf/$1 [R=301,L]
+
+# 3. One URL per page: /contact/ -> /contact (real folders keep their slash).
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+# 4. Real files are served as they are. Every other path is a page of the app,
+#    except a missing built file or PDF: that is a real 404, not the app's HTML
+#    under a .js or .pdf name.
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !^/(assets|fonts|pdf|wp-content)/
 RewriteRule ^ index.html [L]
 
-# Cache immutable built assets; public images/PDFs change only on release.
+ErrorDocument 404 /404.html
+
+# Older Apache builds do not know these types.
+AddType image/webp .webp
+AddType font/woff2 .woff2
+AddType video/mp4 .mp4
+AddType image/svg+xml .svg
+
+# Built JS and CSS carry a content hash in their names, so a new release gets
+# new names and they can be cached for a year. index.html is never cached, so
+# a release reaches everyone on their next visit.
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType text/html "access plus 0 seconds"
-  ExpiresByType application/pdf "access plus 7 days"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType image/jpeg "access plus 30 days"
   ExpiresByType image/png "access plus 30 days"
   ExpiresByType image/webp "access plus 30 days"
-  ExpiresByType text/css "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+  ExpiresByType application/pdf "access plus 1 day"
+</IfModule>
+
+<IfModule mod_filter.c>
+  <IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml application/javascript text/javascript application/json image/svg+xml
+  </IfModule>
 </IfModule>

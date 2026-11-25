@@ -20,8 +20,11 @@ const DIST = new URL('../dist/', import.meta.url);
 const dist = (p) => new URL(p, DIST);
 const read = (p) => readFileSync(dist(p), 'utf8');
 
-const BASE = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).homepageBase
-  ?? '/navinetics-web-v2/';
+/* `--live` checks the navinetics.com build (npm run build:live, base '/');
+   without it, the GitHub Pages review build. */
+const LIVE = process.argv.includes('--live');
+const BASE = LIVE ? '/' : '/navinetics-web-v2/';
+const SITE = LIVE ? 'https://navinetics.com/' : 'https://navineticsai.github.io/navinetics-web-v2/';
 
 let failed = 0;
 const check = (label, ok, detail = '') => {
@@ -78,6 +81,16 @@ check('sitemap.xml is published', existsSync(dist('sitemap.xml')));
 check('index.html carries an Open Graph title', /property="og:title"/.test(index));
 check('index.html carries a canonical URL', /rel="canonical"/.test(index));
 check('index.html carries Organization JSON-LD', /application\/ld\+json/.test(index));
+
+// 6. Absolute URLs point at the site this build is for (see siteOrigin() in
+//    vite.config.js), and the navinetics.com build carries its Apache rules.
+const absolute = [...index.matchAll(/https:\/\/(?:navinetics\.com|navineticsai\.github\.io)\/[^"]*/g)].map((m) => m[0]);
+const elsewhere = absolute.filter((u) => !u.startsWith(SITE));
+check(`index.html's absolute URLs all start ${SITE}`, absolute.length > 0 && elsewhere.length === 0, elsewhere.join(', '));
+if (LIVE) {
+  const ht = existsSync(dist('.htaccess')) ? read('.htaccess') : '';
+  check('.htaccess is in dist/ (redirects, https, page routing)', /RewriteEngine On/.test(ht) && /index\.html/.test(ht));
+}
 
 console.log(`\n${failed === 0 ? 'build output clean' : `${failed} check(s) failed`}`);
 process.exit(failed === 0 ? 0 : 1);

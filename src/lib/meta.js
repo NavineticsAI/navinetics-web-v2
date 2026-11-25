@@ -6,9 +6,13 @@ const SUFFIX = 'NaviNetics';
 /**
  * Where the site is served from. Used to build absolute canonical and og:url
  * values — both must be absolute, so a relative path is not an option.
- * Change this and index.html together if the domain moves.
+ * `npm run build:live` (base '/') is navinetics.com; any other base is the
+ * GitHub Pages review site. Change this and index.html together if the domain
+ * moves.
  */
-const ORIGIN = 'https://navinetics.com';
+const ORIGIN = import.meta.env.BASE_URL === '/'
+  ? 'https://navinetics.com'
+  : 'https://navineticsai.github.io';
 
 function upsert(selector, make, attr, content) {
   if (!content) return;
