@@ -19,7 +19,12 @@ const TESTIMONIALS = [
     name: 'Dr. Erich Fonoff',
     role: 'Neurosurgeon, Professor (Livre-Docente) at the University of São Paulo School of Medicine, and Director of Instituto Parkinson Hoje, São Paulo, Brazil',
     image: asset('/erich-fonoff.jpg'),
-    imagePosition: '50% 50%',
+    /* Top-aligned. The photo is portrait (1153 × 1600) and the avatar is a
+       circle, so only a square of it shows and all the slack is vertical.
+       Centred, that square started at 14% of the height and cut off the top
+       of his head, leaving his face at the rim with the suit below it. At 0%
+       the whole head is in and his eyes sit just above the middle. */
+    imagePosition: '50% 0%',
     quote: [
       'The NaviNetics stereotactic system unequivocally represents a solid and well-founded evolution in contemporary stereotaxy and, by extension, in traditional neurosurgical techniques. Far from proposing the replacement of established stereotactic systems, the device offers a conceptual and operational refinement, preserving the precision inherent to classic arc-based stereotactic systems while eliminating relevant practical limitations of those devices.',
       'One of the main innovations lies in replacing the traditional circular halo with a compact, skull-mounted system built around a "key" structure, combined with a tower that organizes and centralizes the coordinate system. This configuration allows the procedure to be performed around and in front of the system, keeping the skull free of bulky structures. As a result, access to the face and the lateral regions of the head is improved. In addition, the absence of the stereotactic arc makes it easier to extend the surgical field to the thoracic region, particularly in single-stage procedures. This feature is especially advantageous in surgeries under general anesthesia, as it allows the procedure to continue seamlessly, from electrode implantation through tunneling to pulse generator implantation, without the need for a new surgical preparation or new sterile draping.',
