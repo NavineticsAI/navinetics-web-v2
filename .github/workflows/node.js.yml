@@ -22,12 +22,15 @@ concurrency:
   group: github-pages
   cancel-in-progress: true
 
+# TWO JOBS, NOT ONE. Building and deploying in one job broke on 24 Nov
+# 2026: upload-pages-artifact finalized the artifact and deploy-pages asked
+# for it 0.3 s later, before GitHub's artifact listing showed it — "Found 0
+# artifact(s)" — on the first run and again on a re-run, although the API
+# listed it seconds afterwards. A separate deploy job starts only once the
+# build job has finished, which is GitHub's own Pages template and gives the
+# listing the time it needs.
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -63,6 +66,15 @@ jobs:
         with:
           path: ./dist
 
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
