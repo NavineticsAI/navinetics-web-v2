@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:live": "vite build --base=/",
+    "preview:live": "vite preview --base=/ --port 4319 --strictPort",
     "check:build": "node tools/check-build.mjs",
+    "check:build:live": "node tools/check-build.mjs --live",
     "check:routes": "node tools/check-routes.mjs",
     "check:mobile": "node tools/check-mobile.mjs",
     "check:webkit": "node tools/check-webkit.mjs",

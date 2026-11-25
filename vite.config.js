@@ -12,7 +12,13 @@ import react from '@vitejs/plugin-react'
 // import.meta.env.BASE_URL (see src/App.jsx), so this string is the single
 // place the deployment path is declared.
 //
-// Deploying to a custom domain instead? Set this to '/' and add public/CNAME.
+// Two builds, one setting:
+//   npm run build       → '/navinetics-web-v2/', the GitHub Pages review site.
+//                         CI, the copy-review run and every tools/check-* use it.
+//   npm run build:live  → '/', navinetics.com (vite build --base=/). The
+//                         siteOrigin() plugin below points index.html's absolute
+//                         URLs at whichever site the build is for.
+// See documentation/dev/shubham/website/16-public-launch.md.
 /* The review build's footer carries exactly what Kevin Bennet asked for and
    nothing else: "Pages have no page identifiers, version or date."
 
@@ -51,8 +57,28 @@ export default defineConfig({
     watch: { ignored: ['**/copy/**'] },
   },
   base: '/navinetics-web-v2/',
-  plugins: [react(), spaFallback(), perfBeacon()],
+  plugins: [react(), siteOrigin(), spaFallback(), perfBeacon()],
 })
+
+/**
+ * index.html is written for navinetics.com: its canonical, og:url, og:image and
+ * JSON-LD url are absolute, as they must be. A review build (any base but '/')
+ * is served from GitHub Pages instead, so there those URLs are pointed at
+ * https://navineticsai.github.io<base> — otherwise a review link shared in
+ * Teams would unfurl with an image that does not exist on navinetics.com yet.
+ */
+function siteOrigin() {
+  let base = '/'
+  return {
+    name: 'site-origin',
+    configResolved(config) { base = config.base },
+    transformIndexHtml(html) {
+      return base === '/'
+        ? html
+        : html.replaceAll('https://navinetics.com/', `https://navineticsai.github.io${base}`)
+    },
+  }
+}
 
 /**
  * Live telemetry from whatever device is looking at the site.

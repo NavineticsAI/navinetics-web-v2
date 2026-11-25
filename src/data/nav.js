@@ -106,13 +106,26 @@ export const nav = ALL
  * working instead of 404ing, which matters for anything already shared.
  */
 export const redirects = [
+  /* Every URL in the WordPress site's sitemap (navinetics.com, 25 Nov 2026).
+     React Router ignores a trailing slash, so '/who-we-are' covers
+     '/who-we-are/' too. On navinetics.com public/.htaccess answers this same
+     list first, with a server 301; keep the two together. */
+  ['/about-us', '/company/who-we-are'],
   ['/who-we-are', '/company/who-we-are'],
   ['/who-we-are/our-founders', '/company/our-founders'],
   ['/who-we-are/community', '/company/community'],
+  ['/what-we-do', '/products/d1-stereotactic-frame'],
   ['/what-we-do/navinetics-frame-system', '/products/d1-stereotactic-frame'],
   ['/what-we-do/neuromodulation', '/products/maven-neuromodulation'],
+  ['/system_category/reusable', '/products/d1-stereotactic-frame'],
+  ['/system_category/single-use', '/products/d1-stereotactic-frame'],
   ['/careers', '/resources/careers'],
+  // WordPress's Resources page was the parent of Education and Publications.
+  ['/resources', '/resources/publications'],
+  ['/category/publications', '/resources/publications'],
   ['/investment-opportunities', '/contact'],
+  ['/search', '/'],
+  ['/author/support_unlimited', '/'],
   // Shipped as live CTAs on Who We Are, Community and the About stat tiles
   // before anyone noticed neither path was ever a route.
   ['/company/careers', '/resources/careers'],

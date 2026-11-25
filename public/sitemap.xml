@@ -11,62 +11,62 @@
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/</loc>
+    <loc>https://navinetics.com/</loc>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/products/d1-stereotactic-frame</loc>
+    <loc>https://navinetics.com/products/d1-stereotactic-frame</loc>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/products/maven-neuromodulation</loc>
+    <loc>https://navinetics.com/products/maven-neuromodulation</loc>
     <priority>0.9</priority>
   </url>
 
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/technology/stereotactic-devices</loc>
+    <loc>https://navinetics.com/technology/stereotactic-devices</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/technology/neuromodulation</loc>
+    <loc>https://navinetics.com/technology/neuromodulation</loc>
     <priority>0.8</priority>
   </url>
   <!-- /technology/navinetics-ai is hidden: it still renders on its own URL but
        is linked from nowhere, this file included. -->
 
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/company/who-we-are</loc>
+    <loc>https://navinetics.com/company/who-we-are</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/company/our-founders</loc>
+    <loc>https://navinetics.com/company/our-founders</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/company/community</loc>
+    <loc>https://navinetics.com/company/community</loc>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/resources/publications</loc>
+    <loc>https://navinetics.com/resources/publications</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/technology/education</loc>
+    <loc>https://navinetics.com/technology/education</loc>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/resources/media</loc>
+    <loc>https://navinetics.com/resources/media</loc>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/resources/careers</loc>
+    <loc>https://navinetics.com/resources/careers</loc>
     <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://navineticsai.github.io/navinetics-web-v2/contact</loc>
+    <loc>https://navinetics.com/contact</loc>
     <priority>0.8</priority>
   </url>
 </urlset>

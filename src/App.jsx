@@ -11,13 +11,10 @@ function App() {
 
   return (
     <ThemeProvider>
-      {/*
-        The site deploys under a sub-path (see vite.config.js). Without a
-        matching basename the router reads the pathname as '/navinetics-web-v2/',
-        matches no route, and renders the 404 page at the site's own home URL —
-        while every <Link to="/products/…"> pushes outside the deployed base.
-        BASE_URL is '/' in dev and the configured base in a build, so one value
-        covers both.
+      {      /*
+        The configured base is '/' for the public navinetics.com domain and
+        can remain '/' during local development. Keeping the basename explicit
+        ensures every in-app link resolves from the deployment root.
       */}
       <Router basename={import.meta.env.BASE_URL}>
         <motion.div

@@ -19,7 +19,7 @@
  * that failed to decode.
  */
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { dir } from './lib/paths.mjs';
@@ -29,8 +29,11 @@ const DIR = `${ROOT}tools/.routes/`;
 const PORT = 9541;
 /* The deployed base, not the server root. Checking '/' when the site is served
    from a sub-path exercises a URL shape that does not exist in production —
-   which is exactly how the missing Router basename survived this check. */
-const BASE = (process.argv[2] || 'http://localhost:4319') + '/navinetics-web-v2';
+   which is exactly how the missing Router basename survived this check. It is
+   read from the build being previewed: '/navinetics-web-v2' for npm run build,
+   '' for npm run build:live (navinetics.com). */
+const BUILT = readFileSync(`${ROOT}dist/index.html`, 'utf8').match(/src="(\/[^"]*?)assets\//);
+const BASE = (process.argv[2] || 'http://localhost:4319') + (BUILT ? BUILT[1].replace(/\/$/, '') : '/navinetics-web-v2');
 const CHROME = [
   'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
   'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
@@ -43,6 +46,7 @@ const ROUTES = [
   '/products/d1-stereotactic-frame', '/products/carbon-fiber-surgical-tables',
   '/products/maven-neuromodulation',
   '/technology/stereotactic-devices', '/technology/neuromodulation', '/technology/navinetics-ai',
+  '/technology/education',
   '/resources/media', '/resources/careers', '/resources/publications',
   '/contact', '/products/does-not-exist',
 ];
